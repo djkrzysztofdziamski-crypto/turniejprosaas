@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "https://admin.turniejomat.pl/*"
+  to = "/index.html?view=admin"
+  status = 200
+  force = true
+
