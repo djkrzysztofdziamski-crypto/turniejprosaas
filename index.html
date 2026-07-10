@@ -411,7 +411,7 @@
 <script>
     // --- 1. CONFIG CHMURY FIREBASE ---
     const firebaseConfig = { apiKey: "AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU", authDomain: "turniejprosaas.firebaseapp.com", databaseURL: "https://turniejprosaas-default-rtdb.europe-west1.firebasedatabase.app", projectId: "turniejprosaas", storageBucket: "turniejprosaas.firebasestorage.app", messagingSenderId: "141555836771", appId: "1:141555836771:web:d5f17180a21fded3d09556" };
-    
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -1184,12 +1184,12 @@
                     let nm = state.playoffs.find(m => m.id === state.active.next); 
                     if(nm) nm[state.active.slot] = w; 
                 }
-                if(state.active.loserNext || state.active.slotLoser) { 
-                    let targetId = state.active.loserNext || 201;
-                    let targetSlot = state.active.slotLoser || 't2';
-                    let nlm = state.playoffs.find(m => m.id === targetId); 
-                    if(nlm) nlm[targetSlot] = l; 
-                }
+                if(state.active.loserNext) { 
+    let targetId = state.active.loserNext;
+    let targetSlot = state.active.loserSlot || state.active.slotLoser || 't2';
+    let nlm = state.playoffs.find(m => m.id === targetId); 
+    if(nlm) nlm[targetSlot] = l; 
+}
             }
 
             window.logAction(`Zapisano wynik meczu #${state.active.id}: ${state.active.t1.name} ${state.active.g1}:${state.active.g2} ${state.active.t2.name}.`);
