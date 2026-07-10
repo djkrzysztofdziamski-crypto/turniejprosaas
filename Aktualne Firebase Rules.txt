@@ -1,0 +1,16 @@
+Aktualne Firebase Rules
+
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+Data: 2026-07-09
+
+Projekt Firebase:
+turniejpro
+
+Database URL:
+https://turniejpro-default-rtdb.europe-west1.firebasedatabase.app
