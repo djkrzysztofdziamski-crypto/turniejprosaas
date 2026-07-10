@@ -10,7 +10,7 @@ Aktualne Firebase Rules
 Data: 2026-07-09
 
 Projekt Firebase:
-turniejpro
+TurniejProSaaS
 
 Database URL:
-https://turniejpro-default-rtdb.europe-west1.firebasedatabase.app
+https://console.firebase.google.com/project/turniejprosaas/database/turniejprosaas-default-rtdb/data/~2F?hl=pl
