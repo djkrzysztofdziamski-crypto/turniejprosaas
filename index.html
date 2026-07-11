@@ -597,7 +597,7 @@
                 html += `
                     <tr>
                         <td style="font-family: monospace; font-weight: bold; color: #60a5fa;">${key}</td>
-                        <td style="font-weight: 500;">${lic.notatka}</td>
+                        <td style="font-weight: 500;">${esc(lic.notatka)}</td>
                         <td><code>${lic.typ}</code></td>
                         <td>${statusBadge}</td>
                         <td style="font-size: 11px; color: #94a3b8;">${actDate}</td>
@@ -780,7 +780,7 @@
             db.ref('licencje/' + activeKey).on('value', snapshot => {
                 const lic = snapshot.val(); if (!lic) return;
                 const fanLabel = isFanMode ? ' 🔴 WYNIKI LIVE (KIBIC)' : '';
-                document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${lic.notatka}</span>${fanLabel}`;
+                document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
 
                 if (!isFanMode) {
                     if (lic.status !== 'aktywny') { document.getElementById('license-blocked-screen').style.display = 'flex'; return; }
