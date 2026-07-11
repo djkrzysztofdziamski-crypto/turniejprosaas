@@ -1,3 +1,5 @@
+cd "/c/Users/kdzia/Desktop/turniej piłkarski/TURNIEJ PRO SAAS/Turniej Pro SAAS/turniejprosaas"
+
 Aktualne Firebase Rules
 
 {
