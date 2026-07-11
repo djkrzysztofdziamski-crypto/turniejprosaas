@@ -1,6 +1,13 @@
+# admin.turniejomat.pl — SPA rewrite
+# viewMode=admin ustawia index.html po hostname (bez ?view= w URL)
 [[redirects]]
-  from = "https://admin.turniejomat.pl/*"
-  to = "/index.html?view=admin"
+  from = "/*"
+  to = "/index.html"
   status = 200
-  force = true
+  conditions = {Host = ["admin.turniejomat.pl"]}
 
+# domena główna — SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
