@@ -855,6 +855,7 @@
     }
     function unlockLicense(key) {
         if (!isAdminSession()) return;
+        if (!confirm("Odblokowanie zresetuje daty aktywacji licencji.\nKontynuować?")) return;
         db.ref('licencje/' + key).update({ status: 'nowy', aktywowany: null, wygasa: null });
     }
     function add24h(key, currentExpiry) {
@@ -1129,6 +1130,7 @@
 
             if (gDur === 0 || gBreak === 0 || afterG === 0 || poDur === 0 || finDur === 0) { alert("❌ BŁĄD! Ustal czas trwania meczów oraz przerw."); return; }
             if(state.matches && state.matches.length > 0) { if(!confirm("UWAGA! Terminarz już istnieje. Wygenerowanie nowego skasuje wszystkie wyniki fazy grupowej. Kontynuować?")) return; }
+            if(state.playoffs && state.playoffs.length > 0) { if(!confirm("Wygenerowanie nowego terminarza może pozostawić nieaktualną drabinkę play-off.")) return; }
 
             const mode = document.getElementById('schedule-mode').value;
             Object.assign(state.settings, { start: document.getElementById('t-start').value, gDur, gBreak, afterG, poDur, finDur });
@@ -1598,6 +1600,7 @@
 
         window.freezeTournament = () => {
             if(isFanMode || !state.teams || state.teams.length === 0) return;
+            if (!confirm("Czy na pewno zamrozić turniej?\nUtworzona zostanie kopia w Wstrzymanych sesjach.")) return;
             let freezeName = state._meta_name || prompt("Podaj nazwę dla wstrzymanej sesji:"); if (!freezeName) return;
             let freezePayload = { ...state, _meta_name: freezeName, _meta_date: new Date().toLocaleString('pl-PL') };
             db.ref('turnieje_uzytkownikow/' + activeKey + '/wstrzymane').push(freezePayload).then(() => { db.ref('turnieje_uzytkownikow/' + activeKey).child('teams').remove(); location.reload(); });
