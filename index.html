@@ -139,6 +139,16 @@
         #view-app .log-line { margin-bottom: 4px; border-bottom: 1px dashed #222; padding-bottom: 2px; }
         #view-app #license-blocked-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(16,42,67,0.98); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; text-align: center; color: white; }
 
+        #view-app #tournament-dashboard { max-width: 950px; margin: 12px auto 0; padding: 0 10px; box-sizing: border-box; }
+        #view-app .tournament-dashboard-card { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #c1c7d0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        #view-app .tournament-dashboard-title { margin: 0 0 12px 0; font-size: 13px; color: #0747a6; font-weight: 800; letter-spacing: 0.3px; }
+        #view-app .tournament-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+        #view-app .dashboard-stat { background: #f4f8ff; border: 1px solid #c1c7d0; border-radius: 8px; padding: 10px 12px; min-width: 0; }
+        #view-app .dashboard-stat-label { font-size: 10px; font-weight: 700; color: #42526e; margin-bottom: 4px; line-height: 1.3; }
+        #view-app .dashboard-stat-value { font-size: 15px; font-weight: 800; color: #172b4d; word-break: break-word; }
+        #view-app .dashboard-stat-value.dash-fb-online { color: #00875a; }
+        #view-app .dashboard-stat-value.dash-fb-offline { color: #de350b; }
+
         /* --- SYSTEM PREZENTACYJNY: ASYSTENT PRZEWODNIKA DEMO --- */
         .demo-guide-box { background-color: #e6f4ea; border-left: 5px solid #137333; color: #137333; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; line-height: 1.5; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
         .demo-guide-box b { font-size: 14px; color: #0d5224; display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
@@ -320,6 +330,8 @@
         </div>
     </header>
 
+    <div id="tournament-dashboard"></div>
+
     <div class="nav-tabs">
         <button class="nav-btn active" onclick="switchTab('start')">Start</button>
         <button class="nav-btn" onclick="switchTab('sklady')">Składy</button>
@@ -497,6 +509,9 @@
                     setFirebaseStatus(s.val() === true ? 'connected' : 'offline');
                 });
             }, 2000);
+        }
+        if (window.renderDashboard) {
+            window.renderDashboard();
         }
     }
 
@@ -1058,6 +1073,7 @@
             .then(() => {
                 lastSaveTimestamp = Date.now();
                 setFirebaseStatus('saved');
+                window.renderDashboard();
             })
             .catch(() => setFirebaseStatus('offline'));
          }
@@ -1075,6 +1091,58 @@
             const display = document.getElementById('system-log-display'); if(!display) return;
             if(!state.logs || state.logs.length === 0) { display.innerHTML = "Brak zarejestrowanych akcji w tej sesji."; return; }
             display.innerHTML = state.logs.map(l => `<div class="log-line">${esc(l)}</div>`).join(''); display.scrollTop = display.scrollHeight;
+        };
+
+        window.renderDashboard = () => {
+            const el = document.getElementById('tournament-dashboard');
+            if (!el) return;
+            if (isFanMode || archiveId || localArchiveId || viewMode === 'admin') {
+                el.style.display = 'none';
+                return;
+            }
+            el.style.display = 'block';
+
+            const teams = state.teams || [];
+            const matches = state.matches || [];
+            const playoffs = state.playoffs || [];
+            const allMatches = [...matches, ...playoffs];
+            const playedMatches = allMatches.filter(m => m.played).length;
+            const totalMatches = allMatches.length;
+
+            let phase = 'Brak turnieju';
+            if (teams.length === 0) phase = 'Brak turnieju';
+            else if (playoffs.length > 0) phase = 'Play-Off';
+            else if (totalMatches === 0) phase = 'Przygotowanie';
+            else phase = 'Faza grupowa';
+
+            const poStatus = playoffs.length > 0 ? 'wygenerowany' : 'niewygenerowany';
+
+            let lastSave = 'oczekiwanie';
+            if (lastSaveTimestamp) {
+                const diff = Math.floor((Date.now() - lastSaveTimestamp) / 1000);
+                if (diff < 5) lastSave = 'przed chwilą';
+                else if (diff < 60) lastSave = `${diff} s temu`;
+                else if (diff < 3600) lastSave = `${Math.floor(diff / 60)} min temu`;
+                else lastSave = `${Math.floor(diff / 3600)} h temu`;
+            }
+
+            const fbEl = document.getElementById('firebase-status');
+            const fbOffline = fbEl && fbEl.classList.contains('firebase-status-offline');
+            const fbStatus = fbOffline ? 'Offline' : 'Online';
+            const fbClass = fbOffline ? 'dash-fb-offline' : 'dash-fb-online';
+
+            el.innerHTML = `
+                <div class="tournament-dashboard-card">
+                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju</h3>
+                    <div class="tournament-dashboard-grid">
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">👥 Drużyny</div><div class="dashboard-stat-value">${teams.length}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">⚽ Mecze</div><div class="dashboard-stat-value">${playedMatches} / ${totalMatches}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">🏁 Faza</div><div class="dashboard-stat-value">${phase}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">🏆 Play-Off</div><div class="dashboard-stat-value">${poStatus}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">💾 Ostatni zapis</div><div class="dashboard-stat-value">${lastSave}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">🟢 Firebase</div><div class="dashboard-stat-value ${fbClass}">${fbStatus}</div></div>
+                    </div>
+                </div>`;
         };
 
         window.renderGroupsList = () => {
@@ -1108,7 +1176,7 @@
             state.teams = Array.from({length:c}, (_,i)=>({id:i, name:`Drużyna ${i+1}`, gk:`Bramkarz ${i+1}`, cap:`Kapitan ${i+1}`}));
 
             window.logAction(`Utworzono baza ${c} drużyn. Szablon drabinki: ${bSize}, Realny awans: ${advC} zespołów.`);
-            window.renderInputs(); window.save(); switchTab('sklady');
+            window.renderInputs(); window.save(); window.renderDashboard(); switchTab('sklady');
         };
 
         window.renderInputs = () => {
@@ -1127,7 +1195,7 @@
 
             if(state.settings) { delete state.settings.customTableOrder; delete state.settings.confirmedTableOrder; }
             tempLocalOrders = {}; window.logAction("Rozlosowano drużyny do grup automatycznie.");
-            window.renderGroupsList(); window.save(); switchTab('grupy');
+            window.renderGroupsList(); window.save(); window.renderDashboard(); switchTab('grupy');
         };
 
         window.generujTerminarz = function() {
@@ -1163,7 +1231,7 @@
             state.matches.forEach(m => { m.time = curr; curr = window.addMin(curr, parseInt(state.settings.gDur) + parseInt(state.settings.gBreak)); });
 
             window.logAction("Wygenerowano nowy terminarz meczów grupowych.");
-            window.save(); switchTab('mecze');
+            window.save(); window.renderDashboard(); switchTab('mecze');
         };
 
         window.renderFilterBar = () => {
@@ -1460,7 +1528,7 @@
             });
 
             window.logAction(`Wygenerowano strukturę Play-Off.`);
-            window.save(); window.switchTab('playoff');
+            window.save(); window.renderDashboard(); window.switchTab('playoff');
         };
 
         window.checkPenaltyVisibility = () => {
@@ -1603,6 +1671,7 @@
             window.calcTables();
             window.renderPodium();
             window.save();
+            window.renderDashboard();
         };
         window.resetData = () => {
             if (!confirm("RESET? Aktywny turniej zostanie wyczyszczony. Archiwum i wstrzymane sesje zostaną zachowane.")) return;
@@ -1735,6 +1804,7 @@
             window.renderPlayoffTree();
             document.body.classList.remove('theme-dedicated');
             window.switchTab('start');
+            window.renderDashboard();
         } else {
             db.ref(dbPath).on('value', s => {
                 if(isFanMode && document.getElementById('app-header-title').innerText.includes("ARCHIWUM") && !archiveId && !localArchiveId) return;
@@ -1754,6 +1824,7 @@
                 document.body.classList.remove('theme-dedicated');
                 if(document.getElementById('tabele').classList.contains('active')) window.calcTables();
                 window.renderLogs();
+                window.renderDashboard();
             });
         }
 
@@ -1761,6 +1832,8 @@
             db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').on('value', s => { archiveDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
             db.ref('turnieje_uzytkownikow/' + activeKey + '/wstrzymane').on('value', s => { frozenDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
         }
+
+        window.renderDashboard();
     }
 
     // --- 7. START CAŁEGO SYSTEMU ---
