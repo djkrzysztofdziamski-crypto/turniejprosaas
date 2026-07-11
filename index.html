@@ -315,6 +315,7 @@
         </div>
         <div style="display:flex; gap:5px;">
             <button id="btn-freeze" onclick="freezeTournament()" style="background:#ff8b00; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">❄️ ZAMROŹ</button>
+            <button id="btn-restore" onclick="restoreLastSnapshot()" disabled style="background:#0052cc; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">↩ PRZYWRÓĆ OSTATNI STAN</button>
             <button id="btn-reset" onclick="resetData()" style="background:#de350b; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">RESET</button>
         </div>
     </header>
@@ -903,6 +904,13 @@
     }
     let archiveDatabase = {}; let frozenDatabase = {}; let tempLocalOrders = {};
     let currentStatusFilter = 'all'; let currentGroupFilter = 'all';
+    let lastSnapshot = null;
+
+    function saveLastSnapshot() {
+        lastSnapshot = JSON.parse(JSON.stringify(state));
+        const restoreBtn = document.getElementById('btn-restore');
+        if (restoreBtn) restoreBtn.disabled = false;
+    }
 
     // SŁOWNIK ZIELONYCH PRZEWODNIKÓW Z ŻARÓWKĄ DLA TRYBU DEMO
     const DEMO_GUIDES = {
@@ -1094,6 +1102,7 @@
             if (advC > bSize) { alert("Realna ilość awansujących drużyn nie może przekraczać rozmiaru wybranego szablonu drabinki!"); return; }
             if(state.teams && state.teams.length > 0) { if(!confirm("UWAGA! Masz już wygenerowaną klasyfikację. Czy na pewno chcesz wyczyścić formularz?")) return; }
 
+            saveLastSnapshot();
             if (!state.settings) state.settings = {};
             state.settings.bracketSize = bSize; state.settings.advCount = advC;
             state.teams = Array.from({length:c}, (_,i)=>({id:i, name:`Drużyna ${i+1}`, gk:`Bramkarz ${i+1}`, cap:`Kapitan ${i+1}`}));
@@ -1109,6 +1118,7 @@
 
         window.losujGrupy = () => {
             if(state.groups && Object.keys(state.groups).length > 0) { if(!confirm("UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. Kontynuować?")) return; }
+            saveLastSnapshot();
             let sh = [...(state.teams || [])].sort(()=>0.5-Math.random()); let nG = parseInt(document.getElementById('group-count').value) || 1;
             if (nG > sh.length) nG = sh.length;
 
@@ -1132,6 +1142,7 @@
             if(state.matches && state.matches.length > 0) { if(!confirm("UWAGA! Terminarz już istnieje. Wygenerowanie nowego skasuje wszystkie wyniki fazy grupowej. Kontynuować?")) return; }
             if(state.playoffs && state.playoffs.length > 0) { if(!confirm("Wygenerowanie nowego terminarza może pozostawić nieaktualną drabinkę play-off.")) return; }
 
+            saveLastSnapshot();
             const mode = document.getElementById('schedule-mode').value;
             Object.assign(state.settings, { start: document.getElementById('t-start').value, gDur, gBreak, afterG, poDur, finDur });
 
@@ -1390,6 +1401,7 @@
 
         window.generujPlayoff = function() {
             if(state.playoffs && state.playoffs.length > 0) { if(!confirm("UWAGA! Drabinka już istnieje. Kontynuować?")) return; }
+            saveLastSnapshot();
             const pool = window.getAdvancingTeamsFull();
             let bSize = state.settings.bracketSize || 8;
             if (pool.length <= 4) bSize = 4;
@@ -1578,8 +1590,23 @@
         };
 
         window.closeModal = (id) => { document.getElementById(id).style.display = 'none'; };
+        window.restoreLastSnapshot = () => {
+            if (!lastSnapshot) {
+                alert('Brak zapisanej migawki.');
+                return;
+            }
+            if (!confirm("Przywrócić ostatni zapisany stan?")) return;
+            state = JSON.parse(JSON.stringify(lastSnapshot));
+            // TODO: scentralizować pełne odświeżanie UI po restore
+            window.renderInputs();
+            window.renderGroupsList();
+            window.calcTables();
+            window.renderPodium();
+            window.save();
+        };
         window.resetData = () => {
             if (!confirm("RESET? Aktywny turniej zostanie wyczyszczony. Archiwum i wstrzymane sesje zostaną zachowane.")) return;
+            saveLastSnapshot();
             db.ref('turnieje_uzytkownikow/' + activeKey).update({
                 teams: [],
                 groups: {},
