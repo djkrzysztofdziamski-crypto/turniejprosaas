@@ -1051,7 +1051,7 @@
                             <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
                         </div>`;
                         
-                    let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${s.t.name}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${s.t.name}</b></span>`;
+                    let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
 
                     // Nadanie klasy table-team-cell dającej elastyczny podział komórki
                     rowsHTML += `<tr ${rowClass}><td class="table-team-cell">${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
@@ -1362,10 +1362,10 @@
                 let scoreDisplay = m.played ? `${m.g1}:${m.g2} ${m.pen1!=null ? `(k. ${m.pen1}:${m.pen2})` : ''}` : '-:-';
                 return `
                     <div class="match-card" onclick="openMatch(${m.id}, true)">
-                        <span class="match-time-badge" style="background:#ff8b00;">${m.time}</span>
-                        <div class="team-left" title="${m.t1.name}">${m.t1.name}</div>
+                        <span class="match-time-badge" style="background:#ff8b00;">${esc(m.time)}</span>
+                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
                         <div><span class="match-score" style="background:#00875a;">${scoreDisplay}</span></div>
-                        <div class="team-right" title="${m.t2.name}">${m.t2.name}</div>
+                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
                     </div>`;
             }).join('');
         };
