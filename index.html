@@ -35,7 +35,7 @@
         #view-login .msg.error { background: #ffebe6; color: #de350b; border: 1px solid #ffbdad; }
         #view-login .msg.success { background: #e3fcef; color: #00875a; border: 1px solid #57d9a3; }
         #view-login .footer-info { margin-top: 30px; font-size: 11px; color: #bcccdc; line-height: 1.4; }
-        #view-login .footer-info a { color: #ffcc00; text-decoration: none; font-weight: bold; }
+        #view-login .brand-logo { max-width: 280px; width: 90%; height: auto; margin: 0 auto 18px; display: block; }
 
         /* --- SYSTEM STYLÓW: ADMIN --- */
         #view-admin { background-color: #0f172a; color: #f8fafc; padding: 20px; min-height: 100vh; box-sizing: border-box; }
@@ -69,8 +69,7 @@
         #view-admin .archive-item { border-left: 4px solid #10b981; padding: 12px; background: #1e293b; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; border-left-width: 4px; }
 
         /* --- SYSTEM STYLÓW: KONSOLA SĘDZIEGO (APP) --- */
-        #view-app { color: #172b4d; padding-bottom: 80px; background-color: #dcede1; background-image: repeating-linear-gradient(to bottom, transparent, transparent 40px, rgba(255, 255, 255, 0.35) 40px, rgba(255, 255, 255, 0.35) 80px); min-height: 100vh; box-sizing: border-box; }
-        #view-app.theme-dedicated::before { content: ""; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 450px; height: 450px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.06; pointer-events: none; z-index: -1; }
+        #view-app { color: #172b4d; padding-bottom: 80px; min-height: 100vh; box-sizing: border-box; position: relative; background-color: #dcede1; background-image: repeating-linear-gradient(to bottom, transparent, transparent 40px, rgba(255, 255, 255, 0.35) 40px, rgba(255, 255, 255, 0.35) 80px), url('watermark.png'); background-repeat: repeat, repeat; background-size: auto, 340px 340px; }
         #view-app header { background: #0747a6; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         #view-app .nav-tabs { display: flex; background: #fff; border-bottom: 2px solid #c1c7d0; overflow-x: auto; position: sticky; top: 52px; z-index: 999; }
         #view-app .nav-tabs button { flex: 1; min-width: 70px; padding: 12px 2px; border: none; background: none; font-weight: 700; color: #42526e; cursor: pointer; font-size: 10px; text-transform: uppercase; border-bottom: 4px solid transparent; }
@@ -143,12 +142,55 @@
         /* --- SYSTEM PREZENTACYJNY: ASYSTENT PRZEWODNIKA DEMO --- */
         .demo-guide-box { background-color: #e6f4ea; border-left: 5px solid #137333; color: #137333; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; line-height: 1.5; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
         .demo-guide-box b { font-size: 14px; color: #0d5224; display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+
+        /* --- WSKAŹNIK STATUSU FIREBASE --- */
+        #firebase-status {
+            position: fixed;
+            bottom: 44px;
+            right: 16px;
+            top: auto;
+            z-index: 10001;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            pointer-events: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        #firebase-status.firebase-status-connected { background: #e3fcef; color: #00875a; border: 1px solid #57d9a3; }
+        #firebase-status.firebase-status-saving { background: #fff9c4; color: #974f0c; border: 1px solid #ffcc00; }
+        #firebase-status.firebase-status-saved { background: #e3fcef; color: #006644; border: 1px solid #34d399; }
+        #firebase-status.firebase-status-offline { background: #ffebe6; color: #de350b; border: 1px solid #ffbdad; }
+        #last-save-info {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 10001;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            pointer-events: none;
+            background: #e3fcef;
+            color: #006644;
+            border: 1px solid #34d399;
+        }
     </style>
 </head>
 <body>
 
+<div id="firebase-status"></div>
+<div id="last-save-info"></div>
+
 <div id="view-login" class="view">
     <div class="login-card" id="gate-ui">
+        <img src="logo.png" class="brand-logo" alt="TurniejPro SaaS">
         <h2>TurniejPro SaaS</h2>
         <p>System zarządzania i wyników live</p>
         
@@ -177,6 +219,7 @@
 <div id="view-admin" class="view">
     <div id="auth-lock">
         <div class="card" style="width: 320px; text-align: center;">
+            <img src="icon.png" alt="" style="width:64px; height:64px; border-radius:10px; margin-bottom:12px;">
             <h3>Panel Administratora</h3>
             <p style="color: #94a3b8; font-size: 12px; margin-bottom: 20px;">Zaloguj się kontem administratora:</p>
             <input type="email" id="admin-email-input" placeholder="Email administratora" autocomplete="username" style="width: 100%; text-align: center; margin-bottom: 10px;">
@@ -264,7 +307,8 @@
     </div>
 
     <header>
-        <div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <img src="icon.png" alt="" style="height:34px; width:34px; border-radius:6px; flex-shrink:0;">
             <span id="app-header-title" style="font-weight:bold;">TurniejPro SaaS</span>
             <span id="license-countdown" style="margin-left:15px; background: rgba(255,255,255,0.15); color: #ffcc00; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; letter-spacing: 0.5px;">⌛ Licencja: Sprawdzanie...</span>
             <button id="btn-qr" onclick="showQR()" style="margin-left:10px; background:none; border:1px solid white; color:white; padding:2px 8px; border-radius:4px; cursor:pointer;">📲 QR KIBIC</button>
@@ -300,11 +344,11 @@
                     <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <input type="number" id="team-count" value="0"></div>
                     <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <input type="number" id="group-count" value="0"></div>
                     
-                    <div class="time-setting"><span style="font-weight:bold;">Szablon drabinki:</span> 
+                    <div class="time-setting"><span style="font-weight:bold;">Szablon drabinki Playoff:</span> 
                         <select id="bracket-size">
-                            <option value="16">1/8 Finału (16 miejsc)</option>
-                            <option value="8" selected>Ćwierćfinał (8 miejsc)</option>
-                            <option value="4">Półfinał (4 miejsca)</option>
+                            <option value="16">Playoff 1/8 Finału (16 miejsc)</option>
+                            <option value="8">Playoff Ćwierćfinał (8 miejsc)</option>
+                            <option value="4" selected>Playoff Półfinał (4 miejsca)</option>
                         </select>
                     </div>
                     <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
@@ -404,7 +448,7 @@
     <div id="qrModal" class="modal">
         <div class="modal-content">
             <span onclick="closeModal('qrModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-            <div id="qr-logo-container" style="text-align:center; margin-bottom:15px; display:none;">
+            <div id="qr-logo-container" style="text-align:center; margin-bottom:15px;">
                 <img src="logo.png" style="max-width:130px; height:auto;" alt="">
             </div>
             <h3 style="text-align:center; margin-top:0;">Link Live dla Kibiców</h3>
@@ -425,6 +469,41 @@
     const db = firebase.database();
     const auth = firebase.auth();
 
+    let firebaseStatusLock = null;
+    let firebaseSavedTimer = null;
+
+    function setFirebaseStatus(type) {
+        const el = document.getElementById('firebase-status');
+        if (!el) return;
+        const labels = {
+            connected: '🟢 Połączono',
+            saving: '🟡 Zapisywanie...',
+            saved: '✅ Zapisano',
+            offline: '🔴 Offline'
+        };
+        if (type === 'saving') firebaseStatusLock = 'saving';
+        if (type === 'saved') firebaseStatusLock = 'saved';
+        if (type === 'connected' || type === 'offline') {
+            firebaseStatusLock = null;
+        }
+        el.textContent = labels[type] || '';
+        el.className = 'firebase-status-' + type;
+        if (type === 'saved') {
+            clearTimeout(firebaseSavedTimer);
+            firebaseSavedTimer = setTimeout(() => {
+                firebaseStatusLock = null;
+                db.ref('.info/connected').once('value', s => {
+                    setFirebaseStatus(s.val() === true ? 'connected' : 'offline');
+                });
+            }, 2000);
+        }
+    }
+
+    db.ref('.info/connected').on('value', snap => {
+        if (firebaseStatusLock) return;
+        setFirebaseStatus(snap.val() === true ? 'connected' : 'offline');
+    });
+
     // --- 2. PARAMETRY URUCHOMIENIA ---
     const urlParams = new URLSearchParams(window.location.search);
     let viewMode = urlParams.get('view');
@@ -437,6 +516,36 @@
     if (window.location.hostname === 'admin.turniejomat.pl') {
         viewMode = 'admin';
     }
+
+    window.addEventListener('beforeunload', (e) => {
+        if (activeKey && !isDemoMode && !isFanMode && viewMode !== 'admin') {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    let lastSaveTimestamp = null;
+
+    function updateLastSaveInfo() {
+        const el = document.getElementById('last-save-info');
+        if (!el) return;
+        if (!activeKey || isDemoMode || isFanMode || viewMode === 'admin') {
+            el.style.display = 'none';
+            return;
+        }
+        el.style.display = 'block';
+        if (!lastSaveTimestamp) {
+            el.textContent = '⏳ Oczekiwanie na pierwszy zapis';
+            return;
+        }
+        const diff = Math.floor((Date.now() - lastSaveTimestamp) / 1000);
+        if (diff < 5) el.textContent = '✅ Zapisano przed chwilą';
+        else if (diff < 60) el.textContent = `✅ Zapisano ${diff} s temu`;
+        else if (diff < 3600) el.textContent = `✅ Zapisano ${Math.floor(diff / 60)} min temu`;
+        else el.textContent = `✅ Zapisano ${Math.floor(diff / 3600)} h temu`;
+    }
+
+    setInterval(updateLastSaveInfo, 1000);
 
     // --- 3. SYSTEM CENTRALNEGO ROUTERA ---
     function executeRouter() {
@@ -686,7 +795,7 @@
                 
                 let blockBtn = lic.status === 'zablokowany' 
                     ? `<button class="action-btn act-unblock" onclick="unlockLicense('${key}')">🔓 ODBLOKUJ</button>`
-                    : `<button class="action-btn act-block" onclick="confirmBlock('${key}', '${lic.notatka}')">🚫 BLOKUJ</button>`;
+                    : `<button class="action-btn act-block" onclick="confirmBlock('${key}', ${JSON.stringify(lic.notatka || '')})">🚫 BLOKUJ</button>`;
                 
                 let timeBtn = lic.aktywowany ? `<button class="action-btn act-time" onclick="add24h('${key}', ${lic.wygasa})">➕ 24H</button>` : '';
 
@@ -724,8 +833,8 @@
                 html += `
                     <div class="archive-item">
                         <div>
-                            <b style="font-size: 14px; color: #fff;">${turniej._meta_name}</b><br>
-                            <small style="color: #94a3b8;">Klucz sędziego: <code>${turniej._license_owner || 'brak'}</code> | Zakończono: ${turniej._meta_date}</small>
+                            <b style="font-size: 14px; color: #fff;">${esc(turniej._meta_name)}</b><br>
+                            <small style="color: #94a3b8;">Klucz sędziego: <code>${esc(turniej._license_owner || 'brak')}</code> | Zakończono: ${esc(turniej._meta_date)}</small>
                         </div>
                         <div>
                             <button class="action-btn act-view" onclick="otworzZarchiwizowaneTurnieje('${key}')">👁 PRZEGLĄDAJ RAPORT</button>
@@ -782,6 +891,14 @@
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
+    }
+
+    function escAttr(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
     let archiveDatabase = {}; let frozenDatabase = {}; let tempLocalOrders = {};
     let currentStatusFilter = 'all'; let currentGroupFilter = 'all';
@@ -862,18 +979,14 @@
     }
 
     function initArchiveViewer(archiveState) {
-        console.log('INIT ARCHIVE VIEWER START');
         const bar = document.getElementById('archive-back-bar');
         const btn = document.getElementById('btn-archive-back');
         const homeBtn = document.getElementById('btn-archive-home');
-        console.log({ archiveId, localArchiveId, archiveState });
         const liveArchiveId = new URLSearchParams(window.location.search).get('archiveId');
         const liveLocalArchiveId = new URLSearchParams(window.location.search).get('localArchiveId');
         if (!archiveId && !localArchiveId && !liveArchiveId && !liveLocalArchiveId) return;
         if (!bar || !btn) return;
-        console.log('BEFORE FLEX', bar.style.display);
         bar.style.display = 'flex';
-        console.log('AFTER FLEX', bar.style.display);
         const owner = archiveState && archiveState._license_owner;
         btn.onclick = () => {
             window.location.search = owner ? ('?id=' + encodeURIComponent(owner)) : '?view=login';
@@ -931,7 +1044,13 @@
         window.save = () => { 
         if(!isFanMode && !isDemoMode) {
         const { active, archiwum, wstrzymane, ...payload } = state;
-        db.ref('turnieje_uzytkownikow/' + activeKey).update(payload);
+        setFirebaseStatus('saving');
+        db.ref('turnieje_uzytkownikow/' + activeKey).update(payload)
+            .then(() => {
+                lastSaveTimestamp = Date.now();
+                setFirebaseStatus('saved');
+            })
+            .catch(() => setFirebaseStatus('offline'));
          }
         };
         
@@ -946,7 +1065,7 @@
         window.renderLogs = () => {
             const display = document.getElementById('system-log-display'); if(!display) return;
             if(!state.logs || state.logs.length === 0) { display.innerHTML = "Brak zarejestrowanych akcji w tej sesji."; return; }
-            display.innerHTML = state.logs.map(l => `<div class="log-line">${l}</div>`).join(''); display.scrollTop = display.scrollHeight;
+            display.innerHTML = state.logs.map(l => `<div class="log-line">${esc(l)}</div>`).join(''); display.scrollTop = display.scrollHeight;
         };
 
         window.renderGroupsList = () => {
@@ -984,7 +1103,7 @@
 
         window.renderInputs = () => {
             if (!state.teams || state.teams.length === 0) return;
-            document.getElementById('inputs-container').innerHTML = state.teams.map((t,i)=>`<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" value="${t.name}" onchange="syncTeamData(${i},'name',this.value)" style="flex:1.5; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${t.gk}" onchange="syncTeamData(${i},'gk',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${t.cap}" onchange="syncTeamData(${i},'cap',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"></div>`).join('');
+            document.getElementById('inputs-container').innerHTML = state.teams.map((t,i)=>`<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" value="${escAttr(t.name)}" onchange="syncTeamData(${i},'name',this.value)" style="flex:1.5; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${escAttr(t.gk)}" onchange="syncTeamData(${i},'gk',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${escAttr(t.cap)}" onchange="syncTeamData(${i},'cap',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"></div>`).join('');
         };
 
         window.losujGrupy = () => {
@@ -1057,6 +1176,40 @@
             if(currentStatusFilter === 'played') filtered = filtered.filter(m => m.played);
             if(currentGroupFilter !== 'all') { if(currentGroupFilter === 'PO') filtered = []; else filtered = filtered.filter(m => m.group === currentGroupFilter); }
 
+            const renderPoCard = (m, extraStyle = '', extraAlert = '') => {
+                const scoreDisplay = m.played ? `${m.g1}:${m.g2} ${m.pen1 != null ? `(k. ${m.pen1}:${m.pen2})` : ''}` : '-:-';
+                return `
+                    <div class="match-card" ${extraStyle} onclick="openMatch(${m.id}, true)">
+                        <span class="match-time-badge" style="background:#ff8b00;">${esc(m.n)}</span>
+                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
+                        <div style="text-align:center;"><span class="match-score" style="background:#00875a;">${scoreDisplay}</span>${extraAlert}</div>
+                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
+                    </div>`;
+            };
+
+            const isHighlightPlayoff = (m) => {
+                const n = (m.n || '').toUpperCase();
+                if (n.includes('PÓŁFINAŁ')) return true;
+                if (n.includes('3. MIEJSCE')) return true;
+                if (n.includes('WIELKI FINAŁ')) return true;
+                if (n.includes('FINAŁ') && !n.includes('ĆWIERĆ') && !n.includes('1/8')) return true;
+                return false;
+            };
+
+            let playoffShortcutHTML = '';
+            if ((state.playoffs || []).length > 0) {
+                const highlights = (state.playoffs || []).filter(isHighlightPlayoff);
+                if (highlights.length > 0) {
+                    playoffShortcutHTML = '<h3 style="margin:0 0 15px 0; color:#102a43; border-bottom: 2px solid #102a43; padding-bottom:5px;">🏆 PLAY-OFF</h3>';
+                    playoffShortcutHTML += highlights.map(m => {
+                        const extraStyle = !m.played && !isFanMode ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
+                        const extraAlert = !m.played && !isFanMode ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
+                        return renderPoCard(m, extraStyle, extraAlert);
+                    }).join('');
+                    playoffShortcutHTML += '<div style="margin: 20px 0 15px 0; border-bottom: 1px solid #c1c7d0;"></div>';
+                }
+            }
+
             let matchesHTML = filtered.map(m => {
                 let originalIdx = state.matches.findIndex(x => x.id === m.id);
                 let scoreText = m.played ? `${m.g1}:${m.g2}` : '-:-';
@@ -1075,22 +1228,14 @@
             if (isDemoMode) {
                 let playoffHTML = '<h3 style="margin-top:30px; margin-bottom:15px; color:#102a43; border-bottom: 2px solid #102a43; padding-bottom:5px;">🏆 DRABINKA PUCHAROWA (PLAY-OFF DEMO)</h3>';
                 playoffHTML += (state.playoffs || []).map(m => {
-                    let scoreDisplay = m.played ? `${m.g1}:${m.g2} ${m.pen1!=null ? `(k. ${m.pen1}:${m.pen2})` : ''}` : '-:-';
-                    let highlightStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0; padding: 22px 40px 15px 40px;"' : '';
+                    let highlightStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
                     let actionAlert = !m.played ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
-                    
-                    return `
-                        <div class="match-card" ${highlightStyle} onclick="openMatch(${m.id}, true)">
-                            <span class="match-time-badge" style="background:#ff8b00;">${m.time}</span>
-                            <div class="team-left" title="${m.t1.name}">${m.t1.name}</div>
-                            <div style="text-align:center;"><span class="match-score" style="background:#00875a;">${scoreDisplay}</span>${actionAlert}</div>
-                            <div class="team-right" title="${m.t2.name}">${m.t2.name}</div>
-                        </div>`;
+                    return renderPoCard(m, highlightStyle, actionAlert);
                 }).join('');
-                cont.innerHTML = matchesHTML + playoffHTML;
+                cont.innerHTML = playoffShortcutHTML + matchesHTML + playoffHTML;
             } else {
-                if(filtered.length === 0) { cont.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>'; return; }
-                cont.innerHTML = matchesHTML;
+                if (filtered.length === 0 && !playoffShortcutHTML) { cont.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>'; return; }
+                cont.innerHTML = playoffShortcutHTML + matchesHTML;
             }
         };
 
@@ -1363,13 +1508,13 @@
             el.innerHTML = `<div style="padding:40px; font-family: sans-serif; background:white; color:#172b4d;">
                 <h1 style="text-align:center; color:#0747a6; margin:0; font-size:28px;">OFICJALNY RAPORT TURNIEJU</h1>
                 <p style="text-align:center; font-size:12px; color:#666;">Wygenerowano: ${now}</p>
-                <div style="border:3px solid #ffcc00; border-radius:15px; padding:30px; text-align:center; margin:30px 0;"><span style="font-size:40px;">🏆</span> <span style="font-size:32px; font-weight:800; color:#0747a6;">${gold.name}</span></div>
-                <div style="display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:5px; text-align:center; align-items:flex-end;"><div style="background:#e5e5e5; padding:15px; border-radius:8px 8px 0 0;">2. MIEJSCE<br><b>${silver.name}</b></div><div style="background:#ffcc00; padding:25px; border-radius:8px 8px 0 0;">1. MIEJSCE<br><b style="font-size:18px;">${gold.name}</b></div><div style="background:#f5f5f5; padding:10px; border-radius:8px 8px 0 0;">3. MIEJSCE<br><b>${bronze.name}</b></div></div>
-                <div style="background:#172b4d; color:white; border-radius:12px; display:grid; grid-template-columns:1fr 1fr; padding:20px; gap:10px; margin-top:20px;"><div style="border-right:1px solid #333;">⚽ KRÓL STRZELCÓW<br><b>${s.scorer?s.scorer[0]:'-'}</b></div><div>🧤 ZŁOTA RĘKAWICA<br><b>${s.gk?s.gk.n:'-'}</b></div></div>
+                <div style="border:3px solid #ffcc00; border-radius:15px; padding:30px; text-align:center; margin:30px 0;"><span style="font-size:40px;">🏆</span> <span style="font-size:32px; font-weight:800; color:#0747a6;">${esc(gold.name)}</span></div>
+                <div style="display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:5px; text-align:center; align-items:flex-end;"><div style="background:#e5e5e5; padding:15px; border-radius:8px 8px 0 0;">2. MIEJSCE<br><b>${esc(silver.name)}</b></div><div style="background:#ffcc00; padding:25px; border-radius:8px 8px 0 0;">1. MIEJSCE<br><b style="font-size:18px;">${esc(gold.name)}</b></div><div style="background:#f5f5f5; padding:10px; border-radius:8px 8px 0 0;">3. MIEJSCE<br><b>${esc(bronze.name)}</b></div></div>
+                <div style="background:#172b4d; color:white; border-radius:12px; display:grid; grid-template-columns:1fr 1fr; padding:20px; gap:10px; margin-top:20px;"><div style="border-right:1px solid #333;">⚽ KRÓL STRZELCÓW<br><b>${esc(s.scorer?s.scorer[0]:'-')}</b></div><div>🧤 ZŁOTA RĘKAWICA<br><b>${esc(s.gk?s.gk.n:'-')}</b></div></div>
                 <h3 style="margin-top:30px; border-bottom:2px solid #0747a6; padding-bottom:5px;">🗓 PROTOKÓŁ MECZOWY</h3>
                 <table border="1" style="width:100%; border-collapse:collapse; font-size:10px; text-align:center;">
-                    ${state.matches.filter(m=>m.played).map(m=>`<tr><td>${m.t1.name} - ${m.t2.name}</td><td><b>${m.g1}:${m.g2}</b></td><td>${(m.s1||[]).map(x=>x.name).join(', ')} / ${(m.s2||[]).map(x=>x.name).join(', ')}</td></tr>`).join('')}
-                    ${state.playoffs.filter(m=>m.played).map(m=>`<tr style="background:#fff9c4;"><td>${m.n}: ${m.t1.name} - ${m.t2.name}</td><td><b>${m.g1}:${m.g2}${m.pen1!=null ? ` (k. ${m.pen1}:${m.pen2})` : ''}</b></td><td>${(m.s1||[]).map(x=>x.name).join(', ')} / ${(m.s2||[]).map(x=>x.name).join(', ')}</td></tr>`).join('')}
+                    ${state.matches.filter(m=>m.played).map(m=>`<tr><td>${esc(m.t1.name)} - ${esc(m.t2.name)}</td><td><b>${m.g1}:${m.g2}</b></td><td>${(m.s1||[]).map(x=>esc(x.name)).join(', ')} / ${(m.s2||[]).map(x=>esc(x.name)).join(', ')}</td></tr>`).join('')}
+                    ${state.playoffs.filter(m=>m.played).map(m=>`<tr style="background:#fff9c4;"><td>${esc(m.n)}: ${esc(m.t1.name)} - ${esc(m.t2.name)}</td><td><b>${m.g1}:${m.g2}${m.pen1!=null ? ` (k. ${m.pen1}:${m.pen2})` : ''}</b></td><td>${(m.s1||[]).map(x=>esc(x.name)).join(', ')} / ${(m.s2||[]).map(x=>esc(x.name)).join(', ')}</td></tr>`).join('')}
                 </table>
             </div>`;
             html2pdf().from(el).set({ margin:10, filename:'Raport_Turnieju.pdf' }).save();
@@ -1424,7 +1569,7 @@
         window.renderSc = () => {
             const d = n => (state.active['s'+n]||[]).map((s,i)=>`
                 <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center;">
-                    <input type="text" value="${s.name}" onchange="state.active.s${n}[${i}].name=this.value" style="font-size:12px; flex:1; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;">
+                    <input type="text" value="${escAttr(s.name)}" onchange="state.active.s${n}[${i}].name=this.value" style="font-size:12px; flex:1; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;">
                     <button onclick="state.active.s${n}.splice(${i},1);state.active.g${n}--;window.renderSc();document.getElementById('mG${n}').value=state.active.g${n};window.checkPenaltyVisibility();" style="color:#de350b; border:none; background:none; font-size:20px; cursor:pointer; font-weight:bold; padding:0 5px;">&times;</button>
                 </div>`).join('');
             document.getElementById('sc1').innerHTML=d(1); document.getElementById('sc2').innerHTML=d(2);
@@ -1484,7 +1629,7 @@
             let archState = archiveDatabase[key]; if(!archState) return; isFanMode = true;
             history.replaceState(null, '', `?id=${encodeURIComponent(activeKey)}&view=archive&localArchiveId=${encodeURIComponent(key)}`);
             document.head.insertAdjacentHTML('beforeend', '<style id="arch-style">' + readonlyCSS + 'button[onclick*="start"], button[onclick*="sklady"], button[onclick*="grupy"], button[onclick*="archiwum"], .del-archive-btn { display: none !important; }</style>');
-            document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM: ${archState._meta_name}</span>`;
+            document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM: ${esc(archState._meta_name)}</span>`;
             document.getElementById('btn-qr').style.display = 'none'; let headerEl = document.querySelector('header'); let exitBtn = document.createElement('button');
             exitBtn.innerText = "✖ ZAMKNIJ ARCHIWUM"; exitBtn.style.cssText = "display: block !important; background:#fff; color:#de350b; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; pointer-events:auto;";
             exitBtn.onclick = () => location.reload(); headerEl.appendChild(exitBtn); state = archState; window.renderGroupsList(); window.calcTables(); window.renderPodium();
@@ -1496,11 +1641,11 @@
             const cont = document.getElementById('archive-list-display'); if(!cont) return; let html = '';
             html += '<h4 style="color:#ff8b00; border-bottom:2px solid #ff8b00; padding-bottom:5px; margin-top:0;">🟠 MOJE WSTRZYMANE SESJE</h4>';
             if(Object.keys(frozenDatabase).length === 0) { html += '<p style="font-size:12px; color:#666;">Brak zapisanych sesji.</p>'; } else {
-                html += Object.keys(frozenDatabase).reverse().map(key => { let t = frozenDatabase[key]; return `<div class="archive-item" style="border-left-color:#ff8b00;" onclick="unfreezeTournament('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'frozen')">✖ USUŃ</button><b style="font-size:14px;">${t._meta_name}</b><br><small style="color:#666;">❄️ Zamrożono: ${t._meta_date}</small></div>`; }).join('');
+                html += Object.keys(frozenDatabase).reverse().map(key => { let t = frozenDatabase[key]; return `<div class="archive-item" style="border-left-color:#ff8b00;" onclick="unfreezeTournament('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'frozen')">✖ USUŃ</button><b style="font-size:14px;">${esc(t._meta_name)}</b><br><small style="color:#666;">❄️ Zamrożono: ${esc(t._meta_date)}</small></div>`; }).join('');
             }
             html += '<h4 style="color:#00875a; border-bottom:2px solid #00875a; padding-bottom:5px; margin-top:25px;">💾 MOJE ZAKOŃCZONE TURNIEJE</h4>';
             if(Object.keys(archiveDatabase).length === 0) { html += '<p style="font-size:12px; color:#666;">Brak zarchiwizowanych turniejów.</p>'; } else {
-                html += Object.keys(archiveDatabase).reverse().map(key => { let t = archiveDatabase[key]; return `<div class="archive-item" onclick="openArchive('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'archive')">✖ USUŃ</button><b style="font-size:14px;">${t._meta_name}</b><br><small style="color:#666;">🗓 Zakończono: ${t._meta_date}</small></div>`; }).join('');
+                html += Object.keys(archiveDatabase).reverse().map(key => { let t = archiveDatabase[key]; return `<div class="archive-item" onclick="openArchive('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'archive')">✖ USUŃ</button><b style="font-size:14px;">${esc(t._meta_name)}</b><br><small style="color:#666;">🗓 Zakończono: ${esc(t._meta_date)}</small></div>`; }).join('');
             }
             cont.innerHTML = html;
         };
@@ -1535,7 +1680,10 @@
         window.renderPodium = () => {
             const s = window.calcStats(); const f = (state.playoffs||[]).find(m=>m.n.includes("FINAŁ")); const m3 = (state.playoffs||[]).find(m=>m.n.includes("3. MIEJSCE"));
             if(!f?.played) {
-                document.getElementById('podium-view').innerHTML = `<div class="card" style="text-align:center; padding:30px; color:#666;">🏆 <b>Klasyfikacja końcowa zablokowana</b><br>Uzupełnij brakujący Półfinał 2 w zakładce "Mecze", aby serwer SaaS wyliczył podium oraz przyznał statuetki!</div>`;
+                const blockedMsg = isFanMode
+                    ? `🏆 <b>Podium wkrótce dostępne</b><br>Turniej jeszcze trwa — klasyfikacja końcowa i nagrody pojawią się po rozegraniu wszystkich meczów. Śledź wyniki na bieżąco w zakładce „Mecze”!`
+                    : `🏆 <b>Klasyfikacja końcowa zablokowana</b><br>Uzupełnij brakujący Półfinał 2 w zakładce "Mecze", aby serwer SaaS wyliczył podium oraz przyznał statuetki!`;
+                document.getElementById('podium-view').innerHTML = `<div class="card" style="text-align:center; padding:30px; color:#666;">${blockedMsg}</div>`;
                 document.getElementById('btn-pdf-final').style.display = 'none';
                 return;
             }
@@ -1565,8 +1713,6 @@
                     state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
                     if (archiveId || localArchiveId) {
                         document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
-                        console.log({ archiveId, localArchiveId, archiveState: d });
-                        console.log('CALLING initArchiveViewer', d);
                         initArchiveViewer(d);
                     }
                     window.renderInputs();
@@ -1589,6 +1735,9 @@
 
     // --- 7. START CAŁEGO SYSTEMU ---
     executeRouter();
+    db.ref('.info/connected').once('value', snap => {
+        setFirebaseStatus(snap.val() === true ? 'connected' : 'offline');
+    });
 </script>
 </body>
 </html>
