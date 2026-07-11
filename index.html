@@ -666,6 +666,17 @@
     // --- MODUŁ C: LOGIKA KONSOLI SĘDZIEGO ---
     // ==========================================
     let state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [] };
+
+    function esc(value) {
+        if (value == null) return '';
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
     let archiveDatabase = {}; let frozenDatabase = {}; let tempLocalOrders = {};
     let currentStatusFilter = 'all'; let currentGroupFilter = 'all';
 
@@ -790,7 +801,10 @@
         }
 
         window.save = () => { 
-            if(!isFanMode && !isDemoMode) db.ref('turnieje_uzytkownikow/' + activeKey).set(state); 
+        if(!isFanMode && !isDemoMode) {
+        const { active, ...payload } = state;
+        db.ref('turnieje_uzytkownikow/' + activeKey).set(payload);
+         }
         };
         
         window.addMin = (time, min) => { let [h, m] = time.split(':').map(Number); let d = new Date(0, 0, 0, h, m); d.setMinutes(d.getMinutes() + parseInt(min)); return d.toTimeString().slice(0, 5); };
@@ -921,10 +935,10 @@
                 
                 return `
                     <div class="match-card" onclick="openMatch(${m.id})">
-                        <span class="match-time-badge">${m.time}</span>
-                        <div class="team-left" title="${m.t1.name}">${m.t1.name}</div>
+                        <span class="match-time-badge">${esc(m.time)}</span>
+                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
                         <div><span class="match-score">${scoreText}</span></div>
-                        <div class="team-right" title="${m.t2.name}">${m.t2.name}</div>
+                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
                         ${upDownButtons}
                     </div>`;
             }).join('');
@@ -1185,11 +1199,11 @@
                     if(nm) nm[state.active.slot] = w; 
                 }
                 if(state.active.loserNext) { 
-    let targetId = state.active.loserNext;
-    let targetSlot = state.active.loserSlot || state.active.slotLoser || 't2';
-    let nlm = state.playoffs.find(m => m.id === targetId); 
-    if(nlm) nlm[targetSlot] = l; 
-}
+            let targetId = state.active.loserNext;
+            let targetSlot = state.active.loserSlot || state.active.slotLoser || 't2';
+            let nlm = state.playoffs.find(m => m.id === targetId); 
+            if(nlm) nlm[targetSlot] = l; 
+                }
             }
 
             window.logAction(`Zapisano wynik meczu #${state.active.id}: ${state.active.t1.name} ${state.active.g1}:${state.active.g2} ${state.active.t2.name}.`);
