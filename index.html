@@ -14,9 +14,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="demo-story-scenario.bundle.js?v=20260712"></script>
     <script src="demo-story.js?v=20260712"></script>
-    <script src="tiebreak-engine.js?v=20260712s3"></script>
-    <script src="tiebreak-audit.js?v=20260712s3"></script>
-    <script src="tiebreak-ui.js?v=20260712s3"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -168,20 +165,6 @@
         #view-app .advancing-row td:first-child { border-left: 4px solid #00875a; position: relative; }
         #view-app .absolute-remis-row { background-color: #fff0b3 !important; }
         #view-app .absolute-remis-row td:first-child { border-left: 4px solid #ff8b00; position: relative; }
-        #view-app .tiebreak-tables-intro { margin-bottom: 15px; font-size: 11px; background: #e3fcef; color: #00875a; padding: 8px; border-radius: 4px; border-left: 4px solid #00875a; font-weight: bold; }
-        #view-app .tiebreak-po-blocked-banner { margin-bottom: 15px; font-size: 12px; background: #fff0b3; color: #974f0c; padding: 10px 12px; border-radius: 6px; border-left: 4px solid #ff8b00; font-weight: bold; }
-        #view-app .tiebreak-group-banner { margin-bottom: 10px; padding: 10px 12px; border-radius: 6px; font-size: 12px; line-height: 1.45; }
-        #view-app .tiebreak-group-banner.tiebreak-pending { background: #fff0b3; border: 1px solid #ff8b00; color: #974f0c; }
-        #view-app .tiebreak-group-banner.tiebreak-confirmed { background: #e3fcef; border: 1px solid #57d9a3; color: #006644; }
-        #view-app .tiebreak-group-banner.tiebreak-incomplete { background: #f4f5f7; border: 1px solid #c1c7d0; color: #42526e; }
-        #view-app .tiebreak-banner-title { font-weight: 800; font-size: 13px; margin-bottom: 4px; }
-        #view-app .tiebreak-banner-msg { margin-top: 4px; }
-        #view-app .tiebreak-banner-order, #view-app .tiebreak-banner-meta, #view-app .tiebreak-banner-seed { margin-top: 4px; font-size: 12px; }
-        #view-app .tiebreak-seed-code { font-family: monospace; font-size: 11px; word-break: break-all; }
-        #view-app .tiebreak-draw-btn { margin-top: 8px; background: #0052cc; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        #view-app .tiebreak-draw-btn:hover { background: #0747a6; }
-        #view-app .tiebreak-confirmed-badge { font-size: 11px; font-weight: bold; color: #00875a; background: #e3fcef; padding: 2px 6px; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
-        #view-app #tieBreakModal .btn-secondary { background: #42526e; color: #fff; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         #view-app .del-archive-btn { position: absolute; right: 10px; top: 10px; background: #ffebe6; color: #de350b; border: 1px solid #ffbdad; border-radius: 4px; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; z-index: 10; }
         #view-app .del-archive-btn:hover { background: #de350b; color: white; }
         #view-app .table-order-btn { background: #ebf2ff; border: 1px solid #0052cc; color: #0052cc; border-radius: 3px; padding: 1px 5px; font-size: 11px; cursor: pointer; font-weight: bold; margin-left: 3px; }
@@ -664,29 +647,6 @@
                 <button id="btn-sc2" onclick="addSc(2)" class="btn-goal"></button>
             </div>
             <button class="btn-main" onclick="saveMatch()">ZAPISZ WYNIK MECZU</button>
-        </div>
-    </div>
-
-    <div id="tieBreakModal" class="modal">
-        <div class="modal-content">
-            <span onclick="closeTieBreakModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-            <h4>⚖ Remis absolutny — Gr. <span id="tb-group"></span></h4>
-            <div id="tb-step-confirm">
-                <p style="font-size:13px; color:#42526e;">Drużyny objęte remisem absolutnym:</p>
-                <p id="tb-cluster-teams" style="font-size:14px; margin: 8px 0 12px;"></p>
-                <p style="font-size:12px; color:#666;">Miejsc awansujących w grupie: <b id="tb-adv-per-group"></b> · Losowanie jest audytowalne (seed + operator + czas).</p>
-                <p style="font-size:12px; color:#974f0c; font-weight:bold;">Czy na pewno chcesz wylosować kolejność?</p>
-                <button type="button" id="tb-draw-run" class="btn-main tiebreak-action-btn" onclick="confirmTieBreakDraw()">🎲 Losuj kolejność</button>
-                <button type="button" class="btn-secondary tiebreak-action-btn" onclick="closeTieBreakModal()">Anuluj</button>
-            </div>
-            <div id="tb-step-result" style="display:none;">
-                <p style="font-size:13px; color:#00875a; font-weight:bold;">✅ Losowanie zapisane</p>
-                <p style="font-size:12px; margin:8px 0 4px;"><b>Kolejność:</b></p>
-                <p id="tb-result-order" style="font-size:14px; margin:0 0 10px;"></p>
-                <p style="font-size:12px; margin:0;"><b>Operator · czas:</b> <span id="tb-result-meta"></span></p>
-                <p style="font-size:12px; margin:8px 0 0;"><b>Seed:</b> <code id="tb-result-seed" class="tiebreak-seed-code"></code></p>
-                <button type="button" class="btn-main tiebreak-action-btn" style="background:#00875a;" onclick="closeTieBreakModal()">Zamknij</button>
-            </div>
         </div>
     </div>
 
@@ -1637,64 +1597,47 @@
         };
 
         window.getSortedGroupStats = (gn) => {
-            return TiebreakEngine.getSortedGroupStats(gn, {
-                groups: state.groups,
-                matches: state.matches,
-                settings: state.settings,
-                tempLocalOrder: tempLocalOrders[gn]
+            let st = state.groups[gn].map(t => ({t, m:0, w:0, r:0, p:0, pkt:0, bz:0, bs:0}));
+            let groupMatches = (state.matches || []).filter(m => m.group === gn && m.played);
+
+            groupMatches.forEach(m => {
+                let s1 = st.find(s => s.t.id === m.t1.id); let s2 = st.find(s => s.t.id === m.t2.id);
+                if(s1 && s2) {
+                    s1.m++; s2.m++; s1.bz += m.g1; s1.bs += m.g2; s2.bz += m.g2; s2.bs += m.g1;
+                    if(m.g1 > m.g2) { s1.pkt += 3; s1.w++; s2.p++; } else if(m.g2 > m.g1) { s2.pkt += 3; s2.w++; s1.p++; } else { s1.pkt++; s2.pkt++; s1.r++; s2.r++; }
+                }
             });
-        };
 
-        let tieBreakModalGroup = null;
+            let pointGroups = {}; st.forEach(s => { if(!pointGroups[s.pkt]) pointGroups[s.pkt] = []; pointGroups[s.pkt].push(s); });
+            Object.values(pointGroups).forEach(group => {
+                group.forEach(s => { s.h2h_pkt = 0; s.h2h_bz = 0; s.h2h_bs = 0; });
+                if(group.length > 1) {
+                    let tIds = group.map(s => s.t.id);
+                    groupMatches.forEach(m => {
+                        if(tIds.includes(m.t1.id) && tIds.includes(m.t2.id)) {
+                            let s1 = group.find(x => x.t.id === m.t1.id); let s2 = group.find(x => x.t.id === m.t2.id);
+                            if(s1 && s2) {
+                                s1.h2h_bz += m.g1; s1.h2h_bs += m.g2; s2.h2h_bz += m.g2; s2.h2h_bs += m.g1;
+                                if(m.g1 > m.g2) s1.h2h_pkt += 3; else if(m.g2 > m.g1) s2.h2h_pkt += 3; else { s1.h2h_pkt += 1; s2.h2h_pkt += 1; }
+                            }
+                        }
+                    });
+                }
+            });
 
-        window.formatTieBreakOrderNames = function (gn, resolvedOrder) {
-            const st = window.getSortedGroupStats(gn);
-            return (resolvedOrder || []).map(function (id, i) {
-                const found = st.find(function (s) { return s.t.id === id; });
-                return (i + 1) + '. ' + esc(found ? found.t.name : id);
-            }).join(' · ');
-        };
+            st.sort((a, b) => {
+                if (b.pkt !== a.pkt) return b.pkt - a.pkt; if (b.h2h_pkt !== a.h2h_pkt) return b.h2h_pkt - a.h2h_pkt;
+                let a_h2h_gd = a.h2h_bz - a.h2h_bs; let b_h2h_gd = b.h2h_bz - b.h2h_bs; if (b_h2h_gd !== a_h2h_gd) return b_h2h_gd - a_h2h_gd;
+                if (b.h2h_bz !== a.h2h_bz) return b.h2h_bz - a.h2h_bz;
+                let a_gd = a.bz - a.bs; let b_gd = b.bz - b.bs; if (b_gd !== a_gd) return b_gd - a_gd;
+                return b.bz - a.bz;
+            });
 
-        window.openTieBreakDrawModal = function (gn) {
-            if (isFanMode || isDemoMode) return;
-            const tieState = TiebreakEngine.getGroupTieState(gn, window.getTieBreakCtx(gn));
-            if (tieState.state !== 'ABSOLUTE_TIE_PENDING') return;
-            tieBreakModalGroup = gn;
-            const body = TiebreakUI.buildModalConfirmBody(gn, tieState, esc);
-            document.getElementById('tb-group').innerText = body.groupLabel;
-            document.getElementById('tb-cluster-teams').innerHTML = body.teamLine;
-            document.getElementById('tb-adv-per-group').innerText = body.advPerGroup;
-            document.getElementById('tb-step-confirm').style.display = 'block';
-            document.getElementById('tb-step-result').style.display = 'none';
-            const runBtn = document.getElementById('tb-draw-run');
-            if (runBtn) { runBtn.disabled = false; runBtn.innerText = '🎲 Losuj kolejność'; }
-            document.getElementById('tieBreakModal').style.display = 'block';
-        };
-
-        window.confirmTieBreakDraw = function () {
-            if (!tieBreakModalGroup || isFanMode || isDemoMode) return;
-            const gn = tieBreakModalGroup;
-            const btn = document.getElementById('tb-draw-run');
-            if (btn) { btn.disabled = true; btn.innerText = 'Losowanie…'; }
-            const result = window.performTieBreakDraw(gn, activeKey || 'Organizator');
-            if (btn) { btn.disabled = false; btn.innerText = '🎲 Losuj kolejność'; }
-            if (!result.ok) {
-                alert(result.error === 'DECISION_ALREADY_EXISTS'
-                    ? 'Ta grupa ma już zapisaną decyzję losowania.'
-                    : (result.error || 'Losowanie nie powiodło się.'));
-                return;
+            if(tempLocalOrders[gn]) { st.sort((a, b) => tempLocalOrders[gn].indexOf(a.t.id) - tempLocalOrders[gn].indexOf(b.t.id)); }
+            else if(state.settings && state.settings.customTableOrder && state.settings.customTableOrder[gn]) {
+                st.sort((a, b) => state.settings.customTableOrder[gn].indexOf(a.t.id) - state.settings.customTableOrder[gn].indexOf(b.t.id));
             }
-            const body = TiebreakUI.buildModalResultBody(result.decision, esc);
-            document.getElementById('tb-step-confirm').style.display = 'none';
-            document.getElementById('tb-step-result').style.display = 'block';
-            document.getElementById('tb-result-order').innerHTML = TiebreakUI.formatDecisionOrder(result.decision, esc);
-            document.getElementById('tb-result-meta').innerText = body.meta;
-            document.getElementById('tb-result-seed').innerText = body.seed;
-        };
-
-        window.closeTieBreakModal = function () {
-            tieBreakModalGroup = null;
-            window.closeModal('tieBreakModal');
+            st.forEach((s, idx) => { s.rank = idx + 1; s.group = gn; }); return st;
         };
 
         /* --- NOWA MODYFIKACJA: IDEALNE WYRÓWNANIE STRZAŁEK W KIERUNKU PRAWEJ KRAWĘDZI --- */
@@ -1704,11 +1647,10 @@
                 if (typeof window.syncDemoStoryState === 'function') window.syncDemoStoryState();
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
+            cont.innerHTML = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie punktowym decydują miedzy sobą bezpośrednie starcia.</div>';
 
             let advIds = window.getAdvancingTeamsFull().map(t => t.id); let numGroups = Object.keys(state.groups || {}).length;
             let advCount = state.settings.advCount || 4; let anyUnconfirmedAbsoluteRemis = false;
-            let anyPendingAbsoluteTie = false;
-            let groupsHTML = '';
 
             Object.keys(state.groups || {}).forEach(gn => {
                 let st = window.getSortedGroupStats(gn); let rowsHTML = '';
@@ -1718,25 +1660,10 @@
                 let hasLocalCorrection = tempLocalOrders[gn] !== undefined;
                 let isConfirmed = state.settings && state.settings.confirmedTableOrder && state.settings.confirmedTableOrder[gn];
 
-                const tieState = TiebreakEngine.getGroupTieState(gn, {
-                    groups: state.groups,
-                    matches: state.matches,
-                    settings: state.settings,
-                    numGroups: numGroups,
-                    advCount: advCount,
-                    tempLocalOrder: tempLocalOrders[gn]
-                });
-
-                if (tieState.detectRemisAlert) {
-                    anyUnconfirmedAbsoluteRemis = true;
+                let detectRemisAlert = false;
+                if(!isConfirmed && st[cutoffIndex] && st[cutoffIndex+1]) {
+                    if(window.isAbsoluteRemis(st[cutoffIndex], st[cutoffIndex+1])) { detectRemisAlert = true; anyUnconfirmedAbsoluteRemis = true; }
                 }
-                if (tieState.state === 'ABSOLUTE_TIE_PENDING') {
-                    anyPendingAbsoluteTie = true;
-                }
-
-                const criticalIds = (tieState.criticalCluster && tieState.criticalCluster.teamIds) || [];
-                const isPending = tieState.state === 'ABSOLUTE_TIE_PENDING';
-                const hideArrows = fanRo || isPending;
 
                 st.forEach((s, idx) => {
                     let isPewniak = s.rank === 1 && numGroups <= advCount;
@@ -1746,10 +1673,10 @@
                     } else {
                         isAdvancing = advIds.includes(s.t.id) && (isPewniak || s.m > 0);
                     }
-                    const inCluster = criticalIds.includes(s.t.id);
-                    let rowClass = (isPending && inCluster) ? 'class="absolute-remis-row"' : (isAdvancing ? 'class="advancing-row"' : '');
+                    let rowClass = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1)) ? 'class="absolute-remis-row"' : (isAdvancing ? 'class="advancing-row"' : '');
                     
-                    let arrowControlsHTML = hideArrows ? '' : `
+                    // Zmiana struktury przycisków na opakowany boks
+                    let arrowControlsHTML = fanRo ? '' : `
                         <div class="table-arrow-wrapper">
                             <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, -1)">↑</button>
                             <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
@@ -1757,77 +1684,30 @@
                         
                     let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
 
+                    // Nadanie klasy table-team-cell dającej elastyczny podział komórki
                     rowsHTML += `<tr ${rowClass}><td class="table-team-cell">${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
-                });
-
-                const groupBannerHTML = TiebreakUI.buildGroupBanner(gn, tieState, {
-                    fanRo: fanRo,
-                    esc: esc,
-                    resolveOrderNames: window.formatTieBreakOrderNames
                 });
 
                 let headerBadgeHTML = '';
                 if(!fanRo) {
-                    if (tieState.state === 'ABSOLUTE_TIE_CONFIRMED' && tieState.existingDecision) {
-                        headerBadgeHTML = `<span class="tiebreak-confirmed-badge">⚖ Rozstrzygnięto losowaniem</span>`;
-                    } else if (isConfirmed && tieState.state === 'ABSOLUTE_TIE_CONFIRMED') {
-                        headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#00875a; background:#e3fcef; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">✍️ Układ zatwierdzony</span>`;
-                    }
+                    if (detectRemisAlert) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#ff8b00; background:#fff0b3; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">⚠️ REMIS ABSOLUTNY! Użyj strzałek</span>`;
+                    else if (isConfirmed) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#00875a; background:#e3fcef; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">✍️ Układ zatwierdzony</span>`;
 
-                    if(hasLocalCorrection && !isPending) headerBadgeHTML += `<button class="table-save-btn" onclick="confirmTableOrder('${gn}')">✅ ZATWIERDŹ UKŁAD</button>`;
-                    if((hasDbCorrection || hasLocalCorrection) && !isPending) headerBadgeHTML += `<button class="table-reset-btn" onclick="resetTableOrder('${gn}')">🔄 AUTOMAT</button>`;
+                    if(hasLocalCorrection) headerBadgeHTML += `<button class="table-save-btn" onclick="confirmTableOrder('${gn}')">✅ ZATWIERDŹ UKŁAD</button>`;
+                    if(hasDbCorrection || hasLocalCorrection) headerBadgeHTML += `<button class="table-reset-btn" onclick="resetTableOrder('${gn}')">🔄 AUTOMAT</button>`;
                 }
-                groupsHTML += `<div class="card">${groupBannerHTML}<h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table><tr><th style="text-align:left">Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BZ</th><th>BS</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
+                cont.innerHTML += `<div class="card"><h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table><tr><th style="text-align:left">Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BZ</th><th>BS</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
             });
-
-            cont.innerHTML = TiebreakUI.buildTablesIntro() +
-                (anyPendingAbsoluteTie ? TiebreakUI.buildPoBlockedBanner() : '') +
-                groupsHTML;
 
             const poBtn = document.getElementById('btn-start-po');
             if(poBtn) {
                 if (isDemoMode || window._demoStoryFanEmbed) { poBtn.style.display = 'none'; }
-                else if(anyUnconfirmedAbsoluteRemis) {
-                    poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed';
-                    poBtn.innerText = "🔒 ROZSTRZYGNIJ REMIS ABSOLUTNY";
-                } else {
-                    poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer';
-                    poBtn.innerText = "START PLAY-OFF";
-                }
+                if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
+                else { poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer'; poBtn.innerText = "START PLAY-OFF"; }
             }
         };
 
-        window.isAbsoluteRemis = TiebreakEngine.isAbsoluteRemis;
-
-        window.getTieBreakCtx = function (gn) {
-            const numGroups = Object.keys(state.groups || {}).length;
-            return {
-                groups: state.groups,
-                matches: state.matches,
-                settings: state.settings,
-                numGroups: numGroups,
-                advCount: state.settings.advCount || 4,
-                tempLocalOrder: tempLocalOrders[gn]
-            };
-        };
-
-        window.performTieBreakDraw = function (gn, actorLabel) {
-            if (isFanMode || isDemoMode) return { ok: false, error: 'READONLY' };
-            if (!state.settings) state.settings = {};
-            TiebreakEngine.migrateTieBreakSettings(state.settings);
-            const result = TiebreakEngine.performAuditedDraw(gn, window.getTieBreakCtx(gn), {
-                actorLabel: actorLabel || activeKey || 'Organizator',
-                tournamentId: activeKey || '',
-                actorUserId: activeKey || null
-            });
-            if (result.ok) {
-                delete tempLocalOrders[gn];
-                window.logAction(TiebreakEngine.formatTieBreakLogMessage(result.decision));
-                window.save();
-                window.calcTables();
-            }
-            return result;
-        };
+        window.isAbsoluteRemis = (a, b) => { return a.pkt === b.pkt && (a.h2h_pkt || 0) === (b.h2h_pkt || 0) && (a.h2h_bz - a.h2h_bs) === (b.h2h_bz - b.h2h_bs) && a.h2h_bz === b.h2h_bz && (a.bz - a.bs) === (b.bz - b.bs) && a.bz === b.bz; };
 
         window.getAdvancingTeamsFull = () => {
             if (!state.groups || Object.keys(state.groups).length === 0) return [];
@@ -1858,7 +1738,6 @@
                 delete tempLocalOrders[gn];
                 if(state.settings && state.settings.customTableOrder) delete state.settings.customTableOrder[gn];
                 if(state.settings && state.settings.confirmedTableOrder) delete state.settings.confirmedTableOrder[gn];
-                if (TiebreakEngine.removeTieBreakDecision) TiebreakEngine.removeTieBreakDecision(state.settings, gn);
                 window.logAction(`Przywrócono automatyczne wyliczanie bilansu dla grupy ${gn}.`);
                 window.save(); window.calcTables();
             }
@@ -2340,7 +2219,7 @@
             : (localArchiveId && activeKey) ? ('turnieje_uzytkownikow/' + activeKey + '/archiwum/' + localArchiveId)
             : ('turnieje_uzytkownikow/' + activeKey);
         const dbPath = dbPathLive;
-        const readonlyCSS = 'header button, .btn-main, .order-controls, .time-setting, #setup-view, #btn-theme, .table-order-btn, .table-reset-btn, .table-save-btn, .filter-bar, #tb-draw-run, .tiebreak-draw-btn, .tiebreak-action-btn { display: none !important; } .match-card { cursor: default !important; pointer-events: none !important; } input, select { pointer-events: none !important; border: none !important; background: transparent !important; color: inherit !important; outline: none !important; -webkit-appearance: none; appearance: none; } ';
+        const readonlyCSS = 'header button, .btn-main, .order-controls, .time-setting, #setup-view, #btn-theme, .table-order-btn, .table-reset-btn, .table-save-btn, .filter-bar { display: none !important; } .match-card { cursor: default !important; pointer-events: none !important; } input, select { pointer-events: none !important; border: none !important; background: transparent !important; color: inherit !important; outline: none !important; -webkit-appearance: none; appearance: none; } ';
 
         if (isFanMode) {
             document.head.insertAdjacentHTML('beforeend', '<style>' + readonlyCSS + 'button[onclick*="start"], button[onclick*="sklady"], button[onclick*="grupy"], button[onclick*="archiwum"] { display: none !important; }</style>');
@@ -2399,9 +2278,6 @@
                 const d = s.val();
                 if(d) {
                     state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
-                    if (state.settings && TiebreakEngine.migrateTieBreakSettings) {
-                        TiebreakEngine.migrateTieBreakSettings(state.settings);
-                    }
                     if (archiveId || localArchiveId) {
                         document.getElementById('app-header-title').innerHTML = `TurniejPro SaaS <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
                         initArchiveViewer(d);

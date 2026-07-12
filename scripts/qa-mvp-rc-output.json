@@ -1,0 +1,327 @@
+{
+  "demoStory": {
+    "pass": false,
+    "checks": [
+      {
+        "id": "E0-entry-btn",
+        "status": "PASS",
+        "detail": "Przycisk wej┼Ťcia widoczny"
+      },
+      {
+        "id": "E0-view-active",
+        "status": "PASS",
+        "detail": "Demo Story view aktywny"
+      },
+      {
+        "id": "E1-step",
+        "status": "PASS",
+        "detail": "Krok E1"
+      },
+      {
+        "id": "E1-teams-16",
+        "status": "PASS",
+        "detail": "16 dru┼╝yn"
+      },
+      {
+        "id": "E1-matches-32",
+        "status": "PASS",
+        "detail": "32 mecze"
+      },
+      {
+        "id": "E1-played-31",
+        "status": "PASS",
+        "detail": "31 rozegranych"
+      },
+      {
+        "id": "E1-one-match-msg",
+        "status": "PASS",
+        "detail": "Komunikat o jednym pozosta┼éym meczu"
+      },
+      {
+        "id": "E2-step",
+        "status": "PASS",
+        "detail": "Krok E2"
+      },
+      {
+        "id": "E2-total-32",
+        "status": "PASS",
+        "detail": "32 mecz├│w w stanie"
+      },
+      {
+        "id": "E2-tab-mecze",
+        "status": "PASS",
+        "detail": "mecze render OK (len=1918)"
+      },
+      {
+        "id": "E2-tab-tabele",
+        "status": "PASS",
+        "detail": "tabele render OK (len=878)"
+      },
+      {
+        "id": "E2-tab-playoff",
+        "status": "PASS",
+        "detail": "playoff render OK (len=586)"
+      },
+      {
+        "id": "E2-mobile-tabs",
+        "status": "PASS",
+        "detail": "Taby dzia┼éaj─ů @375px"
+      },
+      {
+        "id": "E2-mobile-layout",
+        "status": "PASS",
+        "detail": "Brak rozsypania @375px"
+      },
+      {
+        "id": "E3-step",
+        "status": "PASS",
+        "detail": "Krok E3"
+      },
+      {
+        "id": "E3-31-32",
+        "status": "PASS",
+        "detail": "31/32 mecz├│w"
+      },
+      {
+        "id": "E3-final-only-unplayed",
+        "status": "PASS",
+        "detail": "Fina┼é jedynym nierozegranym"
+      },
+      {
+        "id": "E3-finalists",
+        "status": "PASS",
+        "detail": "FC Or┼éy Pozna┼ä vs United Lubo┼ä"
+      },
+      {
+        "id": "E3-dashboard",
+        "status": "PASS",
+        "detail": "Dashboard/status organizatora OK"
+      },
+      {
+        "id": "E4-input-3-2",
+        "status": "PASS",
+        "detail": "Pola wyniku 3:2"
+      },
+      {
+        "id": "E4-save-transition",
+        "status": "PASS",
+        "detail": "Zapis fina┼éu Ôćĺ E5"
+      },
+      {
+        "id": "E5-step-saved",
+        "status": "PASS",
+        "detail": "E5 po zapisie fina┼éu"
+      },
+      {
+        "id": "E5-32-32",
+        "status": "PASS",
+        "detail": "32/32 rozegranych"
+      },
+      {
+        "id": "E5-podium-1",
+        "status": "PASS",
+        "detail": "FC Or┼éy Pozna┼ä"
+      },
+      {
+        "id": "E5-podium-2",
+        "status": "PASS",
+        "detail": "United Lubo┼ä"
+      },
+      {
+        "id": "E5-podium-3",
+        "status": "PASS",
+        "detail": "Sparta Swarz─Ödz"
+      },
+      {
+        "id": "E5-scorer",
+        "status": "FAIL",
+        "detail": "Brak kr├│la strzelc├│w w UI"
+      },
+      {
+        "id": "E5-gk",
+        "status": "PASS",
+        "detail": "­čžĄ Nowak ÔÇö 2 czyste konta"
+      },
+      {
+        "id": "E5-cta",
+        "status": "PASS",
+        "detail": "CTA E5 obecne"
+      },
+      {
+        "id": "E6-step",
+        "status": "PASS",
+        "detail": "Krok E6"
+      },
+      {
+        "id": "E6-copy-cta",
+        "status": "PASS",
+        "detail": "Copy + CTA render OK"
+      },
+      {
+        "id": "E7-step",
+        "status": "PASS",
+        "detail": "Krok E7"
+      },
+      {
+        "id": "E7-final-3-2",
+        "status": "PASS",
+        "detail": "Wynik 3:2 w archiwum"
+      },
+      {
+        "id": "E7-no-old-scenario",
+        "status": "PASS",
+        "detail": "Brak starych 56/55"
+      },
+      {
+        "id": "E7-podium-1",
+        "status": "PASS",
+        "detail": "FC Or┼éy Pozna┼ä"
+      },
+      {
+        "id": "E7-podium-2",
+        "status": "PASS",
+        "detail": "United Lubo┼ä"
+      },
+      {
+        "id": "E7-podium-3",
+        "status": "PASS",
+        "detail": "Sparta Swarz─Ödz"
+      }
+    ],
+    "failures": [
+      {
+        "id": "E5-scorer",
+        "detail": "Brak kr├│la strzelc├│w w UI"
+      }
+    ]
+  },
+  "tieBreak": {
+    "pass": true,
+    "checks": [
+      {
+        "id": "TB-banner",
+        "status": "PASS",
+        "detail": "Banner remisu absolutnego"
+      },
+      {
+        "id": "TB-po-blocked",
+        "status": "PASS",
+        "detail": "Play-off zablokowany"
+      },
+      {
+        "id": "TB-draw-btn",
+        "status": "PASS",
+        "detail": "Przycisk Losuj kolejno┼Ť─ç"
+      },
+      {
+        "id": "TB-modal",
+        "status": "PASS",
+        "detail": "Modal potwierdzenia"
+      },
+      {
+        "id": "TB-decision-saved",
+        "status": "PASS",
+        "detail": "Decyzja zapisana"
+      },
+      {
+        "id": "TB-po-unlock",
+        "status": "PASS",
+        "detail": "Play-off odblokowany"
+      },
+      {
+        "id": "TB-fan-readonly",
+        "status": "PASS",
+        "detail": "Widok kibica readonly"
+      },
+      {
+        "id": "TB-archive-meta",
+        "status": "PASS",
+        "detail": "Meta archiwum tie-break"
+      },
+      {
+        "id": "TB-pdf-section",
+        "status": "PASS",
+        "detail": "Sekcja PDF tie-break"
+      }
+    ],
+    "failures": []
+  },
+  "admin": {
+    "pass": true,
+    "checks": [
+      {
+        "id": "ADM-view",
+        "status": "PASS",
+        "detail": "Widok admin aktywny"
+      },
+      {
+        "id": "ADM-btn-PODGL─äD",
+        "status": "PASS",
+        "detail": "PODGL─äD obecny"
+      },
+      {
+        "id": "ADM-btn-BLOKUJ",
+        "status": "PASS",
+        "detail": "BLOKUJ obecny"
+      },
+      {
+        "id": "ADM-btn-USU┼â",
+        "status": "PASS",
+        "detail": "USU┼â obecny"
+      },
+      {
+        "id": "ADM-btn-24H",
+        "status": "PASS",
+        "detail": "+24H obecny"
+      },
+      {
+        "id": "ADM-table-layout",
+        "status": "PASS",
+        "detail": "Tabela licencji bez nachodzenia"
+      }
+    ],
+    "failures": []
+  },
+  "firebase": {
+    "pass": true,
+    "checks": [
+      {
+        "id": "demo-no-writes",
+        "status": "PASS",
+        "detail": "Brak zapis├│w Firebase w Demo Story"
+      }
+    ],
+    "failures": []
+  },
+  "console": {
+    "pass": false,
+    "checks": [
+      {
+        "id": "no-errors",
+        "status": "FAIL",
+        "detail": "Cannot read properties of undefined (reading 'ref') | Cannot read properties of undefined (reading 'ref')"
+      }
+    ],
+    "failures": [
+      {
+        "id": "no-errors",
+        "detail": "Cannot read properties of undefined (reading 'ref') | Cannot read properties of undefined (reading 'ref')"
+      }
+    ],
+    "errors": [
+      "Cannot read properties of undefined (reading 'ref')",
+      "Cannot read properties of undefined (reading 'ref')"
+    ]
+  },
+  "issues": {
+    "critical": [
+      "Demo Story E5-scorer: Brak kr├│la strzelc├│w w UI"
+    ],
+    "high": [
+      "B┼é─Ödy konsoli: Cannot read properties of undefined (reading 'ref'); Cannot read properties of undefined (reading 'ref')"
+    ],
+    "medium": [],
+    "low": []
+  },
+  "verdict": "NOT READY FOR RELEASE"
+}
