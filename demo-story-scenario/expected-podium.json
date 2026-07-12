@@ -1,0 +1,126 @@
+{
+  "description": "Oczekiwany wynik po wpisaniu wyniku finału przez użytkownika w Demo Story. Używany do QA walidacji silnika podium.",
+  "input": {
+    "matchId": "m032",
+    "homeTeamId": "t01",
+    "homeTeamName": "FC Orły Poznań",
+    "awayTeamId": "t05",
+    "awayTeamName": "United Luboń",
+    "homeScore": 3,
+    "awayScore": 2,
+    "scoreLabel": "3 : 2"
+  },
+  "expectedAfterSave": {
+    "tournamentStatus": "closed",
+    "matchesPlayed": 32,
+    "matchesTotal": 32,
+    "finalResult": {
+      "matchId": "m032",
+      "homeScore": 3,
+      "awayScore": 2,
+      "winnerTeamId": "t01",
+      "winnerTeamName": "FC Orły Poznań",
+      "loserTeamId": "t05",
+      "loserTeamName": "United Luboń"
+    },
+    "podium": {
+      "label": "Klasyfikacja końcowa",
+      "places": [
+        {
+          "place": 1,
+          "medal": "gold",
+          "emoji": "🥇",
+          "teamId": "t01",
+          "teamName": "FC Orły Poznań",
+          "copyDeckLabel": "🥇 FC Orły Poznań"
+        },
+        {
+          "place": 2,
+          "medal": "silver",
+          "emoji": "🥈",
+          "teamId": "t05",
+          "teamName": "United Luboń",
+          "copyDeckLabel": "🥈 United Luboń"
+        },
+        {
+          "place": 3,
+          "medal": "bronze",
+          "emoji": "🥉",
+          "teamId": "t09",
+          "teamName": "Sparta Swarzędz",
+          "copyDeckLabel": "🥉 Sparta Swarzędz",
+          "source": "m031_third_place_match"
+        }
+      ]
+    },
+    "individualAwards": {
+      "topScorer": {
+        "playerId": "p001",
+        "displayName": "Kowalski",
+        "fullName": "Jan Kowalski",
+        "teamId": "t01",
+        "teamName": "FC Orły Poznań",
+        "goals": 6,
+        "copyDeckLabel": "⚽ Kowalski — 6 bramek",
+        "note": "6 bramek w 31 meczach przed finałem; bramki z finału przypisane opcjonalnie do Kowalskiego nie zmieniają rankingu w MVP"
+      },
+      "goalkeeperOfTournament": {
+        "playerId": "p002",
+        "displayName": "Nowak",
+        "fullName": "Michał Nowak",
+        "teamId": "t01",
+        "teamName": "FC Orły Poznań",
+        "cleanSheets": 2,
+        "copyDeckLabel": "🧤 Nowak — 2 czyste konta"
+      }
+    },
+    "systemCallout": "Wyliczone automatycznie z protokołu meczowego",
+    "headlines": {
+      "h1": "Turniej zamknięty",
+      "subtitle": "Po finałe nie liczysz na kartce. Podium jest gotowe."
+    }
+  },
+  "qaChecks": [
+    {
+      "id": "QA-1",
+      "assertion": "Zwycięzca finału = 1. miejsce",
+      "expected": "t01"
+    },
+    {
+      "id": "QA-2",
+      "assertion": "Przegrany finału = 2. miejsce",
+      "expected": "t05"
+    },
+    {
+      "id": "QA-3",
+      "assertion": "3. miejsce = zwycięzca m031",
+      "expected": "t09"
+    },
+    {
+      "id": "QA-4",
+      "assertion": "Król strzelców",
+      "expected": {
+        "playerId": "p001",
+        "goals": 6
+      }
+    },
+    {
+      "id": "QA-5",
+      "assertion": "Bramkarz turnieju",
+      "expected": {
+        "playerId": "p002",
+        "cleanSheets": 2
+      }
+    },
+    {
+      "id": "QA-6",
+      "assertion": "Mecze rozegrane",
+      "expected": 32
+    },
+    {
+      "id": "QA-7",
+      "assertion": "Status turnieju",
+      "expected": "closed"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "manifestVersion": "1.0",
+  "tournamentId": "DEMO-STORY-2026",
+  "description": "Manifest kanonicznego pakietu danych Demo Story MVP v1.0",
+  "loadOrder": [
+    "tournament.meta.json",
+    "teams.json",
+    "groups.json",
+    "players.json",
+    "matches.json",
+    "standings.json",
+    "playoff-bracket.json",
+    "player-stats.json",
+    "expected-podium.json",
+    "archive.json"
+  ],
+  "integrity": {
+    "teamsCount": 16,
+    "matchesTotal": 56,
+    "matchesPlayed": 55,
+    "matchesPending": 1,
+    "pendingMatchId": "m056",
+    "finalists": ["t01", "t05"],
+    "thirdPlace": "t09",
+    "topScorer": { "playerId": "p001", "goals": 7 },
+    "goalkeeperOfTournament": { "playerId": "p002", "cleanSheets": 4 },
+    "canonicalFinalScore": { "home": 3, "away": 2 }
+  },
+  "screenDataMapping": {
+    "E1_Hook": ["tournament.meta.json", "heroMetrics"],
+    "E2_FanView": ["matches.json", "standings.json", "playoff-bracket.json"],
+    "E3_Organizer": ["tournament.meta.json", "playoff-bracket.json", "matches.json:m056"],
+    "E4_Final": ["matches.json:m056", "teams.json:t01,t05"],
+    "E5_Podium": ["expected-podium.json"],
+    "E7_Archive": ["archive.json"]
+  }
+}

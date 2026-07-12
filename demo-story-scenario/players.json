@@ -1,0 +1,96 @@
+{
+  "players": [
+    {
+      "id": "p001",
+      "firstName": "Jan",
+      "lastName": "Kowalski",
+      "displayName": "Kowalski",
+      "teamId": "t01",
+      "role": "field",
+      "number": 9,
+      "isTopScorer": true
+    },
+    {
+      "id": "p002",
+      "firstName": "Michał",
+      "lastName": "Nowak",
+      "displayName": "Nowak",
+      "teamId": "t01",
+      "role": "goalkeeper",
+      "number": 1,
+      "isGoalkeeperOfTournament": true
+    },
+    {
+      "id": "p003",
+      "firstName": "Adam",
+      "lastName": "Wiśniewski",
+      "displayName": "Wiśniewski",
+      "teamId": "t01",
+      "role": "field",
+      "number": 10
+    },
+    {
+      "id": "p004",
+      "firstName": "Tomasz",
+      "lastName": "Zieliński",
+      "displayName": "Zieliński",
+      "teamId": "t05",
+      "role": "field",
+      "number": 11
+    },
+    {
+      "id": "p005",
+      "firstName": "Piotr",
+      "lastName": "Lewandowski",
+      "displayName": "Lewandowski",
+      "teamId": "t05",
+      "role": "field",
+      "number": 7
+    },
+    {
+      "id": "p006",
+      "firstName": "Krzysztof",
+      "lastName": "Wójcik",
+      "displayName": "Wójcik",
+      "teamId": "t09",
+      "role": "field",
+      "number": 8
+    },
+    {
+      "id": "p007",
+      "firstName": "Marcin",
+      "lastName": "Kamiński",
+      "displayName": "Kamiński",
+      "teamId": "t09",
+      "role": "goalkeeper",
+      "number": 1
+    },
+    {
+      "id": "p008",
+      "firstName": "Damian",
+      "lastName": "Szymański",
+      "displayName": "Szymański",
+      "teamId": "t06",
+      "role": "field",
+      "number": 9
+    },
+    {
+      "id": "p009",
+      "firstName": "Bartosz",
+      "lastName": "Dąbrowski",
+      "displayName": "Dąbrowski",
+      "teamId": "t13",
+      "role": "field",
+      "number": 10
+    },
+    {
+      "id": "p010",
+      "firstName": "Łukasz",
+      "lastName": "Kaczmarek",
+      "displayName": "Kaczmarek",
+      "teamId": "t02",
+      "role": "field",
+      "number": 7
+    }
+  ]
+}

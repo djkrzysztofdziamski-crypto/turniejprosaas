@@ -1,0 +1,70 @@
+{
+  "computedAfterMatches": 31,
+  "topScorers": [
+    {
+      "rank": 1,
+      "playerId": "p001",
+      "displayName": "Kowalski",
+      "fullName": "Jan Kowalski",
+      "teamId": "t01",
+      "teamName": "FC Orły Poznań",
+      "goals": 6,
+      "isTopScorer": true,
+      "label": "Król strzelców",
+      "source": "matches.json — jedyne indywidualnie śledzone bramki w scenariuszu demo"
+    }
+  ],
+  "goalkeepers": [
+    {
+      "rank": 1,
+      "playerId": "p002",
+      "displayName": "Nowak",
+      "fullName": "Michał Nowak",
+      "teamId": "t01",
+      "teamName": "FC Orły Poznań",
+      "cleanSheets": 2,
+      "matchesPlayed": 2,
+      "isGoalkeeperOfTournament": true,
+      "label": "Bramkarz turnieju",
+      "cleanSheetMatchIds": [
+        "m003",
+        "m029"
+      ]
+    }
+  ],
+  "teamStats": {
+    "mostGoalsScored": {
+      "teamId": "t01",
+      "teamName": "FC Orły Poznań",
+      "goals": 14,
+      "note": "Suma bramek drużyny we wszystkich rozegranych meczach (mecze grupowe + play-off)"
+    },
+    "leastGoalsConceded": {
+      "teamId": "t01",
+      "teamName": "FC Orły Poznań",
+      "goalsAgainst": 2
+    }
+  },
+  "scorerTrackingPolicy": {
+    "description": "W scenariuszu demo indywidualne bramki przypisane są wyłącznie do Króla strzelców (Kowalski). Pozostałe bramki widoczne są w wynikach meczów bez przypisania zawodnika — wystarczające dla widoku kibica i podium.",
+    "individuallyTrackedPlayers": [
+      "p001"
+    ],
+    "individuallyTrackedGoalkeepers": [
+      "p002"
+    ],
+    "noteGoalkeepers": "Tylko mecze z cleanSheetGoalkeeperId wliczają się do nagrody Bramkarza Turnieju (analogicznie do strzelców)."
+  },
+  "validation": {
+    "kowalskiGoalsInMatches": 6,
+    "nowakCleanSheetsInMatches": 2,
+    "kowalskiGoalMatchIds": [
+      "m001",
+      "m003",
+      "m005",
+      "m025",
+      "m029"
+    ],
+    "note": "Statystyki wyliczone z matches.json (m001–m031). Po zapisie finału silnik aplikacji przelicza ponownie."
+  }
+}

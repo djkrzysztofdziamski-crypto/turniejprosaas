@@ -1,0 +1,119 @@
+{
+  "teams": [
+    {
+      "id": "t01",
+      "name": "FC Orły Poznań",
+      "shortName": "Orły",
+      "groupId": "A",
+      "city": "Poznań",
+      "isFinalist": true
+    },
+    {
+      "id": "t02",
+      "name": "Lech Mini Gniezno",
+      "shortName": "Lech Mini",
+      "groupId": "A",
+      "city": "Gniezno"
+    },
+    {
+      "id": "t03",
+      "name": "UKS Akademia Piłkarska Poznań",
+      "shortName": "Akademia",
+      "groupId": "A",
+      "city": "Poznań"
+    },
+    {
+      "id": "t04",
+      "name": "Red Dragons Kórnik",
+      "shortName": "Red Dragons",
+      "groupId": "A",
+      "city": "Kórnik"
+    },
+    {
+      "id": "t05",
+      "name": "United Luboń",
+      "shortName": "United",
+      "groupId": "B",
+      "city": "Luboń",
+      "isFinalist": true
+    },
+    {
+      "id": "t06",
+      "name": "Pogoń Kostrzyn",
+      "shortName": "Pogoń",
+      "groupId": "B",
+      "city": "Kostrzyn"
+    },
+    {
+      "id": "t07",
+      "name": "Polonia Środa",
+      "shortName": "Polonia",
+      "groupId": "B",
+      "city": "Środa Wielkopolska"
+    },
+    {
+      "id": "t08",
+      "name": "MKS Dąbrówka",
+      "shortName": "Dąbrówka",
+      "groupId": "B",
+      "city": "Dąbrówka"
+    },
+    {
+      "id": "t09",
+      "name": "Sparta Swarzędz",
+      "shortName": "Sparta",
+      "groupId": "C",
+      "city": "Swarzędz",
+      "isThirdPlace": true
+    },
+    {
+      "id": "t10",
+      "name": "FC Libero Swarzędz",
+      "shortName": "Libero",
+      "groupId": "C",
+      "city": "Swarzędz"
+    },
+    {
+      "id": "t11",
+      "name": "UKS Skorpion Pobiedziska",
+      "shortName": "Skorpion",
+      "groupId": "C",
+      "city": "Pobiedziska"
+    },
+    {
+      "id": "t12",
+      "name": "FC Jaroty Jarocin",
+      "shortName": "Jaroty",
+      "groupId": "C",
+      "city": "Jarocin"
+    },
+    {
+      "id": "t13",
+      "name": "KS WIKO Opalenica",
+      "shortName": "WIKO",
+      "groupId": "D",
+      "city": "Opalenica"
+    },
+    {
+      "id": "t14",
+      "name": "KS Czarnuszka Suchy Las",
+      "shortName": "Czarnuszka",
+      "groupId": "D",
+      "city": "Suchy Las"
+    },
+    {
+      "id": "t15",
+      "name": "UKS Zawisza Czarnków",
+      "shortName": "Zawisza",
+      "groupId": "D",
+      "city": "Czarnków"
+    },
+    {
+      "id": "t16",
+      "name": "MKS Murowana Goślina",
+      "shortName": "Murowana",
+      "groupId": "D",
+      "city": "Murowana Goślina"
+    }
+  ]
+}

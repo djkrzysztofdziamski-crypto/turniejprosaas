@@ -1,0 +1,81 @@
+{
+  "archive": {
+    "tournamentId": "DEMO-STORY-2026",
+    "title": "Memoriał Wiosenny 2026",
+    "venue": "Hala OSiR",
+    "location": "Poznań",
+    "status": "closed",
+    "statusLabel": "Turniej zakończony. Wyniki zostają.",
+    "subtitle": "Protokół i archiwum gotowe — dla klubów, rodziców i sponsorów.",
+    "meta": {
+      "teamsCount": 16,
+      "matchesTotal": 56,
+      "matchesPlayed": 56,
+      "groupsCount": 4,
+      "format": "16 drużyn · 4 grupy · play-off · finał",
+      "closedAt": "2026-04-12T20:15:00",
+      "closedAtLabel": "Zakończono dziś"
+    },
+    "card": {
+      "title": "Memoriał Wiosenny 2026",
+      "metaLine": "16 drużyn · 32 meczów · Zakończono dziś",
+      "icon": "folder"
+    },
+    "finalResult": {
+      "matchId": "m032",
+      "label": "WIELKI FINAŁ",
+      "homeTeamId": "t01",
+      "homeTeamName": "FC Orły Poznań",
+      "awayTeamId": "t05",
+      "awayTeamName": "United Luboń",
+      "homeScore": 3,
+      "awayScore": 2,
+      "resultLabel": "3 : 2",
+      "note": "Wynik finału po interakcji użytkownika w Demo Story (kanoniczny QA: 3:2)"
+    },
+    "podiumSummary": {
+      "first": "FC Orły Poznań",
+      "second": "United Luboń",
+      "third": "Sparta Swarzędz"
+    },
+    "awardsSummary": {
+      "topScorer": "Kowalski — 6 bramek",
+      "goalkeeper": "Nowak — 2 czyste konta"
+    },
+    "documents": [
+      {
+        "type": "report",
+        "label": "Raport turnieju",
+        "status": "available",
+        "callout": "Raport turnieju dostępny w archiwum"
+      },
+      {
+        "type": "protocol",
+        "label": "Protokół meczowy",
+        "status": "available",
+        "description": "Pełne protokoły 32 meczów"
+      },
+      {
+        "type": "standings",
+        "label": "Tabele i klasyfikacje",
+        "status": "available"
+      }
+    ],
+    "publicAccess": {
+      "fanViewAvailable": true,
+      "description": "Link lub QR — widok kibica pozostaje dostępny po zamknięciu turnieju",
+      "requiresAccount": false
+    },
+    "copyDeck": {
+      "h1": "Turniej zakończony. Wyniki zostają.",
+      "ctaPrimary": "Aktywuj licencję",
+      "ctaSecondary": "Chcesz zobaczyć więcej?"
+    },
+    "availableAfterDemoStep": "E7",
+    "preFinalState": {
+      "note": "Przed wpisaniem finału przez użytkownika archiwum nie jest dostępne. Poniższe pola dotyczą stanu po zakończeniu demo.",
+      "status": "pending_final",
+      "matchesPlayed": 31
+    }
+  }
+}

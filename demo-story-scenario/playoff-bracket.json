@@ -1,0 +1,170 @@
+{
+  "bracket": {
+    "qualification": "top_2_per_group",
+    "rounds": [
+      {
+        "id": "quarterfinal",
+        "name": "Ćwierćfinały",
+        "matches": [
+          {
+            "matchId": "m025",
+            "bracketPosition": "QF1",
+            "label": "Ćwierćfinał 1",
+            "homeSeed": "1A",
+            "awaySeed": "2B",
+            "homeTeamId": "t01",
+            "homeTeamName": "FC Orły Poznań",
+            "awayTeamId": "t06",
+            "awayTeamName": "Pogoń Kostrzyn",
+            "homeScore": 3,
+            "awayScore": 1,
+            "winnerTeamId": "t01",
+            "status": "played"
+          },
+          {
+            "matchId": "m026",
+            "bracketPosition": "QF2",
+            "label": "Ćwierćfinał 2",
+            "homeSeed": "1B",
+            "awaySeed": "2A",
+            "homeTeamId": "t05",
+            "homeTeamName": "United Luboń",
+            "awayTeamId": "t02",
+            "awayTeamName": "Lech Mini Gniezno",
+            "homeScore": 2,
+            "awayScore": 0,
+            "winnerTeamId": "t05",
+            "status": "played"
+          },
+          {
+            "matchId": "m027",
+            "bracketPosition": "QF3",
+            "label": "Ćwierćfinał 3",
+            "homeSeed": "1C",
+            "awaySeed": "2D",
+            "homeTeamId": "t09",
+            "homeTeamName": "Sparta Swarzędz",
+            "awayTeamId": "t14",
+            "awayTeamName": "KS Czarnuszka Suchy Las",
+            "homeScore": 2,
+            "awayScore": 1,
+            "winnerTeamId": "t09",
+            "status": "played"
+          },
+          {
+            "matchId": "m028",
+            "bracketPosition": "QF4",
+            "label": "Ćwierćfinał 4",
+            "homeSeed": "1D",
+            "awaySeed": "2C",
+            "homeTeamId": "t13",
+            "homeTeamName": "KS WIKO Opalenica",
+            "awayTeamId": "t10",
+            "awayTeamName": "FC Libero Swarzędz",
+            "homeScore": 1,
+            "awayScore": 0,
+            "winnerTeamId": "t13",
+            "status": "played"
+          }
+        ]
+      },
+      {
+        "id": "semifinal",
+        "name": "Półfinały",
+        "matches": [
+          {
+            "matchId": "m029",
+            "bracketPosition": "SF1",
+            "label": "Półfinał 1",
+            "feedsFrom": [
+              "QF1",
+              "QF4"
+            ],
+            "homeTeamId": "t01",
+            "homeTeamName": "FC Orły Poznań",
+            "awayTeamId": "t13",
+            "awayTeamName": "KS WIKO Opalenica",
+            "homeScore": 2,
+            "awayScore": 0,
+            "winnerTeamId": "t01",
+            "loserTeamId": "t13",
+            "status": "played"
+          },
+          {
+            "matchId": "m030",
+            "bracketPosition": "SF2",
+            "label": "Półfinał 2",
+            "feedsFrom": [
+              "QF2",
+              "QF3"
+            ],
+            "homeTeamId": "t05",
+            "homeTeamName": "United Luboń",
+            "awayTeamId": "t09",
+            "awayTeamName": "Sparta Swarzędz",
+            "homeScore": 3,
+            "awayScore": 1,
+            "winnerTeamId": "t05",
+            "loserTeamId": "t09",
+            "status": "played"
+          }
+        ]
+      },
+      {
+        "id": "third_place",
+        "name": "Mecz o 3. miejsce",
+        "matches": [
+          {
+            "matchId": "m031",
+            "bracketPosition": "3RD",
+            "label": "Mecz o 3. miejsce",
+            "feedsFrom": [
+              "SF1.loser",
+              "SF2.loser"
+            ],
+            "homeTeamId": "t09",
+            "homeTeamName": "Sparta Swarzędz",
+            "awayTeamId": "t13",
+            "awayTeamName": "KS WIKO Opalenica",
+            "homeScore": 2,
+            "awayScore": 0,
+            "winnerTeamId": "t09",
+            "status": "played"
+          }
+        ]
+      },
+      {
+        "id": "final",
+        "name": "WIELKI FINAŁ",
+        "matches": [
+          {
+            "matchId": "m032",
+            "bracketPosition": "FINAL",
+            "label": "WIELKI FINAŁ",
+            "feedsFrom": [
+              "SF1.winner",
+              "SF2.winner"
+            ],
+            "homeTeamId": "t01",
+            "homeTeamName": "FC Orły Poznań",
+            "awayTeamId": "t05",
+            "awayTeamName": "United Luboń",
+            "homeScore": null,
+            "awayScore": null,
+            "winnerTeamId": null,
+            "status": "pending",
+            "isDemoInteraction": true,
+            "scheduledKickoff": "2026-04-12T19:30:00"
+          }
+        ]
+      }
+    ]
+  },
+  "phaseStatus": {
+    "groupStage": "completed",
+    "quarterfinals": "completed",
+    "semifinals": "completed",
+    "thirdPlace": "completed",
+    "final": "pending"
+  }
+}

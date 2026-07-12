@@ -1,0 +1,43 @@
+{
+  "id": "DEMO-STORY-2026",
+  "name": "Memoriał Wiosenny 2026",
+  "venue": "Hala OSiR",
+  "location": "Poznań",
+  "date": "2026-04-12",
+  "dateLabel": "Memoriał Wiosenny 2026 · Hala OSiR",
+  "format": {
+    "teamsCount": 16,
+    "groupsCount": 4,
+    "teamsPerGroup": 4,
+    "groupStage": "single_round_robin",
+    "groupMatchesPerGroup": 6,
+    "groupMatchesTotal": 24,
+    "playoffFormat": "quarterfinal_semifinal_third_place_final",
+    "playoffTeams": 8,
+    "qualificationRule": "top_2_per_group"
+  },
+  "scale": {
+    "teams": 16,
+    "matchesTotal": 32,
+    "matchesPlayed": 31,
+    "matchesPending": 1
+  },
+  "phase": {
+    "current": "final",
+    "groupStage": "completed",
+    "playoff": "completed_except_final",
+    "final": "pending"
+  },
+  "status": {
+    "tournament": "active",
+    "label": "31 / 32 meczów rozegranych",
+    "finalStatus": "WIELKI FINAŁ — wynik do wpisania"
+  },
+  "heroMetrics": {
+    "teams": 16,
+    "matchesTotal": 32,
+    "matchesPlayed": 31
+  },
+  "finalMatchId": "m032",
+  "demoStoryVersion": "1.0"
+}
