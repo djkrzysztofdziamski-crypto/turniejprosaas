@@ -198,22 +198,204 @@
         #view-app .match-card.match-card--highlight { border: 2px dashed #ff8b00; background: #fffcf0; }
 
         /* --- PAKIET PREMIUM 5+: DRABINKA PLAY-OFF --- */
-        #view-app .playoff-bracket { display: flex; align-items: stretch; gap: 10px; overflow-x: auto; padding: 8px 4px 16px; -webkit-overflow-scrolling: touch; }
-        #view-app .bracket-round { display: flex; flex-direction: column; justify-content: space-around; gap: 14px; min-width: min(100%, 220px); flex: 1; }
-        #view-app .bracket-round-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: #42526e; text-align: center; margin-bottom: 4px; }
-        #view-app .bracket-match { background: #fff; border: 1px solid #c1c7d0; border-radius: 8px; padding: 28px 10px 10px; position: relative; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
-        #view-app .bracket-match:hover { border-color: #0052cc; }
+        #view-app #playoff-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        #view-app .playoff-bracket {
+            --bracket-gap: 8px;
+            --bracket-row-gap: 6px;
+            display: grid;
+            grid-template-columns: 1.05fr 1.05fr 0.9fr 1.08fr;
+            grid-template-rows: auto auto var(--bracket-row-gap) auto var(--bracket-row-gap) auto var(--bracket-row-gap) auto;
+            column-gap: var(--bracket-gap);
+            row-gap: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding: 4px 0 12px;
+            align-items: center;
+        }
+        #view-app .bracket-head {
+            font-size: clamp(7px, 1.6vw, 10px);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            color: #42526e;
+            text-align: center;
+            padding-bottom: 6px;
+            grid-row: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #view-app .bracket-head--qf { grid-column: 1; }
+        #view-app .bracket-head--sf { grid-column: 2; }
+        #view-app .bracket-head--bronze { grid-column: 3; }
+        #view-app .bracket-head--final { grid-column: 4; color: #b45309; }
+        #view-app .bracket-slot { position: relative; width: 100%; min-width: 0; }
+        #view-app .bracket-slot--qf1 { grid-column: 1; grid-row: 2; }
+        #view-app .bracket-slot--qf2 { grid-column: 1; grid-row: 4; }
+        #view-app .bracket-slot--qf3 { grid-column: 1; grid-row: 6; }
+        #view-app .bracket-slot--qf4 { grid-column: 1; grid-row: 8; }
+        #view-app .bracket-slot--sf1 { grid-column: 2; grid-row: 2 / 5; align-self: center; }
+        #view-app .bracket-slot--sf2 { grid-column: 2; grid-row: 6 / 9; align-self: center; }
+        #view-app .bracket-slot--bronze { grid-column: 3; grid-row: 4 / 7; align-self: center; }
+        #view-app .bracket-slot--final { grid-column: 4; grid-row: 4 / 7; align-self: center; }
+        #view-app .bracket-slot--qf::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: calc(var(--bracket-gap) * -1);
+            width: var(--bracket-gap);
+            height: 2px;
+            background: #b3bac5;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        #view-app .bracket-slot--sf::before {
+            content: '';
+            position: absolute;
+            left: calc(var(--bracket-gap) * -1);
+            top: 18%;
+            bottom: 18%;
+            width: 2px;
+            background: #b3bac5;
+            pointer-events: none;
+        }
+        #view-app .bracket-slot--sf::after {
+            content: '';
+            position: absolute;
+            left: calc(var(--bracket-gap) * -1);
+            top: 50%;
+            width: var(--bracket-gap);
+            height: 2px;
+            background: #b3bac5;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        #view-app .bracket-slot--bronze::before,
+        #view-app .bracket-slot--final::before {
+            content: '';
+            position: absolute;
+            left: calc(var(--bracket-gap) * -1);
+            top: 50%;
+            width: var(--bracket-gap);
+            height: 2px;
+            background: #b3bac5;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        #view-app .bracket-slot--bronze::after {
+            content: '';
+            position: absolute;
+            right: calc(var(--bracket-gap) * -1);
+            top: 50%;
+            width: var(--bracket-gap);
+            height: 2px;
+            background: linear-gradient(90deg, #b3bac5, #ffcc00);
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        #view-app .bracket-match {
+            background: #fff;
+            border: 1px solid #c1c7d0;
+            border-radius: 7px;
+            padding: 22px 5px 7px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.06);
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        #view-app .bracket-match:hover { border-color: #0052cc; transform: translateY(-1px); }
         #view-app .bracket-match.bm-played { border-left: 3px solid #00875a; }
         #view-app .bracket-match.bm-pending { border-left: 3px solid #ff8b00; }
-        #view-app .bracket-match-label { position: absolute; top: 6px; left: 8px; font-size: 9px; font-weight: 800; color: #fff; background: #0747a6; padding: 2px 6px; border-radius: 3px; max-width: calc(100% - 16px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        #view-app .bracket-match-label.bm-label-final { background: #ff8b00; }
-        #view-app .bracket-teams { font-size: 11px; font-weight: 700; line-height: 1.45; color: #172b4d; }
+        #view-app .bracket-match-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: clamp(7px, 1.4vw, 9px);
+            font-weight: 800;
+            color: #fff;
+            background: #0747a6;
+            padding: 2px 5px;
+            border-radius: 3px;
+            max-width: calc(100% - 10px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #view-app .bracket-match-label.bm-label-bronze { background: #64748b; }
+        #view-app .bracket-teams { font-size: clamp(8px, 1.7vw, 11px); font-weight: 700; line-height: 1.35; color: #172b4d; }
         #view-app .bracket-teams .bm-team { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        #view-app .bracket-score { display: inline-block; margin-top: 6px; font-size: 14px; font-weight: 800; background: #172b4d; color: #fff; padding: 3px 10px; border-radius: 4px; }
+        #view-app .bracket-score { display: inline-block; margin-top: 4px; font-size: clamp(10px, 2vw, 13px); font-weight: 800; background: #172b4d; color: #fff; padding: 2px 7px; border-radius: 4px; }
         #view-app .bracket-score.bm-score-live { background: #00875a; }
-        #view-app .bracket-finals-stack { display: flex; flex-direction: column; gap: 14px; justify-content: center; height: 100%; }
-        #view-demo-story .demo-embed-app .playoff-bracket { gap: 8px; }
-        #view-demo-story .demo-embed-app .bracket-match { font-size: 10px; padding-top: 24px; }
+        #view-app .bracket-match.bm-bronze {
+            border-left: 3px solid #94a3b8;
+            background: linear-gradient(135deg, #f8fafc 0%, #fff 55%);
+            box-shadow: 0 2px 8px rgba(100,116,139,0.1);
+        }
+        #view-app .bracket-match.bm-grand-final {
+            background: linear-gradient(155deg, #0b1f33 0%, #132f4c 48%, #1e4a72 100%);
+            border: 2px solid #ffcc00;
+            border-left: 3px solid #ff8b00;
+            box-shadow: 0 0 0 1px rgba(255,204,0,0.3), 0 6px 20px rgba(255,140,0,0.22), inset 0 1px 0 rgba(255,255,255,0.1);
+            padding: 24px 6px 8px;
+            min-width: 0;
+        }
+        #view-app .bracket-match.bm-grand-final:hover {
+            border-color: #ffe066;
+            box-shadow: 0 0 0 2px rgba(255,204,0,0.4), 0 8px 24px rgba(255,140,0,0.3);
+            transform: translateY(-1px);
+        }
+        #view-app .bracket-match.bm-grand-final .bracket-teams { color: #e8f0fe; }
+        #view-app .bracket-match.bm-grand-final .bm-team { color: #f8fafc; font-size: clamp(8px, 1.8vw, 11px); }
+        #view-app .bracket-match.bm-grand-final .bracket-match-label.bm-label-final {
+            background: linear-gradient(90deg, #ff8b00, #ffcc00);
+            color: #0b1f33;
+            font-size: clamp(7px, 1.5vw, 9px);
+            font-weight: 900;
+            letter-spacing: 0.2px;
+            padding: 2px 7px;
+            box-shadow: 0 2px 6px rgba(255,140,0,0.35);
+        }
+        #view-app .bracket-match.bm-grand-final .bracket-score {
+            background: linear-gradient(90deg, #ffcc00, #ff8b00);
+            color: #0b1f33;
+            font-size: clamp(11px, 2.2vw, 15px);
+            padding: 3px 9px;
+            box-shadow: 0 2px 8px rgba(255,204,0,0.3);
+        }
+        #view-app .bracket-match.bm-grand-final .bracket-trophy {
+            position: absolute;
+            top: -8px;
+            right: 6px;
+            font-size: clamp(14px, 2.5vw, 18px);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+        }
+        #view-demo-story .demo-embed-app #playoff-container { overflow: hidden; }
+        #view-demo-story .demo-embed-app .playoff-bracket {
+            --bracket-gap: 6px;
+            --bracket-row-gap: 4px;
+            grid-template-columns: 1fr 1fr 0.88fr 1fr;
+        }
+        #view-demo-story .demo-embed-app .bracket-match { padding-top: 20px; }
+        #view-demo-story .demo-embed-app .bracket-match.bm-grand-final { padding-top: 22px; }
+        @media (max-width: 520px) {
+            #view-app .playoff-bracket {
+                --bracket-gap: 5px;
+                --bracket-row-gap: 4px;
+                grid-template-columns: 1fr 1fr 0.85fr 1fr;
+            }
+            #view-app .bracket-head--bronze { font-size: 7px; letter-spacing: 0; }
+            #view-app .bracket-match { padding: 20px 4px 6px; border-radius: 6px; }
+        }
 
         /* --- PAKIET PREMIUM 5+: WIDOK KIBICA --- */
         body.fan-view #view-app { background: linear-gradient(180deg, #e8f0fe 0%, var(--color-app-bg, #f0f4f8) 120px); }
@@ -2388,14 +2570,20 @@
             return p1 != null && p2 != null && !isNaN(p1) && !isNaN(p2) && p1 !== p2;
         };
 
-        window.renderPlayoffBracketMatch = (m, fanRo) => {
+        window.renderPlayoffBracketMatch = (m, fanRo, slot) => {
             const scoreDisplay = m.played ? `${m.g1}:${m.g2}${m.pen1 != null ? ` (k.${m.pen1}:${m.pen2})` : ''}` : '-:-';
             const badge = fanRo ? (m.n || m.time) : (m.n || m.time);
-            const isFinal = /WIELKI/i.test(m.n || '') || (m.id === 402);
-            const labelCls = isFinal ? 'bracket-match-label bm-label-final' : 'bracket-match-label';
+            const isFinal = slot === 'final' || (/WIELKI/i.test(m.n || '') && /FINAŁ/i.test(m.n || '')) || (m.id === 402);
+            const isBronze = slot === 'bronze' || /3\.?\s*MIEJSCE/i.test(m.n || '') || m.id === 401;
+            let labelCls = 'bracket-match-label';
+            if (isFinal) labelCls += ' bm-label-final';
+            else if (isBronze) labelCls += ' bm-label-bronze';
             const statusCls = m.played ? 'bm-played' : 'bm-pending';
             const scoreCls = m.played ? 'bracket-score bm-score-live' : 'bracket-score';
-            return `<div class="bracket-match ${statusCls}" onclick="openMatch(${m.id}, true)">
+            const variantCls = isFinal ? ' bm-grand-final' : (isBronze ? ' bm-bronze' : '');
+            const trophy = isFinal ? '<span class="bracket-trophy" aria-hidden="true">🏆</span>' : '';
+            return `<div class="bracket-match ${statusCls}${variantCls}" onclick="openMatch(${m.id}, true)">
+                ${trophy}
                 <span class="${labelCls}">${esc(badge)}</span>
                 <div class="bracket-teams">
                     <div class="bm-team" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
@@ -2407,24 +2595,27 @@
 
         window.renderPlayoffBracketHTML = (po, fanRo) => {
             const byRound = (pred) => po.filter(pred);
-            const qf = byRound(m => /ćwierćfinał/i.test(m.n || '') || (m.id >= 201 && m.id <= 204));
-            const sf = byRound(m => /półfinał/i.test(m.n || '') || (m.id >= 301 && m.id <= 302));
-            const bronze = byRound(m => /3\.?\s*MIEJSCE/i.test(m.n || '') || m.id === 401);
-            const finalM = byRound(m => (/WIELKI/i.test(m.n || '') && /FINAŁ/i.test(m.n || '')) || m.id === 402);
+            const sortM = (arr) => [...arr].sort((a, b) => (a.id || 0) - (b.id || 0));
+            const qf = sortM(byRound(m => /ćwierćfinał/i.test(m.n || '') || (m.id >= 201 && m.id <= 204)));
+            const sf = sortM(byRound(m => /półfinał/i.test(m.n || '') || (m.id >= 301 && m.id <= 302)));
+            const bronze = sortM(byRound(m => /3\.?\s*MIEJSCE/i.test(m.n || '') || m.id === 401));
+            const finalM = sortM(byRound(m => (/WIELKI/i.test(m.n || '') && /FINAŁ/i.test(m.n || '')) || m.id === 402));
             if (sf.length < 2 && finalM.length === 0) return null;
+            const slot = (cls, match, type) => match ? `<div class="bracket-slot ${cls}">${window.renderPlayoffBracketMatch(match, fanRo, type)}</div>` : '';
             let html = '<div class="playoff-bracket">';
+            html += '<div class="bracket-head bracket-head--qf">Ćwierćfinały</div>';
+            html += '<div class="bracket-head bracket-head--sf">Półfinały</div>';
+            html += '<div class="bracket-head bracket-head--bronze">3. miejsce</div>';
+            html += '<div class="bracket-head bracket-head--final">Wielki finał</div>';
             if (qf.length) {
-                html += `<div class="bracket-round"><div class="bracket-round-title">Ćwierćfinały</div>${qf.map(m => window.renderPlayoffBracketMatch(m, fanRo)).join('')}</div>`;
+                [0, 1, 2, 3].forEach(i => {
+                    if (qf[i]) html += slot(`bracket-slot--qf bracket-slot--qf${i + 1}`, qf[i], 'qf');
+                });
             }
-            if (sf.length) {
-                html += `<div class="bracket-round"><div class="bracket-round-title">Półfinały</div>${sf.map(m => window.renderPlayoffBracketMatch(m, fanRo)).join('')}</div>`;
-            }
-            if (finalM.length || bronze.length) {
-                html += `<div class="bracket-round"><div class="bracket-round-title">Finały</div><div class="bracket-finals-stack">`;
-                finalM.forEach(m => { html += window.renderPlayoffBracketMatch(m, fanRo); });
-                bronze.forEach(m => { html += window.renderPlayoffBracketMatch(m, fanRo); });
-                html += '</div></div>';
-            }
+            if (sf[0]) html += slot('bracket-slot--sf bracket-slot--sf1', sf[0], 'sf');
+            if (sf[1]) html += slot('bracket-slot--sf bracket-slot--sf2', sf[1], 'sf');
+            if (bronze[0]) html += slot('bracket-slot--bronze', bronze[0], 'bronze');
+            if (finalM[0]) html += slot('bracket-slot--final', finalM[0], 'final');
             html += '</div>';
             return html;
         };

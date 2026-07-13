@@ -1,0 +1,45 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "licencje": {
+      ".read": "auth != null && auth.token.admin === true",
+      ".indexOn": ["status", "wygasa"],
+      "$key": {
+        ".read": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/)",
+        ".write": "auth != null && auth.token.admin === true",
+        ".validate": "newData.hasChildren(['typ', 'status', 'stworzony', 'notatka'])"
+      }
+    },
+
+    "turnieje_uzytkownikow": {
+      "$key": {
+        ".read": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/)",
+        ".write": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/) && root.child('licencje').child($key).exists() && root.child('licencje').child($key).child('status').val() === 'aktywny' && (!root.child('licencje').child($key).child('wygasa').exists() || root.child('licencje').child($key).child('wygasa').val() > now)",
+
+        "archiwum": {
+          ".read": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/)",
+          "$archiveId": {
+            ".write": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/) && root.child('licencje').child($key).exists() && root.child('licencje').child($key).child('status').val() === 'aktywny' && (!root.child('licencje').child($key).child('wygasa').exists() || root.child('licencje').child($key).child('wygasa').val() > now)"
+          }
+        },
+
+        "wstrzymane": {
+          ".read": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/)",
+          "$freezeId": {
+            ".write": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/) && root.child('licencje').child($key).exists() && root.child('licencje').child($key).child('status').val() === 'aktywny' && (!root.child('licencje').child($key).child('wygasa').exists() || root.child('licencje').child($key).child('wygasa').val() > now)"
+          }
+        }
+      }
+    },
+
+    "archiwum": {
+      ".read": "auth != null && auth.token.admin === true",
+      "$archiveId": {
+        ".read": true,
+        ".write": "(auth != null && auth.token.admin === true) || (!data.exists() && newData.exists() && newData.child('_license_owner').isString() && newData.child('_license_owner').val().matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/) && root.child('licencje').child(newData.child('_license_owner').val()).exists() && root.child('licencje').child(newData.child('_license_owner').val()).child('status').val() === 'aktywny' && (!root.child('licencje').child(newData.child('_license_owner').val()).child('wygasa').exists() || root.child('licencje').child(newData.child('_license_owner').val()).child('wygasa').val() > now))"
+      }
+    }
+  }
+}
