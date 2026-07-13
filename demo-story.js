@@ -1990,7 +1990,7 @@
 
 
 
-        if (new URLSearchParams(global.location.search).get('demo') === 'story') {
+        if (new URLSearchParams(global.location.search).get('demo') === 'story' || global.location.hostname === 'demo.turniejomat.pl') {
 
             DemoStoryController.showEntry();
 

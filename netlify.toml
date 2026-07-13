@@ -6,6 +6,13 @@
   status = 200
   conditions = {Host = ["admin.turniejomat.pl"]}
 
+# demo.turniejomat.pl — Demo Story (SPA rewrite, auto-start w index.html)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Host = ["demo.turniejomat.pl"]}
+
 # domena główna — SPA fallback
 [[redirects]]
   from = "/*"

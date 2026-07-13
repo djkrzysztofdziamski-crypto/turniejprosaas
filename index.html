@@ -720,6 +720,7 @@
     const localArchiveId = urlParams.get('localArchiveId');
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
     let isDemoMode = false;
+    const isDemoStoryHost = window.location.hostname === 'demo.turniejomat.pl';
 
     if (window.location.hostname === 'admin.turniejomat.pl') {
         viewMode = 'admin';
@@ -759,7 +760,7 @@
     function executeRouter() {
         initAppModule({ bridgeOnly: true });
 
-        if (urlParams.get('id') === 'DEMO-2026') {
+        if (urlParams.get('id') === 'DEMO-2026' || isDemoStoryHost) {
             if (window.DemoStoryController) {
                 DemoStoryController.showEntry();
             } else {
@@ -801,7 +802,7 @@
             btnDemoStart.onclick = () => DemoStoryController.showEntry();
         }
 
-        if (urlParams.get('demo') === 'story' && window.DemoStoryController) {
+        if ((urlParams.get('demo') === 'story' || isDemoStoryHost) && window.DemoStoryController) {
             DemoStoryController.showEntry();
             return;
         }
