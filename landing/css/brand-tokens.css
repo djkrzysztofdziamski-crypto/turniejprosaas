@@ -69,11 +69,8 @@
 .brand-footer-author {
     font-weight: 800;
     letter-spacing: 0.6px;
-    background: linear-gradient(90deg, #ff2d95 0%, #ffe566 45%, #57d9a3 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.45));
+    color: #ffcc00;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5), 0 0 22px rgba(255, 180, 0, 0.22);
 }
 
 /* Obrazki marki — WebP z fallback PNG */
