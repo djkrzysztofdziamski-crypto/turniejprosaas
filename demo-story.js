@@ -194,6 +194,164 @@
 
     let demoStoryStartAt = null;
 
+    const DEMO_SESSION_KEY = 'tp_demo_story_session';
+
+    const SALES_EMAIL = 'admin@turniejomat.pl';
+
+
+
+    function isDemoStoryAutoContext() {
+
+        return new URLSearchParams(global.location.search).get('demo') === 'story'
+
+            || global.location.hostname === 'demo.turniejomat.pl';
+
+    }
+
+
+
+    function buildSalesMailto(subject) {
+
+        const body = 'Dzień dobry,\n\nChcę dowiedzieć się więcej o TurniejPro SaaS.\n\n';
+
+        return 'mailto:' + SALES_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+    }
+
+
+
+    function buildDemoSessionSnapshot() {
+
+        const fin = getFinalMatch();
+
+        return {
+
+            step: demoStoryStep,
+
+            isActive: isDemoStoryMode,
+
+            completed: demoStoryCompleted,
+
+            fanTab: demoFanTab,
+
+            final: fin ? { g1: fin.g1, g2: fin.g2, pen1: fin.pen1, pen2: fin.pen2, played: fin.played } : null
+
+        };
+
+    }
+
+
+
+    function saveDemoStorySession() {
+
+        if (!isDemoStoryAutoContext()) return;
+
+        if (!isDemoStoryMode || demoStoryStep < 1) {
+
+            try { global.sessionStorage.removeItem(DEMO_SESSION_KEY); } catch (e) { /* ignore */ }
+
+            return;
+
+        }
+
+        try {
+
+            global.sessionStorage.setItem(DEMO_SESSION_KEY, JSON.stringify(buildDemoSessionSnapshot()));
+
+        } catch (e) { /* ignore */ }
+
+    }
+
+
+
+    function clearDemoStorySession() {
+
+        try { global.sessionStorage.removeItem(DEMO_SESSION_KEY); } catch (e) { /* ignore */ }
+
+    }
+
+
+
+    function applyFinalSessionPatch(patch) {
+
+        if (!patch || !demoScenarioState) return;
+
+        const fin = getFinalMatch();
+
+        if (!fin) return;
+
+        fin.g1 = patch.g1;
+
+        fin.g2 = patch.g2;
+
+        fin.pen1 = patch.pen1;
+
+        fin.pen2 = patch.pen2;
+
+        fin.played = !!patch.played;
+
+        if (fin.played && demoScenarioState._demoStory && demoScenarioState._demoStory.status) {
+
+            demoScenarioState._demoStory.status.label = '32 / 32';
+
+        }
+
+    }
+
+
+
+    function tryRestoreDemoStorySession() {
+
+        if (!isDemoStoryAutoContext()) return false;
+
+        let sess;
+
+        try {
+
+            const raw = global.sessionStorage.getItem(DEMO_SESSION_KEY);
+
+            if (!raw) return false;
+
+            sess = JSON.parse(raw);
+
+        } catch (e) {
+
+            return false;
+
+        }
+
+        if (!sess || !sess.isActive || sess.step < 1) return false;
+
+        const bundle = global.DEMO_SCENARIO_BUNDLE;
+
+        if (!bundle) return false;
+
+        isDemoStoryMode = true;
+
+        demoStoryStep = sess.step;
+
+        demoStoryCompleted = !!sess.completed;
+
+        demoFanTab = sess.fanTab || 'mecze';
+
+        demoStoryStartAt = Date.now();
+
+        demoScenarioState = loadScenarioToState(bundle);
+
+        applyFinalSessionPatch(sess.final);
+
+        applyStateToApp();
+
+        ensureRenderBridge();
+
+        showViewDemoStory();
+
+        renderCurrentStep();
+
+        return true;
+
+    }
+
 
 
     function teamIdToNum(scenarioTeamId) {
@@ -782,6 +940,8 @@
 
         track('demo_story_fan_tab_switched', { tab_name: tab });
 
+        saveDemoStorySession();
+
     }
 
 
@@ -1088,9 +1248,9 @@
 
             '<button type="button" class="demo-btn-primary" data-demo-action="license-cta" data-cta-id="CTA-08">' + copy.ctaPrimary + '</button>' +
 
-            '<button type="button" class="demo-btn-secondary" data-demo-action="license-cta" data-cta-id="CTA-09">' + copy.ctaSecondary + '</button>' +
+            '<a href="' + buildSalesMailto('Zamówienie klucza na weekend — TurniejPro SaaS') + '" class="demo-btn-secondary" data-demo-action="mailto" data-cta-id="CTA-09">' + copy.ctaSecondary + '</a>' +
 
-            '<button type="button" class="demo-btn-link" data-demo-action="license-cta" data-cta-id="CTA-10">' + copy.ctaTertiary + '</button>' +
+            '<a href="' + buildSalesMailto('Prośba o ofertę — TurniejPro SaaS') + '" class="demo-btn-link" data-demo-action="mailto" data-cta-id="CTA-10">' + copy.ctaTertiary + '</a>' +
 
             '<p class="demo-micro">' + copy.microPackages + '</p>' +
 
@@ -1398,6 +1558,8 @@
 
         track('demo_story_step_viewed', { step_id: demoStoryStep, step_name: stepDef.key });
 
+        saveDemoStorySession();
+
     }
 
 
@@ -1562,6 +1724,14 @@
 
 
 
+        tryRestoreSession: function () {
+
+            return tryRestoreDemoStorySession();
+
+        },
+
+
+
         start: function (entryPoint) {
 
             const bundle = global.DEMO_SCENARIO_BUNDLE;
@@ -1599,6 +1769,8 @@
             showViewDemoStory();
 
             renderCurrentStep();
+
+            saveDemoStorySession();
 
             track('demo_story_started', { entry_point: entryPoint || 'login' });
 
@@ -1754,6 +1926,8 @@
 
             demoStoryStep = 0;
 
+            clearDemoStorySession();
+
             try { global.sessionStorage.setItem('tp_demo_source', 'demo_story'); } catch (e) { /* ignore */ }
 
             showViewLogin();
@@ -1785,6 +1959,8 @@
 
 
         showEntry: function () {
+
+            clearDemoStorySession();
 
             isDemoStoryMode = false;
 
@@ -1910,6 +2086,22 @@
 
             const action = btn.getAttribute('data-demo-action');
 
+            if (action === 'mailto') {
+
+                track('demo_story_cta_clicked', {
+
+                    cta_id: btn.getAttribute('data-cta-id') || 'CTA-MAIL',
+
+                    step_id: demoStoryStep,
+
+                    cta_copy: btn.textContent.trim()
+
+                });
+
+                return;
+
+            }
+
             if (action === 'next') {
 
                 if (demoStoryStep === 0) DemoStoryController.start('entry');
@@ -1987,14 +2179,6 @@
             }
 
         });
-
-
-
-        if (new URLSearchParams(global.location.search).get('demo') === 'story' || global.location.hostname === 'demo.turniejomat.pl') {
-
-            DemoStoryController.showEntry();
-
-        }
 
 
 
