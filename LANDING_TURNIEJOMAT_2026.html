@@ -5,32 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turniejomat.pl — Spokój organizatora w dniu turnieju</title>
     <meta name="description" content="Turniejomat — wyniki live dla rodziców, tabele i podium po finałe. Pakiet weekendowy 79 zł lub abonament 149 zł/mies. Demo bez rejestracji.">
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260713">
     <style>
         :root {
-            --bg-deep: var(--color-bg-deep);
-            --bg-card: var(--color-bg-card);
-            --border: var(--color-border-soft);
-            --text: var(--color-text);
-            --text-muted: var(--color-text-muted);
-            --text-soft: var(--color-text-soft);
-            --accent: var(--color-accent);
-            --accent-hover: var(--color-accent-hover);
-            --green: var(--color-green-hover);
-            --green-hover: var(--color-green);
-            --gold: var(--color-gold);
-            --max: var(--max-content);
+            --bg-deep: #102a43;
+            --bg-card: #19354f;
+            --border: #486581;
+            --text: #ffffff;
+            --text-muted: #bcccdc;
+            --text-soft: #94a3b8;
+            --accent: #0052cc;
+            --accent-hover: #0066ff;
+            --green: #137333;
+            --green-hover: #1a8f42;
+            --gold: #ffcc00;
+            --max: 1080px;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: var(--font-body);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
             background: var(--bg-deep);
             color: var(--text);
             line-height: 1.55;
         }
-        h1, h2, h3 { font-family: var(--font-display); }
         a { color: inherit; }
         .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
         .section { padding: 64px 0; }
@@ -83,7 +80,6 @@
             background: linear-gradient(180deg, #0d2236 0%, var(--bg-deep) 100%);
         }
         .hero-logo { max-width: 280px; width: 70%; margin: 0 auto 24px; display: block; }
-        .hero-logo img { width: 100%; height: auto; display: block; }
 
         /* CARDS GRID */
         .grid-3 {
@@ -194,6 +190,15 @@
         footer a { color: var(--text-muted); text-decoration: none; font-weight: 700; }
         footer a:hover { color: #57d9a3; }
         .footer-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 12px; }
+        .brand-footer-author {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #ff2d95 0%, #ffe566 45%, #57d9a3 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.45));
+        }
     </style>
 </head>
 <body>
@@ -211,10 +216,7 @@ SEKCJA 1 — HERO
 ═══════════════════════════════════════════════════════════════════════════ -->
 <header class="hero">
     <div class="wrap">
-        <picture class="hero-logo">
-            <source srcset="logo.webp" type="image/webp">
-            <img src="logo.png" alt="Turniejomat">
-        </picture>
+        <!-- opcjonalnie: <img src="logo.png" alt="Turniejomat" class="hero-logo"> -->
         <p class="eyebrow">Dla koordynatorów turniejów halowych</p>
         <h1>Koniec z chaosem na hali.<br>Spokój w dniu turnieju.</h1>
         <p class="lead">
@@ -405,7 +407,7 @@ SEKCJA 8 — STOPKA
         <a href="https://app.turniejomat.pl">Aplikacja (mam klucz)</a>
         <a href="mailto:admin@turniejomat.pl">Kontakt</a>
     </div>
-    <p class="brand-footer">Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
+    <p>Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
     <p style="margin-top:6px;">admin@turniejomat.pl</p>
 </footer>
 

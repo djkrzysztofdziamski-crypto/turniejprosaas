@@ -55,6 +55,25 @@
 
     /* Layout */
     --max-content: 1080px;
+
+    /* Stopka marki — jedna treść w całym projekcie */
+    --brand-footer-text: 'Turniejomat © 2026 · powered by TurniejPro · Kris Dziamsky';
+}
+
+.brand-footer {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+}
+.brand-footer-author {
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    background: linear-gradient(90deg, #ff2d95 0%, #ffe566 45%, #57d9a3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.45));
 }
 
 /* Obrazki marki — WebP z fallback PNG */

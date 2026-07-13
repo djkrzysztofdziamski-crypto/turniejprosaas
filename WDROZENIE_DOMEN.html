@@ -23,6 +23,14 @@
         a { color: #0052cc; }
         .check { list-style: none; padding: 0; }
         .check li::before { content: "☐ "; }
+        .brand-footer-author {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #ff2d95 0%, #ffe566 45%, #57d9a3 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
     </style>
 </head>
 <body>
@@ -124,7 +132,7 @@ index.html           → podgląd aplikacji (router domen działa tylko na produ
 <h2>Kiedy commit?</h2>
 <p>Gdy powiesz „commit i push” — wypchnę zmiany aplikacji na GitHub → Netlify zaktualizuje app/demo/admin. Landing wdrażasz osobno z folderu <code>landing/</code> (drag &amp; drop lub osobny branch).</p>
 
-<p style="margin-top:40px;font-size:13px;color:#666;">Turniejomat · przewodnik wygenerowany lokalnie · bez publikacji</p>
+<p style="margin-top:40px;font-size:13px;color:#666;">Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
 
 </body>
 </html>
