@@ -253,13 +253,25 @@
         #view-demo-story .demo-phase-sep { color: #486581; font-weight: bold; }
         #view-demo-story .demo-final-teams { text-align: center; margin: 20px 0; font-size: 16px; font-weight: bold; }
         #view-demo-story .demo-final-vs { color: #bcccdc; font-size: 13px; margin: 8px 0; }
-        #view-demo-story .demo-cta-zone { margin-top: 28px; }
+        #view-demo-story .demo-cta-zone { margin-top: 28px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
         #view-demo-story .demo-btn-primary { width: 100%; background: #0052cc; color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,82,204,0.35); }
         #view-demo-story .demo-btn-primary:hover { background: #0066ff; }
-        #view-demo-story .demo-btn-link { display: block; width: 100%; background: none; border: none; color: #bcccdc; font-size: 14px; margin-top: 14px; cursor: pointer; text-decoration: underline; }
+        #view-demo-story .demo-btn-link { display: block; width: 100%; background: none; border: none; color: #bcccdc; font-size: 14px; margin-top: 4px; cursor: pointer; text-decoration: underline; }
         #view-demo-story a.demo-btn-primary,
-        #view-demo-story a.demo-btn-secondary,
-        #view-demo-story a.demo-btn-link { box-sizing: border-box; text-align: center; text-decoration: none; }
+        #view-demo-story a.demo-btn-secondary {
+            display: block;
+            box-sizing: border-box;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+        }
+        #view-demo-story a.demo-btn-link {
+            display: block;
+            box-sizing: border-box;
+            text-align: center;
+            color: #bcccdc;
+            text-decoration: underline;
+        }
         #view-demo-story .demo-micro { font-size: 12px; color: #94a3b8; margin-top: 14px; text-align: center; }
         #view-login .btn-demo-story { background: #137333; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(19,115,51,0.35); }
         #view-login .btn-demo-story:hover { background: #1a8f42; }
@@ -318,7 +330,7 @@
         #view-demo-story .demo-final-penalty .demo-final-inputs input { width: 56px; height: 44px; font-size: 20px; }
         #view-demo-story .demo-validation { color: #ff8b00; font-size: 13px; margin-top: 8px; display: none; }
         #view-demo-story .demo-final-highlight { background: #19354f; border: 2px dashed #ff8b00; border-radius: 10px; padding: 16px; margin: 16px 0; text-align: center; color: #ffcc00; font-weight: bold; }
-        #view-demo-story .demo-btn-secondary { width: 100%; background: #19354f; color: #fff; border: 1px solid #486581; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #view-demo-story .demo-btn-secondary { width: 100%; background: #19354f; color: #fff; border: 1px solid #486581; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 0; }
         #view-demo-story .demo-btn-secondary:hover { background: #243b53; }
         #view-demo-story .demo-btn-outline { background: transparent; border: 1px dashed #486581; color: #bcccdc; margin-top: 20px; }
         #view-demo-story .demo-btn-sm { padding: 12px 16px; font-size: 14px; }
