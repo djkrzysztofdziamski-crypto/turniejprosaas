@@ -62,7 +62,7 @@
 
         entry: {
 
-            eyebrow: 'TurniejPro SaaS',
+            eyebrow: 'Turniejomat',
 
             h1: 'Zobacz finał turnieju — bez chaosu na hali',
 
@@ -150,7 +150,7 @@
 
             ctaTertiary: 'Wyślij mi ofertę',
 
-            microPackages: 'Pakiety: 1 dzień · weekend · miesiąc',
+            microPackages: 'Pakiety: weekend 79 zł · miesiąc 149 zł',
 
             microNext: 'Po aktywacji: wpisujesz klucz → tworzysz drużyny → grasz',
 
@@ -213,7 +213,7 @@
 
     function buildSalesMailto(subject) {
 
-        const body = 'Dzień dobry,\n\nChcę dowiedzieć się więcej o TurniejPro SaaS.\n\n';
+        const body = 'Dzień dobry,\n\nChcę dowiedzieć się więcej o Turniejomat.\n\n';
 
         return 'mailto:' + SALES_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 
@@ -1249,9 +1249,9 @@
 
             '<button type="button" class="demo-btn-primary" data-demo-action="license-cta" data-cta-id="CTA-08">' + copy.ctaPrimary + '</button>' +
 
-            '<a href="' + buildSalesMailto('Zamówienie klucza na weekend — TurniejPro SaaS') + '" class="demo-btn-secondary" data-demo-action="mailto" data-cta-id="CTA-09">' + copy.ctaSecondary + '</a>' +
+            '<a href="' + buildSalesMailto('Zamówienie klucza na weekend — Turniejomat') + '" class="demo-btn-secondary" data-demo-action="mailto" data-cta-id="CTA-09">' + copy.ctaSecondary + '</a>' +
 
-            '<a href="' + buildSalesMailto('Prośba o ofertę — TurniejPro SaaS') + '" class="demo-btn-link" data-demo-action="mailto" data-cta-id="CTA-10">' + copy.ctaTertiary + '</a>' +
+            '<a href="' + buildSalesMailto('Prośba o ofertę — Turniejomat') + '" class="demo-btn-link" data-demo-action="mailto" data-cta-id="CTA-10">' + copy.ctaTertiary + '</a>' +
 
             '<p class="demo-micro">' + copy.microPackages + '</p>' +
 

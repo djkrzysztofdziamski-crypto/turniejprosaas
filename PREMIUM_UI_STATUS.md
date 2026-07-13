@@ -1,57 +1,51 @@
-# Turniejomat — status pakietu premium UI (1–4)
+# Turniejomat — status pakietu premium UI
 
-**Data:** 2026-07-13 · **Bez commita** — gotowe do review + push z innymi zmianami.
+**Data:** 2026-07-13 · Pakiety 1–5 wdrożone lokalnie (commit po review).
 
 ## Zrobione (pakiet 1–4)
 
 | # | Zmiana | Pliki |
 |---|--------|-------|
-| 1 | **WebP** logo/icon (~54 KB + ~42 KB zamiast ~1,2 MB + ~1 MB) | `logo.webp`, `icon.webp`, `landing/*.webp` |
+| 1 | **WebP** logo/icon (~54 KB + ~42 KB) | `logo.webp`, `icon.webp`, `landing/*.webp` |
 | 1 | `<picture>` WebP + fallback PNG | `index.html`, `landing/index.html` |
 | 1 | Skrypt regeneracji | `scripts/optimize-brand-images.mjs` |
-| 2 | **Design tokens + fonty** (Plus Jakarta Sans, DM Sans) | `css/brand-tokens.css`, `landing/css/brand-tokens.css` |
-| 3 | **Panel sędziego** — jasne tło zamiast murawy | `index.html` `#view-app` |
-| 3 | Nagłówek app — ciemny granat (`--color-header-bg`) | `index.html` |
-| 4 | **Bramka** — Turniejomat + „powered by TurniejPro” | `#view-login` |
-| 4 | Stała `BRAND` w JS (nagłówki app) | `index.html` |
-| 4 | Stopka + tytuł strony | `index.html` |
+| 2 | **Design tokens + fonty** | `css/brand-tokens.css`, `landing/css/brand-tokens.css` |
+| 3 | Panel sędziego — jasne tło | `index.html` `#view-app` |
+| 4 | Bramka Turniejomat + `BRAND` | `index.html` |
+| 4 | Stopka ujednolicona + Kris gradient | `index.html`, `landing/`, `demo-story` |
 
-## Oczekujące na ten sam commit (z wcześniejszych sesji)
+## Zrobione (pakiet 5+)
 
-- Fix admin PODGLĄD / PRZEGLĄDAJ RAPORT → `app.turniejomat.pl` (warstwa A+B)
-- Link bramki: „Cennik i zamówienie licencji”
-- `LANDING_SITE_URL` → `https://turniejomat.pl` (nadal `stronaturniejomat.netlify.app`)
+| # | Zmiana | Pliki |
+|---|--------|-------|
+| 5 | **Drabinka play-off** — kolumny ćwierć / pół / finał | `renderPlayoffBracketHTML`, CSS `.playoff-bracket` |
+| 5 | **Karty meczów** — status played/pending, hover, lewa kreska | `.match-card--played/pending/po` |
+| 5 | **Skin widoku kibica** — `body.fan-view`, gradient tła | `index.html` |
+| 5 | **Podium** — scena medalowa `.podium-scene` + emoji medali | `renderPodium()` |
+| 5 | **Demo Story** — copy Turniejomat, cennik 79/149 | `demo-story.js` |
+| 5 | **PDF raport** — logo Turniejomat na górze | `exportToPDF()` |
+| 5 | **Admin KPI** — kafelki: licencje, aktywne, archiwa | `#admin-kpi-strip`, `renderAdminKpi()` |
 
-## Pakiet 5+ (kolejny etap — nie zrobione)
+## Kolejny etap (opcjonalnie)
 
-- [ ] Drabinka play-off wizualna (CSS tree)
-- [ ] Redesign kart meczów
-- [ ] Skin widoku kibica (`?view=fan`)
-- [ ] Podium — scena medalowa
-- [ ] `demo-story.js` — rebrand copy na Turniejomat
-- [ ] PDF raport — logo Turniejomat
-- [ ] Admin dashboard (kafelki KPI)
+- [ ] Animacje wejścia drabinki
+- [ ] Dark mode kibica (osobny toggle)
+- [ ] PDF — pełny branding stopki
+- [ ] Admin — wykres aktywności w czasie
 
-## Deploy checklist
+## Deploy
 
-### App (repo root → Netlify app site)
 ```bash
-git add css/ logo.webp icon.webp index.html scripts/optimize-brand-images.mjs
-git commit -m "..."
+git add index.html demo-story.js PREMIUM_UI_STATUS.md
+git commit -m "feat: premium UI pakiet 5 — drabinka, karty, fan skin, podium, admin KPI"
 git push
 ```
 
-### Landing (osobny site `stronaturniejomat`)
-Skopiuj zaktualizowany folder `landing/` (zawiera `css/`, `*.webp`) — drag & drop lub git jeśli podłączony.
+Landing (`landing/`) — osobny deploy Netlify jeśli zmieniasz tylko app.
 
 ## Lokalny podgląd
+
 ```bash
 python -m http.server 8765
-# http://127.0.0.1:8765/index.html — bramka + app
-# landing/index.html — osobno
-```
-
-## Regeneracja obrazów po zmianie PNG
-```bash
-node scripts/optimize-brand-images.mjs
+# http://127.0.0.1:8765/index.html?id=DEMO-2026
 ```
