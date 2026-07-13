@@ -1,0 +1,72 @@
+/**
+ * Turniejomat — wspólne tokeny marki (landing + app + demo shell)
+ * Pakiet premium 1–4 · bez logiki turnieju
+ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=Plus+Jakarta+Sans:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+:root {
+    /* Brand */
+    --brand-name-display: 'Turniejomat';
+
+    /* Surfaces — dark (login, landing, demo) */
+    --color-bg-deep: #0b1f33;
+    --color-bg-card: #132f4c;
+    --color-bg-card-hover: #193a5c;
+    --color-border: #3d5a73;
+    --color-border-soft: #486581;
+
+    /* Surfaces — light (panel sędziego) */
+    --color-app-bg: #f0f4f8;
+    --color-app-bg-subtle: #e8eef4;
+    --color-app-surface: #ffffff;
+    --color-app-border: #c5d0db;
+    --color-app-text: #1a2b3c;
+    --color-app-text-muted: #5a6b7d;
+
+    /* Text on dark */
+    --color-text: #ffffff;
+    --color-text-muted: #bcccdc;
+    --color-text-soft: #94a3b8;
+
+    /* Accents */
+    --color-accent: #0052cc;
+    --color-accent-hover: #0066ff;
+    --color-green: #1f9d55;
+    --color-green-hover: #137333;
+    --color-green-soft: #57d9a3;
+    --color-gold: #f5c518;
+    --color-orange: #ff8b00;
+    --color-danger: #de350b;
+
+    /* Header app */
+    --color-header-bg: #0b1f33;
+    --color-header-text: #ffffff;
+
+    /* Typography */
+    --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+
+    /* Shape */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow-card: 0 2px 12px rgba(11, 31, 51, 0.08);
+    --shadow-elevated: 0 8px 28px rgba(0, 0, 0, 0.28);
+
+    /* Layout */
+    --max-content: 1080px;
+}
+
+/* Obrazki marki — WebP z fallback PNG */
+.brand-picture {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.brand-picture img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+.brand-picture--logo img { max-width: 280px; width: 90%; }
+.brand-picture--icon img { border-radius: var(--radius-md); }
