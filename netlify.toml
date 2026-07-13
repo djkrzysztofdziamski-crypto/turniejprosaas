@@ -1,19 +1,42 @@
-# admin.turniejomat.pl — SPA rewrite
-# viewMode=admin ustawia index.html po hostname (bez ?view= w URL)
+# TurniejPro SaaS — deploy aplikacji (NIE landing turniejomat.pl)
+# Hosty: app.turniejomat.pl | demo.turniejomat.pl | admin.turniejomat.pl
+# Landing marketingowy: osobny folder landing/ → osobny site Netlify
+
+# app.turniejomat.pl — bramka logowania + panel turnieju
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Host = ["app.turniejomat.pl"]}
+
+# admin.turniejomat.pl — panel administratora
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
   conditions = {Host = ["admin.turniejomat.pl"]}
 
-# demo.turniejomat.pl — Demo Story (SPA rewrite, auto-start w index.html)
+# demo.turniejomat.pl — Demo Story (auto-start E0)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
   conditions = {Host = ["demo.turniejomat.pl"]}
 
-# domena główna — SPA fallback
+# Przekierowania legacy (gdy stary link trafia na deploy aplikacji)
+[[redirects]]
+  from = "/*"
+  to = "https://demo.turniejomat.pl/:splat"
+  status = 302
+  conditions = {Query = {demo = "story"}}
+
+[[redirects]]
+  from = "/*"
+  to = "https://admin.turniejomat.pl/:splat"
+  status = 302
+  conditions = {Query = {view = "admin"}}
+
+# Fallback — podgląd netlify.app i subdomeny dev
 [[redirects]]
   from = "/*"
   to = "/index.html"

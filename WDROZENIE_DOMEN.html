@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turniejomat — przewodnik wdrożenia domen (bez commita)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 820px; margin: 0 auto; padding: 24px 20px 48px; line-height: 1.6; color: #102a43; }
+        h1 { font-size: 28px; }
+        h2 { margin-top: 36px; border-bottom: 2px solid #0052cc; padding-bottom: 6px; }
+        h3 { margin-top: 24px; color: #0747a6; }
+        .box { background: #f4f8ff; border: 1px solid #c1c7d0; border-radius: 10px; padding: 16px 18px; margin: 16px 0; }
+        .warn { background: #fff9c4; border-color: #ff8b00; }
+        .ok { background: #e3fcef; border-color: #57d9a3; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 14px; }
+        pre { background: #102a43; color: #e2e8f0; padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        th, td { border: 1px solid #c1c7d0; padding: 10px; text-align: left; }
+        th { background: #f4f5f7; }
+        .step { counter-increment: step; }
+        .step h3::before { content: "Krok " counter(step) ". "; color: #0052cc; }
+        ol.steps { list-style: none; padding: 0; counter-reset: step; }
+        a { color: #0052cc; }
+        .check { list-style: none; padding: 0; }
+        .check li::before { content: "☐ "; }
+    </style>
+</head>
+<body>
+
+<h1>Turniejomat — wdrożenie domen</h1>
+<p><strong>Status:</strong> pliki przygotowane lokalnie · <strong>bez commita / bez pusha</strong> (na Twoją prośbę).</p>
+
+<div class="box ok">
+    <strong>Docelowy układ:</strong><br>
+    <code>turniejomat.pl</code> → landing (oferta, cennik 79/149 zł)<br>
+    <code>app.turniejomat.pl</code> → bramka logowania + panel turnieju<br>
+    <code>demo.turniejomat.pl</code> → Demo Story (start E0)<br>
+    <code>admin.turniejomat.pl</code> → panel administratora
+</div>
+
+<h2>Co zostało przygotowane lokalnie</h2>
+<table>
+    <tr><th>Folder / plik</th><th>Rola</th></tr>
+    <tr><td><code>landing/</code></td><td>Osobna strona marketingowa (deploy Site A)</td></tr>
+    <tr><td><code>landing/index.html</code></td><td>Gotowy landing z cennikiem 79/149 zł i mailto</td></tr>
+    <tr><td><code>landing/netlify.toml</code></td><td>Redirect www → apex</td></tr>
+    <tr><td><code>index.html</code> (główny)</td><td>Router domen, bramka app, pakiety admin</td></tr>
+    <tr><td><code>demo-story.js</code></td><td>„Aktywuj licencję” → app.turniejomat.pl</td></tr>
+    <tr><td><code>netlify.toml</code> (główny)</td><td>app + demo + admin + legacy redirecty</td></tr>
+</table>
+
+<h2>Dwa osobne site'y Netlify</h2>
+<p>Musisz mieć <strong>dwa deploye</strong> — landing i aplikacja nie mogą dzielić jednego <code>index.html</code> na apex.</p>
+
+<ol class="steps">
+
+    <li class="step">
+        <h3>Site A — Landing (turniejomat.pl)</h3>
+        <p>Otwórz <a href="https://app.netlify.com">app.netlify.com</a> → <strong>Add new site</strong> → <strong>Deploy manually</strong>.</p>
+        <p>Przeciągnij <strong>cały folder</strong>:</p>
+        <pre>turniejprosaas\landing\</pre>
+        <p>(zawiera: index.html, logo.png, icon.png, netlify.toml)</p>
+        <p>Albo podłącz repo GitHub z ustawieniem:</p>
+        <ul>
+            <li><strong>Base directory:</strong> <code>landing</code></li>
+            <li><strong>Publish directory:</strong> <code>landing</code> (lub <code>.</code> jeśli base = landing)</li>
+        </ul>
+        <p>W <strong>Domain management</strong> dodaj:</p>
+        <ul>
+            <li><code>turniejomat.pl</code></li>
+            <li><code>www.turniejomat.pl</code></li>
+        </ul>
+        <p>Skonfiguruj DNS wg instrukcji Netlify (rekord A / CNAME).</p>
+        <div class="box warn">Jeśli masz już site <code>stronaturniejomat.netlify.app</code> — możesz <strong>zaktualizować ten site</strong> zawartością folderu <code>landing/</code> zamiast tworzyć nowy.</div>
+    </li>
+
+    <li class="step">
+        <h3>Site B — Aplikacja (app / demo / admin)</h3>
+        <p>To Twój obecny site <code>turniejprosaas</code> z GitHub.</p>
+        <p>W <strong>Domain management</strong> upewnij się, że są:</p>
+        <ul>
+            <li><code>app.turniejomat.pl</code></li>
+            <li><code>demo.turniejomat.pl</code></li>
+            <li><code>admin.turniejomat.pl</code></li>
+        </ul>
+        <div class="box warn"><strong>Ważne:</strong> usuń <code>turniejomat.pl</code> z tego site'u aplikacji (jeśli tam jest) — apex ma wskazywać tylko na Site A (landing).</div>
+        <p>Deploy aplikacji: na razie <strong>lokalne zmiany nie są na GitHub</strong>. Gdy będziesz gotowy — poprosisz o commit+push, wtedy Netlify zbuduje nową wersję.</p>
+    </li>
+
+    <li class="step">
+        <h3>Okres przejściowy (zanim apex przejdzie na landing)</h3>
+        <p>Jeśli <code>turniejomat.pl</code> nadal wskazuje na stary deploy aplikacji, kod tymczasowo przekierowuje gości na:</p>
+        <pre>https://stronaturniejomat.netlify.app/</pre>
+        <p>Stare linki z kluczem <code>?id=TP-...</code> trafią na <code>app.turniejomat.pl</code>.</p>
+        <p>Po podpięciu landingu pod apex — to przekierowanie nie będzie już potrzebne (aplikacja nie dostaje ruchu z apex).</p>
+    </li>
+
+    <li class="step">
+        <h3>Test po wdrożeniu</h3>
+        <ul class="check">
+            <li><code>turniejomat.pl</code> — landing, cennik 79/149, przycisk demo</li>
+            <li><code>demo.turniejomat.pl</code> — od razu E0 „Zobacz finał”</li>
+            <li><code>app.turniejomat.pl</code> — bramka klucza, link demo na zewnątrz</li>
+            <li><code>admin.turniejomat.pl</code> — panel admina</li>
+            <li>Przycisk „Zamów pakiet” — otwiera maila do admin@turniejomat.pl</li>
+            <li>Demo E6 → „Aktywuj licencję” → app.turniejomat.pl</li>
+        </ul>
+    </li>
+
+</ol>
+
+<h2>Cennik (zatwierdzony)</h2>
+<table>
+    <tr><th>Pakiet</th><th>Cena</th><th>W systemie (typ licencji)</th></tr>
+    <tr><td>Weekendowy</td><td><strong>79 zł</strong> brutto</td><td><code>weekend</code> — 72h</td></tr>
+    <tr><td>Miesięczny</td><td><strong>149 zł</strong> brutto</td><td><code>miesiac</code> — 30 dni</td></tr>
+</table>
+
+<h2>Podgląd lokalny (opcjonalnie)</h2>
+<p>W folderze projektu uruchom prosty serwer i otwórz:</p>
+<pre>landing/index.html   → podgląd landingu
+index.html           → podgląd aplikacji (router domen działa tylko na produkcji)</pre>
+
+<h2>Kiedy commit?</h2>
+<p>Gdy powiesz „commit i push” — wypchnę zmiany aplikacji na GitHub → Netlify zaktualizuje app/demo/admin. Landing wdrażasz osobno z folderu <code>landing/</code> (drag &amp; drop lub osobny branch).</p>
+
+<p style="margin-top:40px;font-size:13px;color:#666;">Turniejomat · przewodnik wygenerowany lokalnie · bez publikacji</p>
+
+</body>
+</html>

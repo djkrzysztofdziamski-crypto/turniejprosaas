@@ -1,0 +1,13 @@
+# Site: turniejomat.pl (landing marketingowy)
+# Osobny deploy Netlify — NIE mieszać z aplikacją SaaS
+
+[[redirects]]
+  from = "https://www.turniejomat.pl/*"
+  to = "https://turniejomat.pl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

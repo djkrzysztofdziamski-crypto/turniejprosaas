@@ -197,6 +197,7 @@
     const DEMO_SESSION_KEY = 'tp_demo_story_session';
 
     const SALES_EMAIL = 'admin@turniejomat.pl';
+    const APP_URL = 'https://app.turniejomat.pl/';
 
 
 
@@ -1929,6 +1930,11 @@
             clearDemoStorySession();
 
             try { global.sessionStorage.setItem('tp_demo_source', 'demo_story'); } catch (e) { /* ignore */ }
+
+            if (global.location.hostname === 'demo.turniejomat.pl') {
+                global.location.href = APP_URL;
+                return;
+            }
 
             showViewLogin();
 

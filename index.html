@@ -275,6 +275,14 @@
         #view-demo-story .demo-micro { font-size: 12px; color: #94a3b8; margin-top: 14px; text-align: center; }
         #view-login .btn-demo-story { background: #137333; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(19,115,51,0.35); }
         #view-login .btn-demo-story:hover { background: #1a8f42; }
+        #view-login a.btn-submit, #view-login a.btn-demo-story {
+            display: block; width: 100%; text-align: center; text-decoration: none; box-sizing: border-box;
+        }
+        #view-login .gate-marketing-link {
+            display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 700;
+            color: #57d9a3; text-decoration: none;
+        }
+        #view-login .gate-marketing-link:hover { color: #fff; text-decoration: underline; }
         #view-demo-story .demo-callout { background: #19354f; border: 1px solid #486581; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #57d9a3; margin: 16px 0; }
         #view-demo-story .demo-fan-tabs { display: flex; gap: 6px; margin: 16px 0 10px; flex-wrap: wrap; }
         #view-demo-story .demo-fan-tab { flex: 1; min-width: 70px; padding: 10px 6px; border: 1px solid #486581; background: #19354f; color: #bcccdc; border-radius: 6px; font-weight: bold; font-size: 11px; cursor: pointer; text-transform: uppercase; }
@@ -394,8 +402,8 @@
         <h2>TurniejPro SaaS</h2>
         <p>System zarządzania i wyników live</p>
         
-        <button type="button" class="btn-submit btn-demo-story" id="btn-demo-story-start">ZOBACZ FINAŁ TURNIEJU</button>
-        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 20px;">2 minuty · Bez rejestracji · Demo nie wymaga klucza</p>
+        <a href="https://demo.turniejomat.pl" class="btn-submit btn-demo-story" id="btn-demo-story-start">ZOBACZ FINAŁ TURNIEJU</a>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 20px;">2 minuty · Bez rejestracji · Demo na demo.turniejomat.pl</p>
 
         <div class="input-group">
             <label for="license-input">Klucz Licencyjny</label>
@@ -409,10 +417,14 @@
         <div class="footer-info">
             Nie masz klucza lub chcesz przedłużyć ważność?<br>
             Skontaktuj się z administratorem:<br>
-            <a href="mailto:admin@turniejomat.pl" class="gate-contact-email">admin@turniejomat.pl</a>
+            <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%20licencji%20%E2%80%94%20Turniejomat" class="gate-contact-email">admin@turniejomat.pl</a>
+            
+            <div style="margin-top: 20px;">
+                <a href="https://turniejomat.pl" class="gate-marketing-link">← Strona główna i cennik (79 / 149 zł)</a>
+            </div>
             
             <div style="margin-top: 25px; border-top: 1px solid #486581; padding-top: 15px;">
-                <a href="?view=admin" style="color: #bcccdc; text-decoration: none; font-size: 11px; font-weight: bold; opacity: 0.5;">
+                <a href="https://admin.turniejomat.pl" style="color: #bcccdc; text-decoration: none; font-size: 11px; font-weight: bold; opacity: 0.5;">
                     🔒 Panel Administratora
                 </a>
             </div>
@@ -471,10 +483,8 @@
                 <div class="form-group">
                     <label for="lic-type">Pakiet Czasowy</label>
                     <select id="lic-type">
-                        <option value="1-dzien">Pakiet 1-dniowy (24h)</option>
-                        <option value="weekend">Pakiet Weekendowy (72h)</option>
-                        <option value="miesiac">Pakiet Abonament (30 dni)</option>
-                        <option value="unlimited">Licencja Dożywotnia (No Limit)</option>
+                        <option value="weekend" selected>Pakiet Weekendowy — 79 zł (72h / 3 dni)</option>
+                        <option value="miesiac">Abonament Miesięczny — 149 zł (30 dni)</option>
                     </select>
                 </div>
                 <button class="btn-primary" onclick="createNewLicense()" style="height: 40px;">UTWÓRZ I KOPIUJ KOD</button>
@@ -747,7 +757,37 @@
     const localArchiveId = urlParams.get('localArchiveId');
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
     let isDemoMode = false;
-    const isDemoStoryHost = window.location.hostname === 'demo.turniejomat.pl';
+    const host = window.location.hostname;
+    const isAppHost = host === 'app.turniejomat.pl';
+    const isDemoStoryHost = host === 'demo.turniejomat.pl';
+    const LANDING_SITE_URL = 'https://stronaturniejomat.netlify.app';
+
+    function formatLicensePakiet(typ) {
+        if (typ === 'weekend') return 'Weekend 79 zł';
+        if (typ === 'miesiac') return 'Miesiąc 149 zł';
+        if (typ === '1-dzien') return '1 dzień (legacy)';
+        if (typ === 'unlimited') return 'Bez limitu (legacy)';
+        return typ || '—';
+    }
+
+    function redirectLegacyApexTraffic() {
+        if (host !== 'turniejomat.pl' && host !== 'www.turniejomat.pl') return false;
+        const q = window.location.search || '';
+        if (urlParams.get('demo') === 'story') {
+            window.location.replace('https://demo.turniejomat.pl/');
+            return true;
+        }
+        if (urlParams.get('view') === 'admin') {
+            window.location.replace('https://admin.turniejomat.pl/' + q);
+            return true;
+        }
+        if (activeKey || archiveId || viewMode === 'fan') {
+            window.location.replace('https://app.turniejomat.pl/' + q);
+            return true;
+        }
+        window.location.replace(LANDING_SITE_URL + '/');
+        return true;
+    }
 
     if (window.location.hostname === 'admin.turniejomat.pl') {
         viewMode = 'admin';
@@ -785,6 +825,13 @@
 
     // --- 3. SYSTEM CENTRALNEGO ROUTERA ---
     function executeRouter() {
+        if (redirectLegacyApexTraffic()) return;
+
+        if (!isDemoStoryHost && urlParams.get('demo') === 'story') {
+            window.location.replace('https://demo.turniejomat.pl/');
+            return;
+        }
+
         initAppModule({ bridgeOnly: true });
 
         if (urlParams.get('id') === 'DEMO-2026' || isDemoStoryHost) {
@@ -826,12 +873,7 @@
             return;
         }
 
-        const btnDemoStart = document.getElementById('btn-demo-story-start');
-        if (btnDemoStart && window.DemoStoryController) {
-            btnDemoStart.onclick = () => DemoStoryController.showEntry();
-        }
-
-        if ((urlParams.get('demo') === 'story' || isDemoStoryHost) && window.DemoStoryController) {
+        if (isDemoStoryHost && window.DemoStoryController) {
             if (!DemoStoryController.tryRestoreSession()) {
                 DemoStoryController.showEntry();
             }
@@ -853,8 +895,7 @@
     function autoVerify(key) {
         if (key === 'DEMO-2026') {
             localStorage.removeItem('tp_license_key');
-            if (window.DemoStoryController) DemoStoryController.showEntry();
-            else showMsg('Użyj przycisku „Zobacz finał turnieju” na ekranie startowym.', 'success');
+            window.location.href = 'https://demo.turniejomat.pl/';
             return;
         }
         db.ref('licencje/' + key).once('value', snapshot => {
@@ -876,11 +917,8 @@
         if (!key) { showMsg("❌ Wpisz klucz licencyjny!", "error"); return; }
         
         if (key === 'DEMO-2026') {
-            showMsg('Legacy demo wyłączone. Uruchamiam Demo Story…', 'success');
             localStorage.removeItem('tp_license_key');
-            setTimeout(function () {
-                if (window.DemoStoryController) DemoStoryController.showEntry();
-            }, 800);
+            window.location.href = 'https://demo.turniejomat.pl/';
             return;
         }
 
@@ -1074,7 +1112,7 @@
                         <td class="lic-col-notatka" title="${escAttr(notatkaRaw)}">
                             <span class="lic-notatka-text">${esc(notatkaRaw) || '—'}</span>
                         </td>
-                        <td class="lic-col-pakiet"><code>${lic.typ}</code></td>
+                        <td class="lic-col-pakiet"><code>${formatLicensePakiet(lic.typ)}</code></td>
                         <td class="lic-col-status">${statusBadge}</td>
                         <td class="lic-col-date">${actDate}</td>
                         <td class="lic-col-date" style="font-weight: bold; color: ${currentStatus==='wygasl'?'#ef4444':'#fff'};">${expDate}</td>
