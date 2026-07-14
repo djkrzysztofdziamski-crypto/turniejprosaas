@@ -48,6 +48,7 @@ async function createCheckoutSession({ productId, customerEmail }) {
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     customer_email: customerEmail || undefined,
+    payment_method_types: ['card', 'blik', 'p24'],
     line_items: [{
       price_data: {
         currency: 'pln',
