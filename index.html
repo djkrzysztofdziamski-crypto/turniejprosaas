@@ -1099,6 +1099,36 @@
         return lic.sports.includes(sport);
     }
 
+    const RTDB_REST_BASE = firebaseConfig.databaseURL.replace(/\/$/, '');
+
+    async function fetchLicenseFromRtdb(key) {
+        const res = await fetch(`${RTDB_REST_BASE}/licencje/${encodeURIComponent(key)}.json`);
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const lic = await res.json();
+        return lic && typeof lic === 'object' ? lic : null;
+    }
+
+    function validateLicenseForEntry(key, lic, failVerify) {
+        if (!lic) { failVerify("❌ Niepoprawny klucz licencyjny!"); return false; }
+        if (lic.status === 'zablokowany') { failVerify("❌ Licencja zawieszona przez administratora!"); return false; }
+        if (!licenseCoversSport(lic, APP_SPORT)) {
+            failVerify("❌ Ten klucz nie obejmuje modułu piłki nożnej. Skontaktuj się z administratorem.");
+            return false;
+        }
+        const now = Date.now();
+        const isActivated = lic.status === 'aktywny' && lic.aktywowany && lic.wygasa;
+        if (!isActivated) {
+            failVerify("⏳ Klucz oczekuje na aktywację przez administratora. Jeśli już opłaciłeś licencję, napisz na admin@turniejomat.pl podając swój klucz.");
+            return false;
+        }
+        if (now > lic.wygasa) {
+            failVerify("❌ Czas tej licencji upłynął! Skontaktuj się w celu przedłużenia.");
+            return false;
+        }
+        return true;
+    }
+
     let firebaseStatusLock = null;
     let firebaseSavedTimer = null;
 
@@ -1274,6 +1304,8 @@
     // ==========================================
     function initLoginModule() {
         if (viewMode === 'admin') return;
+        const fbStatus = document.getElementById('firebase-status');
+        if (fbStatus) fbStatus.style.display = 'none';
 
         if (viewMode === 'fan' && activeKey) {
             window.location.search = `?view=fan&id=${activeKey}`;
@@ -1315,10 +1347,9 @@
             window.location.href = 'https://demo.turniejomat.pl/';
             return;
         }
-        db.ref('licencje/' + key).once('value', snapshot => {
-            const lic = snapshot.val();
+        fetchLicenseFromRtdb(key).then(lic => {
             if (lic && lic.status === 'aktywny' && licenseCoversSport(lic, APP_SPORT)) {
-                const now = new Date().getTime();
+                const now = Date.now();
                 if (lic.wygasa && now > lic.wygasa) {
                     localStorage.removeItem('tp_license_key');
                     showMsg("❌ Ta licencja już wygasła!", "error");
@@ -1326,7 +1357,7 @@
                     window.location.search = `?id=${key}`;
                 }
             }
-        });
+        }).catch(() => {});
     }
 
     function formatCallableError(err) {
@@ -1357,38 +1388,14 @@
 
         showMsg("⌛ Weryfikacja klucza w bazie danych...", "success");
         const failVerify = (txt) => showMsg(txt, "error");
-        const timeout = setTimeout(() => {
-            failVerify("❌ Brak połączenia z bazą (timeout). Odśwież stronę lub spróbuj za chwilę.");
-        }, 12000);
-        db.ref('licencje/' + key).once('value', snapshot => {
-            clearTimeout(timeout);
-            const lic = snapshot.val();
-            if (!lic) { failVerify("❌ Niepoprawny klucz licencyjny!"); return; }
-            if (lic.status === 'zablokowany') { failVerify("❌ Licencja zawieszona przez administratora!"); return; }
-            if (!licenseCoversSport(lic, APP_SPORT)) {
-                failVerify("❌ Ten klucz nie obejmuje modułu piłki nożnej. Skontaktuj się z administratorem.");
-                return;
-            }
-
-            const now = new Date().getTime();
-            const isActivated = lic.status === 'aktywny' && lic.aktywowany && lic.wygasa;
-
-            if (!isActivated) {
-                failVerify("⏳ Klucz oczekuje na aktywację przez administratora. Jeśli już opłaciłeś licencję, napisz na admin@turniejomat.pl podając swój klucz.");
-                return;
-            }
-
-            if (now > lic.wygasa) {
-                failVerify("❌ Czas tej licencji upłynął! Skontaktuj się w celu przedłużenia.");
-            } else {
+        fetchLicenseFromRtdb(key)
+            .then(lic => {
+                if (!validateLicenseForEntry(key, lic, failVerify)) return;
                 localStorage.setItem('tp_license_key', key);
                 showMsg("✅ Klucz poprawny. Witamy!", "success");
                 setTimeout(() => { window.location.search = `?id=${key}`; }, 1000);
-            }
-        }, err => {
-            clearTimeout(timeout);
-            failVerify("❌ Błąd połączenia z bazą: " + (err?.message || err || "nieznany"));
-        });
+            })
+            .catch(err => failVerify("❌ Błąd połączenia z bazą: " + (err?.message || err)));
     }
 
     // ==========================================
@@ -1921,6 +1928,10 @@
 
     function initAppModule(opts = {}) {
         const bridgeOnly = opts.bridgeOnly === true;
+        if (!bridgeOnly && activeKey) {
+            const fbStatus = document.getElementById('firebase-status');
+            if (fbStatus) fbStatus.style.display = '';
+        }
 
         if (!window._appRenderBridgeReady) {
         window._appRenderBridgeReady = true;
