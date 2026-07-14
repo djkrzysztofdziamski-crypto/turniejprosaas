@@ -1078,8 +1078,14 @@
     // --- 1. CONFIG CHMURY FIREBASE ---
     const firebaseConfig = { apiKey: "AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU", authDomain: "turniejprosaas.firebaseapp.com", databaseURL: "https://turniejprosaas-default-rtdb.europe-west1.firebasedatabase.app", projectId: "turniejprosaas", storageBucket: "turniejprosaas.firebasestorage.app", messagingSenderId: "141555836771", appId: "1:141555836771:web:d5f17180a21fded3d09556" };
 
+    // WebSocket RTDB bywa blokowany przez CSP/sieć — long polling przez HTTPS działa stabilniej.
+    if (firebase.database && typeof firebase.database.forceLongPolling === 'function') {
+        firebase.database.forceLongPolling();
+    }
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    try { db.goOnline(); } catch (_) {}
     const auth = firebase.auth();
     const cloudFunctions = firebase.app().functions('europe-west1');
     const activateLicenseCallable = cloudFunctions.httpsCallable('activateLicense');
