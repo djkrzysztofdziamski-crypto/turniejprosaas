@@ -8,7 +8,7 @@
       ".indexOn": ["status", "wygasa"],
       "$key": {
         ".read": "$key.matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/)",
-        ".write": "auth != null && auth.token.admin === true",
+        ".write": "(auth != null && auth.token.admin === true) || (data.exists() && data.child('status').val() === 'nowy' && newData.child('status').val() === 'aktywny' && newData.child('typ').val() === data.child('typ').val() && newData.child('notatka').val() === data.child('notatka').val() && newData.child('stworzony').val() === data.child('stworzony').val() && newData.child('aktywowany').isNumber() && newData.child('wygasa').isNumber() && newData.child('wygasa').val() > now && ((newData.child('typ').val() === 'weekend' && newData.child('wygasa').val() <= newData.child('aktywowany').val() + 259800000) || (newData.child('typ').val() === 'miesiac' && newData.child('wygasa').val() <= newData.child('aktywowany').val() + 2592600000) || (newData.child('typ').val() === '1-dzien' && newData.child('wygasa').val() <= newData.child('aktywowany').val() + 86460000) || (newData.child('typ').val() === 'unlimited' && newData.child('wygasa').val() <= newData.child('aktywowany').val() + 3122064000000)))",
         ".validate": "newData.hasChildren(['typ', 'status', 'stworzony', 'notatka'])"
       }
     },

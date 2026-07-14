@@ -9,8 +9,9 @@
 | Plik | Rola |
 |------|------|
 | `firebase.json` | Konfiguracja CLI — wskazuje na `database.rules.json` |
-| `database.rules.json` | **Wariant przejściowy** — wdrożenie teraz (aktywacja klucza z ograniczeniami) |
-| `database.rules.strict.json` | **Wariant docelowy** — po Cloud Functions + płatnościach (tylko admin pisze w `licencje`) |
+| `database.rules.json` | **Wariant strict (aktywny)** — tylko admin pisze w `licencje` |
+| `database.rules.transitional.json` | Archiwum — aktywacja klienta z ograniczeniami (2026-07-13) |
+| `database.rules.strict.json` | Kopia strict (identyczna z `database.rules.json`) |
 
 ---
 
@@ -59,27 +60,14 @@
 ".write": false
 ```
 
-### `licencje` — przejściowy (`database.rules.json`)
+### `licencje` — strict (`database.rules.json`, od 2026-07-14)
 
-| Operacja | Reguła |
-|----------|--------|
-| Lista wszystkich kluczy | tylko `auth.token.admin === true` |
-| Odczyt `licencje/{key}` | każdy, kto zna poprawny format klucza `TP-XXXX-XXXX` |
-| Zapis admin | tworzenie, blokada, +24h, usuwanie |
-| Aktywacja klienta | tylko `status: nowy → aktywny`, bez zmiany `typ`/`notatka`, `wygasa` zgodne z pakietem |
+- Zapis **wyłącznie admin** (Firebase Auth + `admin` claim) lub Cloud Function z Admin SDK.
+- Klient **nie może** aktywować klucza `nowy → aktywny` — aktywacja w panelu admina lub przez `activateLicense` (Functions).
 
-Limity czasu przy aktywacji (bufor 10 min):
+### `licencje` — transitional (`database.rules.transitional.json`, archiwum)
 
-| `typ` | Maks. czas od `aktywowany` |
-|-------|----------------------------|
-| `1-dzien` | 24 h |
-| `weekend` | 72 h |
-| `miesiac` | 30 dni |
-| `unlimited` | 99 lat (legacy) |
-
-### `licencje` — strict (`database.rules.strict.json`)
-
-- Zapis **wyłącznie admin** — aktywacja tylko przez Cloud Function po płatności.
+- Aktywacja klienta z limitami czasu pakietu — **wyłączone** po wdrożeniu strict.
 
 ### `turnieje_uzytkownikow/{key}`
 
@@ -125,21 +113,20 @@ cd "ścieżka/do/turniejprosaas"
 firebase deploy --only database
 ```
 
-### 4. Po wdrożeniu Cloud Functions (płatności)
+### 4. Cloud Functions (opcjonalnie, przed płatnościami)
 
 ```bash
-# podmień reguły na strict
-cp database.rules.strict.json database.rules.json
-firebase deploy --only database
+cd functions && npm install && cd ..
+firebase deploy --only functions
 ```
 
-Lub w `firebase.json` zmień ścieżkę na `database.rules.strict.json`.
+Funkcje: `activateLicense` (callable, admin), `paymentWebhook` (placeholder 501).
 
 ---
 
 ## Checklist testów po deploy
 
-Wykonaj w **Rules playground** lub curl (odczyt):
+Wykonaj w **Rules playground** lub `node scripts/qa-firebase-rules-smoke.mjs`:
 
 | # | Scenariusz | Oczekiwany wynik |
 |---|------------|------------------|
@@ -147,48 +134,43 @@ Wykonaj w **Rules playground** lub curl (odczyt):
 | 2 | `GET /licencje/TP-VALID.json` bez auth | **200** (metadane licencji) |
 | 3 | `GET /turnieje_uzytkownikow/TP-VALID.json` bez auth | **200** (fan live) |
 | 4 | `PUT /turnieje_uzytkownikow/TP-VALID.json` bez auth, licencja wygasła | **403** |
-| 5 | Aktywacja: `nowy → aktywny` z poprawnym `wygasa` | **200** |
-| 6 | Aktywacja z `wygasa` = +10 lat przy `typ: weekend` | **403** |
-| 7 | Zmiana `typ` przy aktywacji | **403** |
-| 8 | Admin: `GET /licencje.json` z tokenem admin | **200** |
-| 9 | `GET /archiwum.json?shallow=true` bez auth | **403** |
-| 10 | `GET /archiwum/{znany-push-id}.json` bez auth | **200** (link raportu) |
-| 11 | Zapis do `archiwum` z `_license_owner` obcego klucza | **403** |
+| 5 | Klient: `PATCH licencje/TP-XXX` aktywacja | **403** (strict) |
+| 6 | Admin: `GET /licencje.json` z tokenem admin | **200** |
+| 7 | `GET /archiwum.json?shallow=true` bez auth | **403** |
+| 8 | `GET /archiwum/{push-id}.json` bez auth | **200** (link raportu) |
+| 9 | Bramka: klucz `nowy` bez aktywacji admina | komunikat „oczekuje na aktywację” |
+| 10 | Admin: przycisk **AKTYWUJ** / checkbox przy tworzeniu | **200** |
 
 ---
 
-## Co się zmienia po deploy przejściowym
+## Co się zmienia po deploy strict (2026-07-14)
 
-| Zachowanie | Przed (luzne reguły) | Po |
-|------------|----------------------|-----|
-| Enumeracja licencji | zablokowana ✓ | bez zmian ✓ |
-| Zapis turnieju przy wygasłej licencji | możliwy ✗ | **zablokowany** ✓ |
-| Zapis przy `status: zablokowany` | możliwy ✗ | **zablokowany** ✓ |
-| Samodzielne przedłużenie licencji | możliwe ✗ | **zablokowane** (tylko admin) |
-| Aktywacja z fałszywym `wygasa` | możliwa ✗ | **ograniczona do pakietu** ✓ |
-| Odczyt turnieju po znajomości klucza | tak | **nadal tak** (fan live) |
+| Zachowanie | Przed | Po |
+|------------|-------|-----|
+| Aktywacja klucza z bramki | klient sam aktywował | **tylko admin** |
+| Enumeracja licencji | zablokowana | bez zmian |
+| Zapis turnieju przy wygasłej licencji | zablokowany | bez zmian |
+| Fan live po kluczu | tak | bez zmian |
 
-Aplikacja **nie wymaga zmian w kodzie** przy wariancie przejściowym — `verifyLicense()` nadal działa.
+`verifyLicense()` — tylko wejście dla już aktywnych kluczy. Nowe klucze: admin **AKTYWUJ** lub checkbox „Aktywuj od razu”.
 
 ---
 
-## Świadome kompromisy (do Fazy 2)
+## Świadome kompromisy (Faza 2 — płatności)
 
-1. **Klucz = bearer token** — kto zna `TP-XXXX-XXXX`, czyta turniej. To zamierzone dla QR kibica; nie da się tego naprawić samymi regułami bez auth organizatora.
-2. **Link archiwum** — `archiwum/{pushId}` jest publiczny przy znajomości ID. Push ID jest trudny do zgadnięcia, ale nie jest secret jak klucz.
-3. **Aktywacja w przeglądarce** (wariant przejściowy) — nadal możliwa bez płatności, ale z limitami czasu. Docelowo: `database.rules.strict.json` + Cloud Function po Stripe/Przelewy24.
+1. **Klucz = bearer token** — kto zna `TP-XXXX-XXXX`, czyta turniej (fan live).
+2. **Link archiwum** — publiczny przy znajomości push ID.
+3. **Aktywacja manualna** — do czasu webhooka płatności admin aktywuje klucze ręcznie (bezpieczne, ale nie skalowalne).
 
 ---
 
-## Następny krok (punkt 2 z audytu)
+## Następny krok — moduł płatności
 
-Cloud Function `activateLicense`:
+1. Stripe / Przelewy24 checkout na landingu
+2. `paymentWebhook` → weryfikacja podpisu → `licencje/{key}.update(...)` przez Admin SDK
+3. Opcjonalnie: panel admin — lista zamówień
 
-```
-POST /webhook/payment → verify → admin SDK → licencje/{key}.update({ status, aktywowany, wygasa })
-```
-
-Następnie przełączenie na `database.rules.strict.json` i usunięcie aktywacji z `verifyLicense()` w `index.html`.
+Scaffold Functions: `functions/index.js` (`activateLicense`, `paymentWebhook`).
 
 ---
 
