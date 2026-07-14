@@ -1,5 +1,10 @@
 # Site: turniejomat.pl (landing marketingowy)
 # Osobny deploy Netlify — NIE mieszać z aplikacją SaaS
+#
+# Netlify UI → Build & deploy:
+#   Base directory: landing
+#   Publish directory: . (default)
+#   Build command: (empty)
 
 [[redirects]]
   from = "https://www.turniejomat.pl/*"

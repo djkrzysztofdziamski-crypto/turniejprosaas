@@ -1374,7 +1374,7 @@
         }
 
         if (urlParams.get('checkout') === 'success' || urlParams.get('paid') === '1') {
-            showMsg('✅ Płatność przyjęta! Klucz licencyjny wysłaliśmy na Twój email. Wpisz go poniżej, aby wejść do turnieju.', 'success');
+            showMsg('✅ Płatność przyjęta! Klucz licencyjny jest aktywny — wpisz go poniżej (sprawdź też email). Jeśli wiadomość nie dotrze w kilka minut, napisz na admin@turniejomat.pl z adresem płatności.', 'success');
             if (window.history.replaceState) {
                 const clean = new URL(window.location.href);
                 clean.searchParams.delete('checkout');
