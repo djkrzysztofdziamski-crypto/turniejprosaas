@@ -76,6 +76,36 @@ firebase functions:config:set `
 
 ---
 
+## Hosti24.pl (admin@turniejomat.pl)
+
+Jeśli skrzynka jest u **Hosti24** (np. `admin@turniejomat.pl`):
+
+| Parametr | Wartość |
+|----------|---------|
+| Host | `mx.hosti24.pl` |
+| Port | `465` |
+| Szyfrowanie | SSL/TLS (`smtp_secure=true`) |
+| User | pełny email, np. `admin@turniejomat.pl` |
+| Hasło | z panelu Hosti24 (Poczta → konto) |
+
+```powershell
+$env:SMTP_HOST="mx.hosti24.pl"
+$env:SMTP_PORT="465"
+$env:SMTP_USER="admin@turniejomat.pl"
+$env:SMTP_PASS="HASLO_Z_PANELU_HOSTI24"
+$env:SMTP_SECURE="true"
+$env:SMTP_FROM="Turniejomat <admin@turniejomat.pl>"
+$env:SMTP_REPLY_TO="admin@turniejomat.pl"
+node scripts/setup-email-config.mjs
+firebase deploy --only functions
+```
+
+Potem: **Admin → 📧 TEST SMTP**. Jeśli OK — **📧 WYŚLIJ** przy zamówieniu lub nowa płatność testowa.
+
+Źródło: [hosti24.pl — konfiguracja poczty](https://www.hosti24.pl/pomoc/microsoft-outlook-konfiguracja-konta-e-mail)
+
+---
+
 ## Co jest w mailu
 
 - Klucz licencyjny (np. `TP-XXXX-XXXX`)
