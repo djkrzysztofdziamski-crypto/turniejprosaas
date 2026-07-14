@@ -70,7 +70,7 @@
 
         /* --- SYSTEM STYLÓW: ADMIN --- */
         #view-admin { background-color: #0f172a; color: #f8fafc; padding: 20px; min-height: 100vh; box-sizing: border-box; }
-        #view-admin .container { max-width: 1100px; margin: 0 auto; }
+        #view-admin .container { max-width: min(1440px, calc(100vw - 40px)); margin: 0 auto; }
         #view-admin .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         #view-admin h2, #view-admin h3, #view-admin h4 { margin-top: 0; color: #fff; }
         #view-admin #auth-lock { position: fixed; top:0; left:0; width:100%; height:100%; background: #0f172a; z-index: 9999; display: flex; justify-content: center; align-items: center; }
@@ -82,82 +82,57 @@
         #view-admin button { font-weight: bold; cursor: pointer; transition: background 0.2s; }
         #view-admin .btn-primary { background: #3b82f6; border: none; }
         #view-admin .btn-primary:hover { background: #2563eb; }
+        #view-admin .admin-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 4px; }
         #view-admin table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        /* Tabela licencji — layout fix */
-        #view-admin table.licenses-table { table-layout: fixed; min-width: 960px; }
-        #view-admin .lic-col-key { width: 11%; white-space: nowrap; }
-        #view-admin .lic-col-notatka { width: auto; max-width: 0; overflow: hidden; }
-        #view-admin .lic-col-notatka .lic-notatka-text {
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-            overflow: hidden; word-break: break-word; overflow-wrap: anywhere;
-            font-weight: 500; line-height: 1.35;
-        }
-        #view-admin .lic-col-pakiet {
-            width: 14%;
-            min-width: 118px;
-            white-space: normal;
-            vertical-align: middle;
-            line-height: 1.35;
-        }
-        #view-admin .lic-col-pakiet code {
-            display: inline-block;
-            font-size: 11px;
-            line-height: 1.35;
-            white-space: normal;
-            word-break: break-word;
-            overflow-wrap: anywhere;
-        }
-        #view-admin th.lic-col-status,
-        #view-admin td.lic-col-status {
-            width: 9%;
-            min-width: 88px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        #view-admin td.lic-col-status .badge {
-            display: inline-block;
-            margin: 0 auto;
-        }
-        #view-admin .lic-col-date {
-            width: 12%;
-            min-width: 152px;
-            white-space: nowrap;
-            font-size: 11px;
-            color: #94a3b8;
-            font-variant-numeric: tabular-nums;
-            font-feature-settings: "tnum" 1;
-            letter-spacing: 0.01em;
-            text-align: right;
-            vertical-align: middle;
-        }
-        #view-admin th.lic-col-date { text-align: right; }
-        #view-admin .lic-col-actions { width: 340px; min-width: 340px; vertical-align: middle; overflow: hidden; }
-        #view-admin .lic-actions {
-            display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; align-items: center;
-            max-width: 100%;
-        }
-        #view-admin .lic-actions .action-btn { margin-right: 0; white-space: nowrap; flex-shrink: 0; }
-        @media (max-width: 899px) {
-            #view-admin .lic-col-actions {
-                position: sticky; right: 0; background: #1e293b;
-                box-shadow: -4px 0 8px rgba(0, 0, 0, 0.25);
-            }
-        }
-        #view-admin th, #view-admin td { padding: 12px; border: 1px solid #334155; text-align: left; }
-        #view-admin th { background: #111827; color: #94a3b8; font-size: 11px; text-transform: uppercase; font-weight: bold; }
+        #view-admin th, #view-admin td { padding: 11px 12px; border: 1px solid #334155; text-align: left; vertical-align: middle; line-height: 1.4; }
+        #view-admin th { background: #111827; color: #94a3b8; font-size: 10px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.04em; white-space: nowrap; }
         #view-admin tr:hover { background: rgba(255,255,255,0.02); }
-        #view-admin .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
+        /* Tabela licencji */
+        #view-admin table.licenses-table { table-layout: fixed; min-width: 1240px; }
+        #view-admin .lic-col-key { width: 128px; min-width: 128px; white-space: nowrap; font-family: ui-monospace, monospace; font-weight: 700; color: #60a5fa; font-size: 12px; }
+        #view-admin .lic-col-notatka { width: auto; min-width: 200px; }
+        #view-admin .lic-col-notatka .lic-notatka-text {
+            display: block; word-break: break-word; overflow-wrap: anywhere;
+            font-weight: 500; line-height: 1.45; white-space: normal;
+        }
+        #view-admin .lic-col-pakiet { width: 132px; min-width: 132px; white-space: normal; line-height: 1.4; }
+        #view-admin .lic-col-pakiet code { display: block; font-size: 11px; line-height: 1.4; white-space: normal; word-break: break-word; }
+        #view-admin .lic-col-pakiet small { display: block; margin-top: 3px; color: #64748b; font-size: 10px; line-height: 1.3; }
+        #view-admin th.lic-col-status, #view-admin td.lic-col-status { width: 96px; min-width: 96px; text-align: center; }
+        #view-admin td.lic-col-status .badge { display: inline-block; margin: 0 auto; white-space: nowrap; }
+        #view-admin .lic-col-date { width: 142px; min-width: 142px; white-space: nowrap; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; text-align: right; }
+        #view-admin th.lic-col-date { text-align: right; }
+        #view-admin .lic-col-actions { width: 400px; min-width: 400px; }
+        #view-admin .lic-actions { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; align-items: center; }
+        #view-admin .lic-actions .action-btn { margin-right: 0; white-space: nowrap; flex: 0 0 auto; }
+        @media (max-width: 899px) {
+            #view-admin .lic-col-actions { position: sticky; right: 0; background: #1e293b; box-shadow: -4px 0 8px rgba(0, 0, 0, 0.25); }
+        }
+        /* Tabela zamówień */
+        #view-admin table.orders-table { table-layout: fixed; min-width: 1120px; }
+        #view-admin .ord-col-payment { width: 24%; min-width: 220px; }
+        #view-admin .ord-col-provider { width: 8%; min-width: 72px; white-space: nowrap; }
+        #view-admin .ord-col-key { width: 11%; min-width: 118px; font-family: ui-monospace, monospace; font-weight: 700; color: #60a5fa; font-size: 12px; white-space: nowrap; }
+        #view-admin .ord-col-product { width: 13%; min-width: 120px; }
+        #view-admin .ord-col-product code { font-size: 11px; word-break: break-word; white-space: normal; display: block; line-height: 1.35; }
+        #view-admin .ord-col-contact { width: 22%; min-width: 180px; word-break: break-word; overflow-wrap: anywhere; }
+        #view-admin .ord-col-date { width: 14%; min-width: 142px; white-space: nowrap; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; text-align: right; }
+        #view-admin th.ord-col-date { text-align: right; }
+        #view-admin .ord-col-mailsent { width: 8%; min-width: 88px; text-align: center; white-space: nowrap; }
+        #view-admin .ord-payment-id { display: block; font-family: ui-monospace, monospace; font-size: 10px; line-height: 1.45; word-break: break-all; color: #cbd5e1; }
+        #view-admin .badge { padding: 4px 9px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; white-space: nowrap; line-height: 1.2; }
         #view-admin .badge.nowy { background: #1e3a8a; color: #60a5fa; }
         #view-admin .badge.aktywny { background: #064e3b; color: #34d399; }
         #view-admin .badge.zablokowany { background: #7f1d1d; color: #f87171; }
         #view-admin .badge.wygasl { background: #451a03; color: #fbbf24; }
-        #view-admin .action-btn { padding: 4px 8px; font-size: 11px; margin-right: 4px; border: none; border-radius: 4px; color: white; }
+        #view-admin .action-btn { padding: 6px 9px; font-size: 10px; margin-right: 0; border: none; border-radius: 4px; color: white; line-height: 1.2; letter-spacing: 0.02em; }
         #view-admin .act-view { background: #3b82f6; }
         #view-admin .act-block { background: #ef4444; }
         #view-admin .act-unblock { background: #10b981; }
         #view-admin .act-time { background: #f59e0b; color: #000; }
         #view-admin .act-del { background: #475569; }
-        #view-admin .archive-item { border-left: 4px solid #10b981; padding: 12px; background: #1e293b; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; border-left-width: 4px; }
+        #view-admin .archive-item { border-left: 4px solid #10b981; padding: 12px 14px; background: #1e293b; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border: 1px solid #334155; border-left-width: 4px; }
+        #view-admin .archive-item > div:last-child { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
         #view-admin .brand-footer { margin-top: 32px; padding: 16px 0 24px; color: #64748b; font-size: 12px; text-align: center; border-top: 1px solid #334155; }
 
         /* --- SYSTEM STYLÓW: KONSOLA SĘDZIEGO (APP) --- */
@@ -832,7 +807,7 @@
 
         <div class="card">
             <h3>📊 Monitor Licencji i Turniejów Live</h3>
-            <div class="licenses-table-wrap" style="overflow-x: auto;">
+            <div class="admin-table-wrap licenses-table-wrap">
                 <table class="licenses-table">
                     <colgroup>
                         <col class="lic-col-key">
@@ -866,17 +841,26 @@
         <div class="card">
             <h3>💳 Zamówienia online (Billing)</h3>
             <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Płatności Stripe / Przelewy24 — rejestr z modułu billing. Klucze wydawane automatycznie po webhooku.</p>
-            <div style="overflow-x: auto;">
-                <table>
+            <div class="admin-table-wrap">
+                <table class="orders-table">
+                    <colgroup>
+                        <col class="ord-col-payment">
+                        <col class="ord-col-provider">
+                        <col class="ord-col-key">
+                        <col class="ord-col-product">
+                        <col class="ord-col-contact">
+                        <col class="ord-col-date">
+                        <col class="ord-col-mailsent">
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th>ID płatności</th>
-                            <th>Provider</th>
-                            <th>Klucz</th>
-                            <th>Produkt</th>
-                            <th>Email / Notatka</th>
-                            <th>Data</th>
-                            <th>Email</th>
+                            <th class="ord-col-payment">ID płatności</th>
+                            <th class="ord-col-provider">Provider</th>
+                            <th class="ord-col-key">Klucz</th>
+                            <th class="ord-col-product">Produkt</th>
+                            <th class="ord-col-contact">Email / Notatka</th>
+                            <th class="ord-col-date">Data</th>
+                            <th class="ord-col-mailsent">Email wysłany</th>
                         </tr>
                     </thead>
                     <tbody id="orders-table-body">
@@ -1687,11 +1671,11 @@
                 const notatkaRaw = lic.notatka || '';
                 html += `
                     <tr>
-                        <td class="lic-col-key" style="font-family: monospace; font-weight: bold; color: #60a5fa;">${key}</td>
+                        <td class="lic-col-key">${key}</td>
                         <td class="lic-col-notatka" title="${escAttr(notatkaRaw)}">
                             <span class="lic-notatka-text">${esc(notatkaRaw) || '—'}</span>
                         </td>
-                        <td class="lic-col-pakiet"><code>${formatLicensePakiet(lic.typ)}</code><br><small style="color:#64748b;">${esc((lic.sports || ['football']).join(', '))}</small></td>
+                        <td class="lic-col-pakiet"><code>${formatLicensePakiet(lic.typ)}</code><small>${esc((lic.sports || ['football']).join(', '))}</small></td>
                         <td class="lic-col-status">${statusBadge}</td>
                         <td class="lic-col-date">${actDate}</td>
                         <td class="lic-col-date" style="font-weight: bold; color: ${currentStatus==='wygasl'?'#ef4444':'#fff'};">${expDate}</td>
@@ -1733,13 +1717,13 @@
                     : '<span class="badge nowy">BRAK</span>';
                 html += `
                     <tr>
-                        <td style="font-family: monospace; font-size: 11px;">${esc(paymentId)}</td>
-                        <td>${esc(order.provider || '—')}</td>
-                        <td style="font-family: monospace; font-weight: bold; color: #60a5fa;">${esc(order.licenseKey || '—')}</td>
-                        <td><code>${esc(order.productId || order.typ || '—')}</code></td>
-                        <td>${esc(order.customerEmail || order.notatka || '—')}</td>
-                        <td>${dateStr}</td>
-                        <td>${emailBadge}</td>
+                        <td class="ord-col-payment"><span class="ord-payment-id" title="${escAttr(paymentId)}">${esc(paymentId)}</span></td>
+                        <td class="ord-col-provider">${esc(order.provider || '—')}</td>
+                        <td class="ord-col-key">${esc(order.licenseKey || '—')}</td>
+                        <td class="ord-col-product"><code>${esc(order.productId || order.typ || '—')}</code></td>
+                        <td class="ord-col-contact">${esc(order.customerEmail || order.notatka || '—')}</td>
+                        <td class="ord-col-date">${dateStr}</td>
+                        <td class="ord-col-mailsent">${emailBadge}</td>
                     </tr>`;
             });
             tbody.innerHTML = html;
