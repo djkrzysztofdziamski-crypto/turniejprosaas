@@ -1107,6 +1107,22 @@
 
     const RTDB_REST_BASE = firebaseConfig.databaseURL.replace(/\/$/, '');
 
+    async function fetchRtdbRest(path) {
+        const res = await fetch(`${RTDB_REST_BASE}/${path}.json`);
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+    }
+
+    async function patchRtdbRest(path, payload) {
+        const res = await fetch(`${RTDB_REST_BASE}/${path}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+    }
+
     async function fetchLicenseFromRtdb(key) {
         const res = await fetch(`${RTDB_REST_BASE}/licencje/${encodeURIComponent(key)}.json`);
         if (res.status === 404) return null;
@@ -1943,18 +1959,25 @@
         window._appRenderBridgeReady = true;
 
         window.save = () => {
-        if(!isFanMode && !isDemoMode) {
+        if (!activeKey || isFanMode || isDemoMode) return;
         const { active, archiwum, wstrzymane, ...payload } = state;
+        const savePath = 'turnieje_uzytkownikow/' + activeKey;
         setFirebaseStatus('saving');
-        db.ref('turnieje_uzytkownikow/' + activeKey).update(payload)
+        const sdkSave = db.ref(savePath).update(payload);
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
+        Promise.race([sdkSave, timeout])
+            .catch(() => patchRtdbRest(savePath, payload))
             .then(() => {
                 lastSaveTimestamp = Date.now();
                 setFirebaseStatus('saved');
                 window.renderDashboard();
             })
-            .catch(() => setFirebaseStatus('offline'));
-         }
-        };
+            .catch(err => {
+                console.error('Save failed:', err);
+                setFirebaseStatus('offline');
+                alert('❌ Zapis w chmurze nie powiódł się. Dane są tylko w tej karcie — nie odświeżaj strony. Spróbuj ponownie za chwilę.');
+            });
+         };
         
         window.addMin = (time, min) => { let [h, m] = time.split(':').map(Number); let d = new Date(0, 0, 0, h, m); d.setMinutes(d.getMinutes() + parseInt(min)); return d.toTimeString().slice(0, 5); };
 
@@ -2960,28 +2983,56 @@
             if(lockContainer) lockContainer.style.display = 'none';
         }
 
-        if (activeKey && !isDemoMode && viewMode !== 'archive') {
-            db.ref('licencje/' + activeKey).on('value', snapshot => {
-                const lic = snapshot.val(); if (!lic) return;
+        function applyTournamentState(d) {
+            if (window.DemoStoryController && DemoStoryController.isActive()) return;
+            if (isFanMode && document.getElementById('app-header-title').innerText.includes("ARCHIWUM") && !archiveId && !localArchiveId) return;
+            if (d) {
+                state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
+                if (archiveId || localArchiveId) {
+                    document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
+                    initArchiveViewer(d);
+                }
+                window.renderInputs();
+                if (state.groups && Object.keys(state.groups).length > 0) {
+                    window.renderGroupsList(); window.filterAndRenderMatches();
+                    window.renderPlayoffTree();
+                }
+            } else {
+                state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [] };
+            }
+            document.body.classList.remove('theme-dedicated');
+            if (document.getElementById('tabele').classList.contains('active')) window.calcTables();
+            window.renderLogs();
+            window.renderDashboard();
+        }
+
+        function startLicenseHeaderWatch(key) {
+            function applyLicenseHeader(lic) {
+                if (!lic) return;
                 const fanLabel = isFanMode ? ' 🔴 WYNIKI LIVE (KIBIC)' : '';
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
+                if (isFanMode) return;
+                if (lic.status !== 'aktywny') { document.getElementById('license-blocked-screen').style.display = 'flex'; return; }
+                clearInterval(window.licenseInterval);
+                window.licenseInterval = setInterval(() => {
+                    const now = Date.now(); const diff = lic.wygasa - now;
+                    if (diff <= 0) {
+                        clearInterval(window.licenseInterval);
+                        document.getElementById('license-blocked-screen').style.display = 'flex';
+                    } else {
+                        const hours = Math.floor(diff / (1000 * 60 * 60));
+                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                        document.getElementById('license-countdown').innerText = `⌛ Czas licencji: ${hours}h ${minutes}m ${seconds}s`;
+                    }
+                }, 1000);
+            }
+            fetchLicenseFromRtdb(key).then(applyLicenseHeader).catch(() => {});
+            db.ref('licencje/' + key).on('value', snapshot => applyLicenseHeader(snapshot.val()));
+        }
 
-                if (!isFanMode) {
-                    if (lic.status !== 'aktywny') { document.getElementById('license-blocked-screen').style.display = 'flex'; return; }
-                    clearInterval(window.licenseInterval);
-                    window.licenseInterval = setInterval(() => {
-                        const now = new Date().getTime(); const diff = lic.wygasa - now;
-                        if (diff <= 0) {
-                            clearInterval(window.licenseInterval); document.getElementById('license-blocked-screen').style.display = 'flex';
-                        } else {
-                            const hours = Math.floor(diff / (1000 * 60 * 60));
-                            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                            document.getElementById('license-countdown').innerText = `⌛ Czas licencji: ${hours}h ${minutes}m ${seconds}s`;
-                        }
-                    }, 1000);
-                }
-            });
+        if (activeKey && !isDemoMode && viewMode !== 'archive') {
+            startLicenseHeaderWatch(activeKey);
         }
 
         if (isDemoMode) {
@@ -2994,27 +3045,15 @@
             window.switchTab('start');
             window.renderDashboard();
         } else {
+            let rtdbLiveLoaded = false;
             db.ref(dbPath).on('value', s => {
-                if (window.DemoStoryController && DemoStoryController.isActive()) return;
-                if(isFanMode && document.getElementById('app-header-title').innerText.includes("ARCHIWUM") && !archiveId && !localArchiveId) return;
-                const d = s.val();
-                if(d) {
-                    state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
-                    if (archiveId || localArchiveId) {
-                        document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
-                        initArchiveViewer(d);
-                    }
-                    window.renderInputs();
-                    if(state.groups && Object.keys(state.groups).length > 0) {
-                        window.renderGroupsList(); window.filterAndRenderMatches();
-                        window.renderPlayoffTree();
-                    }
-                } else { state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [] }; }
-                document.body.classList.remove('theme-dedicated');
-                if(document.getElementById('tabele').classList.contains('active')) window.calcTables();
-                window.renderLogs();
-                window.renderDashboard();
+                rtdbLiveLoaded = true;
+                applyTournamentState(s.val());
             });
+            setTimeout(() => {
+                if (rtdbLiveLoaded) return;
+                fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => {});
+            }, 2500);
         }
 
         if (activeKey && !isDemoMode && viewMode !== 'archive') {
