@@ -1123,6 +1123,27 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
     }
 
+    function normalizeLicenseKey(raw) {
+        if (!raw || typeof raw !== 'string') return null;
+        return raw.trim().toUpperCase().replace(/\s+/g, '-');
+    }
+
+    function useRtdbRestForOrganizer() {
+        return viewMode !== 'admin';
+    }
+
+    async function probeRtdbConnection() {
+        try {
+            const path = activeKey
+                ? ('licencje/' + encodeURIComponent(activeKey))
+                : 'turnieje_uzytkownikow';
+            const res = await fetch(`${RTDB_REST_BASE}/${path}.json`, { method: 'GET', cache: 'no-store' });
+            return res.ok;
+        } catch (_) {
+            return false;
+        }
+    }
+
     async function fetchLicenseFromRtdb(key) {
         const res = await fetch(`${RTDB_REST_BASE}/licencje/${encodeURIComponent(key)}.json`);
         if (res.status === 404) return null;
@@ -1172,11 +1193,12 @@
         el.className = 'firebase-status-' + type;
         if (type === 'saved') {
             clearTimeout(firebaseSavedTimer);
-            firebaseSavedTimer = setTimeout(() => {
+            firebaseSavedTimer = setTimeout(async () => {
                 firebaseStatusLock = null;
-                db.ref('.info/connected').once('value', s => {
-                    setFirebaseStatus(s.val() === true ? 'connected' : 'offline');
-                });
+                const ok = useRtdbRestForOrganizer()
+                    ? await probeRtdbConnection()
+                    : (await db.ref('.info/connected').once('value')).val() === true;
+                setFirebaseStatus(ok ? 'connected' : 'offline');
             }, 2000);
         }
         if (window.renderDashboard) {
@@ -1184,15 +1206,11 @@
         }
     }
 
-    db.ref('.info/connected').on('value', snap => {
-        if (firebaseStatusLock) return;
-        setFirebaseStatus(snap.val() === true ? 'connected' : 'offline');
-    });
-
     // --- 2. PARAMETRY URUCHOMIENIA ---
     const urlParams = new URLSearchParams(window.location.search);
     let viewMode = urlParams.get('view');
-    const activeKey = urlParams.get('id');
+    const activeKeyRaw = urlParams.get('id');
+    const activeKey = normalizeLicenseKey(activeKeyRaw);
     const archiveId = urlParams.get('archiveId');
     const localArchiveId = urlParams.get('localArchiveId');
     const BRAND = {
@@ -1216,6 +1234,29 @@
         window.location.replace(APP_SITE_URL + '/' + (window.location.search || ''));
     } else if (isAdminHost) {
         viewMode = 'admin';
+    }
+
+    if (activeKeyRaw && activeKey && activeKeyRaw !== activeKey) {
+        const params = new URLSearchParams(window.location.search);
+        params.set('id', activeKey);
+        window.location.replace(window.location.pathname + '?' + params.toString());
+    }
+
+    function initFirebaseConnectionMonitor() {
+        if (viewMode === 'admin') {
+            db.ref('.info/connected').on('value', snap => {
+                if (firebaseStatusLock) return;
+                setFirebaseStatus(snap.val() === true ? 'connected' : 'offline');
+            });
+            return;
+        }
+        if (!activeKey && !archiveId) return;
+        async function refreshConnectionStatus() {
+            if (firebaseStatusLock) return;
+            setFirebaseStatus((await probeRtdbConnection()) ? 'connected' : 'offline');
+        }
+        refreshConnectionStatus();
+        setInterval(refreshConnectionStatus, 20000);
     }
 
     function formatLicensePakiet(typ) {
@@ -1319,6 +1360,7 @@
             document.getElementById('view-login').classList.add('active');
             initLoginModule();
         }
+        initFirebaseConnectionMonitor();
     }
 
     // ==========================================
@@ -1399,7 +1441,7 @@
     }
 
     function verifyLicense() {
-        const key = document.getElementById('license-input').value.trim();
+        const key = normalizeLicenseKey(document.getElementById('license-input').value);
         if (!key) { showMsg("❌ Wpisz klucz licencyjny!", "error"); return; }
         
         if (key === 'DEMO-2026') {
@@ -1415,7 +1457,7 @@
                 if (!validateLicenseForEntry(key, lic, failVerify)) return;
                 localStorage.setItem('tp_license_key', key);
                 showMsg("✅ Klucz poprawny. Witamy!", "success");
-                setTimeout(() => { window.location.search = `?id=${key}`; }, 1000);
+                setTimeout(() => { window.location.search = `?id=${encodeURIComponent(key)}`; }, 1000);
             })
             .catch(err => failVerify("❌ Błąd połączenia z bazą: " + (err?.message || err)));
     }
@@ -1963,10 +2005,13 @@
         const { active, archiwum, wstrzymane, ...payload } = state;
         const savePath = 'turnieje_uzytkownikow/' + activeKey;
         setFirebaseStatus('saving');
-        const sdkSave = db.ref(savePath).update(payload);
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
-        Promise.race([sdkSave, timeout])
-            .catch(() => patchRtdbRest(savePath, payload))
+        const savePromise = useRtdbRestForOrganizer()
+            ? patchRtdbRest(savePath, payload)
+            : Promise.race([
+                db.ref(savePath).update(payload),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000)),
+            ]).catch(() => patchRtdbRest(savePath, payload));
+        savePromise
             .then(() => {
                 lastSaveTimestamp = Date.now();
                 setFirebaseStatus('saved');
@@ -3028,7 +3073,9 @@
                 }, 1000);
             }
             fetchLicenseFromRtdb(key).then(applyLicenseHeader).catch(() => {});
-            db.ref('licencje/' + key).on('value', snapshot => applyLicenseHeader(snapshot.val()));
+            if (!useRtdbRestForOrganizer()) {
+                db.ref('licencje/' + key).on('value', snapshot => applyLicenseHeader(snapshot.val()));
+            }
         }
 
         if (activeKey && !isDemoMode && viewMode !== 'archive') {
@@ -3044,6 +3091,13 @@
             document.body.classList.remove('theme-dedicated');
             window.switchTab('start');
             window.renderDashboard();
+        } else if (useRtdbRestForOrganizer()) {
+            fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => applyTournamentState(null));
+            if (isFanMode) {
+                setInterval(() => {
+                    fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => {});
+                }, 8000);
+            }
         } else {
             let rtdbLiveLoaded = false;
             db.ref(dbPath).on('value', s => {
@@ -3057,8 +3111,23 @@
         }
 
         if (activeKey && !isDemoMode && viewMode !== 'archive') {
-            db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').on('value', s => { archiveDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
-            db.ref('turnieje_uzytkownikow/' + activeKey + '/wstrzymane').on('value', s => { frozenDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
+            if (useRtdbRestForOrganizer()) {
+                async function refreshArchiveAndFrozenRest() {
+                    try {
+                        const [arch, frozen] = await Promise.all([
+                            fetchRtdbRest('turnieje_uzytkownikow/' + activeKey + '/archiwum'),
+                            fetchRtdbRest('turnieje_uzytkownikow/' + activeKey + '/wstrzymane'),
+                        ]);
+                        archiveDatabase = arch || {};
+                        frozenDatabase = frozen || {};
+                        window.renderArchiveAndFrozen();
+                    } catch (_) {}
+                }
+                refreshArchiveAndFrozenRest();
+            } else {
+                db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').on('value', s => { archiveDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
+                db.ref('turnieje_uzytkownikow/' + activeKey + '/wstrzymane').on('value', s => { frozenDatabase = s.val() || {}; window.renderArchiveAndFrozen(); });
+            }
         }
 
         window.renderDashboard();
@@ -3067,9 +3136,6 @@
     // --- 7. START CAŁEGO SYSTEMU ---
     executeRouter();
     window.initAppModuleBridge = function () { initAppModule({ bridgeOnly: true }); };
-    db.ref('.info/connected').once('value', snap => {
-        setFirebaseStatus(snap.val() === true ? 'connected' : 'offline');
-    });
 </script>
 </body>
 </html>
