@@ -81,17 +81,20 @@ Webhook w Stripe Dashboard:
 
 ### Email z kluczem (SMTP)
 
+Szczegóły: **[docs/EMAIL.md](EMAIL.md)** (Brevo — rekomendowane, O2 — alternatywa).
+
 ```bash
 firebase functions:config:set \
-  email.smtp_host="smtp.example.com" \
+  email.smtp_host="smtp-relay.brevo.com" \
   email.smtp_port="587" \
   email.smtp_user="..." \
   email.smtp_pass="..." \
   email.smtp_secure="false" \
-  email.from="Turniejomat <noreply@turniejomat.pl>"
+  email.from="Turniejomat <noreply@turniejomat.pl>" \
+  email.reply_to="admin@turniejomat.pl"
 ```
 
-Bez konfiguracji email — webhook nadal wydaje licencję; w adminie widać `Email: BRAK`.
+Bez konfiguracji email — webhook nadal wydaje licencję; w adminie widać `Email: BRAK`. Admin może wysłać ręcznie przyciskiem **📧 WYŚLIJ**.
 
 ### URL aplikacji (opcjonalnie)
 

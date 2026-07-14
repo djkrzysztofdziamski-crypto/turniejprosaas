@@ -48,6 +48,7 @@ async function fulfillOrder(db, order) {
     await db.ref('zamowienia/' + paymentId).update({
       emailSent: emailResult.sent === true,
       emailError: emailResult.sent ? null : (emailResult.reason || 'unknown'),
+      emailSentAt: emailResult.sent ? Date.now() : null,
     });
   }
 

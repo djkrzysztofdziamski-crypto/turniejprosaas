@@ -118,7 +118,9 @@
         #view-admin .ord-col-contact { width: 22%; min-width: 180px; word-break: break-word; overflow-wrap: anywhere; }
         #view-admin .ord-col-date { width: 14%; min-width: 142px; white-space: nowrap; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; text-align: right; }
         #view-admin th.ord-col-date { text-align: right; }
-        #view-admin .ord-col-mailsent { width: 8%; min-width: 88px; text-align: center; white-space: nowrap; }
+        #view-admin .ord-col-mailsent { width: 11%; min-width: 110px; text-align: center; white-space: nowrap; }
+        #view-admin .ord-email-actions { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        #view-admin .ord-email-error { font-size: 9px; color: #f87171; max-width: 100px; word-break: break-word; line-height: 1.25; }
         #view-admin .ord-payment-id { display: block; font-family: ui-monospace, monospace; font-size: 10px; line-height: 1.45; word-break: break-all; color: #cbd5e1; }
         #view-admin .badge { padding: 4px 9px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; white-space: nowrap; line-height: 1.2; }
         #view-admin .badge.nowy { background: #1e3a8a; color: #60a5fa; }
@@ -775,6 +777,7 @@
                 <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Centrum generowania licencji i zarządzania serwerem</p>
             </div>
             <div style="display:flex; gap:5px;">
+                <button onclick="adminVerifyEmailConfig()" style="background:#334155; border:none; padding: 8px 15px;">📧 TEST SMTP</button>
                 <button onclick="location.reload()" style="background:#334155; border:none; padding: 8px 15px;">🔄 ODŚWIEŻ PANEL</button>
                 <button onclick="logoutAdmin()" style="background:#ef4444; border:none; padding: 8px 15px; color:white;">🚪 WYLOGUJ</button>
             </div>
@@ -1073,6 +1076,8 @@
     const auth = firebase.auth();
     const cloudFunctions = firebase.app().functions('europe-west1');
     const activateLicenseCallable = cloudFunctions.httpsCallable('activateLicense');
+    const resendOrderEmailCallable = cloudFunctions.httpsCallable('resendOrderEmail');
+    const verifyEmailConfigCallable = cloudFunctions.httpsCallable('verifyEmailConfig');
 
     /** Aktywny moduł sportowy tej instancji aplikacji (przyszłość: dart, pool). */
     const APP_SPORT = 'football';
@@ -1458,7 +1463,7 @@
         }
 
         if (urlParams.get('checkout') === 'success' || urlParams.get('paid') === '1') {
-            showMsg('✅ Płatność przyjęta! Klucz licencyjny jest aktywny — wpisz go poniżej (sprawdź też email). Jeśli wiadomość nie dotrze w kilka minut, napisz na admin@turniejomat.pl z adresem płatności.', 'success');
+            showMsg('✅ Płatność przyjęta! Klucz licencyjny wysłaliśmy na Twój email (sprawdź też spam). Wpisz go poniżej lub użyj linku z wiadomości.', 'success');
             if (window.history.replaceState) {
                 const clean = new URL(window.location.href);
                 clean.searchParams.delete('checkout');
@@ -1693,6 +1698,33 @@
             .catch(err => alert('❌ Błąd aktywacji: ' + formatCallableError(err)));
     }
 
+    async function adminResendOrderEmail(paymentId, btnEl) {
+        if (!isAdminSession()) return;
+        if (btnEl) { btnEl.disabled = true; btnEl.textContent = '…'; }
+        try {
+            const result = await resendOrderEmailCallable({ paymentId });
+            const data = result.data;
+            if (data?.sent) alert('✅ Email z kluczem wysłany na: ' + (data.email || ''));
+            else alert('❌ Email nie wysłany: ' + (data?.reason || 'nieznany błąd'));
+        } catch (err) {
+            alert('❌ Błąd: ' + formatCallableError(err));
+        } finally {
+            if (btnEl) { btnEl.disabled = false; btnEl.textContent = '📧 WYŚLIJ'; }
+        }
+    }
+
+    async function adminVerifyEmailConfig() {
+        if (!isAdminSession()) return;
+        try {
+            const result = await verifyEmailConfigCallable({});
+            const data = result.data;
+            if (data?.ok) alert('✅ SMTP skonfigurowany poprawnie — gotowy do wysyłki.');
+            else alert('❌ SMTP nieskonfigurowany lub błąd połączenia:\n' + (data?.reason || 'unknown'));
+        } catch (err) {
+            alert('❌ ' + formatCallableError(err));
+        }
+    }
+
     let adminKpiCache = { licencje: null, archiwum: null, zamowienia: null };
 
     function renderAdminKpi() {
@@ -1799,6 +1831,12 @@
                 const emailBadge = order.emailSent
                     ? '<span class="badge aktywny">WYSŁANO</span>'
                     : '<span class="badge nowy">BRAK</span>';
+                const emailErr = order.emailError && !order.emailSent
+                    ? `<span class="ord-email-error" title="${escAttr(order.emailError)}">${esc(String(order.emailError).slice(0, 40))}</span>`
+                    : '';
+                const resendBtn = order.customerEmail
+                    ? `<button class="action-btn act-time" onclick="adminResendOrderEmail('${escAttr(paymentId)}', this)">📧 WYŚLIJ</button>`
+                    : '';
                 html += `
                     <tr>
                         <td class="ord-col-payment"><span class="ord-payment-id" title="${escAttr(paymentId)}">${esc(paymentId)}</span></td>
@@ -1807,7 +1845,7 @@
                         <td class="ord-col-product"><code>${esc(order.productId || order.typ || '—')}</code></td>
                         <td class="ord-col-contact">${esc(order.customerEmail || order.notatka || '—')}</td>
                         <td class="ord-col-date">${dateStr}</td>
-                        <td class="ord-col-mailsent">${emailBadge}</td>
+                        <td class="ord-col-mailsent"><div class="ord-email-actions">${emailBadge}${emailErr}${resendBtn}</div></td>
                     </tr>`;
             });
             tbody.innerHTML = html;

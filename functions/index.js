@@ -8,6 +8,8 @@ const admin = require('firebase-admin');
 const { activateLicenseByKey } = require('./lib/licensing');
 const { getActiveProducts, productToPublic } = require('./lib/billing/catalog');
 const { fulfillOrder } = require('./lib/billing/fulfillOrder');
+const { resendOrderEmail } = require('./lib/billing/resendOrderEmail');
+const { verifyEmailTransport } = require('./lib/billing/email');
 const {
   getStripeClient,
   parseCheckoutSession,
@@ -54,6 +56,30 @@ exports.createCheckoutSession = functions.region('europe-west1').https.onCall(as
   } catch (err) {
     throw toHttpsError(err);
   }
+});
+
+exports.resendOrderEmail = functions.region('europe-west1').https.onCall(async (data, context) => {
+  if (!context.auth || context.auth.token.admin !== true) {
+    throw new functions.https.HttpsError('permission-denied', 'Wymagane uprawnienia administratora.');
+  }
+
+  const paymentId = String(data?.paymentId || '').trim();
+  if (!paymentId) {
+    throw new functions.https.HttpsError('invalid-argument', 'Wymagane paymentId.');
+  }
+
+  try {
+    return await resendOrderEmail(db, paymentId);
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.verifyEmailConfig = functions.region('europe-west1').https.onCall(async (_data, context) => {
+  if (!context.auth || context.auth.token.admin !== true) {
+    throw new functions.https.HttpsError('permission-denied', 'Wymagane uprawnienia administratora.');
+  }
+  return verifyEmailTransport();
 });
 
 exports.paymentWebhook = functions.region('europe-west1').https.onRequest(async (req, res) => {
