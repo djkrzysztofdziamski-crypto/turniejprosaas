@@ -1,0 +1,1269 @@
+{
+  "startedAt": "2026-07-14T07:59:58.137Z",
+  "environment": {
+    "port": 8080,
+    "engine": "index.html initAppModule bridge"
+  },
+  "priorQaScripts": [
+    "qa-tournament-27-report.mjs — 27 drużyn / 6 grup, remis absolutny, play-off, podium, archiwum",
+    "qa-demo-story-smoke.mjs — Demo Story E0→E7, finał 3:2, podium",
+    "qa-demo-final-draw.mjs — remis finału, kary, odrzucenie 4:4 karnych",
+    "qa-demo-tables-standings.mjs — tabele demo, awans top-2",
+    "qa-demo-tables.mjs, qa-demo-filters.mjs, qa-demo-e2-fan.mjs — UI/fan"
+  ],
+  "summary": {
+    "total": 67,
+    "passed": 67,
+    "failed": 0,
+    "warnings": 1
+  },
+  "scenarios": [
+    {
+      "name": "3 drużyn / 1 grup / awans 3",
+      "ok": true,
+      "detail": "3 meczów grupowych, play-off: 4, podium: DRUZYNA 2",
+      "cfg": {
+        "teams": 3,
+        "groups": 1,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 2",
+        "silver": "DRUZYNA 1",
+        "bronze": "—",
+        "topScorer": "KAPITAN 2 (DRUZYNA 2)",
+        "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
+      },
+      "groupMatches": 3,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "4 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "6 meczów grupowych, play-off: 4, podium: DRUZYNA 3",
+      "cfg": {
+        "teams": 4,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 3",
+        "silver": "DRUZYNA 2",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 6,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "5 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "10 meczów grupowych, play-off: 4, podium: DRUZYNA 1",
+      "cfg": {
+        "teams": 5,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 1",
+        "silver": "DRUZYNA 4",
+        "bronze": "DRUZYNA 2",
+        "topScorer": "KAPITAN 4 (DRUZYNA 4)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 10,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "8 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "28 meczów grupowych, play-off: 4, podium: DRUZYNA 4",
+      "cfg": {
+        "teams": 8,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 4",
+        "silver": "DRUZYNA 3",
+        "bronze": "DRUZYNA 8",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 3 (DRUZYNA 3)"
+      },
+      "groupMatches": 28,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "8 drużyn / 2 grup / awans 4",
+      "ok": true,
+      "detail": "12 meczów grupowych, play-off: 4, podium: DRUZYNA 8",
+      "cfg": {
+        "teams": 8,
+        "groups": 2,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 8",
+        "silver": "DRUZYNA 3",
+        "bronze": "DRUZYNA 7",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
+      },
+      "groupMatches": 12,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "8 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "4 meczów grupowych, play-off: 4, podium: DRUZYNA 3",
+      "cfg": {
+        "teams": 8,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 3",
+        "silver": "DRUZYNA 5",
+        "bronze": "DRUZYNA 2",
+        "topScorer": "KAPITAN 2 (DRUZYNA 2)",
+        "topGk": "BRAMKARZ 3 (DRUZYNA 3)"
+      },
+      "groupMatches": 4,
+      "at": "2026-07-14T08:00:00.602Z"
+    },
+    {
+      "name": "10 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "45 meczów grupowych, play-off: 4, podium: DRUZYNA 1",
+      "cfg": {
+        "teams": 10,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 1",
+        "silver": "DRUZYNA 3",
+        "bronze": "DRUZYNA 4",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
+      },
+      "groupMatches": 45,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "10 drużyn / 2 grup / awans 4",
+      "ok": true,
+      "detail": "20 meczów grupowych, play-off: 4, podium: DRUZYNA 9",
+      "cfg": {
+        "teams": 10,
+        "groups": 2,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 9",
+        "silver": "DRUZYNA 3",
+        "bronze": "DRUZYNA 2",
+        "topScorer": "KAPITAN 9 (DRUZYNA 9)",
+        "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
+      },
+      "groupMatches": 20,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "10 drużyn / 5 grup / awans 5",
+      "ok": true,
+      "detail": "5 meczów grupowych, play-off: 8, podium: DRUZYNA 10",
+      "cfg": {
+        "teams": 10,
+        "groups": 5,
+        "adv": 5,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 10",
+        "silver": "DRUZYNA 9",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 10 (DRUZYNA 10)",
+        "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
+      },
+      "groupMatches": 5,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "12 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "66 meczów grupowych, play-off: 4, podium: DRUZYNA 7",
+      "cfg": {
+        "teams": 12,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 7",
+        "silver": "DRUZYNA 8",
+        "bronze": "DRUZYNA 10",
+        "topScorer": "KAPITAN 7 (DRUZYNA 7)",
+        "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
+      },
+      "groupMatches": 66,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "12 drużyn / 2 grup / awans 4",
+      "ok": true,
+      "detail": "30 meczów grupowych, play-off: 4, podium: DRUZYNA 10",
+      "cfg": {
+        "teams": 12,
+        "groups": 2,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 10",
+        "silver": "DRUZYNA 7",
+        "bronze": "DRUZYNA 12",
+        "topScorer": "KAPITAN 10 (DRUZYNA 10)",
+        "topGk": "BRAMKARZ 7 (DRUZYNA 7)"
+      },
+      "groupMatches": 30,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "12 drużyn / 3 grup / awans 3",
+      "ok": true,
+      "detail": "18 meczów grupowych, play-off: 4, podium: DRUZYNA 12",
+      "cfg": {
+        "teams": 12,
+        "groups": 3,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 12",
+        "silver": "DRUZYNA 11",
+        "bronze": "—",
+        "topScorer": "KAPITAN 11 (DRUZYNA 11)",
+        "topGk": "BRAMKARZ 12 (DRUZYNA 12)"
+      },
+      "groupMatches": 18,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "12 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "12 meczów grupowych, play-off: 4, podium: DRUZYNA 11",
+      "cfg": {
+        "teams": 12,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 11",
+        "silver": "DRUZYNA 1",
+        "bronze": "DRUZYNA 6",
+        "topScorer": "KAPITAN 6 (DRUZYNA 6)",
+        "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
+      },
+      "groupMatches": 12,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "12 drużyn / 6 grup / awans 6",
+      "ok": true,
+      "detail": "6 meczów grupowych, play-off: 8, podium: DRUZYNA 6",
+      "cfg": {
+        "teams": 12,
+        "groups": 6,
+        "adv": 6,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 6",
+        "silver": "DRUZYNA 1",
+        "bronze": "DRUZYNA 4",
+        "topScorer": "KAPITAN 1 (DRUZYNA 1)",
+        "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
+      },
+      "groupMatches": 6,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "15 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "105 meczów grupowych, play-off: 4, podium: DRUZYNA 10",
+      "cfg": {
+        "teams": 15,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 10",
+        "silver": "DRUZYNA 11",
+        "bronze": "DRUZYNA 12",
+        "topScorer": "KAPITAN 10 (DRUZYNA 10)",
+        "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
+      },
+      "groupMatches": 105,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "15 drużyn / 3 grup / awans 3",
+      "ok": true,
+      "detail": "30 meczów grupowych, play-off: 4, podium: DRUZYNA 8",
+      "cfg": {
+        "teams": 15,
+        "groups": 3,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 8",
+        "silver": "DRUZYNA 4",
+        "bronze": "—",
+        "topScorer": "KAPITAN 4 (DRUZYNA 4)",
+        "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
+      },
+      "groupMatches": 30,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "15 drużyn / 5 grup / awans 5",
+      "ok": true,
+      "detail": "15 meczów grupowych, play-off: 8, podium: DRUZYNA 3",
+      "cfg": {
+        "teams": 15,
+        "groups": 5,
+        "adv": 5,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 3",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 14",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 15,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "16 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "120 meczów grupowych, play-off: 4, podium: DRUZYNA 11",
+      "cfg": {
+        "teams": 16,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 11",
+        "silver": "DRUZYNA 14",
+        "bronze": "DRUZYNA 12",
+        "topScorer": "KAPITAN 16 (DRUZYNA 16)",
+        "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
+      },
+      "groupMatches": 120,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "16 drużyn / 2 grup / awans 4",
+      "ok": true,
+      "detail": "56 meczów grupowych, play-off: 4, podium: DRUZYNA 15",
+      "cfg": {
+        "teams": 16,
+        "groups": 2,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 15",
+        "silver": "DRUZYNA 12",
+        "bronze": "DRUZYNA 16",
+        "topScorer": "KAPITAN 15 (DRUZYNA 15)",
+        "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
+      },
+      "groupMatches": 56,
+      "at": "2026-07-14T08:00:00.603Z"
+    },
+    {
+      "name": "16 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "24 meczów grupowych, play-off: 4, podium: DRUZYNA 11",
+      "cfg": {
+        "teams": 16,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 11",
+        "silver": "DRUZYNA 2",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 2 (DRUZYNA 2)",
+        "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
+      },
+      "groupMatches": 24,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "16 drużyn / 8 grup / awans 8",
+      "ok": true,
+      "detail": "8 meczów grupowych, play-off: 8, podium: DRUZYNA 8",
+      "cfg": {
+        "teams": 16,
+        "groups": 8,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 8",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 11",
+        "topScorer": "KAPITAN 11 (DRUZYNA 11)",
+        "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
+      },
+      "groupMatches": 8,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "16 drużyn / 4 grup / awans 8",
+      "ok": true,
+      "detail": "24 meczów grupowych, play-off: 8, podium: DRUZYNA 6",
+      "cfg": {
+        "teams": 16,
+        "groups": 4,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 6",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 4",
+        "topScorer": "KAPITAN 4 (DRUZYNA 4)",
+        "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
+      },
+      "groupMatches": 24,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "16 drużyn / 4 grup / awans 16",
+      "ok": true,
+      "detail": "24 meczów grupowych, play-off: 16, podium: DRUZYNA 16",
+      "cfg": {
+        "teams": 16,
+        "groups": 4,
+        "adv": 16,
+        "bracket": 16
+      },
+      "podium": {
+        "gold": "DRUZYNA 16",
+        "silver": "DRUZYNA 4",
+        "bronze": "DRUZYNA 12",
+        "topScorer": "KAPITAN 4 (DRUZYNA 4)",
+        "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
+      },
+      "groupMatches": 24,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "20 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "190 meczów grupowych, play-off: 4, podium: DRUZYNA 4",
+      "cfg": {
+        "teams": 20,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 4",
+        "silver": "DRUZYNA 1",
+        "bronze": "DRUZYNA 20",
+        "topScorer": "KAPITAN 16 (DRUZYNA 16)",
+        "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
+      },
+      "groupMatches": 190,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "20 drużyn / 2 grup / awans 4",
+      "ok": true,
+      "detail": "90 meczów grupowych, play-off: 4, podium: DRUZYNA 20",
+      "cfg": {
+        "teams": 20,
+        "groups": 2,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 20",
+        "silver": "DRUZYNA 4",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 4 (DRUZYNA 4)",
+        "topGk": "BRAMKARZ 20 (DRUZYNA 20)"
+      },
+      "groupMatches": 90,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "20 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "40 meczów grupowych, play-off: 4, podium: DRUZYNA 2",
+      "cfg": {
+        "teams": 20,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 2",
+        "silver": "DRUZYNA 5",
+        "bronze": "DRUZYNA 12",
+        "topScorer": "KAPITAN 2 (DRUZYNA 2)",
+        "topGk": "BRAMKARZ 5 (DRUZYNA 5)"
+      },
+      "groupMatches": 40,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "20 drużyn / 5 grup / awans 5",
+      "ok": true,
+      "detail": "30 meczów grupowych, play-off: 8, podium: DRUZYNA 2",
+      "cfg": {
+        "teams": 20,
+        "groups": 5,
+        "adv": 5,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 2",
+        "silver": "DRUZYNA 16",
+        "bronze": "DRUZYNA 19",
+        "topScorer": "KAPITAN 16 (DRUZYNA 16)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 30,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "20 drużyn / 10 grup / awans 8",
+      "ok": true,
+      "detail": "10 meczów grupowych, play-off: 8, podium: DRUZYNA 17",
+      "cfg": {
+        "teams": 20,
+        "groups": 10,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 17",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 1 (DRUZYNA 1)",
+        "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
+      },
+      "groupMatches": 10,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "276 meczów grupowych, play-off: 4, podium: DRUZYNA 17",
+      "cfg": {
+        "teams": 24,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 17",
+        "silver": "DRUZYNA 7",
+        "bronze": "DRUZYNA 6",
+        "topScorer": "KAPITAN 7 (DRUZYNA 7)",
+        "topGk": "BRAMKARZ 6 (DRUZYNA 6)"
+      },
+      "groupMatches": 276,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 3 grup / awans 3",
+      "ok": true,
+      "detail": "84 meczów grupowych, play-off: 4, podium: DRUZYNA 5",
+      "cfg": {
+        "teams": 24,
+        "groups": 3,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 5",
+        "silver": "DRUZYNA 24",
+        "bronze": "—",
+        "topScorer": "KAPITAN 5 (DRUZYNA 5)",
+        "topGk": "BRAMKARZ 12 (DRUZYNA 12)"
+      },
+      "groupMatches": 84,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "60 meczów grupowych, play-off: 4, podium: DRUZYNA 19",
+      "cfg": {
+        "teams": 24,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 19",
+        "silver": "DRUZYNA 12",
+        "bronze": "DRUZYNA 13",
+        "topScorer": "KAPITAN 12 (DRUZYNA 12)",
+        "topGk": "BRAMKARZ 7 (DRUZYNA 7)"
+      },
+      "groupMatches": 60,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 6 grup / awans 6",
+      "ok": true,
+      "detail": "36 meczów grupowych, play-off: 8, podium: DRUZYNA 5",
+      "cfg": {
+        "teams": 24,
+        "groups": 6,
+        "adv": 6,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 5",
+        "silver": "DRUZYNA 18",
+        "bronze": "DRUZYNA 3",
+        "topScorer": "KAPITAN 10 (DRUZYNA 10)",
+        "topGk": "BRAMKARZ 5 (DRUZYNA 5)"
+      },
+      "groupMatches": 36,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 8 grup / awans 8",
+      "ok": true,
+      "detail": "24 meczów grupowych, play-off: 8, podium: DRUZYNA 21",
+      "cfg": {
+        "teams": 24,
+        "groups": 8,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 21",
+        "silver": "DRUZYNA 17",
+        "bronze": "DRUZYNA 6",
+        "topScorer": "KAPITAN 21 (DRUZYNA 21)",
+        "topGk": "BRAMKARZ 17 (DRUZYNA 17)"
+      },
+      "groupMatches": 24,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "24 drużyn / 12 grup / awans 8",
+      "ok": true,
+      "detail": "12 meczów grupowych, play-off: 8, podium: DRUZYNA 13",
+      "cfg": {
+        "teams": 24,
+        "groups": 12,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 13",
+        "silver": "DRUZYNA 14",
+        "bronze": "DRUZYNA 4",
+        "topScorer": "KAPITAN 14 (DRUZYNA 14)",
+        "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
+      },
+      "groupMatches": 12,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "27 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "351 meczów grupowych, play-off: 4, podium: DRUZYNA 13",
+      "cfg": {
+        "teams": 27,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 13",
+        "silver": "DRUZYNA 25",
+        "bronze": "DRUZYNA 1",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
+      },
+      "groupMatches": 351,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "27 drużyn / 3 grup / awans 3",
+      "ok": true,
+      "detail": "108 meczów grupowych, play-off: 4, podium: DRUZYNA 17",
+      "cfg": {
+        "teams": 27,
+        "groups": 3,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 17",
+        "silver": "DRUZYNA 4",
+        "bronze": "—",
+        "topScorer": "KAPITAN 24 (DRUZYNA 24)",
+        "topGk": "BRAMKARZ 17 (DRUZYNA 17)"
+      },
+      "groupMatches": 108,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "27 drużyn / 9 grup / awans 8",
+      "ok": true,
+      "detail": "27 meczów grupowych, play-off: 8, podium: DRUZYNA 16",
+      "cfg": {
+        "teams": 27,
+        "groups": 9,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 16",
+        "silver": "DRUZYNA 2",
+        "bronze": "DRUZYNA 17",
+        "topScorer": "KAPITAN 16 (DRUZYNA 16)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 27,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "27 drużyn / 6 grup / awans 8",
+      "ok": true,
+      "detail": "48 meczów grupowych, play-off: 8, podium: DRUZYNA 25",
+      "cfg": {
+        "teams": 27,
+        "groups": 6,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 25",
+        "silver": "DRUZYNA 2",
+        "bronze": "DRUZYNA 18",
+        "topScorer": "KAPITAN 2 (DRUZYNA 2)",
+        "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
+      },
+      "groupMatches": 48,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "30 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "435 meczów grupowych, play-off: 4, podium: DRUZYNA 11",
+      "cfg": {
+        "teams": 30,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 11",
+        "silver": "DRUZYNA 14",
+        "bronze": "DRUZYNA 9",
+        "topScorer": "KAPITAN 14 (DRUZYNA 14)",
+        "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
+      },
+      "groupMatches": 435,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "30 drużyn / 3 grup / awans 3",
+      "ok": true,
+      "detail": "135 meczów grupowych, play-off: 4, podium: DRUZYNA 3",
+      "cfg": {
+        "teams": 30,
+        "groups": 3,
+        "adv": 3,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 3",
+        "silver": "DRUZYNA 4",
+        "bronze": "—",
+        "topScorer": "KAPITAN 3 (DRUZYNA 3)",
+        "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
+      },
+      "groupMatches": 135,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "30 drużyn / 5 grup / awans 5",
+      "ok": true,
+      "detail": "75 meczów grupowych, play-off: 8, podium: DRUZYNA 7",
+      "cfg": {
+        "teams": 30,
+        "groups": 5,
+        "adv": 5,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 7",
+        "silver": "DRUZYNA 9",
+        "bronze": "DRUZYNA 18",
+        "topScorer": "KAPITAN 7 (DRUZYNA 7)",
+        "topGk": "BRAMKARZ 9 (DRUZYNA 9)"
+      },
+      "groupMatches": 75,
+      "at": "2026-07-14T08:00:00.604Z"
+    },
+    {
+      "name": "30 drużyn / 6 grup / awans 6",
+      "ok": true,
+      "detail": "60 meczów grupowych, play-off: 8, podium: DRUZYNA 30",
+      "cfg": {
+        "teams": 30,
+        "groups": 6,
+        "adv": 6,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 30",
+        "silver": "DRUZYNA 20",
+        "bronze": "DRUZYNA 11",
+        "topScorer": "KAPITAN 15 (DRUZYNA 15)",
+        "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
+      },
+      "groupMatches": 60,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "30 drużyn / 10 grup / awans 8",
+      "ok": true,
+      "detail": "30 meczów grupowych, play-off: 8, podium: DRUZYNA 17",
+      "cfg": {
+        "teams": 30,
+        "groups": 10,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 17",
+        "silver": "DRUZYNA 10",
+        "bronze": "DRUZYNA 5",
+        "topScorer": "KAPITAN 17 (DRUZYNA 17)",
+        "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
+      },
+      "groupMatches": 30,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "32 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "496 meczów grupowych, play-off: 4, podium: DRUZYNA 5",
+      "cfg": {
+        "teams": 32,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 5",
+        "silver": "DRUZYNA 25",
+        "bronze": "DRUZYNA 22",
+        "topScorer": "KAPITAN 13 (DRUZYNA 13)",
+        "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
+      },
+      "groupMatches": 496,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "32 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "112 meczów grupowych, play-off: 4, podium: DRUZYNA 31",
+      "cfg": {
+        "teams": 32,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 31",
+        "silver": "DRUZYNA 22",
+        "bronze": "DRUZYNA 24",
+        "topScorer": "KAPITAN 19 (DRUZYNA 19)",
+        "topGk": "BRAMKARZ 22 (DRUZYNA 22)"
+      },
+      "groupMatches": 112,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "32 drużyn / 8 grup / awans 8",
+      "ok": true,
+      "detail": "48 meczów grupowych, play-off: 8, podium: DRUZYNA 26",
+      "cfg": {
+        "teams": 32,
+        "groups": 8,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 26",
+        "silver": "DRUZYNA 22",
+        "bronze": "DRUZYNA 31",
+        "topScorer": "KAPITAN 22 (DRUZYNA 22)",
+        "topGk": "BRAMKARZ 26 (DRUZYNA 26)"
+      },
+      "groupMatches": 48,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "36 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "630 meczów grupowych, play-off: 4, podium: DRUZYNA 14",
+      "cfg": {
+        "teams": 36,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 14",
+        "silver": "DRUZYNA 2",
+        "bronze": "DRUZYNA 3",
+        "topScorer": "KAPITAN 16 (DRUZYNA 16)",
+        "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
+      },
+      "groupMatches": 630,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "36 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "144 meczów grupowych, play-off: 4, podium: DRUZYNA 22",
+      "cfg": {
+        "teams": 36,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 22",
+        "silver": "DRUZYNA 20",
+        "bronze": "DRUZYNA 7",
+        "topScorer": "KAPITAN 22 (DRUZYNA 22)",
+        "topGk": "BRAMKARZ 20 (DRUZYNA 20)"
+      },
+      "groupMatches": 144,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "36 drużyn / 6 grup / awans 6",
+      "ok": true,
+      "detail": "90 meczów grupowych, play-off: 8, podium: DRUZYNA 32",
+      "cfg": {
+        "teams": 36,
+        "groups": 6,
+        "adv": 6,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 32",
+        "silver": "DRUZYNA 25",
+        "bronze": "DRUZYNA 11",
+        "topScorer": "KAPITAN 11 (DRUZYNA 11)",
+        "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
+      },
+      "groupMatches": 90,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "36 drużyn / 9 grup / awans 8",
+      "ok": true,
+      "detail": "54 meczów grupowych, play-off: 8, podium: DRUZYNA 11",
+      "cfg": {
+        "teams": 36,
+        "groups": 9,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 11",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 30",
+        "topScorer": "KAPITAN 17 (DRUZYNA 17)",
+        "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
+      },
+      "groupMatches": 54,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "36 drużyn / 12 grup / awans 8",
+      "ok": true,
+      "detail": "36 meczów grupowych, play-off: 8, podium: DRUZYNA 8",
+      "cfg": {
+        "teams": 36,
+        "groups": 12,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 8",
+        "silver": "DRUZYNA 28",
+        "bronze": "DRUZYNA 13",
+        "topScorer": "KAPITAN 28 (DRUZYNA 28)",
+        "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
+      },
+      "groupMatches": 36,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "40 drużyn / 1 grup / awans 4",
+      "ok": true,
+      "detail": "780 meczów grupowych, play-off: 4, podium: DRUZYNA 18",
+      "cfg": {
+        "teams": 40,
+        "groups": 1,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 18",
+        "silver": "DRUZYNA 17",
+        "bronze": "DRUZYNA 37",
+        "topScorer": "KAPITAN 17 (DRUZYNA 17)",
+        "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
+      },
+      "groupMatches": 780,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "40 drużyn / 4 grup / awans 4",
+      "ok": true,
+      "detail": "180 meczów grupowych, play-off: 4, podium: DRUZYNA 1",
+      "cfg": {
+        "teams": 40,
+        "groups": 4,
+        "adv": 4,
+        "bracket": 4
+      },
+      "podium": {
+        "gold": "DRUZYNA 1",
+        "silver": "DRUZYNA 15",
+        "bronze": "DRUZYNA 30",
+        "topScorer": "KAPITAN 1 (DRUZYNA 1)",
+        "topGk": "BRAMKARZ 18 (DRUZYNA 18)"
+      },
+      "groupMatches": 180,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "40 drużyn / 5 grup / awans 5",
+      "ok": true,
+      "detail": "140 meczów grupowych, play-off: 8, podium: DRUZYNA 1",
+      "cfg": {
+        "teams": 40,
+        "groups": 5,
+        "adv": 5,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 1",
+        "silver": "DRUZYNA 12",
+        "bronze": "DRUZYNA 18",
+        "topScorer": "KAPITAN 25 (DRUZYNA 25)",
+        "topGk": "BRAMKARZ 18 (DRUZYNA 18)"
+      },
+      "groupMatches": 140,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "40 drużyn / 8 grup / awans 8",
+      "ok": true,
+      "detail": "80 meczów grupowych, play-off: 8, podium: DRUZYNA 16",
+      "cfg": {
+        "teams": 40,
+        "groups": 8,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 16",
+        "silver": "DRUZYNA 26",
+        "bronze": "DRUZYNA 25",
+        "topScorer": "KAPITAN 26 (DRUZYNA 26)",
+        "topGk": "BRAMKARZ 24 (DRUZYNA 24)"
+      },
+      "groupMatches": 80,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "40 drużyn / 10 grup / awans 8",
+      "ok": true,
+      "detail": "60 meczów grupowych, play-off: 8, podium: DRUZYNA 34",
+      "cfg": {
+        "teams": 40,
+        "groups": 10,
+        "adv": 8,
+        "bracket": 8
+      },
+      "podium": {
+        "gold": "DRUZYNA 34",
+        "silver": "DRUZYNA 20",
+        "bronze": "DRUZYNA 31",
+        "topScorer": "KAPITAN 34 (DRUZYNA 34)",
+        "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
+      },
+      "groupMatches": 60,
+      "at": "2026-07-14T08:00:00.605Z"
+    }
+  ],
+  "edgeCases": [
+    {
+      "name": "edge-names-8-single-group",
+      "ok": true,
+      "detail": "Nazwy specjalne OK, podium: 🔥⚽ ÉLITE ÑOÑO",
+      "podium": {
+        "gold": "🔥⚽ ÉLITE ÑOÑO",
+        "silver": "O'Brien & Sons 'FC'",
+        "bronze": "SELECT * FROM teams",
+        "topScorer": "CAP\tTAB (O'Brien & Sons 'FC')",
+        "topGk": "Test\\nNewline (O'Brien & Sons 'FC')"
+      },
+      "at": "2026-07-14T08:00:00.605Z"
+    }
+  ],
+  "invariantTests": [
+    {
+      "name": "syncTeamData-propagation",
+      "ok": true,
+      "detail": "OK",
+      "warning": true,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "renderInputs-xss-escape",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "absolute-tie-detection",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "h2h-tiebreak",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "podium-blocked-unresolved-draw",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "odd-team-bye-3",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.605Z"
+    },
+    {
+      "name": "generujPlayoff-engine-call",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.606Z"
+    },
+    {
+      "name": "getAdvancingTeamsFull-8",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.606Z"
+    },
+    {
+      "name": "bracket-16-full-simulation",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.606Z"
+    },
+    {
+      "name": "bracket-16-engine-generujPlayoff",
+      "ok": true,
+      "detail": "OK",
+      "warning": false,
+      "at": "2026-07-14T08:00:00.606Z"
+    }
+  ],
+  "hotSpots": [
+    {
+      "area": "getAdvancingTeamsFull",
+      "risk": "średnie",
+      "note": "Sortowanie po rank grupowym, potem pkt — przy wielu grupach może faworyzować wyższe miejsca z słabszych grup zamiast punktacji globalnej."
+    },
+    {
+      "area": "syncTeamData",
+      "risk": "niskie",
+      "note": "Nazwy uppercasowane, HTML nie escapowany w danych (tylko w renderze) — OK jeśli esc() wszędzie."
+    },
+    {
+      "area": "losujGrupy",
+      "risk": "niskie",
+      "note": "Math.random() — brak kryptograficznej losowości, akceptowalne dla sportu."
+    },
+    {
+      "area": "remis absolutny",
+      "risk": "średnie",
+      "note": "Wymaga ręcznej interwencji sędziego — poprawne, ale operator musi wiedzieć."
+    },
+    {
+      "area": "playoff propagation",
+      "risk": "średnie",
+      "note": "Imperatywne sloty next/loserNext — błąd w jednym meczu kaskaduje."
+    },
+    {
+      "area": "archiwum",
+      "risk": "niskie",
+      "note": "Pełny stan kopiowany — duże payloady przy 40 drużynach."
+    },
+    {
+      "area": "bracket 16",
+      "risk": "niskie",
+      "note": "Pokryte testem bracket-16-full-simulation oraz bracket-16-engine-generujPlayoff."
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-07-14T08:00:00.606Z",
+  "durationSec": 2
+}
