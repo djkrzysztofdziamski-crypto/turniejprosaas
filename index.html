@@ -881,8 +881,8 @@
 
 <div id="view-app" class="view">
     <div id="license-blocked-screen">
-        <h1 style="color:#de350b; font-size: 42px; margin-bottom: 10px;">⚠️ LICENCJA WYGASŁA LUB ZOSTAŁA ZABLOKOWANA</h1>
-        <p style="font-size: 18px; color: #bcccdc; max-width: 500px; line-height: 1.5;">Czas trwania tego turnieju dobiegł końca lub klucz został zawieszony przez administratora. Wyniki live dla kibiców są nadal dostępne.</p>
+        <h1 id="license-blocked-title" style="color:#de350b; font-size: 42px; margin-bottom: 10px;">⚠️ LICENCJA WYGASŁA LUB ZOSTAŁA ZABLOKOWANA</h1>
+        <p id="license-blocked-msg" style="font-size: 18px; color: #bcccdc; max-width: 500px; line-height: 1.5;">Czas trwania tego turnieju dobiegł końca lub klucz został zawieszony przez administratora. Wyniki live dla kibiców są nadal dostępne.</p>
         <button onclick="window.location.search=''" style="background:#0052cc; color:white; border:none; padding:12px 30px; font-size:16px; font-weight:bold; border-radius:6px; cursor:pointer; margin-top:20px;">POWRÓT DO EKRANU LOGOWANIA</button>
     </div>
 
@@ -1154,6 +1154,90 @@
             return false;
         }
         return true;
+    }
+
+    window.licenseWriteAllowed = false;
+
+    const LICENSE_BLOCK_COPY = {
+        deleted: { title: '⚠️ KLUCZ NIE ISTNIEJE', msg: 'Ten klucz licencyjny został usunięty lub jest niepoprawny. Skontaktuj się z administratorem.', badge: '❌ Klucz usunięty' },
+        blocked: { title: '⚠️ LICENCJA ZABLOKOWANA', msg: 'Klucz został zawieszony przez administratora. Zapis wyników jest wyłączony. Wyniki live dla kibiców mogą być nadal widoczne.', badge: '🚫 Zablokowano' },
+        expired: { title: '⚠️ LICENCJA WYGASŁA', msg: 'Czas trwania tego turnieju dobiegł końca. Skontaktuj się w celu przedłużenia.', badge: '⏱ Wygasła' },
+        pending: { title: '⏳ OCZEKUJE NA AKTYWACJĘ', msg: 'Klucz nie został jeszcze aktywowany przez administratora.', badge: '⏳ Nieaktywna' },
+    };
+
+    function showLicenseBlockedScreen(reason) {
+        if (isFanMode) return;
+        const copy = LICENSE_BLOCK_COPY[reason] || LICENSE_BLOCK_COPY.blocked;
+        const screen = document.getElementById('license-blocked-screen');
+        const titleEl = document.getElementById('license-blocked-title');
+        const msgEl = document.getElementById('license-blocked-msg');
+        if (titleEl) titleEl.textContent = copy.title;
+        if (msgEl) msgEl.textContent = copy.msg;
+        clearInterval(window.licenseInterval);
+        clearInterval(window.licensePollInterval);
+        window.licenseWriteAllowed = false;
+        const cd = document.getElementById('license-countdown');
+        if (cd) cd.innerText = copy.badge;
+        if (screen) screen.style.display = 'flex';
+    }
+
+    function resolveLicenseBlockReason(lic) {
+        if (!lic) return 'deleted';
+        if (lic.status === 'zablokowany') return 'blocked';
+        if (lic.status === 'nowy' || !lic.aktywowany) return 'pending';
+        if (lic.wygasa && Date.now() > lic.wygasa) return 'expired';
+        if (lic.status !== 'aktywny') return 'blocked';
+        return null;
+    }
+
+    function applyLicenseState(lic) {
+        const fanLabel = isFanMode ? ' 🔴 WYNIKI LIVE (KIBIC)' : '';
+        const cd = document.getElementById('license-countdown');
+        if (!lic) {
+            if (cd) cd.innerText = '❌ Klucz nie istnieje';
+            if (!isFanMode) showLicenseBlockedScreen('deleted');
+            return;
+        }
+        document.getElementById('app-header-title').innerHTML = `${BRAND.name} | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
+        const blockReason = resolveLicenseBlockReason(lic);
+        if (blockReason) {
+            if (!isFanMode) showLicenseBlockedScreen(blockReason);
+            return;
+        }
+        window.licenseWriteAllowed = true;
+        const blockedScreen = document.getElementById('license-blocked-screen');
+        if (blockedScreen) blockedScreen.style.display = 'none';
+        if (isFanMode) return;
+        clearInterval(window.licenseInterval);
+        window.licenseInterval = setInterval(() => {
+            const diff = lic.wygasa - Date.now();
+            if (diff <= 0) {
+                clearInterval(window.licenseInterval);
+                showLicenseBlockedScreen('expired');
+            } else if (cd) {
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                cd.innerText = `⌛ Czas licencji: ${hours}h ${minutes}m ${seconds}s`;
+            }
+        }, 1000);
+    }
+
+    function startLicenseHeaderWatch(key) {
+        async function refreshLicense() {
+            try {
+                applyLicenseState(await fetchLicenseFromRtdb(key));
+            } catch (_) {
+                const cdEl = document.getElementById('license-countdown');
+                if (cdEl) cdEl.innerText = '⚠️ Błąd weryfikacji';
+            }
+        }
+        clearInterval(window.licensePollInterval);
+        refreshLicense();
+        window.licensePollInterval = setInterval(refreshLicense, 5000);
+        try {
+            db.ref('licencje/' + key).on('value', snapshot => applyLicenseState(snapshot.val()));
+        } catch (_) {}
     }
 
     let firebaseStatusLock = null;
@@ -1986,6 +2070,10 @@
 
         window.save = () => {
         if (!activeKey || isFanMode || isDemoMode) return;
+        if (window.licenseWriteAllowed === false) {
+            alert('❌ Licencja nieważna lub zawieszona — zapis wyłączony.');
+            return;
+        }
         const { active, archiwum, wstrzymane, ...payload } = state;
         const savePath = 'turnieje_uzytkownikow/' + activeKey;
         setFirebaseStatus('saving');
@@ -2004,6 +2092,13 @@
             .catch(err => {
                 console.error('Save failed:', err);
                 setFirebaseStatus('offline');
+                const msg = String(err?.message || err);
+                if (/401|403|permission/i.test(msg)) {
+                    window.licenseWriteAllowed = false;
+                    showLicenseBlockedScreen('blocked');
+                    alert('❌ Zapis odrzucony — licencja została zawieszona lub wygasła.');
+                    return;
+                }
                 alert('❌ Zapis w chmurze nie powiódł się. Dane są tylko w tej karcie — nie odświeżaj strony. Spróbuj ponownie za chwilę.');
             });
          };
@@ -3033,33 +3128,6 @@
             if (document.getElementById('tabele').classList.contains('active')) window.calcTables();
             window.renderLogs();
             window.renderDashboard();
-        }
-
-        function startLicenseHeaderWatch(key) {
-            function applyLicenseHeader(lic) {
-                if (!lic) return;
-                const fanLabel = isFanMode ? ' 🔴 WYNIKI LIVE (KIBIC)' : '';
-                document.getElementById('app-header-title').innerHTML = `${BRAND.name} | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
-                if (isFanMode) return;
-                if (lic.status !== 'aktywny') { document.getElementById('license-blocked-screen').style.display = 'flex'; return; }
-                clearInterval(window.licenseInterval);
-                window.licenseInterval = setInterval(() => {
-                    const now = Date.now(); const diff = lic.wygasa - now;
-                    if (diff <= 0) {
-                        clearInterval(window.licenseInterval);
-                        document.getElementById('license-blocked-screen').style.display = 'flex';
-                    } else {
-                        const hours = Math.floor(diff / (1000 * 60 * 60));
-                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                        document.getElementById('license-countdown').innerText = `⌛ Czas licencji: ${hours}h ${minutes}m ${seconds}s`;
-                    }
-                }, 1000);
-            }
-            fetchLicenseFromRtdb(key).then(applyLicenseHeader).catch(() => {});
-            if (!useRtdbRestForOrganizer()) {
-                db.ref('licencje/' + key).on('value', snapshot => applyLicenseHeader(snapshot.val()));
-            }
         }
 
         if (activeKey && !isDemoMode && viewMode !== 'archive') {
