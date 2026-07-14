@@ -45,7 +45,10 @@
     "zamowienia": {
       ".read": "auth != null && auth.token.admin === true",
       ".write": false,
-      ".indexOn": ["createdAt", "status", "provider"]
+      ".indexOn": ["createdAt", "status", "provider"],
+      "$paymentId": {
+        ".write": "auth != null && auth.token.admin === true"
+      }
     }
   }
 }

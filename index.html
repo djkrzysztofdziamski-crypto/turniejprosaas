@@ -109,17 +109,22 @@
             #view-admin .lic-col-actions { position: sticky; right: 0; background: #1e293b; box-shadow: -4px 0 8px rgba(0, 0, 0, 0.25); }
         }
         /* Tabela zamówień */
-        #view-admin table.orders-table { table-layout: fixed; min-width: 1120px; }
-        #view-admin .ord-col-payment { width: 24%; min-width: 220px; }
-        #view-admin .ord-col-provider { width: 8%; min-width: 72px; white-space: nowrap; }
-        #view-admin .ord-col-key { width: 11%; min-width: 118px; font-family: ui-monospace, monospace; font-weight: 700; color: #60a5fa; font-size: 12px; white-space: nowrap; }
-        #view-admin .ord-col-product { width: 13%; min-width: 120px; }
+        #view-admin table.orders-table { table-layout: fixed; min-width: 1280px; }
+        #view-admin .ord-col-payment { width: 20%; min-width: 200px; }
+        #view-admin .ord-col-provider { width: 7%; min-width: 64px; white-space: nowrap; }
+        #view-admin .ord-col-key { width: 10%; min-width: 110px; font-family: ui-monospace, monospace; font-weight: 700; color: #60a5fa; font-size: 12px; white-space: nowrap; }
+        #view-admin .ord-col-product { width: 11%; min-width: 108px; }
         #view-admin .ord-col-product code { font-size: 11px; word-break: break-word; white-space: normal; display: block; line-height: 1.35; }
-        #view-admin .ord-col-contact { width: 22%; min-width: 180px; word-break: break-word; overflow-wrap: anywhere; }
-        #view-admin .ord-col-date { width: 14%; min-width: 142px; white-space: nowrap; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; text-align: right; }
+        #view-admin .ord-col-contact { width: 18%; min-width: 160px; word-break: break-word; overflow-wrap: anywhere; }
+        #view-admin .ord-col-date { width: 12%; min-width: 130px; white-space: nowrap; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; text-align: right; }
         #view-admin th.ord-col-date { text-align: right; }
-        #view-admin .ord-col-mailsent { width: 11%; min-width: 110px; text-align: center; white-space: nowrap; }
-        #view-admin .ord-email-actions { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        #view-admin .ord-col-licstatus { width: 12%; min-width: 118px; text-align: center; vertical-align: middle; }
+        #view-admin .ord-lic-status-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        #view-admin .ord-lic-expiry { display: block; font-size: 10px; color: #94a3b8; line-height: 1.3; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        #view-admin .ord-col-mailsent { width: 9%; min-width: 88px; text-align: center; white-space: nowrap; }
+        #view-admin .ord-col-actions { width: 11%; min-width: 120px; text-align: center; vertical-align: middle; }
+        #view-admin .ord-actions { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; align-items: center; }
+        #view-admin .ord-email-actions { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         #view-admin .ord-email-error { font-size: 9px; color: #f87171; max-width: 100px; word-break: break-word; line-height: 1.25; }
         #view-admin .ord-payment-id { display: block; font-family: ui-monospace, monospace; font-size: 10px; line-height: 1.45; word-break: break-all; color: #cbd5e1; }
         #view-admin .badge { padding: 4px 9px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; white-space: nowrap; line-height: 1.2; }
@@ -853,7 +858,9 @@
                         <col class="ord-col-product">
                         <col class="ord-col-contact">
                         <col class="ord-col-date">
+                        <col class="ord-col-licstatus">
                         <col class="ord-col-mailsent">
+                        <col class="ord-col-actions">
                     </colgroup>
                     <thead>
                         <tr>
@@ -863,11 +870,13 @@
                             <th class="ord-col-product">Produkt</th>
                             <th class="ord-col-contact">Email / Notatka</th>
                             <th class="ord-col-date">Data</th>
-                            <th class="ord-col-mailsent">Email wysłany</th>
+                            <th class="ord-col-licstatus">Status licencji</th>
+                            <th class="ord-col-mailsent">Email</th>
+                            <th class="ord-col-actions">Akcje</th>
                         </tr>
                     </thead>
                     <tbody id="orders-table-body">
-                        <tr><td colspan="7" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>
+                        <tr><td colspan="9" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1572,7 +1581,7 @@
         const archive = document.getElementById('central-archive-display');
         if (archive) archive.innerHTML = 'Zaloguj się, aby załadować archiwum.';
         const ordersBody = document.getElementById('orders-table-body');
-        if (ordersBody) ordersBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>`;
+        if (ordersBody) ordersBody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>`;
     }
 
     function showAdminPanel() {
@@ -1808,48 +1817,81 @@
                 `;
             });
             tbody.innerHTML = html;
+            renderOrdersTable();
         });
+    }
+
+    function formatOrderLicenseStatusCell(licenseKey) {
+        const lic = licenseKey && adminKpiCache.licencje ? adminKpiCache.licencje[licenseKey] : null;
+        if (!lic) {
+            return `<div class="ord-lic-status-cell"><span class="badge nowy">NIEAKTYWNY</span><small class="ord-lic-expiry">brak w bazie</small></div>`;
+        }
+        const now = Date.now();
+        if (lic.status === 'zablokowany') {
+            const exp = lic.wygasa ? `<small class="ord-lic-expiry">do ${formatAdminDateTime(lic.wygasa)}</small>` : '';
+            return `<div class="ord-lic-status-cell"><span class="badge zablokowany">BLOKADA</span>${exp}</div>`;
+        }
+        if (lic.status === 'aktywny' && lic.wygasa && now <= lic.wygasa) {
+            return `<div class="ord-lic-status-cell"><span class="badge aktywny">AKTYWNY</span><small class="ord-lic-expiry">do ${formatAdminDateTime(lic.wygasa)}</small></div>`;
+        }
+        const expLine = lic.wygasa
+            ? `<small class="ord-lic-expiry">${now > lic.wygasa ? 'wygasła' : 'ważność'}: ${formatAdminDateTime(lic.wygasa)}</small>`
+            : '';
+        return `<div class="ord-lic-status-cell"><span class="badge nowy">NIEAKTYWNY</span>${expLine}</div>`;
+    }
+
+    function renderOrdersTable() {
+        const data = adminKpiCache.zamowienia;
+        const tbody = document.getElementById('orders-table-body');
+        if (!tbody) return;
+        if (!data || Object.keys(data).length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #94a3b8;">Brak zamówień online w bazie.</td></tr>`;
+            return;
+        }
+
+        let html = '';
+        Object.keys(data).sort((a, b) => (data[b].createdAt || 0) - (data[a].createdAt || 0)).forEach(paymentId => {
+            const order = data[paymentId];
+            const dateStr = order.createdAt ? formatAdminDateTime(order.createdAt) : '—';
+            const emailBadge = order.emailSent
+                ? '<span class="badge aktywny">WYSŁANO</span>'
+                : '<span class="badge nowy">BRAK</span>';
+            const emailErr = order.emailError && !order.emailSent
+                ? `<span class="ord-email-error" title="${escAttr(order.emailError)}">${esc(String(order.emailError).slice(0, 32))}</span>`
+                : '';
+            const resendBtn = order.customerEmail
+                ? `<button class="action-btn act-time" onclick="adminResendOrderEmail('${escAttr(paymentId)}', this)">📧 WYŚLIJ</button>`
+                : '';
+            const delBtn = `<button class="action-btn act-del" onclick="deleteOrder('${escAttr(paymentId)}')">✖ USUŃ</button>`;
+            html += `
+                <tr>
+                    <td class="ord-col-payment"><span class="ord-payment-id" title="${escAttr(paymentId)}">${esc(paymentId)}</span></td>
+                    <td class="ord-col-provider">${esc(order.provider || '—')}</td>
+                    <td class="ord-col-key">${esc(order.licenseKey || '—')}</td>
+                    <td class="ord-col-product"><code>${esc(order.productId || order.typ || '—')}</code></td>
+                    <td class="ord-col-contact">${esc(order.customerEmail || order.notatka || '—')}</td>
+                    <td class="ord-col-date">${dateStr}</td>
+                    <td class="ord-col-licstatus">${formatOrderLicenseStatusCell(order.licenseKey)}</td>
+                    <td class="ord-col-mailsent"><div class="ord-email-actions">${emailBadge}${emailErr}</div></td>
+                    <td class="ord-col-actions"><div class="ord-actions">${resendBtn}${delBtn}</div></td>
+                </tr>`;
+        });
+        tbody.innerHTML = html;
     }
 
     function initOrdersMonitor() {
         if (!isAdminSession()) return;
         db.ref('zamowienia').on('value', snapshot => {
-            const data = snapshot.val();
-            adminKpiCache.zamowienia = data || {};
+            adminKpiCache.zamowienia = snapshot.val() || {};
             renderAdminKpi();
-            const tbody = document.getElementById('orders-table-body');
-            if (!tbody) return;
-            if (!data) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Brak zamówień online w bazie.</td></tr>`;
-                return;
-            }
-
-            let html = '';
-            Object.keys(data).sort((a, b) => (data[b].createdAt || 0) - (data[a].createdAt || 0)).forEach(paymentId => {
-                const order = data[paymentId];
-                const dateStr = order.createdAt ? formatAdminDateTime(order.createdAt) : '—';
-                const emailBadge = order.emailSent
-                    ? '<span class="badge aktywny">WYSŁANO</span>'
-                    : '<span class="badge nowy">BRAK</span>';
-                const emailErr = order.emailError && !order.emailSent
-                    ? `<span class="ord-email-error" title="${escAttr(order.emailError)}">${esc(String(order.emailError).slice(0, 40))}</span>`
-                    : '';
-                const resendBtn = order.customerEmail
-                    ? `<button class="action-btn act-time" onclick="adminResendOrderEmail('${escAttr(paymentId)}', this)">📧 WYŚLIJ</button>`
-                    : '';
-                html += `
-                    <tr>
-                        <td class="ord-col-payment"><span class="ord-payment-id" title="${escAttr(paymentId)}">${esc(paymentId)}</span></td>
-                        <td class="ord-col-provider">${esc(order.provider || '—')}</td>
-                        <td class="ord-col-key">${esc(order.licenseKey || '—')}</td>
-                        <td class="ord-col-product"><code>${esc(order.productId || order.typ || '—')}</code></td>
-                        <td class="ord-col-contact">${esc(order.customerEmail || order.notatka || '—')}</td>
-                        <td class="ord-col-date">${dateStr}</td>
-                        <td class="ord-col-mailsent"><div class="ord-email-actions">${emailBadge}${emailErr}${resendBtn}</div></td>
-                    </tr>`;
-            });
-            tbody.innerHTML = html;
+            renderOrdersTable();
         });
+    }
+
+    function deleteOrder(paymentId) {
+        if (!isAdminSession()) return;
+        if (!confirm(`Usunąć wpis zamówienia z rejestru billing?\n\n${paymentId}\n\nLicencja i turniej NIE zostaną usunięte — tylko rekord zamówienia.`)) return;
+        db.ref('zamowienia/' + paymentId).remove().catch(err => alert('❌ Błąd usuwania: ' + (err.message || err)));
     }
 
     function initCentralArchive() {
