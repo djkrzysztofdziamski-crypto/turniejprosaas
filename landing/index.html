@@ -169,7 +169,11 @@
         .price-list li { padding: 8px 0; border-bottom: 1px solid rgba(72,101,129,0.4); font-size: 14px; color: var(--text-muted); }
         .price-list li:last-child { border-bottom: none; }
         .price-card .btn { width: 100%; }
+        .price-card .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
         .price-note { font-size: 12px; color: var(--text-soft); margin-top: 24px; max-width: 560px; margin-left: auto; margin-right: auto; }
+        .checkout-fallback { display: block; margin-top: 10px; font-size: 12px; color: var(--text-soft); text-align: center; }
+        .checkout-fallback a { color: #57d9a3; font-weight: 700; }
+        #checkout-error { display: none; margin: 16px auto 0; max-width: 560px; padding: 12px 16px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); border-radius: 8px; color: #fca5a5; font-size: 14px; text-align: center; }
 
         /* B2B */
         .b2b {
@@ -349,7 +353,8 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
                     <li>✅ Generowanie raportu PDF po turnieju</li>
                     <li>✅ 1 turniej = 1 licencja</li>
                 </ul>
-                <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Pakiet%20Weekendowy%2079%20z%C5%82%20%E2%80%94%20Turniejomat&amp;body=Dzie%C5%84%20dobry%2C%0A%0AChc%C4%99%20zam%C3%B3wi%C4%87%20Pakiet%20Weekendowy%20(79%20z%C5%82%20brutto)%20na%20turniej%3A%0A%0A%E2%80%A2%20Nazwa%20turnieju%3A%20%0A%E2%80%A2%20Data%20rozgrywek%3A%20%0A%E2%80%A2%20Liczba%20dru%C5%BCyn%20(szacunkowo)%3A%20%0A%E2%80%A2%20Organizator%20%2F%20klub%3A%20%0A%0APozdrawiam%2C%0A" class="btn btn-secondary">Zamów pakiet weekendowy</a>
+                <button type="button" class="btn btn-secondary" data-checkout-product="football-weekend" onclick="startCheckout('football-weekend', this)">Zamów pakiet weekendowy</button>
+                <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Pakiet%20Weekendowy%2079%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
             <!-- ABONAMENT MIESIĘCZNY -->
@@ -366,10 +371,13 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
                     <li>✅ Opłaca się od <strong>2 turniejów miesięcznie</strong></li>
                     <li>✅ Priorytetowe wsparcie w weekendy</li>
                 </ul>
-                <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Abonament%20Miesi%C4%99czny%20149%20z%C5%82%20%E2%80%94%20Turniejomat&amp;body=Dzie%C5%84%20dobry%2C%0A%0AChc%C4%99%20zam%C3%B3wi%C4%87%20Abonament%20Miesi%C4%99czny%20(149%20z%C5%82%20brutto)%3A%0A%0A%E2%80%A2%20Nazwa%20klubu%20%2F%20organizacji%3A%20%0A%E2%80%A2%20Szacowana%20liczba%20turniej%C3%B3w%20w%20miesi%C4%85cu%3A%20%0A%E2%80%A2%20Kontakt%20zwrotny%3A%20%0A%0APozdrawiam%2C%0A" class="btn btn-primary">Zamów abonament miesięczny</a>
+                <button type="button" class="btn btn-primary" data-checkout-product="football-month" onclick="startCheckout('football-month', this)">Zamów abonament miesięczny</button>
+                <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Abonament%20Miesi%C4%99czny%20149%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
         </div>
+
+        <p id="checkout-error" role="alert"></p>
 
         <p class="price-note">
             Cennik obowiązuje do <strong>31.12.2026</strong>.
@@ -408,6 +416,57 @@ SEKCJA 8 — STOPKA
     <p class="brand-footer">Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
     <p style="margin-top:6px;">admin@turniejomat.pl</p>
 </footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
+<script>
+(function () {
+    const firebaseConfig = {
+        apiKey: 'AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU',
+        authDomain: 'turniejprosaas.firebaseapp.com',
+        projectId: 'turniejprosaas',
+        appId: '1:141555836771:web:d5f17180a21fded3d09556'
+    };
+    firebase.initializeApp(firebaseConfig);
+    const checkoutFn = firebase.app().functions('europe-west1').httpsCallable('createCheckoutSession');
+
+    function showCheckoutError(msg) {
+        const el = document.getElementById('checkout-error');
+        if (!el) return;
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    window.startCheckout = async function (productId, btn) {
+        const errEl = document.getElementById('checkout-error');
+        if (errEl) errEl.style.display = 'none';
+        const buttons = document.querySelectorAll('[data-checkout-product]');
+        buttons.forEach(function (b) { b.disabled = true; });
+        if (btn) btn.textContent = 'Przekierowanie…';
+
+        try {
+            const result = await checkoutFn({ productId: productId });
+            if (result.data && result.data.url) {
+                window.location.href = result.data.url;
+                return;
+            }
+            throw new Error('Brak adresu płatności.');
+        } catch (err) {
+            buttons.forEach(function (b) {
+                b.disabled = false;
+                if (b.dataset.checkoutProduct === 'football-weekend') b.textContent = 'Zamów pakiet weekendowy';
+                if (b.dataset.checkoutProduct === 'football-month') b.textContent = 'Zamów abonament miesięczny';
+            });
+            const msg = (err && err.message) ? err.message : String(err);
+            if (msg.includes('failed-precondition') || msg.includes('Stripe')) {
+                showCheckoutError('Płatność online chwilowo niedostępna. Użyj linku „zamów mailowo” poniżej przycisku.');
+            } else {
+                showCheckoutError('Nie udało się rozpocząć płatności. Spróbuj ponownie lub zamów mailowo.');
+            }
+        }
+    };
+})();
+</script>
 
 </body>
 </html>

@@ -1,49 +1,104 @@
-# Płatności online — Stripe i Przelewy24
+# Płatności i moduł Billing — Turniejomat
 
 **Projekt:** `turniejprosaas`  
 **Region funkcji:** `europe-west1`
 
-## Architektura
-
-```
-Klient (landing / Stripe Checkout)
-        │
-        ▼
-Stripe webhook ──POST──► paymentWebhook (Cloud Function)
-        │                      │
-        │                      ├── createAndActivateLicense()
-        │                      ├── licencje/{TP-XXXX-XXXX}
-        │                      └── zamowienia/{sessionId}
-        ▼
-Klient wpisuje klucz na bramce app.turniejomat.pl
-```
-
-Panel admina aktywuje istniejące klucze przez **callable** `activateLicense` (nie zapisuje `status: aktywny` bezpośrednio w RTDB).
+Moduł **billing** jest samodzielny — nie zna logiki turniejów (piłka, dart, pool). Zna tylko **katalog produktów** i wydaje **licencje** przez moduł **licensing**.
 
 ---
 
-## Endpoint webhooka
+## Architektura modułów
+
+```
+landing (checkout)
+       │
+       ▼
+createCheckoutSession ──► Stripe Checkout
+       │
+       ▼
+paymentWebhook ──► billing/fulfillOrder()
+       │                  │
+       │                  ├── licensing/issue (klucz + sports + productId)
+       │                  ├── zamowienia/{paymentId}
+       │                  └── billing/email (klucz na email)
+       ▼
+app.turniejomat.pl — verifyLicense() + APP_SPORT gate
+```
+
+| Moduł | Ścieżka w repo | Odpowiedzialność |
+|-------|----------------|------------------|
+| **Billing** | `functions/lib/billing/` | Katalog produktów, Stripe, zamówienia, email |
+| **Licensing** | `functions/lib/licensing/` | Klucze, aktywacja, uprawnienia sportowe |
+| **Sport** | `index.html` Moduł C | Silnik turnieju (dziś: `APP_SPORT = 'football'`) |
+
+---
+
+## Katalog produktów
+
+Plik: `functions/lib/billing/catalog.js`
+
+| productId | Sport(y) | Czas | Cena |
+|-----------|----------|------|------|
+| `football-weekend` | football | 72 h | 79 zł |
+| `football-month` | football | 30 dni | 149 zł |
+
+Dodanie darta / poola = nowy wpis w katalogu + nowy silnik sportowy — **bez zmiany webhooka**.
+
+---
+
+## Cloud Functions
+
+| Funkcja | Typ | Auth | Opis |
+|---------|-----|------|------|
+| `createCheckoutSession` | callable | publiczna | `{ productId, email? }` → `{ url, sessionId }` |
+| `getProductCatalog` | callable | publiczna | Lista aktywnych produktów (bez sekretów) |
+| `paymentWebhook` | HTTPS POST | Stripe signature | Fulfillment po płatności |
+| `activateLicense` | callable | admin | Ręczna aktywacja klucza |
+
+### Endpoint webhooka
 
 ```
 https://europe-west1-turniejprosaas.cloudfunctions.net/paymentWebhook
 ```
 
-| Parametr | Wartość |
-|----------|---------|
-| Metoda | `POST` |
-| Provider domyślny | Stripe |
-| Przelewy24 | `?provider=p24` — **501 Not Implemented** (placeholder) |
+Przelewy24: `?provider=p24` → **501** (placeholder).
 
 ---
 
-## Stripe — konfiguracja
+## Konfiguracja produkcyjna
 
-### 1. Sekrety w Firebase Functions
+### Stripe
 
 ```bash
 firebase functions:config:set \
   stripe.secret_key="sk_live_..." \
   stripe.webhook_secret="whsec_..."
+```
+
+Webhook w Stripe Dashboard:
+- Zdarzenie: `checkout.session.completed`
+- Metadata sesji: `productId` (ustawiane automatycznie przez `createCheckoutSession`)
+
+### Email z kluczem (SMTP)
+
+```bash
+firebase functions:config:set \
+  email.smtp_host="smtp.example.com" \
+  email.smtp_port="587" \
+  email.smtp_user="..." \
+  email.smtp_pass="..." \
+  email.smtp_secure="false" \
+  email.from="Turniejomat <noreply@turniejomat.pl>"
+```
+
+Bez konfiguracji email — webhook nadal wydaje licencję; w adminie widać `Email: BRAK`.
+
+### URL aplikacji (opcjonalnie)
+
+```bash
+firebase functions:config:set \
+  app.url="https://app.turniejomat.pl" \
+  app.landing_url="https://turniejomat.pl"
 ```
 
 Po zmianie configu:
@@ -53,101 +108,69 @@ cd functions && npm install
 firebase deploy --only functions
 ```
 
-### 2. Webhook w Stripe Dashboard
+---
 
-1. **Developers → Webhooks → Add endpoint**
-2. URL: endpoint powyżej
-3. Zdarzenie: `checkout.session.completed`
-4. Skopiuj **Signing secret** (`whsec_...`) do configu
+## RTDB — ścieżki
 
-### 3. Stripe Checkout — metadata
-
-Przy tworzeniu sesji Checkout ustaw metadata:
-
-| Klucz | Wartość |
-|-------|---------|
-| `package` | `weekend` lub `miesiac` |
-
-Przykład (Node.js):
+### `licencje/{TP-XXXX-XXXX}`
 
 ```javascript
-const session = await stripe.checkout.sessions.create({
-  mode: 'payment',
-  customer_email: email,
-  line_items: [{ price: 'price_...', quantity: 1 }],
-  success_url: 'https://app.turniejomat.pl/?paid=1',
-  cancel_url: 'https://turniejomat.pl/#cennik',
-  metadata: { package: 'weekend' },
-});
+{
+  typ: 'weekend',
+  productId: 'football-weekend',
+  sports: ['football'],
+  status: 'aktywny',
+  stworzony, aktywowany, wygasa, notatka
+}
 ```
 
-Po opłaceniu funkcja:
-- generuje klucz `TP-XXXX-XXXX`,
-- aktywuje licencję (pakiet weekend = 72 h, miesiąc = 30 dni),
-- zapisuje wpis w `zamowienia/{session.id}` (idempotencja — powtórny webhook nie tworzy duplikatu).
+Licencje bez `sports` (legacy) = traktowane jako `['football']`.
 
-### 4. Powiadomienie klienta
-
-Obecnie klucz trafia tylko do RTDB. Kolejny krok produktowy:
-- email z kluczem (SendGrid / Resend / Firebase Extension),
-- lub przekierowanie na stronę z kluczem po `success_url` + odczyt z backendu.
-
----
-
-## Przelewy24 — plan integracji
-
-Endpoint zwraca `501` z komunikatem. Kroki do wdrożenia:
-
-1. `firebase functions:config:set p24.merchant_id="..." p24.pos_id="..." p24.crc="..." p24.sandbox="true"`
-2. W `paymentWebhook` — gałąź `provider=p24`:
-   - weryfikacja sygnatury CRC,
-   - mapowanie `sessionId` / `orderId` na pakiet,
-   - wywołanie `createAndActivateLicense()` z `source: 'p24'`.
-3. Webhook URL w panelu P24:  
-   `https://europe-west1-turniejprosaas.cloudfunctions.net/paymentWebhook?provider=p24`
-
----
-
-## RTDB — ścieżka `zamowienia`
-
-```
-zamowienia/
-  └── {paymentId}/
-      ├── provider      # stripe | p24
-      ├── paymentId
-      ├── licenseKey
-      ├── typ           # weekend | miesiac
-      ├── status        # completed
-      ├── createdAt     # timestamp ms
-      └── notatka       # np. "Stripe: user@email.com"
-```
-
-- **Odczyt:** tylko admin (`auth.token.admin === true`)
-- **Zapis:** tylko Admin SDK (Cloud Functions) — reguły `.write: false` dla klientów
-
----
-
-## Panel admina — aktywacja ręczna
-
-Zalogowany admin wywołuje:
+### `zamowienia/{paymentId}`
 
 ```javascript
-firebase.app().functions('europe-west1').httpsCallable('activateLicense')({ key: 'TP-XXXX-XXXX' })
+{
+  provider: 'stripe',
+  paymentId, licenseKey, productId, typ, sports,
+  status: 'completed', createdAt, notatka,
+  customerEmail, emailSent, emailError
+}
 ```
 
-Wymaga custom claim `admin: true` na koncie Firebase Auth.
+- Odczyt: admin (`auth.token.admin`)
+- Zapis: tylko Admin SDK (Cloud Functions)
 
 ---
 
-## Test lokalny (emulator)
+## Frontend
+
+| Miejsce | Integracja |
+|---------|------------|
+| `landing/index.html` | `createCheckoutSession` — przyciski cennika |
+| `index.html` (bramka) | `verifyLicense` + `APP_SPORT` |
+| `index.html` (admin) | Monitor `zamowienia/`, generator z `productId` + `sports` |
+
+CSP landing: `connect-src` musi zawierać `https://*.cloudfunctions.net`.
+
+---
+
+## Przepływ zakupu
+
+1. Klient klika „Zamów” na landingu → Stripe Checkout
+2. Po opłaceniu webhook → licencja aktywna + wpis w `zamowienia/`
+3. Email z kluczem (jeśli SMTP skonfigurowany)
+4. Klient wchodzi na `app.turniejomat.pl/?checkout=success` i wpisuje klucz
+
+Fallback: link „zamów mailowo” na landingu.
+
+---
+
+## Test lokalny
 
 ```bash
-cd functions
-npm install
+cd functions && npm install
 firebase emulators:start --only functions
 ```
-
-Stripe CLI do testów webhooka:
 
 ```bash
 stripe listen --forward-to http://127.0.0.1:5001/turniejprosaas/europe-west1/paymentWebhook
@@ -156,11 +179,10 @@ stripe trigger checkout.session.completed
 
 ---
 
-## Checklist wdrożenia produkcyjnego
+## Roadmap multi-sport
 
-- [ ] `stripe.secret_key` i `stripe.webhook_secret` w Functions config
-- [ ] `firebase deploy --only functions,database`
-- [ ] Webhook Stripe wskazuje na URL produkcyjny
-- [ ] CSP (`_headers`) zawiera `https://*.cloudfunctions.net` w `connect-src`
-- [ ] Checkout na landingu z poprawnym `metadata.package`
-- [ ] Proces wysyłki klucza do klienta po płatności
+1. Dodać produkt w `catalog.js` (np. `dart-weekend`)
+2. Dodać `APP_SPORT` / routing do modułu darta
+3. Namespace danych: `turnieje_uzytkownikow/{key}/dart/` (przyszłość)
+
+Billing i webhook **bez zmian**.

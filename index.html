@@ -864,6 +864,29 @@
         </div>
 
         <div class="card">
+            <h3>💳 Zamówienia online (Billing)</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Płatności Stripe / Przelewy24 — rejestr z modułu billing. Klucze wydawane automatycznie po webhooku.</p>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID płatności</th>
+                            <th>Provider</th>
+                            <th>Klucz</th>
+                            <th>Produkt</th>
+                            <th>Email / Notatka</th>
+                            <th>Data</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="7" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
             <h3 style="color: #10b981;">📜 Centralne Archiwum Serwera (Zakończone Turnieje)</h3>
             <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Tutaj trafiają pełne kopie raportów turniejowych automatycznie przesyłane przez sędziów po zakończeniu rozgrywek.</p>
             <div id="central-archive-display">Ładowanie bazy danych archiwum...</div>
@@ -1061,6 +1084,21 @@
     const cloudFunctions = firebase.app().functions('europe-west1');
     const activateLicenseCallable = cloudFunctions.httpsCallable('activateLicense');
 
+    /** Aktywny moduł sportowy tej instancji aplikacji (przyszłość: dart, pool). */
+    const APP_SPORT = 'football';
+
+    const ADMIN_LICENSE_PRODUCTS = {
+        weekend: { productId: 'football-weekend', sports: ['football'] },
+        miesiac: { productId: 'football-month', sports: ['football'] },
+    };
+
+    function licenseCoversSport(lic, sport) {
+        if (!lic.sports || !Array.isArray(lic.sports) || lic.sports.length === 0) {
+            return sport === 'football';
+        }
+        return lic.sports.includes(sport);
+    }
+
     let firebaseStatusLock = null;
     let firebaseSavedTimer = null;
 
@@ -1254,6 +1292,16 @@
             document.getElementById('license-input').value = cachedKey;
             autoVerify(cachedKey);
         }
+
+        if (urlParams.get('checkout') === 'success' || urlParams.get('paid') === '1') {
+            showMsg('✅ Płatność przyjęta! Klucz licencyjny wysłaliśmy na Twój email. Wpisz go poniżej, aby wejść do turnieju.', 'success');
+            if (window.history.replaceState) {
+                const clean = new URL(window.location.href);
+                clean.searchParams.delete('checkout');
+                clean.searchParams.delete('paid');
+                window.history.replaceState({}, '', clean.pathname + (clean.search || ''));
+            }
+        }
     }
 
     function showMsg(txt, type) {
@@ -1269,7 +1317,7 @@
         }
         db.ref('licencje/' + key).once('value', snapshot => {
             const lic = snapshot.val();
-            if (lic && lic.status === 'aktywny') {
+            if (lic && lic.status === 'aktywny' && licenseCoversSport(lic, APP_SPORT)) {
                 const now = new Date().getTime();
                 if (lic.wygasa && now > lic.wygasa) {
                     localStorage.removeItem('tp_license_key');
@@ -1312,6 +1360,10 @@
             const lic = snapshot.val();
             if (!lic) { showMsg("❌ Niepoprawny klucz licencyjny!", "error"); return; }
             if (lic.status === 'zablokowany') { showMsg("❌ Licencja zawieszona przez administratora!", "error"); return; }
+            if (!licenseCoversSport(lic, APP_SPORT)) {
+                showMsg("❌ Ten klucz nie obejmuje modułu piłki nożnej. Skontaktuj się z administratorem.", "error");
+                return;
+            }
 
             const now = new Date().getTime();
             const isActivated = lic.status === 'aktywny' && lic.aktywowany && lic.wygasa;
@@ -1367,6 +1419,8 @@
         if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować dane.</td></tr>`;
         const archive = document.getElementById('central-archive-display');
         if (archive) archive.innerHTML = 'Zaloguj się, aby załadować archiwum.';
+        const ordersBody = document.getElementById('orders-table-body');
+        if (ordersBody) ordersBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Zaloguj się, aby załadować zamówienia.</td></tr>`;
     }
 
     function showAdminPanel() {
@@ -1376,6 +1430,7 @@
         if (err) err.style.display = 'none';
         if (!adminListenersStarted) {
             initAdminMonitor();
+            initOrdersMonitor();
             initCentralArchive();
             adminListenersStarted = true;
         }
@@ -1424,6 +1479,7 @@
 
     function logoutAdmin() {
         db.ref('licencje').off();
+        db.ref('zamowienia').off();
         db.ref('archiwum').off();
         adminListenersStarted = false;
         window.currentAdminUser = null;
@@ -1447,7 +1503,17 @@
         const newKey = generateRandomKey();
         const nowStr = new Date().toLocaleString('pl-PL');
 
-        const payload = { typ: type, status: 'nowy', stworzony: nowStr, aktywowany: null, wygasa: null, notatka: name };
+        const productMeta = ADMIN_LICENSE_PRODUCTS[type] || ADMIN_LICENSE_PRODUCTS.weekend;
+        const payload = {
+            typ: type,
+            productId: productMeta.productId,
+            sports: productMeta.sports,
+            status: 'nowy',
+            stworzony: nowStr,
+            aktywowany: null,
+            wygasa: null,
+            notatka: name
+        };
         const activateNow = document.getElementById('lic-activate-now')?.checked === true;
 
         db.ref('licencje/' + newKey).set(payload).then(async () => {
@@ -1480,13 +1546,14 @@
             .catch(err => alert('❌ Błąd aktywacji: ' + formatCallableError(err)));
     }
 
-    let adminKpiCache = { licencje: null, archiwum: null };
+    let adminKpiCache = { licencje: null, archiwum: null, zamowienia: null };
 
     function renderAdminKpi() {
         const strip = document.getElementById('admin-kpi-strip');
         if (!strip) return;
         const lic = adminKpiCache.licencje || {};
         const arch = adminKpiCache.archiwum || {};
+        const orders = adminKpiCache.zamowienia || {};
         const now = Date.now();
         const keys = Object.keys(lic);
         let active = 0, blocked = 0, newLic = 0;
@@ -1498,11 +1565,13 @@
             else if (l.status === 'aktywny' && (!l.wygasa || now <= l.wygasa)) active++;
         });
         const archives = Object.keys(arch).length;
+        const orderCount = Object.keys(orders).length;
         strip.innerHTML = `
             <div class="admin-kpi-card kpi-blue"><div class="admin-kpi-value">${keys.length}</div><div class="admin-kpi-label">Licencje</div></div>
             <div class="admin-kpi-card kpi-green"><div class="admin-kpi-value">${active}</div><div class="admin-kpi-label">Aktywne</div></div>
             <div class="admin-kpi-card"><div class="admin-kpi-value">${newLic}</div><div class="admin-kpi-label">Nowe</div></div>
             <div class="admin-kpi-card"><div class="admin-kpi-value">${blocked}</div><div class="admin-kpi-label">Zablokowane</div></div>
+            <div class="admin-kpi-card kpi-gold"><div class="admin-kpi-value">${orderCount}</div><div class="admin-kpi-label">Zamówienia</div></div>
             <div class="admin-kpi-card kpi-gold"><div class="admin-kpi-value">${archives}</div><div class="admin-kpi-label">Archiwa</div></div>`;
     }
 
@@ -1543,7 +1612,7 @@
                         <td class="lic-col-notatka" title="${escAttr(notatkaRaw)}">
                             <span class="lic-notatka-text">${esc(notatkaRaw) || '—'}</span>
                         </td>
-                        <td class="lic-col-pakiet"><code>${formatLicensePakiet(lic.typ)}</code></td>
+                        <td class="lic-col-pakiet"><code>${formatLicensePakiet(lic.typ)}</code><br><small style="color:#64748b;">${esc((lic.sports || ['football']).join(', '))}</small></td>
                         <td class="lic-col-status">${statusBadge}</td>
                         <td class="lic-col-date">${actDate}</td>
                         <td class="lic-col-date" style="font-weight: bold; color: ${currentStatus==='wygasl'?'#ef4444':'#fff'};">${expDate}</td>
@@ -1558,6 +1627,41 @@
                         </td>
                     </tr>
                 `;
+            });
+            tbody.innerHTML = html;
+        });
+    }
+
+    function initOrdersMonitor() {
+        if (!isAdminSession()) return;
+        db.ref('zamowienia').on('value', snapshot => {
+            const data = snapshot.val();
+            adminKpiCache.zamowienia = data || {};
+            renderAdminKpi();
+            const tbody = document.getElementById('orders-table-body');
+            if (!tbody) return;
+            if (!data) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Brak zamówień online w bazie.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            Object.keys(data).sort((a, b) => (data[b].createdAt || 0) - (data[a].createdAt || 0)).forEach(paymentId => {
+                const order = data[paymentId];
+                const dateStr = order.createdAt ? formatAdminDateTime(order.createdAt) : '—';
+                const emailBadge = order.emailSent
+                    ? '<span class="badge aktywny">WYSŁANO</span>'
+                    : '<span class="badge nowy">BRAK</span>';
+                html += `
+                    <tr>
+                        <td style="font-family: monospace; font-size: 11px;">${esc(paymentId)}</td>
+                        <td>${esc(order.provider || '—')}</td>
+                        <td style="font-family: monospace; font-weight: bold; color: #60a5fa;">${esc(order.licenseKey || '—')}</td>
+                        <td><code>${esc(order.productId || order.typ || '—')}</code></td>
+                        <td>${esc(order.customerEmail || order.notatka || '—')}</td>
+                        <td>${dateStr}</td>
+                        <td>${emailBadge}</td>
+                    </tr>`;
             });
             tbody.innerHTML = html;
         });
