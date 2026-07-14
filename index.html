@@ -1356,12 +1356,17 @@
         }
 
         showMsg("⌛ Weryfikacja klucza w bazie danych...", "success");
+        const failVerify = (txt) => showMsg(txt, "error");
+        const timeout = setTimeout(() => {
+            failVerify("❌ Brak połączenia z bazą (timeout). Odśwież stronę lub spróbuj za chwilę.");
+        }, 12000);
         db.ref('licencje/' + key).once('value', snapshot => {
+            clearTimeout(timeout);
             const lic = snapshot.val();
-            if (!lic) { showMsg("❌ Niepoprawny klucz licencyjny!", "error"); return; }
-            if (lic.status === 'zablokowany') { showMsg("❌ Licencja zawieszona przez administratora!", "error"); return; }
+            if (!lic) { failVerify("❌ Niepoprawny klucz licencyjny!"); return; }
+            if (lic.status === 'zablokowany') { failVerify("❌ Licencja zawieszona przez administratora!"); return; }
             if (!licenseCoversSport(lic, APP_SPORT)) {
-                showMsg("❌ Ten klucz nie obejmuje modułu piłki nożnej. Skontaktuj się z administratorem.", "error");
+                failVerify("❌ Ten klucz nie obejmuje modułu piłki nożnej. Skontaktuj się z administratorem.");
                 return;
             }
 
@@ -1369,17 +1374,20 @@
             const isActivated = lic.status === 'aktywny' && lic.aktywowany && lic.wygasa;
 
             if (!isActivated) {
-                showMsg("⏳ Klucz oczekuje na aktywację przez administratora. Jeśli już opłaciłeś licencję, napisz na admin@turniejomat.pl podając swój klucz.", "error");
+                failVerify("⏳ Klucz oczekuje na aktywację przez administratora. Jeśli już opłaciłeś licencję, napisz na admin@turniejomat.pl podając swój klucz.");
                 return;
             }
 
             if (now > lic.wygasa) {
-                showMsg("❌ Czas tej licencji upłynął! Skontaktuj się w celu przedłużenia.", "error");
+                failVerify("❌ Czas tej licencji upłynął! Skontaktuj się w celu przedłużenia.");
             } else {
                 localStorage.setItem('tp_license_key', key);
                 showMsg("✅ Klucz poprawny. Witamy!", "success");
                 setTimeout(() => { window.location.search = `?id=${key}`; }, 1000);
             }
+        }, err => {
+            clearTimeout(timeout);
+            failVerify("❌ Błąd połączenia z bazą: " + (err?.message || err || "nieznany"));
         });
     }
 
