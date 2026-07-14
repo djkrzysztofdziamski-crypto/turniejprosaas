@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="demo-story-scenario.bundle.js?v=20260712"></script>
     <script src="demo-story.js?v=20260712"></script>
@@ -1057,6 +1058,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
+    const cloudFunctions = firebase.app().functions('europe-west1');
+    const activateLicenseCallable = cloudFunctions.httpsCallable('activateLicense');
 
     let firebaseStatusLock = null;
     let firebaseSavedTimer = null;
@@ -1278,16 +1281,20 @@
         });
     }
 
-    function getLicenseDurationMs(typ) {
-        if (typ === 'weekend') return 72 * 60 * 60 * 1000;
-        if (typ === 'miesiac') return 30 * 24 * 60 * 60 * 1000;
-        if (typ === 'unlimited') return 99 * 365 * 24 * 60 * 60 * 1000;
-        return 24 * 60 * 60 * 1000;
+    function formatCallableError(err) {
+        const code = err?.code || '';
+        const msg = err?.message || String(err);
+        if (code.includes('permission-denied')) return 'Brak uprawnień administratora (Cloud Function).';
+        if (code.includes('not-found')) return 'Licencja nie istnieje.';
+        if (code.includes('failed-precondition')) return msg;
+        if (code.includes('unavailable')) return 'Funkcja chmurowa niedostępna — spróbuj za chwilę.';
+        return msg;
     }
 
-    function buildLicenseActivationUpdate(typ, now) {
-        now = now == null ? Date.now() : now;
-        return { status: 'aktywny', aktywowany: now, wygasa: now + getLicenseDurationMs(typ) };
+    async function callActivateLicenseCloud(key) {
+        if (!isAdminSession()) throw new Error('Brak sesji administratora.');
+        const result = await activateLicenseCallable({ key });
+        return result.data;
     }
 
     function verifyLicense() {
@@ -1442,35 +1449,35 @@
 
         const payload = { typ: type, status: 'nowy', stworzony: nowStr, aktywowany: null, wygasa: null, notatka: name };
         const activateNow = document.getElementById('lic-activate-now')?.checked === true;
-        if (activateNow) Object.assign(payload, buildLicenseActivationUpdate(type, Date.now()));
 
-        db.ref('licencje/' + newKey).set(payload).then(() => {
+        db.ref('licencje/' + newKey).set(payload).then(async () => {
+            if (activateNow) {
+                try {
+                    await callActivateLicenseCloud(newKey);
+                } catch (err) {
+                    alert('⚠️ Klucz utworzony, ale aktywacja przez Cloud Function nie powiodła się:\n' + formatCallableError(err));
+                }
+            }
             document.getElementById('client-name').value = '';
             const sBox = document.getElementById('generator-success-box');
             sBox.innerText = activateNow
-                ? `✅ Utworzono i aktywowano klucz dla [${name}]: ${newKey} (Skopiowano do schowka!)`
+                ? `✅ Utworzono i aktywowano (Cloud) klucz dla [${name}]: ${newKey} (Skopiowano do schowka!)`
                 : `✅ Pomyślnie utworzono klucz dla [${name}]: ${newKey} (Skopiowano do schowka!) — aktywuj w monitorze przed wysyłką klientowi.`;
             sBox.style.display = 'block';
             navigator.clipboard.writeText(newKey);
             setTimeout(() => { sBox.style.display = 'none'; }, 5000);
-        });
+        }).catch(err => alert('❌ Błąd tworzenia klucza: ' + (err.message || err)));
     }
 
     function adminActivateLicense(key) {
         if (!isAdminSession()) return;
-        if (!confirm(`Aktywować licencję ${key}?\nRozpocznie się odliczanie czasu pakietu.`)) return;
-        db.ref('licencje/' + key).once('value', snap => {
-            const lic = snap.val();
-            if (!lic) { alert('❌ Brak licencji w bazie.'); return; }
-            if (lic.status === 'zablokowany') { alert('❌ Licencja jest zablokowana.'); return; }
-            if (lic.status === 'aktywny' && lic.wygasa && Date.now() < lic.wygasa) {
-                alert('ℹ️ Licencja jest już aktywna.');
-                return;
-            }
-            db.ref('licencje/' + key).update(buildLicenseActivationUpdate(lic.typ, Date.now()))
-                .then(() => alert('✅ Licencja aktywowana.'))
-                .catch(err => alert('❌ Błąd aktywacji: ' + (err.message || err)));
-        });
+        if (!confirm(`Aktywować licencję ${key}?\nRozpocznie się odliczanie czasu pakietu (Cloud Function).`)) return;
+        callActivateLicenseCloud(key)
+            .then((data) => {
+                if (data?.alreadyActive) alert('ℹ️ Licencja była już aktywna.');
+                else alert('✅ Licencja aktywowana przez serwer.');
+            })
+            .catch(err => alert('❌ Błąd aktywacji: ' + formatCallableError(err)));
     }
 
     let adminKpiCache = { licencje: null, archiwum: null };

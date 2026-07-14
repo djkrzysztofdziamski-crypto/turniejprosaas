@@ -1,74 +1,97 @@
 /**
  * Turniejomat — Cloud Functions
- * - activateLicense: aktywacja klucza (admin / przyszły webhook płatności)
- * - paymentWebhook: placeholder pod Stripe / Przelewy24
+ * - activateLicense: callable (panel admina)
+ * - paymentWebhook: Stripe (+ placeholder Przelewy24)
  */
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const {
+  KEY_RE,
+  activateLicenseByKey,
+  createAndActivateLicense,
+} = require('./lib/licensing');
 
 admin.initializeApp();
+const db = admin.database();
 
-const KEY_RE = /^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/;
-
-function durationMs(typ) {
-  if (typ === 'weekend') return 72 * 60 * 60 * 1000;
-  if (typ === 'miesiac') return 30 * 24 * 60 * 60 * 1000;
-  if (typ === 'unlimited') return 99 * 365 * 24 * 60 * 60 * 1000;
-  return 24 * 60 * 60 * 1000;
+function toHttpsError(err) {
+  const allowed = ['invalid-argument', 'not-found', 'failed-precondition', 'permission-denied'];
+  const code = allowed.includes(err.code) ? err.code : 'internal';
+  return new functions.https.HttpsError(code, err.message || 'Błąd serwera.');
 }
 
-function buildActivationUpdate(typ, now) {
-  return {
-    status: 'aktywny',
-    aktywowany: now,
-    wygasa: now + durationMs(typ),
-  };
-}
-
-/**
- * Callable — tylko admin (auth.token.admin === true).
- * Użycie z panelu admina po podłączeniu firebase.functions().httpsCallable('activateLicense').
- */
 exports.activateLicense = functions.region('europe-west1').https.onCall(async (data, context) => {
   if (!context.auth || context.auth.token.admin !== true) {
     throw new functions.https.HttpsError('permission-denied', 'Wymagane uprawnienia administratora.');
   }
 
   const key = String(data?.key || '').trim();
-  if (!KEY_RE.test(key)) {
-    throw new functions.https.HttpsError('invalid-argument', 'Niepoprawny format klucza licencyjnego.');
+  try {
+    return await activateLicenseByKey(db, key);
+  } catch (err) {
+    throw toHttpsError(err);
   }
-
-  const ref = admin.database().ref('licencje/' + key);
-  const snap = await ref.once('value');
-  const lic = snap.val();
-  if (!lic) {
-    throw new functions.https.HttpsError('not-found', 'Licencja nie istnieje.');
-  }
-  if (lic.status === 'zablokowany') {
-    throw new functions.https.HttpsError('failed-precondition', 'Licencja jest zablokowana.');
-  }
-  if (lic.status === 'aktywny' && lic.wygasa && lic.wygasa > Date.now()) {
-    return { ok: true, alreadyActive: true, key, wygasa: lic.wygasa };
-  }
-
-  const now = Date.now();
-  const update = buildActivationUpdate(lic.typ, now);
-  await ref.update(update);
-  return { ok: true, key, ...update };
 });
 
-/**
- * HTTP — docelowo webhook Stripe / Przelewy24.
- * Na razie zwraca 501; podłączenie po wyborze PSP.
- */
-exports.paymentWebhook = functions.region('europe-west1').https.onRequest((req, res) => {
+exports.paymentWebhook = functions.region('europe-west1').https.onRequest(async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
-  res.status(501).json({
-    error: 'Not implemented',
-    message: 'Podłącz Stripe lub Przelewy24 — aktywacja licencji po weryfikacji podpisu webhook.',
-  });
+
+  const provider = String(req.query.provider || req.headers['x-payment-provider'] || 'stripe').toLowerCase();
+
+  if (provider === 'p24' || provider === 'przelewy24') {
+    res.status(501).json({
+      error: 'Not implemented',
+      message: 'Przelewy24: ustaw functions.config().p24 i zaimplementuj weryfikację CRC — patrz docs/PAYMENTS.md',
+    });
+    return;
+  }
+
+  const stripeWebhookSecret = functions.config().stripe?.webhook_secret;
+  const stripeSecretKey = functions.config().stripe?.secret_key;
+
+  if (!stripeWebhookSecret || !stripeSecretKey) {
+    res.status(503).json({
+      error: 'Stripe not configured',
+      message: 'Ustaw firebase functions:config:set stripe.secret_key="..." stripe.webhook_secret="..."',
+    });
+    return;
+  }
+
+  const stripe = require('stripe')(stripeSecretKey);
+  const sig = req.headers['stripe-signature'];
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig, stripeWebhookSecret);
+  } catch (err) {
+    console.error('Stripe webhook signature error:', err.message);
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  try {
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const typ = session.metadata?.package === 'miesiac' ? 'miesiac' : 'weekend';
+      const email = session.customer_email || session.customer_details?.email || '';
+      const notatka = email ? `Stripe: ${email}` : 'Stripe checkout';
+
+      const result = await createAndActivateLicense(db, {
+        typ,
+        notatka,
+        source: 'stripe',
+        paymentId: session.id,
+      });
+
+      console.log('License issued via Stripe:', result.key, session.id);
+    }
+
+    res.json({ received: true });
+  } catch (err) {
+    console.error('paymentWebhook handler error:', err);
+    res.status(500).json({ error: 'Webhook handler failed' });
+  }
 });
