@@ -14,28 +14,25 @@ O2 / WP / Onet często **blokują** wysyłkę z serwerów chmurowych. **Brevo** 
 2. **SMTP & API** → **SMTP** → wygeneruj klucz SMTP
 3. Zweryfikuj domenę `turniejomat.pl` (DNS: SPF + DKIM) — ważne, żeby maile nie trafiały do spamu
 
-### 2. Konfiguracja Firebase
+### 2. Konfiguracja Firebase (params + Secret Manager)
 
-```powershell
-firebase functions:config:set `
-  email.smtp_host="smtp-relay.brevo.com" `
-  email.smtp_port="587" `
-  email.smtp_user="TWOJ_LOGIN_BREVO" `
-  email.smtp_pass="TWOJ_KLUCZ_SMTP_BREVO" `
-  email.smtp_secure="false" `
-  email.from="Turniejomat <noreply@turniejomat.pl>" `
-  email.reply_to="admin@turniejomat.pl"
-```
-
-Lub skrypt (czyta zmienne środowiskowe):
+Hasło SMTP jako secret; pozostałe pola w `functions/.env.turniejprosaas`:
 
 ```powershell
 $env:SMTP_HOST="smtp-relay.brevo.com"
 $env:SMTP_PORT="587"
-$env:SMTP_USER="..."
-$env:SMTP_PASS="..."
+$env:SMTP_USER="TWOJ_LOGIN_BREVO"
+$env:SMTP_PASS="TWOJ_KLUCZ_SMTP_BREVO"
+$env:SMTP_SECURE="false"
 $env:SMTP_FROM="Turniejomat <noreply@turniejomat.pl>"
+$env:SMTP_REPLY_TO="admin@turniejomat.pl"
 node scripts/setup-email-config.mjs
+```
+
+Migracja ze starego `functions:config`:
+
+```bash
+node scripts/migrate-functions-config-to-secrets.mjs
 ```
 
 ### 3. Deploy funkcji
@@ -63,13 +60,13 @@ firebase deploy --only functions
 | Secure | `true` dla 465 |
 
 ```powershell
-firebase functions:config:set `
-  email.smtp_host="smtp.o2.pl" `
-  email.smtp_port="465" `
-  email.smtp_user="admin@turniejomat.pl" `
-  email.smtp_pass="HASLO_SKRZYNKI" `
-  email.smtp_secure="true" `
-  email.from="Turniejomat <admin@turniejomat.pl>"
+$env:SMTP_HOST="smtp.o2.pl"
+$env:SMTP_PORT="465"
+$env:SMTP_USER="admin@turniejomat.pl"
+$env:SMTP_PASS="HASLO_SKRZYNKI"
+$env:SMTP_SECURE="true"
+$env:SMTP_FROM="Turniejomat <admin@turniejomat.pl>"
+node scripts/setup-email-config.mjs
 ```
 
 ⚠️ O2 może odrzucać połączenia z IP Google Cloud — wtedy użyj Brevo.

@@ -1,11 +1,7 @@
-const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
+const { getEmailConfig } = require('../params');
 
 const APP_URL = 'https://app.turniejomat.pl';
-
-function getEmailConfig() {
-  return functions.config().email || {};
-}
 
 function getTransporter() {
   const cfg = getEmailConfig();
@@ -84,7 +80,7 @@ async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt }) {
   const cfg = getEmailConfig();
   const transporter = getTransporter();
   if (!transporter) {
-    console.warn('Email skipped — brak konfiguracji email.smtp_* w functions config');
+    console.warn('Email skipped — brak konfiguracji SMTP (SMTP_HOST, SMTP_USER, SMTP_PASS)');
     return { sent: false, reason: 'not_configured' };
   }
 

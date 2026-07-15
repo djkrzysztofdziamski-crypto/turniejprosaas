@@ -1,8 +1,13 @@
-const functions = require('firebase-functions');
 const { getProduct, resolveProductId } = require('../catalog');
+const {
+  getStripeSecretKey,
+  getStripeWebhookSecret,
+  getPaymentMethodTypes,
+  getAppUrls,
+} = require('../../params');
 
 function getStripeClient() {
-  const stripeSecretKey = functions.config().stripe?.secret_key;
+  const stripeSecretKey = getStripeSecretKey();
   if (!stripeSecretKey) return null;
   return require('stripe')(stripeSecretKey);
 }
@@ -32,15 +37,6 @@ function isSessionPaid(session) {
   return session.payment_status === 'paid';
 }
 
-function getPaymentMethodTypes() {
-  const raw = functions.config().stripe?.payment_method_types;
-  if (raw) {
-    return raw.split(',').map((s) => s.trim()).filter(Boolean);
-  }
-  // p24 wymaga osobnej aktywacji w Stripe Live (Settings → Payment methods)
-  return ['card', 'blik'];
-}
-
 async function createCheckoutSession({ productId, customerEmail }) {
   const stripe = getStripeClient();
   if (!stripe) {
@@ -56,8 +52,7 @@ async function createCheckoutSession({ productId, customerEmail }) {
     throw err;
   }
 
-  const appUrl = functions.config().app?.url || 'https://app.turniejomat.pl';
-  const landingUrl = functions.config().app?.landing_url || 'https://turniejomat.pl';
+  const { appUrl, landingUrl } = getAppUrls();
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -86,7 +81,7 @@ async function createCheckoutSession({ productId, customerEmail }) {
 }
 
 function verifyWebhookEvent(req, stripe) {
-  const stripeWebhookSecret = functions.config().stripe?.webhook_secret;
+  const stripeWebhookSecret = getStripeWebhookSecret();
   const sig = req.headers['stripe-signature'];
   return stripe.webhooks.constructEvent(req.rawBody, sig, stripeWebhookSecret);
 }

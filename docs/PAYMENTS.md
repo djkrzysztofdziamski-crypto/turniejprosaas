@@ -67,19 +67,32 @@ Przelewy24: `?provider=p24` → **501** (placeholder).
 
 ## Konfiguracja produkcyjna
 
-### Stripe
+> **Od 2026:** zamiast `firebase functions:config:set` używamy **Secret Manager** + pliku `functions/.env.turniejprosaas` (parametry `defineString` / `defineSecret`).
+
+### Migracja z legacy config
+
+Jeśli masz stare `functions:config`:
 
 ```bash
-firebase functions:config:set \
-  stripe.secret_key="sk_live_..." \
-  stripe.webhook_secret="whsec_..."
+node scripts/migrate-functions-config-to-secrets.mjs
+cd functions && npm install
+firebase deploy --only functions
 ```
 
-Opcjonalnie metody płatności (domyślnie `card,blik` — bez P24 do czasu aktywacji w Stripe Live):
+### Stripe (Secret Manager)
 
 ```bash
-firebase functions:config:set stripe.payment_method_types="card,blik,p24"
+firebase functions:secrets:set STRIPE_SECRET_KEY
+firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
 ```
+
+Opcjonalnie metody płatności w `functions/.env.turniejprosaas`:
+
+```
+STRIPE_PAYMENT_METHOD_TYPES=card,blik,p24
+```
+
+Domyślnie: `card,blik` (bez P24 do czasu aktywacji w Stripe Live).
 
 P24 w Live: **Stripe Dashboard → Settings → Payment methods → Przelewy24 → Enable**.
 
@@ -89,30 +102,29 @@ Webhook w Stripe Dashboard:
 
 ### Email z kluczem (SMTP)
 
-Szczegóły: **[docs/EMAIL.md](EMAIL.md)** (Brevo — rekomendowane, O2 — alternatywa).
+Szczegóły: **[docs/EMAIL.md](EMAIL.md)**.
 
-```bash
-firebase functions:config:set \
-  email.smtp_host="smtp-relay.brevo.com" \
-  email.smtp_port="587" \
-  email.smtp_user="..." \
-  email.smtp_pass="..." \
-  email.smtp_secure="false" \
-  email.from="Turniejomat <noreply@turniejomat.pl>" \
-  email.reply_to="admin@turniejomat.pl"
+Hasło SMTP → secret `SMTP_PASS`. Pozostałe pola → `.env.turniejprosaas` lub skrypt:
+
+```powershell
+$env:SMTP_HOST="smtp-relay.brevo.com"
+$env:SMTP_USER="..."
+$env:SMTP_PASS="..."
+node scripts/setup-email-config.mjs
 ```
 
 Bez konfiguracji email — webhook nadal wydaje licencję; w adminie widać `Email: BRAK`. Admin może wysłać ręcznie przyciskiem **📧 WYŚLIJ**.
 
 ### URL aplikacji (opcjonalnie)
 
-```bash
-firebase functions:config:set \
-  app.url="https://app.turniejomat.pl" \
-  app.landing_url="https://turniejomat.pl"
+W `functions/.env.turniejprosaas`:
+
+```
+APP_URL=https://app.turniejomat.pl
+APP_LANDING_URL=https://turniejomat.pl
 ```
 
-Po zmianie configu:
+Po zmianie parametrów:
 
 ```bash
 cd functions && npm install
