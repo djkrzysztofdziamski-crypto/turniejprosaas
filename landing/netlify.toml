@@ -12,7 +12,4 @@
   status = 301
   force = true
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Uwaga: pliki statyczne (np. /legal/*.html) mają pierwszeństwo przed regułami poniżej.

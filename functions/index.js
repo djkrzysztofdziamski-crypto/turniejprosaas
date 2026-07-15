@@ -14,15 +14,19 @@ const { verifyEmailTransport } = require('./lib/billing/email');
 const {
   getStripeClient,
   parseCheckoutSession,
-  createCheckoutSession,
+  createCheckoutSession: createStripeCheckoutSession,
   verifyWebhookEvent,
   isSessionPaid,
 } = require('./lib/billing/providers/stripe');
+const { createAutopayPayment, handleAutopayItn } = require('./lib/billing/providers/autopay');
 const { generateAssistantToken, assistantSaveMatch } = require('./lib/assistant');
 const {
   billingSecrets,
   emailSecrets,
   stripeSecrets,
+  autopaySecrets,
+  autopayWebhookSecrets,
+  getPaymentProvider,
   getStripeSecretKey,
   getStripeWebhookSecret,
 } = require('./lib/params');
@@ -36,6 +40,24 @@ function toHttpsError(err) {
   const allowed = ['invalid-argument', 'not-found', 'failed-precondition', 'permission-denied'];
   const code = allowed.includes(err.code) ? err.code : 'internal';
   return new functions.https.HttpsError(code, err.message || 'Błąd serwera.');
+}
+
+function resolveWebhookProvider(req) {
+  const explicit = String(req.query.provider || req.headers['x-payment-provider'] || '').toLowerCase();
+  if (explicit) return explicit;
+  if (req.headers['stripe-signature']) return 'stripe';
+  const body = req.body || {};
+  if (body.transactions || body.Transactions) return 'autopay';
+  return getPaymentProvider();
+}
+
+function requireCheckoutConsent(data) {
+  if (!data?.termsAccepted || !data?.withdrawalConsent) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'Wymagana akceptacja regulaminów przed płatnością.',
+    );
+  }
 }
 
 exports.activateLicense = functions.region(region).https.onCall(async (data, context) => {
@@ -56,7 +78,7 @@ exports.getProductCatalog = functions.region(region).https.onCall(async () => {
 });
 
 exports.createCheckoutSession = functions
-  .runWith({ secrets: stripeSecrets })
+  .runWith({ secrets: [...autopaySecrets, ...stripeSecrets] })
   .region(region)
   .https.onCall(async (data) => {
     const productId = String(data?.productId || '').trim();
@@ -66,8 +88,19 @@ exports.createCheckoutSession = functions
       throw new functions.https.HttpsError('invalid-argument', 'Wymagane productId.');
     }
 
+    requireCheckoutConsent(data);
+
     try {
-      return await createCheckoutSession({ productId, customerEmail });
+      const provider = getPaymentProvider();
+      const consent = {
+        termsAccepted: data.termsAccepted === true,
+        withdrawalConsent: data.withdrawalConsent === true,
+        termsVersion: String(data?.termsVersion || '').trim() || null,
+      };
+      if (provider === 'stripe') {
+        return await createStripeCheckoutSession({ productId, customerEmail, ...consent });
+      }
+      return await createAutopayPayment(db, { productId, customerEmail, ...consent });
     } catch (err) {
       console.error('createCheckoutSession error:', err.type || err.code, err.message);
       throw toHttpsError(err);
@@ -125,7 +158,7 @@ exports.assistantSaveMatch = functions.region(region).https.onCall(async (data) 
 });
 
 exports.paymentWebhook = functions
-  .runWith({ secrets: billingSecrets })
+  .runWith({ secrets: [...autopayWebhookSecrets, ...billingSecrets] })
   .region(region)
   .https.onRequest(async (req, res) => {
     if (req.method !== 'POST') {
@@ -133,12 +166,24 @@ exports.paymentWebhook = functions
       return;
     }
 
-    const provider = String(req.query.provider || req.headers['x-payment-provider'] || 'stripe').toLowerCase();
+    const provider = resolveWebhookProvider(req);
+
+    if (provider === 'autopay') {
+      try {
+        const result = await handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure);
+        if (result.contentType) res.set('Content-Type', result.contentType);
+        res.status(result.status).send(result.body);
+      } catch (err) {
+        console.error('Autopay ITN error:', err);
+        res.status(500).send('ITN handler failed');
+      }
+      return;
+    }
 
     if (provider === 'p24' || provider === 'przelewy24') {
       res.status(501).json({
         error: 'Not implemented',
-        message: 'Przelewy24: patrz docs/PAYMENTS.md',
+        message: 'Przelewy24 bezpośrednio — użyj Autopay (obsługuje BLIK i przelewy).',
       });
       return;
     }

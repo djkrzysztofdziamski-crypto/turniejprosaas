@@ -1,6 +1,6 @@
 # Email z kluczem licencyjnym — Turniejomat
 
-Po płatności Stripe webhook wywołuje `sendLicenseEmail()` — klient dostaje klucz na adres podany przy checkout.
+Po płatności (Autopay ITN lub Stripe webhook) wywoływane jest `sendLicenseEmail()` — klient dostaje klucz na adres podany przy checkout.
 
 ---
 

@@ -15,13 +15,13 @@ Repo: ten sam co aplikacja (`turniejprosaas`), branch `main`.
 
 Po pushu na `main` Netlify powinien sam zdeployować landing, jeśli site ma ustawiony base directory `landing`.
 
-## Checkout (Stripe test)
+## Checkout (Autopay)
 
 1. Wejdź na https://turniejomat.pl/#cennik
 2. Wpisz email → **Zamów pakiet weekendowy**
-3. Stripe test: karta `4242 4242 4242 4242`, dowolna data CVV
-4. Po płatności → `app.turniejomat.pl/?checkout=success`
-5. Klucz w **admin** → Zamówienia online + Licencje (auto-aktywny)
+3. Przekierowanie na bramkę Autopay (test: `testpay.autopay.eu` jeśli skonfigurowane)
+4. Po płatności → powrót na stronę skonfigurowaną w panelu Autopay (np. `app.turniejomat.pl/?checkout=success`)
+5. Klucz w **admin** → Zamówienia online + Licencje (auto-aktywny po ITN)
 
 Smoke test z CLI (z root repo):
 
@@ -32,5 +32,6 @@ node scripts/qa-landing-checkout.mjs
 ## Pliki
 
 - `index.html` — strona + `createCheckoutSession`
-- `_headers` — CSP (Firebase callable)
+- `legal/` — regulaminy i polityka prywatności (HTML)
+- `_headers` — CSP (Firebase callable, Autopay form-action)
 - `netlify.toml` — redirect www → apex

@@ -168,7 +168,7 @@
         .price-list li { padding: 8px 0; border-bottom: 1px solid rgba(72,101,129,0.4); font-size: 14px; color: var(--text-muted); }
         .price-list li:last-child { border-bottom: none; }
         .price-card .btn { width: 100%; }
-        .price-card .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+        .price-card .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
         .price-note { font-size: 12px; color: var(--text-soft); margin-top: 24px; max-width: 560px; margin-left: auto; margin-right: auto; }
         .checkout-fallback { display: block; margin-top: 10px; font-size: 12px; color: var(--text-soft); text-align: center; }
         .checkout-fallback a { color: #57d9a3; font-weight: 700; }
@@ -195,6 +195,42 @@
         }
         .checkout-email-wrap input:focus { outline: none; border-color: #57d9a3; }
         .checkout-email-wrap p { margin: 10px 0 0; font-size: 12px; color: var(--text-soft); line-height: 1.45; }
+        .checkout-consent-wrap {
+            max-width: 560px;
+            margin: 0 auto 24px;
+            text-align: left;
+        }
+        .checkout-consent {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin: 0 0 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.45;
+            cursor: pointer;
+        }
+        .checkout-consent input {
+            margin-top: 3px;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            accent-color: #57d9a3;
+            cursor: pointer;
+        }
+        .checkout-consent a { color: #57d9a3; font-weight: 700; }
+        .checkout-autopay-note {
+            max-width: 560px;
+            margin: 0 auto 20px;
+            padding: 12px 14px;
+            font-size: 12px;
+            line-height: 1.45;
+            color: var(--text-soft);
+            background: rgba(87, 217, 163, 0.08);
+            border: 1px solid rgba(87, 217, 163, 0.25);
+            border-radius: 8px;
+            text-align: left;
+        }
         .checkout-trust { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; font-size: 12px; color: var(--text-soft); }
         .checkout-trust span { display: inline-flex; align-items: center; gap: 6px; }
 
@@ -350,7 +386,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
 <section class="section" id="cennik">
     <div class="wrap center">
         <h2>Prosty cennik na sezon 2026</h2>
-        <p class="lead">Dwa pakiety. Bez ukrytych opłat. Ceny brutto — faktura VAT na życzenie.</p>
+        <p class="lead">Dwa pakiety. Bez ukrytych opłat. Ceny brutto — dokument potwierdzający zakup na życzenie.</p>
 
         <div class="pricing-toggle" aria-hidden="true">
             <span class="active">Płatność za turniej</span>
@@ -360,8 +396,25 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
         <div class="checkout-email-wrap">
             <label for="checkout-email">Email do wysyłki klucza licencyjnego</label>
             <input type="email" id="checkout-email" name="email" placeholder="np. twoj@email.pl" autocomplete="email" inputmode="email" required>
-            <p>Po opłaceniu otrzymasz klucz na ten adres i od razu wejdziesz do aplikacji. Płatność obsługuje Stripe (karta, BLIK).</p>
+            <p>Po opłaceniu otrzymasz klucz na ten adres i od razu wejdziesz do aplikacji.</p>
         </div>
+
+        <div class="checkout-consent-wrap" id="checkout-consent">
+            <label class="checkout-consent" for="checkout-terms">
+                <input type="checkbox" id="checkout-terms" name="terms">
+                <span>Akceptuję <a href="legal/regulamin-uslug-platnych.html" target="_blank" rel="noopener">Regulamin Usług Płatnych</a> oraz <a href="legal/regulamin-serwisu.html" target="_blank" rel="noopener">Regulamin Serwisu</a>. Zapoznałem/am się z <a href="legal/polityka-prywatnosci.html" target="_blank" rel="noopener">Polityką Prywatności</a>.</span>
+            </label>
+            <label class="checkout-consent" for="checkout-withdrawal">
+                <input type="checkbox" id="checkout-withdrawal" name="withdrawal">
+                <span>Wyrażam zgodę na rozpoczęcie świadczenia usługi cyfrowej przed upływem 14 dni od zawarcia umowy i przyjmuję do wiadomości, że może to skutkować utratą prawa odstąpienia zgodnie z Regulaminem Usług Płatnych.</span>
+            </label>
+        </div>
+
+        <p class="checkout-autopay-note">
+            Płatności online obsługuje <strong style="color:#fff;">Autopay S.A.</strong> (operator płatności).
+            Dane płatnicze (BLIK, karta, przelew) podajesz bezpośrednio na bezpiecznej stronie Autopay —
+            Turniejomat nie przechowuje danych kart płatniczych.
+        </p>
 
         <div class="pricing-grid">
 
@@ -379,7 +432,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
                     <li>✅ Generowanie raportu PDF po turnieju</li>
                     <li>✅ 1 turniej = 1 licencja</li>
                 </ul>
-                <button type="button" class="btn btn-secondary" data-checkout-product="football-weekend" onclick="startCheckout('football-weekend', this)">Zamów pakiet weekendowy</button>
+                <button type="button" class="btn btn-secondary" data-checkout-product="football-weekend" onclick="startCheckout('football-weekend', this)" disabled>Zamów pakiet weekendowy</button>
                 <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Pakiet%20Weekendowy%2079%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
@@ -397,7 +450,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
                     <li>✅ Opłaca się od <strong>2 turniejów miesięcznie</strong></li>
                     <li>✅ Priorytetowe wsparcie w weekendy</li>
                 </ul>
-                <button type="button" class="btn btn-primary" data-checkout-product="football-month" onclick="startCheckout('football-month', this)">Zamów abonament miesięczny</button>
+                <button type="button" class="btn btn-primary" data-checkout-product="football-month" onclick="startCheckout('football-month', this)" disabled>Zamów abonament miesięczny</button>
                 <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Abonament%20Miesi%C4%99czny%20149%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
@@ -406,7 +459,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
         <p id="checkout-error" role="alert"></p>
 
         <div class="checkout-trust" aria-hidden="true">
-            <span>🔒 Bezpieczna płatność Stripe</span>
+            <span>🔒 Bezpieczna płatność Autopay</span>
             <span>⚡ Klucz aktywny od razu</span>
             <span>📧 Potwierdzenie na email</span>
         </div>
@@ -443,6 +496,9 @@ SEKCJA 8 — STOPKA
     <div class="footer-links">
         <a href="https://demo.turniejomat.pl">Demo</a>
         <a href="https://app.turniejomat.pl">Aplikacja (mam klucz)</a>
+        <a href="legal/regulamin-serwisu.html">Regulamin serwisu</a>
+        <a href="legal/regulamin-uslug-platnych.html">Usługi płatne</a>
+        <a href="legal/polityka-prywatnosci.html">Polityka prywatności</a>
         <a href="mailto:admin@turniejomat.pl">Kontakt</a>
     </div>
     <p class="brand-footer">Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
@@ -461,6 +517,7 @@ SEKCJA 8 — STOPKA
     };
     firebase.initializeApp(firebaseConfig);
     const checkoutFn = firebase.app().functions('europe-west1').httpsCallable('createCheckoutSession');
+    const TERMS_VERSION = 'RUP-2.1/RS-1.2/PP-2.1';
 
     function showCheckoutError(msg) {
         const el = document.getElementById('checkout-error');
@@ -469,15 +526,70 @@ SEKCJA 8 — STOPKA
         el.style.display = 'block';
     }
 
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+    }
+
+    function isCheckoutReady() {
+        const emailOk = isValidEmail(document.getElementById('checkout-email')?.value);
+        const termsOk = !!document.getElementById('checkout-terms')?.checked;
+        const withdrawalOk = !!document.getElementById('checkout-withdrawal')?.checked;
+        return emailOk && termsOk && withdrawalOk;
+    }
+
+    function updateCheckoutButtons() {
+        const ready = isCheckoutReady();
+        document.querySelectorAll('[data-checkout-product]').forEach(function (btn) {
+            if (btn.textContent.indexOf('Przekierowanie') === -1) {
+                btn.disabled = !ready;
+            }
+        });
+    }
+
+    ['checkout-email', 'checkout-terms', 'checkout-withdrawal'].forEach(function (id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', updateCheckoutButtons);
+        el.addEventListener('change', updateCheckoutButtons);
+    });
+    updateCheckoutButtons();
+
+    function submitPaymentForm(payload) {
+        const form = document.createElement('form');
+        form.method = payload.method || 'POST';
+        form.action = payload.url;
+        form.acceptCharset = 'UTF-8';
+        Object.keys(payload.fields || {}).forEach(function (name) {
+            const value = payload.fields[name];
+            if (value == null || value === '') return;
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = String(value);
+            form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     window.startCheckout = async function (productId, btn) {
         const errEl = document.getElementById('checkout-error');
         if (errEl) errEl.style.display = 'none';
 
         const emailEl = document.getElementById('checkout-email');
         const email = emailEl ? emailEl.value.trim() : '';
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (!isValidEmail(email)) {
             showCheckoutError('Podaj poprawny adres email — na niego wyślemy klucz licencyjny.');
             if (emailEl) emailEl.focus();
+            return;
+        }
+
+        if (!document.getElementById('checkout-terms')?.checked) {
+            showCheckoutError('Zaakceptuj Regulamin Usług Płatnych i Regulamin Serwisu.');
+            return;
+        }
+        if (!document.getElementById('checkout-withdrawal')?.checked) {
+            showCheckoutError('Zaznacz zgodę na natychmiastowe świadczenie usługi cyfrowej (wymagane przed płatnością).');
             return;
         }
 
@@ -486,21 +598,33 @@ SEKCJA 8 — STOPKA
         if (btn) btn.textContent = 'Przekierowanie…';
 
         try {
-            const result = await checkoutFn({ productId: productId, email: email });
-            if (result.data && result.data.url) {
+            const result = await checkoutFn({
+                productId: productId,
+                email: email,
+                termsAccepted: true,
+                withdrawalConsent: true,
+                termsVersion: TERMS_VERSION,
+            });
+            const data = result.data || {};
+            if (data.provider === 'autopay' && data.url && data.fields) {
                 try { sessionStorage.setItem('tp_checkout_email', email); } catch (_) {}
-                window.location.href = result.data.url;
+                submitPaymentForm(data);
+                return;
+            }
+            if (data.url) {
+                try { sessionStorage.setItem('tp_checkout_email', email); } catch (_) {}
+                window.location.href = data.url;
                 return;
             }
             throw new Error('Brak adresu płatności.');
         } catch (err) {
             buttons.forEach(function (b) {
-                b.disabled = false;
+                b.disabled = !isCheckoutReady();
                 if (b.dataset.checkoutProduct === 'football-weekend') b.textContent = 'Zamów pakiet weekendowy';
                 if (b.dataset.checkoutProduct === 'football-month') b.textContent = 'Zamów abonament miesięczny';
             });
             const msg = (err && err.message) ? err.message : String(err);
-            if (msg.includes('failed-precondition') || msg.includes('Stripe')) {
+            if (msg.includes('failed-precondition') || msg.includes('Autopay') || msg.includes('Stripe')) {
                 showCheckoutError('Płatność online chwilowo niedostępna. Użyj linku „zamów mailowo” poniżej przycisku.');
             } else {
                 showCheckoutError('Nie udało się rozpocząć płatności. Spróbuj ponownie lub zamów mailowo.');
