@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-14T07:59:58.137Z",
+  "startedAt": "2026-07-15T08:12:30.715Z",
   "environment": {
     "port": 8080,
     "engine": "index.html initAppModule bridge"
@@ -36,7 +36,7 @@
         "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
       },
       "groupMatches": 3,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.963Z"
     },
     {
       "name": "4 drużyn / 1 grup / awans 4",
@@ -56,7 +56,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 6,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "5 drużyn / 1 grup / awans 4",
@@ -76,7 +76,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 10,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "8 drużyn / 1 grup / awans 4",
@@ -96,7 +96,7 @@
         "topGk": "BRAMKARZ 3 (DRUZYNA 3)"
       },
       "groupMatches": 28,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "8 drużyn / 2 grup / awans 4",
@@ -116,7 +116,7 @@
         "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
       },
       "groupMatches": 12,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "8 drużyn / 4 grup / awans 4",
@@ -136,7 +136,7 @@
         "topGk": "BRAMKARZ 3 (DRUZYNA 3)"
       },
       "groupMatches": 4,
-      "at": "2026-07-14T08:00:00.602Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "10 drużyn / 1 grup / awans 4",
@@ -156,7 +156,7 @@
         "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
       },
       "groupMatches": 45,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "10 drużyn / 2 grup / awans 4",
@@ -176,7 +176,7 @@
         "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
       },
       "groupMatches": 20,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "10 drużyn / 5 grup / awans 5",
@@ -196,7 +196,7 @@
         "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
       },
       "groupMatches": 5,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "12 drużyn / 1 grup / awans 4",
@@ -216,7 +216,7 @@
         "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
       },
       "groupMatches": 66,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "12 drużyn / 2 grup / awans 4",
@@ -236,7 +236,7 @@
         "topGk": "BRAMKARZ 7 (DRUZYNA 7)"
       },
       "groupMatches": 30,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "12 drużyn / 3 grup / awans 3",
@@ -256,7 +256,7 @@
         "topGk": "BRAMKARZ 12 (DRUZYNA 12)"
       },
       "groupMatches": 18,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "12 drużyn / 4 grup / awans 4",
@@ -276,7 +276,7 @@
         "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
       },
       "groupMatches": 12,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "12 drużyn / 6 grup / awans 6",
@@ -296,7 +296,7 @@
         "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
       },
       "groupMatches": 6,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "15 drużyn / 1 grup / awans 4",
@@ -316,7 +316,7 @@
         "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
       },
       "groupMatches": 105,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "15 drużyn / 3 grup / awans 3",
@@ -336,7 +336,7 @@
         "topGk": "BRAMKARZ 8 (DRUZYNA 8)"
       },
       "groupMatches": 30,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "15 drużyn / 5 grup / awans 5",
@@ -356,7 +356,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 15,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "16 drużyn / 1 grup / awans 4",
@@ -376,7 +376,7 @@
         "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
       },
       "groupMatches": 120,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "16 drużyn / 2 grup / awans 4",
@@ -396,7 +396,7 @@
         "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
       },
       "groupMatches": 56,
-      "at": "2026-07-14T08:00:00.603Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "16 drużyn / 4 grup / awans 4",
@@ -416,7 +416,7 @@
         "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
       },
       "groupMatches": 24,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.964Z"
     },
     {
       "name": "16 drużyn / 8 grup / awans 8",
@@ -436,7 +436,7 @@
         "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
       },
       "groupMatches": 8,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "16 drużyn / 4 grup / awans 8",
@@ -456,7 +456,7 @@
         "topGk": "BRAMKARZ 1 (DRUZYNA 1)"
       },
       "groupMatches": 24,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "16 drużyn / 4 grup / awans 16",
@@ -476,7 +476,7 @@
         "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
       },
       "groupMatches": 24,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "20 drużyn / 1 grup / awans 4",
@@ -496,7 +496,7 @@
         "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
       },
       "groupMatches": 190,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "20 drużyn / 2 grup / awans 4",
@@ -516,7 +516,7 @@
         "topGk": "BRAMKARZ 20 (DRUZYNA 20)"
       },
       "groupMatches": 90,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "20 drużyn / 4 grup / awans 4",
@@ -536,7 +536,7 @@
         "topGk": "BRAMKARZ 5 (DRUZYNA 5)"
       },
       "groupMatches": 40,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "20 drużyn / 5 grup / awans 5",
@@ -556,7 +556,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 30,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "20 drużyn / 10 grup / awans 8",
@@ -576,7 +576,7 @@
         "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
       },
       "groupMatches": 10,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 1 grup / awans 4",
@@ -596,7 +596,7 @@
         "topGk": "BRAMKARZ 6 (DRUZYNA 6)"
       },
       "groupMatches": 276,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 3 grup / awans 3",
@@ -616,7 +616,7 @@
         "topGk": "BRAMKARZ 12 (DRUZYNA 12)"
       },
       "groupMatches": 84,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 4 grup / awans 4",
@@ -636,7 +636,7 @@
         "topGk": "BRAMKARZ 7 (DRUZYNA 7)"
       },
       "groupMatches": 60,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 6 grup / awans 6",
@@ -656,7 +656,7 @@
         "topGk": "BRAMKARZ 5 (DRUZYNA 5)"
       },
       "groupMatches": 36,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 8 grup / awans 8",
@@ -676,7 +676,7 @@
         "topGk": "BRAMKARZ 17 (DRUZYNA 17)"
       },
       "groupMatches": 24,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "24 drużyn / 12 grup / awans 8",
@@ -696,7 +696,7 @@
         "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
       },
       "groupMatches": 12,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "27 drużyn / 1 grup / awans 4",
@@ -716,7 +716,7 @@
         "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
       },
       "groupMatches": 351,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "27 drużyn / 3 grup / awans 3",
@@ -736,7 +736,7 @@
         "topGk": "BRAMKARZ 17 (DRUZYNA 17)"
       },
       "groupMatches": 108,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "27 drużyn / 9 grup / awans 8",
@@ -756,7 +756,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 27,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "27 drużyn / 6 grup / awans 8",
@@ -776,7 +776,7 @@
         "topGk": "BRAMKARZ 2 (DRUZYNA 2)"
       },
       "groupMatches": 48,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "30 drużyn / 1 grup / awans 4",
@@ -796,7 +796,7 @@
         "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
       },
       "groupMatches": 435,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "30 drużyn / 3 grup / awans 3",
@@ -816,7 +816,7 @@
         "topGk": "BRAMKARZ 4 (DRUZYNA 4)"
       },
       "groupMatches": 135,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "30 drużyn / 5 grup / awans 5",
@@ -836,7 +836,7 @@
         "topGk": "BRAMKARZ 9 (DRUZYNA 9)"
       },
       "groupMatches": 75,
-      "at": "2026-07-14T08:00:00.604Z"
+      "at": "2026-07-15T08:12:33.965Z"
     },
     {
       "name": "30 drużyn / 6 grup / awans 6",
@@ -856,7 +856,7 @@
         "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
       },
       "groupMatches": 60,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "30 drużyn / 10 grup / awans 8",
@@ -876,7 +876,7 @@
         "topGk": "BRAMKARZ 10 (DRUZYNA 10)"
       },
       "groupMatches": 30,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "32 drużyn / 1 grup / awans 4",
@@ -896,7 +896,7 @@
         "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
       },
       "groupMatches": 496,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "32 drużyn / 4 grup / awans 4",
@@ -916,7 +916,7 @@
         "topGk": "BRAMKARZ 22 (DRUZYNA 22)"
       },
       "groupMatches": 112,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "32 drużyn / 8 grup / awans 8",
@@ -936,7 +936,7 @@
         "topGk": "BRAMKARZ 26 (DRUZYNA 26)"
       },
       "groupMatches": 48,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "36 drużyn / 1 grup / awans 4",
@@ -956,7 +956,7 @@
         "topGk": "BRAMKARZ 14 (DRUZYNA 14)"
       },
       "groupMatches": 630,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "36 drużyn / 4 grup / awans 4",
@@ -976,7 +976,7 @@
         "topGk": "BRAMKARZ 20 (DRUZYNA 20)"
       },
       "groupMatches": 144,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "36 drużyn / 6 grup / awans 6",
@@ -996,7 +996,7 @@
         "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
       },
       "groupMatches": 90,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "36 drużyn / 9 grup / awans 8",
@@ -1016,7 +1016,7 @@
         "topGk": "BRAMKARZ 11 (DRUZYNA 11)"
       },
       "groupMatches": 54,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "36 drużyn / 12 grup / awans 8",
@@ -1036,7 +1036,7 @@
         "topGk": "BRAMKARZ 13 (DRUZYNA 13)"
       },
       "groupMatches": 36,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "40 drużyn / 1 grup / awans 4",
@@ -1056,7 +1056,7 @@
         "topGk": "BRAMKARZ 25 (DRUZYNA 25)"
       },
       "groupMatches": 780,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "40 drużyn / 4 grup / awans 4",
@@ -1076,7 +1076,7 @@
         "topGk": "BRAMKARZ 18 (DRUZYNA 18)"
       },
       "groupMatches": 180,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "40 drużyn / 5 grup / awans 5",
@@ -1096,7 +1096,7 @@
         "topGk": "BRAMKARZ 18 (DRUZYNA 18)"
       },
       "groupMatches": 140,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "40 drużyn / 8 grup / awans 8",
@@ -1116,7 +1116,7 @@
         "topGk": "BRAMKARZ 24 (DRUZYNA 24)"
       },
       "groupMatches": 80,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "40 drużyn / 10 grup / awans 8",
@@ -1136,7 +1136,7 @@
         "topGk": "BRAMKARZ 16 (DRUZYNA 16)"
       },
       "groupMatches": 60,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     }
   ],
   "edgeCases": [
@@ -1151,7 +1151,7 @@
         "topScorer": "CAP\tTAB (O'Brien & Sons 'FC')",
         "topGk": "Test\\nNewline (O'Brien & Sons 'FC')"
       },
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     }
   ],
   "invariantTests": [
@@ -1160,70 +1160,70 @@
       "ok": true,
       "detail": "OK",
       "warning": true,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "renderInputs-xss-escape",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "absolute-tie-detection",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "h2h-tiebreak",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "podium-blocked-unresolved-draw",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "odd-team-bye-3",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.605Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "generujPlayoff-engine-call",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.606Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "getAdvancingTeamsFull-8",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.606Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "bracket-16-full-simulation",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.606Z"
+      "at": "2026-07-15T08:12:33.966Z"
     },
     {
       "name": "bracket-16-engine-generujPlayoff",
       "ok": true,
       "detail": "OK",
       "warning": false,
-      "at": "2026-07-14T08:00:00.606Z"
+      "at": "2026-07-15T08:12:33.966Z"
     }
   ],
   "hotSpots": [
@@ -1264,6 +1264,6 @@
     }
   ],
   "errors": [],
-  "finishedAt": "2026-07-14T08:00:00.606Z",
-  "durationSec": 2
+  "finishedAt": "2026-07-15T08:12:33.966Z",
+  "durationSec": 3
 }

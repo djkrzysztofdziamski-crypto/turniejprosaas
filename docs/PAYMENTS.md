@@ -75,8 +75,16 @@ firebase functions:config:set \
   stripe.webhook_secret="whsec_..."
 ```
 
+Opcjonalnie metody płatności (domyślnie `card,blik` — bez P24 do czasu aktywacji w Stripe Live):
+
+```bash
+firebase functions:config:set stripe.payment_method_types="card,blik,p24"
+```
+
+P24 w Live: **Stripe Dashboard → Settings → Payment methods → Przelewy24 → Enable**.
+
 Webhook w Stripe Dashboard:
-- Zdarzenie: `checkout.session.completed`
+- Zdarzenia: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`
 - Metadata sesji: `productId` (ustawiane automatycznie przez `createCheckoutSession`)
 
 ### Email z kluczem (SMTP)

@@ -52,6 +52,10 @@
 
         organizer: ['tournament-dashboard'],
 
+        live: ['nazywo'],
+
+        hall: ['hall-screen'],
+
         podium: ['podium-view']
 
     };
@@ -961,6 +965,10 @@
 
             restoreNodes(EMBED_NODES.organizer);
 
+            restoreNodes(EMBED_NODES.live);
+
+            restoreNodes(EMBED_NODES.hall);
+
             global._demoStoryOrganizerEmbed = false;
 
         } else if (activeEmbedKind === 'podium') {
@@ -1101,6 +1109,14 @@
 
         html += '<div id="demo-organizer-embed-host" class="demo-embed-app"></div>';
 
+        html += '<p class="demo-micro" style="margin-top:18px;">Na żywo — harmonogram i tabele obok siebie (desktop organizatora):</p>';
+
+        html += '<div id="demo-live-embed-host" class="demo-embed-app"></div>';
+
+        html += '<p class="demo-micro" style="margin-top:14px;">Tryb hali — widok projektora:</p>';
+
+        html += '<div id="demo-hall-embed-host" class="demo-embed-app demo-hall-embed-host"></div>';
+
         return html;
 
     }
@@ -1221,7 +1237,11 @@
 
         const s = global.calcStats();
 
-        const scorerLabel = s.scorer ? (s.scorer[0].split(' (')[0] + ' — ' + s.scorer[1] + ' bramek') : '—';
+        const scorerLabel = s.scorer
+            ? (s.scorer[0].split(' (')[0] + ' — ' + (typeof global.formatPolishGoals === 'function'
+                ? global.formatPolishGoals(s.scorer[1])
+                : (s.scorer[1] + ' bramek')))
+            : '—';
 
         const gkLabel = s.gk ? (s.gk.n + ' (' + s.gk.t + ') — ' + (s.gk.ck > 0 ? s.gk.ck + ' czyste konta' : s.gk.lost + ' straconych')) : '—';
 
@@ -1364,6 +1384,34 @@
         activeEmbedKind = 'organizer';
 
         mountNodes(EMBED_NODES.organizer, hostEl);
+
+        const liveHost = document.getElementById('demo-live-embed-host');
+
+        if (liveHost) {
+
+            mountNodes(EMBED_NODES.live, liveHost);
+
+            const nazywo = document.getElementById('nazywo');
+
+            if (nazywo) nazywo.classList.add('active');
+
+            if (global.renderFilterBar) global.renderFilterBar();
+
+            if (global.filterAndRenderMatches) global.filterAndRenderMatches();
+
+            if (global.calcTables) global.calcTables();
+
+        }
+
+        const hallHost = document.getElementById('demo-hall-embed-host');
+
+        if (hallHost) {
+
+            mountNodes(EMBED_NODES.hall, hallHost);
+
+            if (global.renderHallView) global.renderHallView();
+
+        }
 
         if (global.renderDashboard) global.renderDashboard();
 

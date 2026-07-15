@@ -164,13 +164,18 @@
         }
         #view-app header { background: var(--color-header-bg); color: var(--color-header-text); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 12px rgba(11, 31, 51, 0.15); }
         #view-app .nav-tabs { display: flex; background: var(--color-app-surface); border-bottom: 2px solid var(--color-app-border); overflow-x: auto; position: sticky; top: 52px; z-index: 999; }
-        #view-app .nav-tabs button { flex: 1; min-width: 70px; padding: 12px 2px; border: none; background: none; font-weight: 700; color: var(--color-app-text-muted); cursor: pointer; font-size: 10px; text-transform: uppercase; border-bottom: 4px solid transparent; font-family: var(--font-display); }
+        #view-app .nav-tabs button { flex: 1; min-width: 70px; padding: 12px 6px; border: none; background: none; font-weight: 700; color: var(--color-app-text-muted); cursor: pointer; font-size: var(--font-size-nav-tab, 12px); text-transform: none; border-bottom: 4px solid transparent; font-family: var(--font-display); letter-spacing: 0.01em; }
         #view-app .nav-tabs button.active { color: var(--color-accent); border-bottom-color: var(--color-accent); background: #f4f8ff; }
-        #view-app .container { max-width: 950px; margin: 15px auto; padding: 0 10px; }
-        #view-app .card { background: var(--color-app-surface); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px; border: 1px solid var(--color-app-border); box-shadow: var(--shadow-card); }
+        #view-app .nav-tabs button.nav-tab-live { color: var(--color-accent); font-weight: 800; }
+        @media (min-width: 1024px) { #view-app .nav-tabs .nav-mobile-only { display: none; } }
+        @media (max-width: 1023px) { #view-app .nav-tabs .nav-desktop-only { display: none; } }
+        #view-app .container { max-width: 1200px; margin: 15px auto; padding: 0 10px; }
+        #view-app .container.container--live { max-width: 100%; padding: 0 12px; }
+        #view-app .card { background: var(--color-app-surface); border-radius: var(--radius-panel, var(--radius-md)); padding: 12px 14px; margin-bottom: 10px; border: 1px solid var(--color-app-border); box-shadow: var(--color-glow-panel, var(--shadow-card)); }
+        #view-app .standings-group-card h4 { font-size: 12px; margin: 0 0 6px; line-height: 1.2; }
         #view-app .tab-content { display: none; }
         #view-app .tab-content.active { display: block; }
-        #view-app table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        #view-app table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: var(--font-size-table, 12px); }
         #view-app .standings-table,
         #view-demo-story .demo-embed-app .standings-table { table-layout: fixed; width: 100%; }
         #view-app .standings-table col.col-stat,
@@ -187,9 +192,264 @@
         #view-demo-story .demo-embed-app .standings-table td:first-child { text-align: left; }
         #view-app .standings-table th:not(:first-child),
         #view-app .standings-table td:not(:first-child) { text-align: center; }
-        #view-app th { background: #f4f5f7; padding: 10px; border: 1px solid #c1c7d0; font-weight: 800; }
-        #view-app td { padding: 10px; border: 1px solid #c1c7d0; text-align: center; }
-        #view-app tr:nth-child(even) { background-color: #fafbfc; }
+        #view-app th { background: var(--color-table-head-bg, #eef2ff); color: var(--color-table-head-text, #334155); padding: 5px 7px; border: 1px solid var(--color-app-border-strong, #cbd5e1); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
+        #view-app td { padding: 4px 7px; border: 1px solid var(--color-app-border); text-align: center; min-height: var(--row-height-table, 30px); box-sizing: border-box; line-height: 1.25; font-size: var(--font-size-table, 12px); }
+        #view-app tr:nth-child(even) { background-color: var(--color-app-surface-muted, #f1f5f9); }
+        /* --- Na żywo: split harmonogram + tabele --- */
+        #view-app .live-toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+        #view-app .live-toolbar-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+        #view-app .live-btn-secondary { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
+        #view-app .live-btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        #view-app .live-split { display: block; }
+        #view-app .live-split-schedule,
+        #view-app .live-split-standings { min-width: 0; }
+        #view-app .live-panel-head { font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display); }
+        #view-app .live-split-schedule.card,
+        #view-app .live-split-standings.card { padding: 10px 12px; margin-bottom: 10px; }
+        #view-app .live-split-standings .standings-group-card { margin-bottom: 6px; padding: 8px 10px; }
+        #view-app .live-split-standings .standings-group-card h4 { font-size: 11px; margin: 0 0 4px; line-height: 1.2; }
+        #view-app .live-split-standings .standings-group-card table { margin-top: 0; }
+        #view-app .live-split-standings .standings-group-card th { padding: 3px 5px; font-size: 8px; }
+        #view-app .live-split-standings .standings-group-card td { padding: 3px 5px; min-height: var(--row-height-table-compact, 26px); font-size: 11px; }
+        #view-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 6px; padding: 8px 10px; }
+        #view-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 11px; margin: 0 0 4px; }
+        #view-app .tables-render-target[data-compact="true"] table { margin-top: 0; }
+        #view-app .tables-render-target[data-compact="true"] th { padding: 3px 5px; font-size: 8px; }
+        #view-app .tables-render-target[data-compact="true"] td { padding: 3px 5px; min-height: var(--row-height-table-compact, 26px); font-size: 11px; }
+        #view-app .live-po-actions { margin-top: 8px; }
+        #view-app .live-match-table-wrap { border: 1px solid var(--color-app-border); border-radius: var(--radius-md, 10px); overflow: hidden; box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08)); background: #fff; }
+        #view-app .live-match-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0; font-family: var(--font-body); }
+        #view-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
+        #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92); padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
+        #view-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
+        #view-app .live-match-table td { padding: 3px 6px; vertical-align: middle; border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2; }
+        #view-app .live-match-table tbody tr:last-child td { border-bottom: none; }
+        #view-app .live-match-row { border-left: 3px solid #cbd5e1; transition: background 0.12s ease; }
+        #view-app .live-match-row:nth-child(even) { background: #f8fafc; }
+        #view-app .live-match-row:hover { background: #f0f6ff; }
+        #view-app .live-match-row.live-match-row--played { border-left-color: #00875a; }
+        #view-app .live-match-row.live-match-row--played:nth-child(even) { background: linear-gradient(90deg, #f6fffb 0%, #f8fafc 40%); }
+        #view-app .live-match-row.live-match-row--pending { border-left-color: #ff8b00; }
+        #view-app .live-match-no { font-family: var(--font-display); font-weight: 800; font-size: 12px; color: #42526e; font-variant-numeric: tabular-nums; line-height: 1; }
+        #view-app .live-group-badge { display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #0747a6; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2; }
+        #view-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
+        #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; max-width: 220px; }
+        #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
+        #view-app .live-match-teams .live-team-name { display: inline; }
+        #view-app .live-score-display { font-family: var(--font-display); font-weight: 800; font-size: 13px; color: #172b4d; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; line-height: 1; }
+        #view-app .live-score-inputs { display: inline-flex; align-items: center; gap: 3px; }
+        #view-app .live-score-inputs input { width: 32px; text-align: center; font-weight: 800; font-family: var(--font-display); padding: 2px 3px; border: 1px solid var(--color-app-border-strong); border-radius: 4px; font-size: 12px; color: #172b4d; line-height: 1.2; }
+        #view-app .live-score-inputs input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 2px rgba(0,82,204,0.15); }
+        #view-app .live-score-inputs > span { font-weight: 800; color: #64748b; font-size: 11px; }
+        #view-app .live-score-save { background: var(--color-accent); color: #fff; border: none; border-radius: 4px; padding: 3px 6px; font-size: 10px; font-weight: 800; cursor: pointer; font-family: var(--font-display); line-height: 1.2; }
+        #view-app .live-score-save:hover { filter: brightness(1.06); }
+        #view-app .live-status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #cbd5e1; box-shadow: inset 0 1px 1px rgba(0,0,0,0.08); }
+        #view-app .live-status-dot.is-played { background: #00875a; box-shadow: 0 0 0 1px rgba(0,135,90,0.2); }
+        #view-app .assistant-scorers-btn { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 3px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: var(--font-body); transition: border-color 0.12s, color 0.12s, background 0.12s; line-height: 1.2; }
+        #view-app .assistant-scorers-btn:hover { border-color: var(--color-accent); color: var(--color-accent); background: #f4f8ff; }
+        #view-app .assistant-scorers-btn--lead { background: #eef2ff; border-color: var(--color-accent); color: var(--color-accent); }
+        #view-app .live-score-cell { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; justify-content: center; max-width: 100%; }
+        @media (min-width: 1024px) {
+            #view-app .live-split { display: grid; grid-template-columns: 1.55fr 1fr; gap: 10px; align-items: start; }
+            #view-app .live-split-schedule,
+            #view-app .live-split-standings { max-height: calc(100vh - 210px); overflow-y: auto; padding-right: 4px; }
+        }
+        @media (max-width: 640px) {
+            #view-app .live-match-table th { font-size: 8px; padding: 4px 4px; }
+            #view-app .live-match-table td { padding: 3px 4px; font-size: 11px; }
+            #view-app .live-match-teams { max-width: 110px; font-size: 11px; }
+            #view-app .live-match-no { font-size: 11px; }
+            #view-app .assistant-scorers-btn { padding: 2px 5px; font-size: 9px; }
+        }
+        /* --- Regulamin punktacji (fan) --- */
+        #view-app .rules-box { background: #fff; border: 1px solid var(--color-app-border); box-shadow: var(--color-glow-panel, var(--shadow-card)); border-radius: var(--radius-panel, 8px); padding: 12px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; color: var(--color-app-text-muted); }
+        #view-app .rules-box strong { color: var(--color-app-text); }
+        #view-app .rules-box-title { font-weight: 800; color: var(--color-accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; font-family: var(--font-display); }
+        #view-app .rules-box { display: none; }
+        body.fan-view #view-app .rules-box { display: block; }
+        @media print {
+            body.print-live header,
+            body.print-live .nav-tabs,
+            body.print-live #tournament-dashboard,
+            body.print-live .live-toolbar,
+            body.print-live .live-po-actions,
+            body.print-live .table-order-btn,
+            body.print-live .table-save-btn,
+            body.print-live .table-reset-btn,
+            body.print-live .filter-bar { display: none !important; }
+            body.print-live #view-app,
+            body.print-live #view-app .card { background: #fff !important; box-shadow: none !important; }
+            body.print-live #nazywo { display: block !important; }
+            body.print-live .live-split { display: block !important; max-height: none !important; overflow: visible !important; }
+            body.print-live .live-split-schedule,
+            body.print-live .live-split-standings { max-height: none !important; overflow: visible !important; page-break-inside: avoid; }
+            body.print-live .live-split-standings { page-break-before: always; }
+            body.print-live table { font-size: 9pt; border: 1px solid #000; }
+            body.print-live th, body.print-live td { border: 1px solid #000; color: #000; }
+            body.print-live .live-panel-head { font-size: 11pt; border-color: #000; }
+            @page { margin: 12mm; size: A4 portrait; }
+        }
+        /* --- Tryb hali (projektor) --- */
+        body.hall-view #view-app header,
+        body.hall-view #view-app .header-organizer-actions,
+        body.hall-view #view-app #tournament-dashboard,
+        body.hall-view #view-app .nav-tabs,
+        body.hall-view #view-app .container { display: none !important; }
+        body.hall-view #view-app #hall-screen { display: block; }
+        body.hall-view #view-app { background: #fff; min-height: 100vh; }
+        #view-app #hall-screen { display: none; padding: 12px 16px 16px; }
+        #view-app .hall-header { display: flex; justify-content: space-between; align-items: center; gap: 12px 16px; flex-wrap: wrap; border-bottom: 2px solid var(--color-app-border); padding-bottom: 8px; margin-bottom: 10px; }
+        #view-app .hall-header-left { display: flex; align-items: center; gap: 12px 16px; min-width: 0; flex: 1; }
+        #view-app .brand-picture--hall { margin: 0; flex-shrink: 0; line-height: 0; }
+        #view-app .brand-picture--hall img { max-width: none; width: auto; height: clamp(36px, 4.5vw, 52px); object-fit: contain; display: block; }
+        #view-app .hall-header-main { min-width: 0; }
+        #view-app .hall-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 2.6vw, 32px); color: var(--color-app-text); line-height: 1.15; }
+        #view-app .hall-meta { font-size: 12px; color: var(--color-app-text-muted); margin-top: 2px; }
+        #view-app .hall-fs-btn { background: #fff; border: 1px solid var(--color-app-border-strong); padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        #view-app .hall-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+        #view-app .hall-panel { background: #fff; border: 1px solid var(--color-app-border); border-radius: 10px; padding: 10px 12px; box-shadow: var(--color-glow-panel, var(--shadow-card)); }
+        #view-app .hall-next-label { font-size: 11px; font-weight: 800; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+        #view-app .hall-live-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+        #view-app .hall-live-badge { display: none; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: #de350b; padding: 4px 10px; border-radius: 999px; box-shadow: 0 0 0 0 rgba(222, 53, 11, 0.45); animation: hall-live-pulse 1.6s ease-in-out infinite; }
+        #view-app .hall-live-panel.is-live .hall-live-badge { display: inline-block; }
+        #view-app .hall-live-panel.is-live { border-color: #fca5a5; box-shadow: 0 0 0 1px rgba(222, 53, 11, 0.12), 0 8px 32px rgba(222, 53, 11, 0.08); }
+        @keyframes hall-live-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(222, 53, 11, 0.45); } 50% { box-shadow: 0 0 0 8px rgba(222, 53, 11, 0); } }
+        #view-app .hall-next-meta { font-size: clamp(14px, 1.8vw, 20px); font-weight: 800; color: #0747a6; font-family: var(--font-display); margin-bottom: 8px; letter-spacing: 0.02em; }
+        #view-app .hall-next-meta.hall-next-meta--po { color: #b45309; }
+        #view-app .hall-live-board { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px 16px; margin: 6px 0 8px; }
+        #view-app .hall-live-team { min-width: 0; }
+        #view-app .hall-live-team--home { text-align: right; }
+        #view-app .hall-live-team--away { text-align: left; }
+        #view-app .hall-live-team-name { font-size: clamp(16px, 2.4vw, 28px); font-weight: 800; line-height: 1.15; word-break: break-word; color: #172b4d; }
+        #view-app .hall-live-team-name.is-leading { color: #00875a; }
+        #view-app .hall-live-score-wrap { display: flex; align-items: center; justify-content: center; gap: clamp(6px, 1.2vw, 14px); padding: 8px 12px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 12px 28px rgba(15, 23, 42, 0.28); }
+        #view-app .hall-live-digit { font-family: var(--font-display); font-size: clamp(64px, 12vw, 132px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 0.95; color: #f8fafc; letter-spacing: 0.02em; min-width: 1.1ch; text-align: center; transition: transform 0.18s ease, color 0.18s ease; }
+        #view-app .hall-live-digit.score-bump { animation: hall-score-bump 0.45s ease-out; color: #86efac; }
+        @keyframes hall-score-bump { 0% { transform: scale(1); } 35% { transform: scale(1.12); } 100% { transform: scale(1); } }
+        #view-app .hall-live-colon { font-family: var(--font-display); font-size: clamp(40px, 7vw, 72px); font-weight: 800; color: #64748b; line-height: 1; margin-top: -0.06em; }
+        #view-app .hall-live-time { font-size: clamp(13px, 1.5vw, 16px); font-weight: 700; color: #64748b; letter-spacing: 0.04em; }
+        #view-app .hall-live-empty { font-size: clamp(18px, 2.5vw, 26px); font-weight: 700; color: #94a3b8; text-align: center; padding: 28px 12px; }
+        #view-app .hall-live-panel.is-complete { border-color: #fcd34d; box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.25), 0 10px 36px rgba(255, 204, 0, 0.14); background: linear-gradient(180deg, #fffef7 0%, #ffffff 100%); }
+        #view-app .hall-complete-badge { display: none; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #172b4d; background: linear-gradient(180deg, #ffcc00 0%, #f59e0b 100%); padding: 4px 12px; border-radius: 999px; }
+        #view-app .hall-live-panel.is-complete .hall-live-badge { display: none; }
+        #view-app .hall-live-panel.is-complete .hall-complete-badge { display: inline-block; }
+        #view-app .hall-live-pen-note { text-align: center; font-size: clamp(12px, 1.4vw, 15px); font-weight: 700; color: #64748b; margin-top: 4px; }
+        #view-app .hall-podium-banner { display: grid; gap: 8px; }
+        #view-app .hall-podium-wrap { margin-top: 14px; padding-top: 14px; border-top: 2px solid #fcd34d; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(10px, 2vw, 18px); align-items: stretch; }
+        #view-app .hall-podium-awards { display: grid; gap: 8px; align-content: center; }
+        #view-app .hall-award-card { padding: 12px 14px; border-radius: 10px; background: linear-gradient(145deg, #172b4d 0%, #1e3a5f 55%, #243b53 100%); color: #f8fafc; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2); border: 1px solid rgba(255,255,255,0.1); }
+        #view-app .hall-award-card--scorer { border-left: 4px solid #38bdf8; }
+        #view-app .hall-award-card--gk { border-left: 4px solid #fbbf24; }
+        #view-app .hall-award-card-label { font-size: clamp(9px, 1vw, 11px); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(248, 250, 252, 0.72); margin-bottom: 6px; }
+        #view-app .hall-award-card-player { font-size: clamp(14px, 1.85vw, 22px); font-weight: 800; line-height: 1.2; word-break: break-word; }
+        #view-app .hall-award-card-player--ex + .hall-award-card-team { margin-bottom: 6px; }
+        #view-app .hall-award-card-player--ex:last-of-type + .hall-award-card-team { margin-bottom: 0; }
+        #view-app .hall-award-card-team { font-size: clamp(11px, 1.2vw, 14px); font-weight: 700; color: #94a3b8; margin-top: 3px; }
+        #view-app .hall-award-card-stat { font-size: clamp(10px, 1.1vw, 13px); font-weight: 800; color: #86efac; margin-top: 5px; letter-spacing: 0.02em; }
+        @media (max-width: 720px) { #view-app .hall-podium-wrap { grid-template-columns: 1fr; } }
+        #view-app .hall-podium-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: clamp(14px, 1.8vw, 20px); font-weight: 800; line-height: 1.2; }
+        #view-app .hall-podium-row--gold { background: linear-gradient(90deg, #fffbeb 0%, #fff 100%); border: 1px solid #fcd34d; color: #172b4d; }
+        #view-app .hall-podium-row--silver { background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; }
+        #view-app .hall-podium-row--bronze { background: linear-gradient(90deg, #fff7ed 0%, #fff 100%); border: 1px solid #fdba74; color: #7c2d12; }
+        #view-app .hall-podium-medal { font-size: clamp(22px, 2.8vw, 32px); line-height: 1; flex-shrink: 0; }
+        #view-app .hall-podium-label { font-size: 0.62em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.72; display: block; margin-bottom: 2px; }
+        #view-app .hall-podium-name { word-break: break-word; }
+        #view-app .hall-last-meta { font-size: clamp(12px, 1.4vw, 16px); font-weight: 700; color: #64748b; margin-bottom: 4px; }
+        #view-app .hall-po-panel { display: flex; flex-direction: column; gap: 10px; }
+        #view-app .hall-po-round { display: flex; flex-direction: column; gap: 6px; margin-bottom: 2px; }
+        #view-app .hall-po-round-title { font-size: 11px; font-weight: 800; color: #0747a6; text-transform: uppercase; letter-spacing: 0.06em; margin: 8px 0 2px; padding-bottom: 3px; border-bottom: 1px solid var(--color-app-border); }
+        #view-app .hall-po-round-title:first-child { margin-top: 0; }
+        #view-app .hall-po-panel .hall-played-card { margin-bottom: 0; }
+        #view-app .hall-played-card--compact { padding: 7px 9px; }
+        #view-app .hall-played-card--compact .hall-played-card-meta { font-size: 9px; }
+        #view-app .hall-played-card--compact .hall-played-card-time { font-size: 9px; }
+        #view-app .hall-played-card--compact .hall-played-card-row { font-size: clamp(11px, 1.15vw, 13px); padding: 2px 0; }
+        #view-app .hall-played-card--compact .hall-played-card-goals { font-size: clamp(13px, 1.4vw, 16px); }
+        #view-app .hall-played-card--micro { padding: 5px 7px; border-left-width: 3px; border-radius: 8px; box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05); }
+        #view-app .hall-played-card--micro .hall-played-card-top { margin-bottom: 4px; }
+        #view-app .hall-played-card--micro .hall-played-card-meta { font-size: 8px; letter-spacing: 0.03em; }
+        #view-app .hall-played-card--micro .hall-played-card-time { font-size: 8px; }
+        #view-app .hall-played-card--micro .hall-played-card-row { font-size: clamp(10px, 1vw, 12px); padding: 1px 0; gap: 4px; }
+        #view-app .hall-played-card--micro .hall-played-card-row + .hall-played-card-row { margin-top: 1px; padding-top: 3px; }
+        #view-app .hall-played-card--micro .hall-played-card-goals { font-size: clamp(11px, 1.2vw, 14px); }
+        #view-app .hall-played-card--pending { border-left-color: #ff8b00; background: #fffcf0; }
+        #view-app .hall-played-card--pending .hall-played-card-goals { color: #94a3b8; font-weight: 700; }
+        #view-app .hall-last { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-app-border); }
+        #view-app .hall-last-score { font-size: clamp(18px, 2.6vw, 28px); font-weight: 800; color: #00875a; line-height: 1.15; }
+        #view-app .hall-played-panel { margin-top: 10px; }
+        #view-app .hall-played-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        #view-app .hall-played-head-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+        #view-app .hall-played-toggle { font-size: 10px; font-weight: 800; letter-spacing: 0.03em; color: #0747a6; background: #eef2ff; border: 1px solid #c7d2fe; padding: 4px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; transition: background 0.15s ease; }
+        #view-app .hall-played-toggle:hover { background: #dbeafe; }
+        #view-app .hall-played-toggle--inline { font-size: inherit; padding: 0; border: none; background: none; color: #0747a6; text-decoration: underline; border-radius: 0; }
+        #view-app .hall-played-more-hint { grid-column: 1 / -1; text-align: center; font-size: 11px; font-weight: 700; color: #64748b; padding: 8px 6px 2px; }
+        #view-app .hall-played-badge { font-size: 11px; font-weight: 800; color: #00875a; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.03em; }
+        #view-app .hall-played-featured { background: #f8fafc; border: 1px dashed #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-top: 10px; margin-bottom: 0; box-shadow: none; }
+        #view-app .hall-played-featured.hall-played-featured--po { background: #fafafa; border-color: #e2e8f0; }
+        #view-app .hall-played-featured-meta { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+        #view-app .hall-played-featured-sub { font-size: 10px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+        #view-app .hall-played-featured-match { display: flex; align-items: center; justify-content: center; gap: clamp(8px, 1.5vw, 14px); flex-wrap: wrap; }
+        #view-app .hall-played-featured-team { font-size: clamp(11px, 1.25vw, 14px); font-weight: 700; color: #64748b; line-height: 1.2; word-break: break-word; max-width: 42%; }
+        #view-app .hall-played-featured-team--left { text-align: right; }
+        #view-app .hall-played-featured-team--right { text-align: left; }
+        #view-app .hall-played-featured-team.is-win { color: #059669; font-weight: 800; }
+        #view-app .hall-played-featured-score { font-family: var(--font-display); font-size: clamp(14px, 1.5vw, 17px); font-weight: 800; color: #475569; line-height: 1; letter-spacing: 0.03em; white-space: nowrap; flex-shrink: 0; }
+        #view-app .hall-played-featured-pen { display: block; font-size: 9px; font-weight: 600; color: #94a3b8; margin-top: 2px; text-align: center; letter-spacing: 0.02em; }
+        #view-app .hall-played-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; max-height: min(42vh, 420px); overflow-y: auto; padding-right: 2px; }
+        #view-app .hall-played-grid.hall-played-grid--all { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 6px; max-height: min(52vh, 620px); }
+        #view-app .hall-played-grid::-webkit-scrollbar { width: 6px; }
+        #view-app .hall-played-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+        #view-app .hall-played-card { background: #fff; border: 1px solid var(--color-app-border); border-radius: 10px; padding: 9px 11px; border-left: 4px solid #00875a; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); }
+        #view-app .hall-played-card--po { border-left-color: #f59e0b; }
+        #view-app .hall-played-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; margin-bottom: 6px; }
+        #view-app .hall-played-card-meta { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.3; flex: 1; min-width: 0; }
+        #view-app .hall-played-card-time { font-size: 10px; font-weight: 800; color: #94a3b8; white-space: nowrap; }
+        #view-app .hall-played-card-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; font-size: clamp(12px, 1.35vw, 14px); font-weight: 700; line-height: 1.25; padding: 3px 0; }
+        #view-app .hall-played-card-row + .hall-played-card-row { border-top: 1px dashed #e2e8f0; margin-top: 2px; padding-top: 5px; }
+        #view-app .hall-played-card-name { word-break: break-word; }
+        #view-app .hall-played-card-name--win { color: #00875a; font-weight: 800; }
+        #view-app .hall-played-card-goals { font-family: var(--font-display); font-size: clamp(14px, 1.6vw, 18px); font-weight: 800; color: #172b4d; min-width: 1.2em; text-align: right; }
+        #view-app .hall-played-card-goals--lose { color: #94a3b8; font-weight: 700; }
+        #view-app .hall-played-empty { text-align: center; color: #94a3b8; padding: 28px 12px; font-size: 14px; font-weight: 600; background: #f8fafc; border-radius: 10px; border: 1px dashed #e2e8f0; }
+        #view-app .hall-table-mini { font-size: clamp(11px, 1.35vw, 14px); width: 100%; margin-top: 4px; border-collapse: collapse; }
+        #view-app .hall-table-mini td, #view-app .hall-table-mini th { padding: 3px 8px; line-height: 1.2; border: 1px solid var(--color-app-border); }
+        #view-app .hall-table-mini th { background: var(--color-table-head-bg, #eef2ff); font-size: 0.85em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; }
+        #view-app .hall-panel .hall-next-label + .hall-table-mini { margin-top: 2px; }
+        #view-app .hall-panel .hall-group-block { margin-bottom: 8px; }
+        #view-app .hall-panel .hall-group-block:last-child { margin-bottom: 0; }
+        @keyframes score-flash { 0% { background: #fff9c4; } 100% { background: transparent; } }
+        #view-app .hall-flash { animation: score-flash 0.4s ease-out; }
+        @media (max-width: 900px) { #view-app .hall-grid { grid-template-columns: 1fr; } }
+        /* --- Drawer edycji kolejności tabeli --- */
+        #view-app .table-order-drawer { display: none; position: fixed; inset: 0; z-index: 2500; }
+        #view-app .table-order-drawer.is-open { display: block; }
+        #view-app .table-order-drawer-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.45); }
+        #view-app .table-order-drawer-panel { position: absolute; right: 0; top: 0; height: 100%; width: min(420px, 100%); background: #fff; box-shadow: -8px 0 32px rgba(11,31,51,0.15); padding: 18px 16px; overflow-y: auto; }
+        #view-app .table-order-drawer-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        #view-app .table-order-drawer-row { display: flex; align-items: center; gap: 8px; padding: 10px 8px; border-bottom: 1px solid var(--color-app-border); }
+        #view-app .table-order-drawer-row.is-remis { background: #fff0b3; border-left: 4px solid #ff8b00; }
+        #view-app .live-table-order-cta { margin: 10px 0 0; display: none; }
+        #view-app .live-table-order-cta button { width: 100%; background: #fff0b3; border: 1px solid #ff8b00; color: #7a4d00; padding: 10px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; }
+        /* --- Modal Udostępnij --- */
+        #view-app .share-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+        #view-app .share-tab { flex: 1; border: 1px solid var(--color-app-border); background: #f8fafc; padding: 8px 6px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
+        #view-app .share-tab.active { background: #eef2ff; border-color: var(--color-accent); color: var(--color-accent); }
+        #view-app .share-panel { display: none; text-align: center; }
+        #view-app .share-panel.active { display: block; }
+        #view-app .share-copy-btn { margin-top: 8px; background: #eef2ff; border: 1px solid #c7d2fe; color: #0052cc; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; }
+        #view-app .share-generate-btn { background: var(--color-accent); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        /* --- Tryb asystenta --- */
+        body.assistant-view #view-app header .header-organizer-actions,
+        body.assistant-view #view-app #tournament-dashboard,
+        body.assistant-view #view-app .nav-tabs,
+        body.assistant-view #view-app .container,
+        body.assistant-view #view-app #hall-screen { display: none !important; }
+        body.assistant-view #view-app #assistant-screen { display: block; }
+        body.assistant-view #view-app { background: var(--color-app-bg); min-height: 100vh; }
+        #view-app #assistant-screen { display: none; padding: 8px 12px 16px; max-width: 900px; margin: 0 auto; }
+        #view-app #assistant-screen .assistant-banner { padding: 8px 12px; font-size: 12px; margin-bottom: 8px; }
+        #view-app #assistant-screen .filter-bar { padding: 6px 8px; margin-bottom: 8px; }
+        #view-app .assistant-banner { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e3a8a; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
         #view-app .podium-main { border: 3px solid #ffcc00; border-radius: 15px; padding: 25px; text-align: center; background: white; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(255,204,0,0.2); }
         #view-app .podium-winner { font-size: 30px; font-weight: 800; color: #102a43; }
         #view-app .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 20px; align-items: flex-end; }
@@ -232,6 +492,11 @@
         #view-app .match-card.match-card--played { border-left-color: #00875a; background: linear-gradient(90deg, #f6fffb 0%, #fff 28%); }
         #view-app .match-card.match-card--pending { border-left-color: #ff8b00; }
         #view-app .match-card.match-card--po { border-left-color: #0747a6; }
+        #view-app .match-card.match-card--po-inline { display: block; }
+        #view-app .match-po-inline-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0; line-height: 1.35; }
+        #view-app .match-po-team { font-weight: bold; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+        #view-app .match-po-sep { font-weight: bold; font-size: 14px; color: #64748b; flex-shrink: 0; padding: 0 4px; }
+        #view-app .match-po-inline-line .match-score { margin-left: 8px; flex-shrink: 0; }
         #view-app .match-card.match-card--highlight { border: 2px dashed #ff8b00; background: #fffcf0; }
 
         /* --- PAKIET PREMIUM 5+: DRABINKA PLAY-OFF --- */
@@ -371,6 +636,10 @@
         #view-app .bracket-match-label.bm-label-bronze { background: #64748b; }
         #view-app .bracket-teams { font-size: clamp(8px, 1.7vw, 11px); font-weight: 700; line-height: 1.35; color: #172b4d; }
         #view-app .bracket-teams .bm-team { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #view-app .bracket-teams--inline { display: flex; flex-wrap: wrap; align-items: center; gap: 0; }
+        #view-app .bracket-teams--inline .bm-sep { color: #64748b; flex-shrink: 0; padding: 0 3px; font-weight: 700; }
+        #view-app .bracket-teams--inline .bracket-score { margin-left: 6px; margin-top: 0; flex-shrink: 0; }
+        #view-app .bracket-match.bm-grand-final .bracket-teams--inline .bm-sep { color: #94a3b8; }
         #view-app .bracket-score { display: inline-block; margin-top: 4px; font-size: clamp(10px, 2vw, 13px); font-weight: 800; background: #172b4d; color: #fff; padding: 2px 7px; border-radius: 4px; }
         #view-app .bracket-score.bm-score-live { background: #00875a; }
         #view-app .bracket-match.bm-bronze {
@@ -479,6 +748,12 @@
         #view-app .footer-sig { position: fixed; bottom: 0; left: 0; width: 100%; background: #172b4d; color: #fff; text-align: center; padding: 10px 0; font-size: 12px; z-index: 1000; letter-spacing: 0.3px; }
         #view-app .archive-item { position: relative; border-left: 4px solid #0052cc; padding: 15px; background: #fff; margin-bottom: 10px; border-radius: 4px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         #view-app .archive-item:hover { background: #f4f8ff; }
+        #view-app .archive-close-panel { margin-bottom: 16px; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--color-app-border); background: linear-gradient(145deg, #f0fdf4 0%, #fff 55%); }
+        #view-app .archive-close-panel.is-pending { background: #f8fafc; border-color: #e2e8f0; }
+        #view-app .archive-close-panel h4 { margin: 0 0 6px; font-size: 14px; color: #102a43; }
+        #view-app .archive-close-panel p { margin: 0 0 10px; font-size: 12px; color: #64748b; line-height: 1.45; }
+        #view-app .archive-close-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        #view-app .archive-close-actions .btn-main { margin: 0; flex: 1 1 200px; }
         #view-app .advancing-row { background-color: #e3fcef !important; }
         #view-app .advancing-row td:first-child { border-left: 4px solid #00875a; position: relative; }
         #view-app .absolute-remis-row { background-color: #fff0b3 !important; }
@@ -490,8 +765,8 @@
         #view-app .table-reset-btn:hover { background: #ffebe6; color: #de350b; border-color: #ffbdad; }
         #view-app .table-save-btn { background: #00875a; border: 1px solid #57d9a3; color: white; border-radius: 4px; padding: 3px 8px; font-size: 10px; cursor: pointer; font-weight: bold; float: right; margin-top: -2px; }
         #view-app .table-save-btn:hover { background: #006644; }
-        #view-app .filter-bar { display: flex; flex-wrap: wrap; gap: 6px; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #c1c7d0; margin-bottom: 12px; }
-        #view-app .filter-btn { background: #f4f5f7; border: 1px solid #c1c7d0; border-radius: 4px; padding: 8px 14px; font-size: 13px; font-weight: bold; cursor: pointer; color: #42526e; }
+        #view-app .filter-bar { display: flex; flex-wrap: wrap; gap: 5px; background: #fff; padding: 6px 8px; border-radius: 8px; border: 1px solid #c1c7d0; margin-bottom: 8px; }
+        #view-app .filter-btn { background: #f4f5f7; border: 1px solid #c1c7d0; border-radius: 4px; padding: 5px 10px; font-size: 11px; font-weight: bold; cursor: pointer; color: #42526e; line-height: 1.2; }
         #view-app .filter-btn.active { background: #0052cc; color: white; border-color: #0052cc; }
         #view-app .filter-separator { width: 1px; background: #c1c7d0; margin: 0 4px; }
         #view-app .log-container { background: #111; color: #22c55e; font-family: monospace; font-size: 11px; padding: 12px; border-radius: 6px; height: 150px; overflow-y: auto; border: 1px solid #333; margin-top: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5); }
@@ -527,6 +802,10 @@
         #view-demo-story .demo-screen[data-step="3"],
         #view-demo-story .demo-screen[data-step="5"] { max-width: 720px; }
         #view-demo-story .demo-embed-app #btn-start-po { display: none !important; }
+        #view-demo-story .demo-live-embed-host #nazywo { display: block !important; }
+        #view-demo-story .demo-live-embed-host .live-toolbar-actions { display: none !important; }
+        #view-demo-story .demo-hall-embed-host #hall-screen { display: block !important; padding: 12px; }
+        #view-demo-story .demo-hall-embed-host .hall-fs-btn { display: none !important; }
         #view-demo-story .demo-embed-app #match-filter-bar { display: none; margin-bottom: 0; }
         #view-demo-story .demo-embed-app #match-filter-bar.fan-filters-visible { display: flex !important; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
         #view-demo-story .demo-embed-app .filter-btn { pointer-events: auto !important; cursor: pointer !important; padding: 8px 12px; font-size: 12px; font-weight: 800; border-radius: 4px; border: 1px solid #c1c7d0; background: #fff; }
@@ -914,9 +1193,9 @@
             </picture>
             <span id="app-header-title" style="font-weight:800; font-family:var(--font-display);">Turniejomat</span>
             <span id="license-countdown" style="margin-left:15px; background: rgba(255,255,255,0.15); color: #ffcc00; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; letter-spacing: 0.5px;">⌛ Licencja: Sprawdzanie...</span>
-            <button id="btn-qr" onclick="showQR()" style="margin-left:10px; background:none; border:1px solid white; color:white; padding:2px 8px; border-radius:4px; cursor:pointer;">📲 QR KIBIC</button>
+            <button id="btn-qr" onclick="showShareModal('fan')" style="margin-left:10px; background:none; border:1px solid white; color:white; padding:2px 8px; border-radius:4px; cursor:pointer;">📲 Udostępnij</button>
         </div>
-        <div style="display:flex; gap:5px;">
+        <div style="display:flex; gap:5px;" class="header-organizer-actions">
             <button id="btn-freeze" onclick="freezeTournament()" style="background:#ff8b00; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">❄️ ZAMROŹ</button>
             <button id="btn-restore" onclick="restoreLastSnapshot()" disabled style="background:#0052cc; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">↩ PRZYWRÓĆ OSTATNI STAN</button>
             <button id="btn-reset" onclick="resetData()" style="background:#de350b; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">RESET</button>
@@ -925,15 +1204,75 @@
 
     <div id="tournament-dashboard"></div>
 
+    <div id="hall-screen" aria-hidden="true">
+        <div class="hall-header">
+            <div class="hall-header-left">
+                <picture class="brand-picture brand-picture--hall">
+                    <source srcset="logo.webp" type="image/webp">
+                    <img src="logo.png" class="hall-brand-logo" alt="Turniejomat — powered by TurniejPro">
+                </picture>
+                <div class="hall-header-main">
+                    <div class="hall-title" id="hall-title">Turniej</div>
+                    <div class="hall-meta" id="hall-meta"></div>
+                </div>
+            </div>
+            <button type="button" class="hall-fs-btn" onclick="requestHallFullscreen()">⛶ Pełny ekran</button>
+        </div>
+        <div class="hall-grid">
+            <div>
+                <div class="hall-panel hall-live-panel" id="hall-live-panel">
+                    <div class="hall-live-head">
+                        <span class="hall-live-badge">● LIVE</span>
+                        <span class="hall-complete-badge">🏆 Turniej zakończony</span>
+                        <span class="hall-next-label" id="hall-live-label">Mecz aktualny</span>
+                    </div>
+                    <div class="hall-next-meta" id="hall-live-meta">—</div>
+                    <div id="hall-live-body">
+                        <div class="hall-live-empty">Oczekiwanie na terminarz…</div>
+                    </div>
+                    <div class="hall-live-time" id="hall-live-time"></div>
+                </div>
+                <div class="hall-panel hall-played-panel" id="hall-played-panel">
+                    <div class="hall-played-head">
+                        <span class="hall-next-label">Mecze rozegrane</span>
+                        <div class="hall-played-head-actions">
+                            <span class="hall-played-badge" id="hall-played-count">0</span>
+                            <button type="button" class="hall-played-toggle" id="hall-played-toggle" style="display:none;" onclick="toggleHallPlayedShowAll()">Pokaż wszystkie</button>
+                        </div>
+                    </div>
+                    <div class="hall-played-grid" id="hall-played-grid"></div>
+                    <div id="hall-played-featured"></div>
+                </div>
+            </div>
+            <div class="hall-panel">
+                <div id="hall-tables"></div>
+                <div class="rules-box" style="display:block; margin-top:14px;" id="hall-rules"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="assistant-screen" aria-hidden="true">
+        <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.</div>
+        <div class="filter-bar match-filter-bar" id="assistant-match-filter-bar"></div>
+        <div id="assistant-matches-container" class="matches-render-target"></div>
+    </div>
+
     <div class="nav-tabs">
         <button class="nav-btn active" onclick="switchTab('start')">Start</button>
         <button class="nav-btn" onclick="switchTab('sklady')">Składy</button>
         <button class="nav-btn" onclick="switchTab('grupy')">Grupy</button>
-        <button class="nav-btn" onclick="switchTab('mecze')">Mecze</button>
-        <button class="nav-btn" onclick="switchTab('tabele')">Tabele</button>
+        <button class="nav-btn nav-desktop-only nav-tab-live" onclick="switchTab('nazywo')">Na żywo</button>
+        <button class="nav-btn nav-desktop-only" onclick="switchTab('mecze')">Mecze</button>
+        <button class="nav-btn nav-mobile-only" onclick="switchTab('mecze')">Mecze</button>
+        <button class="nav-btn nav-mobile-only" onclick="switchTab('tabele')">Tabele</button>
         <button class="nav-btn" onclick="switchTab('playoff')">Play-Off</button>
         <button class="nav-btn" onclick="switchTab('podium')">Podium</button>
         <button class="nav-btn" onclick="switchTab('archiwum')" style="color:#00875a;">Archiwum</button>
+    </div>
+
+    <div id="fan-rules-box" class="rules-box" aria-hidden="true">
+        <div class="rules-box-title">Regulamin punktacji</div>
+        <div id="fan-rules-content"></div>
     </div>
 
     <div class="container">
@@ -947,6 +1286,7 @@
             <div class="card" id="setup-view">
                 <h3>Konfiguracja turnieju</h3>
                 <div style="display:flex; flex-direction:column; gap:5px;">
+                    <div class="time-setting"><span style="font-weight:bold;">Nazwa turnieju:</span> <input type="text" id="tournament-name" placeholder="np. Turniej szkoły podstawowej" onchange="syncTournamentMeta('tournamentName', this.value)" style="flex:1; max-width:320px; text-align:left; font-weight:600; padding:8px 10px;"></div>
                     <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <input type="number" id="team-count" value="0"></div>
                     <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <input type="number" id="group-count" value="0"></div>
                     
@@ -999,22 +1339,49 @@
         </div>
 
         <div id="mecze" class="tab-content">
-            <div class="filter-bar" id="match-filter-bar"></div>
-            <div id="matches-container"></div>
+            <div class="filter-bar match-filter-bar" id="match-filter-bar"></div>
+            <div id="matches-container" class="matches-render-target"></div>
+        </div>
+
+        <div id="nazywo" class="tab-content">
+            <div class="container container--live">
+                <div class="live-toolbar">
+                    <div class="filter-bar match-filter-bar" id="live-match-filter-bar" style="flex:1; margin:0;"></div>
+                    <div class="live-toolbar-actions">
+                        <button type="button" class="live-btn-secondary" onclick="showShareModal('fan')">Udostępnij</button>
+                        <button type="button" class="live-btn-secondary" onclick="window.printLiveView()">Drukuj</button>
+                        <button type="button" class="live-btn-secondary" onclick="openHallView()">Tryb hali</button>
+                    </div>
+                </div>
+                <div class="live-split">
+                    <div class="live-split-schedule card">
+                        <h4 class="live-panel-head">Harmonogram meczów</h4>
+                        <div id="live-matches-container" class="matches-render-target"></div>
+                    </div>
+                    <div class="live-split-standings card">
+                        <h4 class="live-panel-head">Tabele na żywo</h4>
+                        <div id="live-tables-container" class="tables-render-target" data-compact="true"></div>
+                        <div id="live-table-order-cta" class="live-table-order-cta"></div>
+                        <div class="live-po-actions">
+                            <button class="btn-main" id="btn-start-po-live" onclick="generujPlayoff()" style="background:#00875a; width:100%;">START PLAY-OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div id="tabele" class="tab-content"><div id="tables-container"></div><button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button></div>
+        <div id="tabele" class="tab-content"><div id="tables-container" class="tables-render-target"></div><button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button></div>
         <div id="playoff" class="tab-content"><div id="playoff-container"></div></div>
 
         <div id="podium" class="tab-content">
             <div id="podium-view"></div>
-            <button class="btn-main" id="btn-pdf-final" style="background:#de350b; display:none;" onclick="exportToPDF()">📥 GENERUJ RAPORT PDF</button>
         </div>
 
         <div id="archiwum" class="tab-content">
             <div class="card">
                 <h3 style="margin-top:0;">Centrum Zapisów</h3>
                 <p style="font-size:12px; color:#666;">Zarządzaj wstrzymanymi sesjami oraz przeglądaj dawne wyniki.</p>
+                <div id="archive-close-panel" class="archive-close-panel is-pending"></div>
                 <div id="archive-list-display">Trwa ładowanie bazy...</div>
             </div>
             
@@ -1031,7 +1398,7 @@
             <span onclick="closeModal('matchModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
             <h4 id="mTitle"></h4>
             <div style="display:flex; justify-content:center; align-items:center; gap:10px;">
-                <b id="mT1"></b> <input type="number" id="mG1" oninput="checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;"> : <input type="number" id="mG2" oninput="checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;"> <b id="mT2"></b>
+                <b id="mT1"></b> <input type="number" id="mG1" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;"> : <input type="number" id="mG2" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;"> <b id="mT2"></b>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
                 <div id="sc1"></div><div id="sc2"></div>
@@ -1051,21 +1418,64 @@
         </div>
     </div>
 
-    <div id="qrModal" class="modal">
-        <div class="modal-content">
-            <span onclick="closeModal('qrModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-            <div id="qr-logo-container" style="text-align:center; margin-bottom:15px;">
+    <div id="shareModal" class="modal">
+        <div class="modal-content" style="max-width:480px;">
+            <span onclick="closeModal('shareModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
+            <div id="qr-logo-container" style="text-align:center; margin-bottom:10px;">
                 <picture class="brand-picture brand-picture--logo" style="margin:0 auto;">
                     <source srcset="logo.webp" type="image/webp">
-                    <img src="logo.png" style="max-width:130px; height:auto;" alt="Turniejomat">
+                    <img src="logo.png" style="max-width:110px; height:auto;" alt="Turniejomat">
                 </picture>
             </div>
-            <h3 style="text-align:center; margin-top:0;">Link Live dla Kibiców</h3>
-            <div id="qrImgContainer" style="margin:20px auto; text-align:center;"></div>
-            <p id="qrLinkTxt" style="font-size:12px; word-break:break-all; text-align:center; color:#0747a6; font-weight:bold;"></p>
-            <button class="btn-main" onclick="closeModal('qrModal')" style="background:#172b4d; margin-top:15px;">ZAMKNIJ QR KOD</button>
+            <h3 style="text-align:center; margin-top:0;">Udostępnij turniej</h3>
+            <div class="share-tabs">
+                <button type="button" class="share-tab active" data-share-tab="fan" onclick="switchShareTab('fan')">Kibic</button>
+                <button type="button" class="share-tab" data-share-tab="hall" onclick="switchShareTab('hall')">Hala</button>
+                <button type="button" class="share-tab" data-share-tab="assistant" onclick="switchShareTab('assistant')">Asystent</button>
+            </div>
+            <div id="share-panel-fan" class="share-panel active">
+                <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Wyniki live dla rodziców i kibiców (telefon).</p>
+                <div id="share-qr-fan" style="margin:12px auto;"></div>
+                <p id="share-url-fan" style="font-size:11px; word-break:break-all; color:#0747a6; font-weight:bold;"></p>
+                <button type="button" class="share-copy-btn" onclick="copyShareUrl('fan')">Kopiuj link</button>
+            </div>
+            <div id="share-panel-hall" class="share-panel">
+                <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Widok projektora — następny mecz i tabele.</p>
+                <div id="share-qr-hall" style="margin:12px auto;"></div>
+                <p id="share-url-hall" style="font-size:11px; word-break:break-all; color:#0747a6; font-weight:bold;"></p>
+                <button type="button" class="share-copy-btn" onclick="copyShareUrl('hall')">Kopiuj link</button>
+            </div>
+            <div id="share-panel-assistant" class="share-panel">
+                <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Drugi sędzia wpisuje wyniki bez klucza licencyjnego.</p>
+                <div id="share-assistant-loading" style="display:none; font-size:12px; color:#64748b;">Generowanie linku…</div>
+                <div id="share-assistant-ready" style="display:none;">
+                    <div id="share-qr-assistant" style="margin:12px auto;"></div>
+                    <p id="share-url-assistant" style="font-size:11px; word-break:break-all; color:#0747a6; font-weight:bold;"></p>
+                    <button type="button" class="share-copy-btn" onclick="copyShareUrl('assistant')">Kopiuj link</button>
+                </div>
+                <button type="button" id="share-generate-assistant-btn" class="share-generate-btn" onclick="ensureAssistantShareLink(true)">Generuj link asystenta</button>
+            </div>
+            <button class="btn-main" onclick="closeModal('shareModal')" style="background:#172b4d; margin-top:15px; width:100%;">Zamknij</button>
         </div>
     </div>
+
+    <div id="table-order-drawer" class="table-order-drawer" aria-hidden="true">
+        <div class="table-order-drawer-backdrop" onclick="closeTableOrderDrawer()"></div>
+        <div class="table-order-drawer-panel">
+            <div class="table-order-drawer-head">
+                <h3 style="margin:0; font-size:16px;" id="table-order-drawer-title">Edytuj kolejność</h3>
+                <button type="button" onclick="closeTableOrderDrawer()" style="border:none; background:none; font-size:22px; cursor:pointer;">&times;</button>
+            </div>
+            <p style="font-size:12px; color:#64748b; margin:0 0 12px;">Remis absolutny — ułóż drużyny strzałkami, potem zatwierdź układ.</p>
+            <div id="table-order-drawer-body"></div>
+            <div style="display:flex; gap:8px; margin-top:14px;">
+                <button type="button" class="btn-main" style="flex:1; background:#00875a;" id="table-order-drawer-confirm">✅ Zatwierdź układ</button>
+                <button type="button" class="live-btn-secondary" style="flex:1;" onclick="resetTableOrderFromDrawer()">🔄 Automat</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="qrModal" class="modal" style="display:none !important;" aria-hidden="true"></div>
 
     <div class="footer-sig brand-footer" data-brand-footer></div>
 </div>
@@ -1087,6 +1497,11 @@
     const activateLicenseCallable = cloudFunctions.httpsCallable('activateLicense');
     const resendOrderEmailCallable = cloudFunctions.httpsCallable('resendOrderEmail');
     const verifyEmailConfigCallable = cloudFunctions.httpsCallable('verifyEmailConfig');
+    const generateAssistantTokenCallable = cloudFunctions.httpsCallable('generateAssistantToken');
+    const assistantSaveMatchCallable = cloudFunctions.httpsCallable('assistantSaveMatch');
+    let cachedAssistantToken = null;
+    let tableOrderDrawerGroup = null;
+    window.inlineScoreDrafts = window.inlineScoreDrafts || {};
 
     /** Aktywny moduł sportowy tej instancji aplikacji (przyszłość: dart, pool). */
     const APP_SPORT = 'football';
@@ -1212,7 +1627,10 @@
             if (!isFanMode) showLicenseBlockedScreen('deleted');
             return;
         }
-        document.getElementById('app-header-title').innerHTML = `${BRAND.name} | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
+        const titleEl = document.getElementById('app-header-title');
+        if (titleEl && !isHallMode && !isAssistantMode && !isFanMode) {
+            titleEl.innerHTML = `${BRAND.name} | <span style="color:#ffcc00; font-weight:normal; font-size:13px;">🏢 ${esc(lic.notatka)}</span>${fanLabel}`;
+        }
         const blockReason = resolveLicenseBlockReason(lic);
         if (blockReason) {
             if (!isFanMode) showLicenseBlockedScreen(blockReason);
@@ -1303,6 +1721,14 @@
     };
     document.querySelectorAll('[data-brand-footer]').forEach(function (el) { el.innerHTML = BRAND.footer; });
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
+    let isHallMode = viewMode === 'hall';
+    let isAssistantMode = viewMode === 'assistant';
+    const assistantTokenParam = urlParams.get('token') || '';
+    window.getTournamentDbPath = () => {
+        if (archiveId) return 'archiwum/' + archiveId;
+        if (localArchiveId && activeKey) return 'turnieje_uzytkownikow/' + activeKey + '/archiwum/' + localArchiveId;
+        return 'turnieje_uzytkownikow/' + activeKey;
+    };
     let isDemoMode = false;
     const host = window.location.hostname;
     const isAppHost = host === 'app.turniejomat.pl';
@@ -1311,7 +1737,7 @@
     const APP_SITE_URL = 'https://app.turniejomat.pl';
     const LANDING_SITE_URL = 'https://turniejomat.pl';
 
-    const isAppDeepLink = !!(activeKey || archiveId || localArchiveId || viewMode === 'archive' || viewMode === 'fan');
+    const isAppDeepLink = !!(activeKey || archiveId || localArchiveId || viewMode === 'archive' || viewMode === 'fan' || viewMode === 'hall' || viewMode === 'assistant');
     if (isAdminHost && isAppDeepLink) {
         window.location.replace(APP_SITE_URL + '/' + (window.location.search || ''));
     } else if (isAdminHost) {
@@ -1856,6 +2282,9 @@
             const emailBadge = order.emailSent
                 ? '<span class="badge aktywny">WYSŁANO</span>'
                 : '<span class="badge nowy">BRAK</span>';
+            const payFailed = order.status === 'payment_failed'
+                ? '<span class="badge zablokowany" title="Płatność nieudana">PŁATNOŚĆ NIEUDANA</span>'
+                : '';
             const emailErr = order.emailError && !order.emailSent
                 ? `<span class="ord-email-error" title="${escAttr(order.emailError)}">${esc(String(order.emailError).slice(0, 32))}</span>`
                 : '';
@@ -1871,7 +2300,7 @@
                     <td class="ord-col-product"><code>${esc(order.productId || order.typ || '—')}</code></td>
                     <td class="ord-col-contact">${esc(order.customerEmail || order.notatka || '—')}</td>
                     <td class="ord-col-date">${dateStr}</td>
-                    <td class="ord-col-licstatus">${formatOrderLicenseStatusCell(order.licenseKey)}</td>
+                    <td class="ord-col-licstatus">${payFailed}${formatOrderLicenseStatusCell(order.licenseKey)}</td>
                     <td class="ord-col-mailsent"><div class="ord-email-actions">${emailBadge}${emailErr}</div></td>
                     <td class="ord-col-actions"><div class="ord-actions">${resendBtn}${delBtn}</div></td>
                 </tr>`;
@@ -1993,9 +2422,549 @@
     };
 
     window.getMatchGroupLabel = function (m, isPo) {
-        if (isPo) return 'Play-off';
+        if (isPo) return window.getPlayoffRoundLabel(m);
         return m.group ? ('Grupa ' + m.group) : '';
     };
+
+    window.isPlayoffPhase = function () {
+        return (state.playoffs || []).length > 0;
+    };
+
+    window.getPlayoffRoundLabel = function (m) {
+        const n = (m.n || '').toUpperCase();
+        if (n.includes('1/8')) return '1/8 finału';
+        if (n.includes('ĆWIERĆ')) return 'Ćwierćfinał';
+        if (n.includes('PÓŁFINAŁ')) return (m.n || 'Półfinał');
+        if (n.includes('3. MIEJSCE')) return 'Mecz o 3. miejsce';
+        if (n.includes('WIELKI FINAŁ')) return 'Wielki finał';
+        if (n.includes('FINAŁ')) return (m.n || 'Finał');
+        return m.n || 'Play-off';
+    };
+
+    window.formatHallMatchMeta = function (m, isPo) {
+        const po = !!isPo;
+        const no = window.getGlobalMatchNo(m, po);
+        const label = po ? window.getPlayoffRoundLabel(m) : (m.group ? ('Grupa ' + m.group) : '');
+        return label ? ('Mecz #' + no + ' · ' + label) : ('Mecz #' + no);
+    };
+
+    window._hallLiveScoreKey = '';
+
+    function getHallAllMatches() {
+        return [...(state.matches || []), ...(state.playoffs || []).map(m => ({ ...m, isPo: true }))];
+    }
+
+    window.resolveHallLiveScores = function (m) {
+        if (!m) return { g1: 0, g2: 0 };
+        let g1 = parseInt(m.g1, 10);
+        let g2 = parseInt(m.g2, 10);
+        if (isNaN(g1)) g1 = 0;
+        if (isNaN(g2)) g2 = 0;
+        const draft = window.inlineScoreDrafts && window.inlineScoreDrafts[m.id];
+        if (draft) {
+            if (draft.g1 !== undefined && draft.g1 !== '') g1 = parseInt(draft.g1, 10) || 0;
+            if (draft.g2 !== undefined && draft.g2 !== '') g2 = parseInt(draft.g2, 10) || 0;
+        }
+        if (state.active && state.active.id === m.id && !!state.active.isPo === !!m.isPo && !state.active.played) {
+            g1 = parseInt(state.active.g1, 10) || 0;
+            g2 = parseInt(state.active.g2, 10) || 0;
+        }
+        return { g1, g2 };
+    };
+
+    window.getHallCurrentMatch = function () {
+        const all = getHallAllMatches();
+        const pending = all.filter(m => !m.played && m.t1?.id !== -99 && m.t2?.id !== -99);
+        const meta = state.meta || {};
+        if (meta.liveMatchId) {
+            const live = all.find(m => m.id === meta.liveMatchId && !!m.isPo === !!meta.liveMatchIsPo);
+            if (live && !live.played) return live;
+        }
+        const withActivity = pending.filter(m => {
+            const sc = window.resolveHallLiveScores(m);
+            return sc.g1 > 0 || sc.g2 > 0 || (m.s1 && m.s1.length) || (m.s2 && m.s2.length);
+        });
+        if (withActivity.length) {
+            return withActivity.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))[0];
+        }
+        return pending.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))[0] || null;
+    };
+
+    function isHallMatchLive(m, scores) {
+        if (!m || m.played) return false;
+        const meta = state.meta || {};
+        if (meta.liveMatchId === m.id && !!meta.liveMatchIsPo === !!m.isPo) return true;
+        return scores.g1 > 0 || scores.g2 > 0 || (m.s1 && m.s1.length > 0) || (m.s2 && m.s2.length > 0);
+    }
+
+    function renderHallLiveBoardHTML(m, scores) {
+        const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
+        const t1Cls = lead === 't1' ? ' is-leading' : '';
+        const t2Cls = lead === 't2' ? ' is-leading' : '';
+        return '<div class="hall-live-board">' +
+            '<div class="hall-live-team hall-live-team--home"><div class="hall-live-team-name' + t1Cls + '">' + esc(m.t1.name) + '</div></div>' +
+            '<div class="hall-live-score-wrap">' +
+            '<span class="hall-live-digit" id="hall-live-g1">' + scores.g1 + '</span>' +
+            '<span class="hall-live-colon">:</span>' +
+            '<span class="hall-live-digit" id="hall-live-g2">' + scores.g2 + '</span>' +
+            '</div>' +
+            '<div class="hall-live-team hall-live-team--away"><div class="hall-live-team-name' + t2Cls + '">' + esc(m.t2.name) + '</div></div>' +
+            '</div>';
+    }
+
+    function hallFindGrandFinal() {
+        const po = state.playoffs || [];
+        return po.find(m => m.isDemoFinal) || po.find(m => /WIELKI/i.test(m.n || '') && /FINAŁ/i.test(m.n || ''));
+    }
+
+    function hallIsMatchDecided(m) {
+        if (!m || !m.played) return false;
+        if (m.g1 !== m.g2) return true;
+        const p1 = m.pen1;
+        const p2 = m.pen2;
+        return p1 != null && p2 != null && !isNaN(p1) && !isNaN(p2) && p1 !== p2;
+    }
+
+    function hallGetWinnerTeam(m) {
+        if (!hallIsMatchDecided(m)) return null;
+        if (m.g1 > m.g2) return m.t1;
+        if (m.g2 > m.g1) return m.t2;
+        return m.pen1 > m.pen2 ? m.t1 : m.t2;
+    }
+
+    function hallGetLoserTeam(m) {
+        if (!hallIsMatchDecided(m)) return null;
+        if (m.g1 > m.g2) return m.t2;
+        if (m.g2 > m.g1) return m.t1;
+        return m.pen1 > m.pen2 ? m.t2 : m.t1;
+    }
+
+    window.getHallTournamentPodium = function () {
+        const finalM = hallFindGrandFinal();
+        if (!finalM || !hallIsMatchDecided(finalM)) return null;
+        const m3 = (state.playoffs || []).find(m => (m.n || '').includes('3. MIEJSCE'));
+        const gold = hallGetWinnerTeam(finalM);
+        const silver = hallGetLoserTeam(finalM);
+        const bronze = m3 && hallIsMatchDecided(m3) ? hallGetWinnerTeam(m3) : { name: '—' };
+        return {
+            final: { ...finalM, isPo: true },
+            gold,
+            silver,
+            bronze,
+            g1: finalM.g1,
+            g2: finalM.g2,
+            pen1: finalM.pen1,
+            pen2: finalM.pen2,
+        };
+    };
+
+    function renderHallGkAwardCard(s) {
+        const winners = (typeof window.buildGoalkeepersTopRanked === 'function')
+            ? window.buildGoalkeepersTopRanked(s.allGk || [], 1)
+            : (s.gk ? [{ gk: s.gk, rank: 1, ex: false }] : []);
+        const ex = winners.length > 1;
+        const label = '🧤 Złota rękawica' + (ex ? ' · ex aequo' : '');
+        if (!winners.length) {
+            return '<div class="hall-award-card hall-award-card--gk">' +
+                '<div class="hall-award-card-label">' + label + '</div>' +
+                '<div class="hall-award-card-player">—</div></div>';
+        }
+        let body = '';
+        winners.forEach(function (row) {
+            body += '<div class="hall-award-card-player' + (ex ? ' hall-award-card-player--ex' : '') + '">' + esc(row.gk.n) + '</div>';
+            body += '<div class="hall-award-card-team">' + esc(row.gk.t) + '</div>';
+        });
+        const stat = window.formatGkStatLabel(winners[0].gk);
+        if (stat) body += '<div class="hall-award-card-stat">' + esc(stat) + '</div>';
+        return '<div class="hall-award-card hall-award-card--gk">' +
+            '<div class="hall-award-card-label">' + label + '</div>' + body + '</div>';
+    }
+
+    function renderHallAwardsPanel() {
+        if (typeof window.calcStats !== 'function') return '';
+        const s = window.calcStats();
+        const sc = (typeof window.parseScorerEntry === 'function') ? window.parseScorerEntry(s.scorer) : null;
+        const scorerName = sc && sc.name ? esc(sc.name) : '—';
+        const scorerTeam = sc && sc.team ? esc(sc.team) : '';
+        const scorerStat = (s.scorer && s.scorer[1]) ? window.formatPolishGoals(s.scorer[1]) : '';
+        return '<div class="hall-podium-awards">' +
+            '<div class="hall-award-card hall-award-card--scorer">' +
+            '<div class="hall-award-card-label">⚽ Król strzelców</div>' +
+            '<div class="hall-award-card-player">' + scorerName + '</div>' +
+            (scorerTeam ? '<div class="hall-award-card-team">' + scorerTeam + '</div>' : '') +
+            (scorerStat ? '<div class="hall-award-card-stat">' + scorerStat + '</div>' : '') +
+            '</div>' +
+            renderHallGkAwardCard(s) +
+            '</div>';
+    }
+
+    function renderHallPodiumBanner(podium) {
+        const row = (cls, medal, label, team) =>
+            '<div class="hall-podium-row hall-podium-row--' + cls + '">' +
+            '<span class="hall-podium-medal">' + medal + '</span>' +
+            '<div><span class="hall-podium-label">' + label + '</span>' +
+            '<span class="hall-podium-name">' + esc(team && team.name ? team.name : '—') + '</span></div></div>';
+        return '<div class="hall-podium-wrap">' +
+            '<div class="hall-podium-banner">' +
+            row('gold', '🥇', 'Zwycięzca turnieju', podium.gold) +
+            row('silver', '🥈', '2. miejsce', podium.silver) +
+            row('bronze', '🥉', '3. miejsce', podium.bronze) +
+            '</div>' +
+            renderHallAwardsPanel() +
+            '</div>';
+    }
+
+    function renderHallCompleteBoardHTML(podium) {
+        const m = podium.final;
+        const scores = { g1: podium.g1, g2: podium.g2 };
+        const goldName = podium.gold && podium.gold.name;
+        const t1Win = m.t1 && m.t1.name === goldName ? ' is-leading' : '';
+        const t2Win = m.t2 && m.t2.name === goldName ? ' is-leading' : '';
+        let penNote = '';
+        if (podium.pen1 != null && podium.pen2 != null) {
+            penNote = '<div class="hall-live-pen-note">Po rzutach karnych: ' + podium.pen1 + ':' + podium.pen2 + '</div>';
+        }
+        return '<div class="hall-live-board">' +
+            '<div class="hall-live-team hall-live-team--home"><div class="hall-live-team-name' + t1Win + '">' + esc(m.t1.name) + '</div></div>' +
+            '<div class="hall-live-score-wrap">' +
+            '<span class="hall-live-digit" id="hall-live-g1">' + scores.g1 + '</span>' +
+            '<span class="hall-live-colon">:</span>' +
+            '<span class="hall-live-digit" id="hall-live-g2">' + scores.g2 + '</span>' +
+            '</div>' +
+            '<div class="hall-live-team hall-live-team--away"><div class="hall-live-team-name' + t2Win + '">' + esc(m.t2.name) + '</div></div>' +
+            '</div>' + penNote + renderHallPodiumBanner(podium);
+    }
+
+    function renderHallCompletePanel(podium) {
+        const panel = document.getElementById('hall-live-panel');
+        const metaEl = document.getElementById('hall-live-meta');
+        const bodyEl = document.getElementById('hall-live-body');
+        const timeEl = document.getElementById('hall-live-time');
+        const labelEl = document.getElementById('hall-live-label');
+        if (!panel || !bodyEl) return;
+
+        panel.classList.remove('is-live');
+        panel.classList.add('is-complete');
+        if (labelEl) labelEl.textContent = 'Wielki finał — wynik końcowy';
+        if (metaEl) {
+            metaEl.textContent = window.formatHallMatchMeta(podium.final, true);
+            metaEl.className = 'hall-next-meta hall-next-meta--po';
+        }
+        if (timeEl) {
+            timeEl.textContent = podium.final.time
+                ? ('Godzina finału: ' + podium.final.time)
+                : 'Gratulacje dla wszystkich drużyn!';
+        }
+        bodyEl.innerHTML = renderHallCompleteBoardHTML(podium);
+        window._hallLiveScoreKey = 'complete:' + podium.g1 + ':' + podium.g2;
+    }
+
+    function renderHallLivePanel(current) {
+        const panel = document.getElementById('hall-live-panel');
+        const metaEl = document.getElementById('hall-live-meta');
+        const bodyEl = document.getElementById('hall-live-body');
+        const timeEl = document.getElementById('hall-live-time');
+        const labelEl = document.getElementById('hall-live-label');
+        if (!panel || !bodyEl) return;
+
+        const podium = window.getHallTournamentPodium();
+        if (podium) {
+            renderHallCompletePanel(podium);
+            return;
+        }
+
+        panel.classList.remove('is-complete');
+
+        if (!current) {
+            panel.classList.remove('is-live');
+            if (metaEl) { metaEl.textContent = '—'; metaEl.className = 'hall-next-meta'; }
+            if (labelEl) labelEl.textContent = 'Mecz aktualny';
+            bodyEl.innerHTML = '<div class="hall-live-empty">Brak zaplanowanych meczów</div>';
+            if (timeEl) timeEl.textContent = '';
+            window._hallLiveScoreKey = '';
+            return;
+        }
+
+        const scores = window.resolveHallLiveScores(current);
+        const live = isHallMatchLive(current, scores);
+        const scoreKey = current.id + ':' + (current.isPo ? 'po' : 'gr') + ':' + scores.g1 + ':' + scores.g2;
+        const prevKey = window._hallLiveScoreKey || '';
+        const scoreChanged = prevKey && prevKey !== scoreKey && prevKey.startsWith(String(current.id) + ':');
+        window._hallLiveScoreKey = scoreKey;
+
+        panel.classList.toggle('is-live', live);
+        if (labelEl) labelEl.textContent = live ? 'Mecz na żywo' : 'Mecz aktualny';
+        if (metaEl) {
+            metaEl.textContent = window.formatHallMatchMeta(current, current.isPo);
+            metaEl.className = 'hall-next-meta' + (current.isPo ? ' hall-next-meta--po' : '');
+        }
+        if (timeEl) timeEl.textContent = current.time ? ('Godzina meczu: ' + current.time) : '';
+
+        const g1El = document.getElementById('hall-live-g1');
+        const g2El = document.getElementById('hall-live-g2');
+        const sameMatch = prevKey.startsWith(String(current.id) + ':');
+        if (g1El && g2El && sameMatch) {
+            g1El.textContent = String(scores.g1);
+            g2El.textContent = String(scores.g2);
+            if (scoreChanged) {
+                const bump = (el) => { el.classList.remove('score-bump'); void el.offsetWidth; el.classList.add('score-bump'); };
+                if (prevKey.split(':')[2] !== String(scores.g1)) bump(g1El);
+                if (prevKey.split(':')[3] !== String(scores.g2)) bump(g2El);
+            }
+            const t1 = bodyEl.querySelector('.hall-live-team--home .hall-live-team-name');
+            const t2 = bodyEl.querySelector('.hall-live-team--away .hall-live-team-name');
+            const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
+            if (t1) t1.className = 'hall-live-team-name' + (lead === 't1' ? ' is-leading' : '');
+            if (t2) t2.className = 'hall-live-team-name' + (lead === 't2' ? ' is-leading' : '');
+        } else {
+            bodyEl.innerHTML = renderHallLiveBoardHTML(current, scores);
+        }
+    }
+
+    window.clearHallLiveMatchMeta = function () {
+        if (!state.meta) return;
+        delete state.meta.liveMatchId;
+        delete state.meta.liveMatchIsPo;
+    };
+
+    window.pushLiveMatchScores = function (matchId, isPo, g1, g2, s1, s2) {
+        matchId = parseInt(matchId, 10);
+        isPo = !!isPo;
+        g1 = parseInt(g1, 10) || 0;
+        g2 = parseInt(g2, 10) || 0;
+        const arr = isPo ? (state.playoffs || []) : (state.matches || []);
+        const idx = arr.findIndex(x => x.id === matchId);
+        if (idx < 0) return;
+        if (!state.meta) state.meta = {};
+        state.meta.liveMatchId = matchId;
+        state.meta.liveMatchIsPo = isPo;
+        const patch = { g1, g2, played: false };
+        if (Array.isArray(s1)) patch.s1 = s1;
+        if (Array.isArray(s2)) patch.s2 = s2;
+        arr[idx] = { ...arr[idx], ...patch };
+        if (isAssistantMode) {
+            window.persistMatchViaAssistant({
+                matchId, isPo, g1, g2,
+                s1: s1 || arr[idx].s1 || [],
+                s2: s2 || arr[idx].s2 || [],
+                live: true,
+            }).then(() => { if (isHallMode) window.renderHallView(); });
+            return;
+        }
+        if (isFanMode || isHallMode || isDemoMode || !activeKey) return;
+        window.save();
+    };
+
+    window.pushLiveMatchFromActive = function () {
+        if (!state.active || state.active.played) return;
+        window.pushLiveMatchScores(
+            state.active.id,
+            !!state.active.isPo,
+            state.active.g1,
+            state.active.g2,
+            state.active.s1 || [],
+            state.active.s2 || []
+        );
+    };
+
+    let _liveDraftTimers = {};
+    window.scheduleLiveDraftPush = function (matchId) {
+        if (isFanMode || isHallMode || isDemoMode) return;
+        clearTimeout(_liveDraftTimers[matchId]);
+        _liveDraftTimers[matchId] = setTimeout(() => {
+            const draft = (window.inlineScoreDrafts && window.inlineScoreDrafts[matchId]) || {};
+            const all = getHallAllMatches();
+            const m = all.find(x => x.id === matchId);
+            if (!m || m.played) return;
+            const g1 = draft.g1 !== undefined && draft.g1 !== '' ? (parseInt(draft.g1, 10) || 0) : (parseInt(m.g1, 10) || 0);
+            const g2 = draft.g2 !== undefined && draft.g2 !== '' ? (parseInt(draft.g2, 10) || 0) : (parseInt(m.g2, 10) || 0);
+            if (g1 === 0 && g2 === 0) return;
+            window.pushLiveMatchScores(matchId, !!m.isPo, g1, g2, m.s1 || [], m.s2 || []);
+        }, 700);
+    };
+
+    function hallMatchWinnerSide(m) {
+        if (!m || !m.played) return null;
+        if (m.pen1 != null && m.pen2 != null) {
+            if (m.pen1 > m.pen2) return 't1';
+            if (m.pen2 > m.pen1) return 't2';
+        }
+        if (m.g1 > m.g2) return 't1';
+        if (m.g2 > m.g1) return 't2';
+        return null;
+    }
+
+    function renderHallPlayedFeatured(m) {
+        const win = hallMatchWinnerSide(m);
+        const poCls = m.isPo ? ' hall-played-featured--po' : '';
+        const t1Win = win === 't1' ? ' is-win' : '';
+        const t2Win = win === 't2' ? ' is-win' : '';
+        let scoreTxt = m.g1 + ':' + m.g2;
+        if (m.pen1 != null) scoreTxt += '<span class="hall-played-featured-pen">k. ' + m.pen1 + ':' + m.pen2 + '</span>';
+        return '<div class="hall-played-featured' + poCls + '">' +
+            '<div class="hall-played-featured-meta">Ostatni wynik</div>' +
+            '<div class="hall-played-featured-sub">' + esc(window.formatHallMatchMeta(m, m.isPo)) + ' · ' + esc(m.time || '—') + '</div>' +
+            '<div class="hall-played-featured-match">' +
+            '<span class="hall-played-featured-team hall-played-featured-team--left' + t1Win + '">' + esc(m.t1.name) + '</span>' +
+            '<span class="hall-played-featured-score">' + scoreTxt + '</span>' +
+            '<span class="hall-played-featured-team hall-played-featured-team--right' + t2Win + '">' + esc(m.t2.name) + '</span>' +
+            '</div></div>';
+    }
+
+    function renderHallMatchCard(m, opts) {
+        opts = opts || {};
+        const isPo = opts.isPo === true || m.isPo === true;
+        const compact = opts.compact === true;
+        const micro = opts.micro === true;
+        const pending = !m.played;
+        const win = pending ? null : hallMatchWinnerSide(m);
+        const poCls = isPo ? ' hall-played-card--po' : '';
+        const compactCls = compact ? ' hall-played-card--compact' : '';
+        const microCls = micro ? ' hall-played-card--micro' : '';
+        const pendingCls = pending ? ' hall-played-card--pending' : '';
+        const t1Win = win === 't1' ? ' hall-played-card-name--win' : '';
+        const t2Win = win === 't2' ? ' hall-played-card-name--win' : '';
+        const g1Cls = win === 't2' ? ' hall-played-card-goals--lose' : '';
+        const g2Cls = win === 't1' ? ' hall-played-card-goals--lose' : '';
+        let penNote = !pending && m.pen1 != null ? ' · k. ' + m.pen1 + ':' + m.pen2 : '';
+        const g1Display = pending ? '—' : m.g1;
+        const g2Display = pending ? '—' : m.g2;
+        return '<div class="hall-played-card' + poCls + compactCls + microCls + pendingCls + '">' +
+            '<div class="hall-played-card-top">' +
+            '<div class="hall-played-card-meta">' + esc(window.formatHallMatchMeta(m, isPo)) + penNote + '</div>' +
+            '<div class="hall-played-card-time">' + esc(m.time || '—') + '</div>' +
+            '</div>' +
+            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t1Win + '">' + esc(m.t1.name) + '</span><span class="hall-played-card-goals' + g1Cls + '">' + g1Display + '</span></div>' +
+            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t2Win + '">' + esc(m.t2.name) + '</span><span class="hall-played-card-goals' + g2Cls + '">' + g2Display + '</span></div>' +
+            '</div>';
+    }
+
+    window.hallPlayedShowAll = false;
+    const HALL_PLAYED_PREVIEW = 8;
+
+    window.toggleHallPlayedShowAll = function () {
+        window.hallPlayedShowAll = !window.hallPlayedShowAll;
+        if (typeof window.renderHallView === 'function') window.renderHallView();
+    };
+
+    function renderHallPlayedCard(m, opts) {
+        opts = opts || {};
+        return renderHallMatchCard(m, {
+            isPo: !!m.isPo,
+            compact: !!opts.compact,
+            micro: !!opts.micro,
+        });
+    }
+
+    function renderHallPlayedSection(played) {
+        const countEl = document.getElementById('hall-played-count');
+        const featuredEl = document.getElementById('hall-played-featured');
+        const gridEl = document.getElementById('hall-played-grid');
+        const toggleBtn = document.getElementById('hall-played-toggle');
+        if (!featuredEl || !gridEl) return;
+        const total = played.length;
+        const showAll = !!window.hallPlayedShowAll;
+        if (countEl) countEl.textContent = total + (total === 1 ? ' mecz' : total < 5 ? ' mecze' : ' meczów');
+        if (toggleBtn) {
+            if (total > HALL_PLAYED_PREVIEW) {
+                toggleBtn.style.display = '';
+                toggleBtn.textContent = showAll ? 'Zwiń listę' : ('Pokaż wszystkie (' + total + ')');
+            } else {
+                toggleBtn.style.display = 'none';
+                window.hallPlayedShowAll = false;
+            }
+        }
+        if (!total) {
+            featuredEl.innerHTML = '';
+            featuredEl.style.display = '';
+            gridEl.className = 'hall-played-grid';
+            gridEl.innerHTML = '<div class="hall-played-empty">Brak rozegranych meczów — wyniki pojawią się tutaj na bieżąco.</div>';
+            return;
+        }
+        if (showAll) {
+            featuredEl.innerHTML = '';
+            featuredEl.style.display = 'none';
+            gridEl.className = 'hall-played-grid hall-played-grid--all';
+            gridEl.innerHTML = played.slice().reverse().map(function (m) {
+                return renderHallPlayedCard(m, { compact: true, micro: true });
+            }).join('');
+            return;
+        }
+        featuredEl.style.display = '';
+        gridEl.className = 'hall-played-grid';
+        const recent = played.slice(-HALL_PLAYED_PREVIEW).reverse();
+        featuredEl.innerHTML = renderHallPlayedFeatured(recent[0]);
+        const older = recent.slice(1);
+        let gridHTML = older.length
+            ? older.map(function (m) { return renderHallPlayedCard(m); }).join('')
+            : '';
+        if (total > HALL_PLAYED_PREVIEW) {
+            gridHTML += '<div class="hall-played-more-hint">+' + (total - HALL_PLAYED_PREVIEW) + ' wcześniejszych · <button type="button" class="hall-played-toggle hall-played-toggle--inline" onclick="toggleHallPlayedShowAll()">pokaż wszystkie</button></div>';
+        } else if (!gridHTML) {
+            gridHTML = '<div class="hall-played-empty" style="padding:14px; grid-column:1/-1;">To wszystkie dotychczasowe wyniki turnieju.</div>';
+        }
+        gridEl.innerHTML = gridHTML;
+    }
+
+    function renderHallPlayoffSidebar() {
+        const po = state.playoffs || [];
+        if (!po.length) return '';
+        const roundDefs = [
+            { title: '1/8 finału', test: n => n.includes('1/8') && !n.includes('ĆWIERĆ') },
+            { title: 'Ćwierćfinały', test: n => n.includes('ĆWIERĆ') },
+            { title: 'Półfinały', test: n => n.includes('PÓŁFINAŁ') },
+            { title: 'Mecz o 3. miejsce', test: n => n.includes('3. MIEJSCE') },
+            { title: 'Finał', test: n => (n.includes('WIELKI FINAŁ') || n.includes('FINAŁ')) && !n.includes('ĆWIERĆ') && !n.includes('1/8') },
+        ];
+        const assigned = new Set();
+        let html = '<div class="hall-po-panel"><div class="hall-next-label">Faza pucharowa</div>';
+        const renderPoRow = (m) => renderHallMatchCard(m, { isPo: true, compact: true });
+        roundDefs.forEach(rd => {
+            const ms = po.filter(m => {
+                if (assigned.has(m.id)) return false;
+                const n = (m.n || '').toUpperCase();
+                return rd.test(n);
+            });
+            if (!ms.length) return;
+            ms.forEach(m => assigned.add(m.id));
+            html += '<div class="hall-po-round"><div class="hall-po-round-title">' + rd.title + '</div>' + ms.map(renderPoRow).join('') + '</div>';
+        });
+        po.filter(m => !assigned.has(m.id)).forEach(m => { html += renderPoRow(m); });
+        html += '</div>';
+        return html;
+    }
+
+    function formatPoMatchScoreText(m) {
+        return m.played
+            ? (m.g1 + ':' + m.g2 + (m.pen1 != null ? ' (k. ' + m.pen1 + ':' + m.pen2 + ')' : ''))
+            : '-:-';
+    }
+
+    function renderPoMatchInlineBody(m, opts) {
+        opts = opts || {};
+        const scoreDisplay = formatPoMatchScoreText(m);
+        const scoreStyle = opts.scoreStyle ? ' style="' + opts.scoreStyle + '"' : '';
+        const extraAlert = opts.extraAlert || '';
+        return '<div class="match-po-inline-line">' +
+            '<span class="match-po-team" title="' + escAttr(m.t1.name) + '">' + esc(m.t1.name) + '</span>' +
+            '<span class="match-po-sep"> — </span>' +
+            '<span class="match-po-team" title="' + escAttr(m.t2.name) + '">' + esc(m.t2.name) + '</span>' +
+            ' <span class="match-score"' + scoreStyle + '>' + scoreDisplay + '</span>' +
+            extraAlert +
+            '</div>';
+    }
+
+    function renderPoMatchCardHTML(m, opts) {
+        opts = opts || {};
+        const statusCls = m.played ? 'match-card--played' : 'match-card--pending';
+        const highlightCls = opts.extraStyle ? ' match-card--highlight' : '';
+        const badge = opts.badge != null ? opts.badge : m.n;
+        return '<div class="match-card match-card--po match-card--po-inline ' + statusCls + highlightCls + '"' +
+            (opts.extraStyle ? ' ' + opts.extraStyle : '') + ' onclick="openMatch(' + m.id + ', true)">' +
+            '<span class="match-time-badge" style="background:#ff8b00;">' + esc(badge) + '</span>' +
+            renderPoMatchInlineBody(m, { scoreStyle: opts.scoreStyle || 'background:#00875a;', extraAlert: opts.extraAlert || '' }) +
+            '</div>';
+    }
 
     function renderMatchScoreBlock(m, scoreText, opts) {
         opts = opts || {};
@@ -2011,6 +2980,150 @@
 
     function renderMatchSectionHead(icon, label, extraClass) {
         return '<h3 class="match-section-head' + (extraClass ? ' ' + extraClass : '') + '">' + icon + ' ' + label + '</h3>';
+    }
+
+    function parseNonNegativeScore(raw, emptyAsZero) {
+        if (raw === null || raw === undefined) return emptyAsZero ? 0 : NaN;
+        const s = String(raw).trim();
+        if (s === '') return emptyAsZero ? 0 : NaN;
+        if (!/^\d+$/.test(s)) return NaN;
+        return parseInt(s, 10);
+    }
+
+    function readScoreFromInputEl(el, fallback) {
+        if (!el) {
+            if (fallback !== undefined && fallback !== null) return parseNonNegativeScore(fallback, true);
+            return NaN;
+        }
+        const raw = el.value;
+        if (raw === '' || raw === null) return 0;
+        const parsed = parseNonNegativeScore(raw, false);
+        if (Number.isFinite(parsed)) return parsed;
+        if (el.type === 'number' && el.validity && el.validity.valid) {
+            const n = el.valueAsNumber;
+            if (Number.isFinite(n) && n >= 0) return Math.floor(n);
+        }
+        if (fallback !== undefined && fallback !== null) return parseNonNegativeScore(fallback, true);
+        return NaN;
+    }
+
+    function resolveMatchForSave(matchId, isPoHint) {
+        matchId = parseInt(matchId, 10);
+        let isPo = isPoHint === true || isPoHint === 1 || isPoHint === '1' || isPoHint === 'true';
+        let arr = isPo ? (state.playoffs || []) : (state.matches || []);
+        let m = arr.find(x => x.id === matchId);
+        if (!m && !isPo) {
+            m = (state.playoffs || []).find(x => x.id === matchId);
+            if (m) isPo = true;
+        } else if (!m && isPo) {
+            m = (state.matches || []).find(x => x.id === matchId);
+            if (m) isPo = false;
+        }
+        return { m, isPo, matchId };
+    }
+
+    function draftInputValue(v) {
+        if (v === undefined || v === null || v === '') return '';
+        return escAttr(String(v));
+    }
+
+    function isVisibleScoreInput(inp) {
+        if (!inp) return false;
+        if (inp === document.activeElement) return true;
+        if (inp.offsetParent !== null) return true;
+        const host = inp.closest('.matches-render-target, #assistant-screen');
+        if (!host) return false;
+        if (host.id === 'assistant-matches-container') return !!document.body.classList.contains('assistant-view');
+        const tab = host.closest('.tab-content');
+        return !!(tab && tab.classList.contains('active'));
+    }
+
+    function shouldRenderMatchContainer(contId) {
+        if (contId === 'assistant-matches-container') return isAssistantMode;
+        if (isAssistantMode) return false;
+        if (window._demoStoryFanEmbed) return contId === 'live-matches-container' || contId === 'matches-container';
+        if (isFanMode) return contId === 'matches-container';
+        const activeTab = document.querySelector('.tab-content.active');
+        const activeId = activeTab ? activeTab.id : '';
+        if (contId === 'live-matches-container') return activeId === 'nazywo';
+        if (contId === 'matches-container') return activeId === 'mecze';
+        return false;
+    }
+
+    function renderInlineScoreInputs(matchId, idSuffix, isPo) {
+        const draft = (window.inlineScoreDrafts && window.inlineScoreDrafts[matchId]) || {};
+        const draftG1 = draftInputValue(draft.g1);
+        const draftG2 = draftInputValue(draft.g2);
+        const suffix = idSuffix || '';
+        const poFlag = isPo ? '1' : '0';
+        return '<span class="live-score-inputs" onclick="event.stopPropagation()">' +
+            '<input data-score="g1" data-match-id="' + matchId + '" id="live-g1-' + matchId + suffix + '" type="number" min="0" inputmode="numeric" placeholder="0" value="' + draftG1 + '" oninput="syncInlineScoreDraft(' + matchId + ', 1, this.value)" onchange="syncInlineScoreDraft(' + matchId + ', 1, this.value)">' +
+            '<span>:</span>' +
+            '<input data-score="g2" data-match-id="' + matchId + '" id="live-g2-' + matchId + suffix + '" type="number" min="0" inputmode="numeric" placeholder="0" value="' + draftG2 + '" oninput="syncInlineScoreDraft(' + matchId + ', 2, this.value)" onchange="syncInlineScoreDraft(' + matchId + ', 2, this.value)">' +
+            '<button type="button" class="live-score-save" data-match-id="' + matchId + '" data-is-po="' + poFlag + '" onmousedown="syncInlineScoreFromRow(' + matchId + ', this)" onclick="event.stopPropagation(); saveInlineScoreFromBtn(event)">✓</button></span>';
+    }
+
+    function getMatchInputIdSuffix(containerId) {
+        if (containerId === 'assistant-matches-container') return '-asst';
+        if (containerId === 'live-matches-container') return '-live';
+        if (containerId === 'matches-container') return '-mecze';
+        return '';
+    }
+
+    function renderScorersBtn(matchId, isPo, lead) {
+        const poArg = isPo ? 'true' : 'false';
+        const leadCls = lead ? ' assistant-scorers-btn--lead' : '';
+        return '<button type="button" class="assistant-scorers-btn' + leadCls + '" onclick="event.stopPropagation();openMatch(' + matchId + ', ' + poArg + ')">⚽ Strzelcy</button>';
+    }
+
+    function renderMatchTableRow(m, opts) {
+        opts = opts || {};
+        const isPo = opts.isPo === true;
+        const matchNo = window.getGlobalMatchNo(m, isPo);
+        const groupBadge = isPo
+            ? '<span class="live-group-badge" style="background:#fff7ed;color:#b45309;border:1px solid #fdba74;">' + esc(window.getPlayoffRoundLabel(m)) + '</span>'
+            : (m.group
+                ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
+                : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
+        const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
+            '<span class="live-teams-vs">vs</span>' +
+            '<span class="live-team-name">' + esc(m.t2.name) + '</span>';
+        const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
+        let scoreHTML;
+        if (opts.readonly) {
+            scoreHTML = m.played
+                ? '<span class="live-score-display">' + m.g1 + ':' + m.g2 + (m.pen1 != null ? ' <small>(k.' + m.pen1 + ':' + m.pen2 + ')</small>' : '') + '</span>'
+                : '<span class="live-score-display" style="color:#94a3b8;">–:–</span>';
+        } else if (m.played) {
+            scoreHTML = '<span class="live-score-display">' + m.g1 + ':' + m.g2 + (m.pen1 != null ? ' <small>(k.' + m.pen1 + ':' + m.pen2 + ')</small>' : '') + '</span>';
+        } else {
+            scoreHTML = renderInlineScoreInputs(m.id, opts.idSuffix || '', isPo);
+        }
+        const scorersHTML = opts.showScorers
+            ? renderScorersBtn(m.id, isPo, !m.played)
+            : '';
+        const statusHTML = '<span class="live-status-dot ' + (m.played ? 'is-played' : '') + '"></span>';
+        return '<tr class="' + rowCls + '">' +
+            '<td><span class="live-match-no">' + matchNo + '</span></td>' +
+            '<td>' + groupBadge + '</td>' +
+            '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
+            '<td class="live-match-teams" title="' + escAttr(m.t1.name + ' vs ' + m.t2.name) + '">' + teamsHTML + '</td>' +
+            '<td>' + scoreHTML + '</td>' +
+            (opts.showScorers ? '<td>' + scorersHTML + '</td>' : '') +
+            '<td>' + statusHTML + '</td>' +
+            '</tr>';
+    }
+
+    function renderMatchesTableHTML(filtered, opts) {
+        opts = opts || {};
+        const scorersCol = opts.showScorers ? '<th>Strzelcy</th>' : '';
+        const groupCol = opts.isPo ? 'Faza' : 'Grupa';
+        const rows = filtered.map(m => renderMatchTableRow(m, opts)).join('');
+        return '<div class="live-match-table-wrap"><table class="live-match-table">' +
+            '<thead><tr>' +
+            '<th>#</th><th>' + groupCol + '</th><th>Godz.</th><th class="col-teams">Mecz</th><th>Wynik</th>' +
+            scorersCol + '<th></th>' +
+            '</tr></thead><tbody>' + rows + '</tbody></table></div>';
     }
 
     function esc(value) {
@@ -2031,6 +3144,21 @@
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
     }
+
+    /** PL: 1 bramka · 2–4 bramki · 5+ bramek */
+    function polishBramkiForm(n) {
+        n = Math.abs(parseInt(n, 10) || 0);
+        if (n === 1) return 'bramka';
+        const mod10 = n % 10;
+        const mod100 = n % 100;
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'bramki';
+        return 'bramek';
+    }
+
+    window.formatPolishGoals = function (count) {
+        const n = parseInt(count, 10) || 0;
+        return n + ' ' + polishBramkiForm(n);
+    };
     let archiveDatabase = {}; let frozenDatabase = {}; let tempLocalOrders = {};
     let currentStatusFilter = 'all'; let currentGroupFilter = 'all';
 
@@ -2053,6 +3181,7 @@
         'sklady': '💡 <b>Zarządzanie Kadrami</b> W tym miejscu normalnie wpisujesz nazwy drużyn, nazwiska bramkarzy oraz kapitanów. Zmiany zapisują się w chmurze natychmiast po kliknięciu. Dla Twojej wygody uzupełniliśmy bazę losowymi, popularnymi zespołami regionalnymi.',
         'grupy': '💡 <b>Rozstawienie i Harmonogram</b> System automatycznie przypisał 8 zespołów do dwóch koszyków (Grupa A i Grupa B). W tym panelu ustalasz również precyzyjny czas trwania meczów, przerw technicznych oraz wybierasz algorytm układania terminarza.',
         'mecze': '💡 <b>Centrum Dowodzenia Live!</b> Wszystkie mecze grupowe zostały już automatycznie rozegrane. Zwróć szczególną uwagę na fazę pucharową na samym dole. <b>Półfinał 2 (wynik -:- ) czeka na Twój krok!</b> Kliknij w niego, wpisz dowolny wynik i zobacz, jak system sam ułoży skład Wielkiego Finału.',
+        'nazywo': '💡 <b>Na żywo</b> — harmonogram i tabele obok siebie. Wpisuj wyniki w Meczach lub tutaj obserwuj awans drużyn w czasie rzeczywistym.',
         'tabele': '💡 <b>Tabele w Czasie Rzeczywistym</b> Zielone wiersze oznaczają strefę awansu. Tabele same przeliczają punkty, bilans bramkowy oraz małą tabelę (bezpośrednie starcia przy remisach). Zmień wynik dowolnego meczu w zakładce "Mecze", a zobaczysz, jak tabela natychmiast przeskoczy automatycznie!',
         'playoff': '💡 <b>Drabinka Pucharowa</b> Generowana automatycznie na podstawie zajętych miejsc w grupach. Półfinał 1 został już zasymulowany. Wprowadź wynik w drugim półfinale w karcie "Mecze", aby zobaczyć, jak ta struktura dynamicznie zapełnia się zespołami.',
         'podium': '💡 <b>Automatyczne Podsumowanie i Nagrody</b> Koniec z liczeniem bramek na kolanie! System sam analizuje protokoły meczowe, wyłaniając Króla Strzelców i Złotą Rękawicę (czyste konta bramkarzy). Wpisz strzelców w brakującym półfinale, a zobaczysz, jak statystyki natychmiast się przebudują.',
@@ -2062,6 +3191,7 @@
     // GENEROWANIE KOMPLEKSOWEGO, INTERAKTYWNEGO SCENARIUSZA DEMO
     function generateDemoMockData() {
         return {
+            meta: { tournamentName: 'Turniej Demo Turniejomat' },
             settings: { bracketSize: 4, advCount: 4, start: "10:00", gDur: 10, gBreak: 2, afterG: 10, poDur: 12, finDur: 15 },
             teams: [
                 { id: 0, name: "FC Sparta Poznań", gk: "A. Boruc", cap: "M. Żewłakow" },
@@ -2149,7 +3279,7 @@
         window._appRenderBridgeReady = true;
 
         window.save = () => {
-        if (!activeKey || isFanMode || isDemoMode) return;
+        if (!activeKey || isFanMode || isDemoMode || isHallMode || isAssistantMode) return;
         if (window.licenseWriteAllowed === false) {
             alert('❌ Licencja nieważna lub zawieszona — zapis wyłączony.');
             return;
@@ -2186,7 +3316,7 @@
         window.addMin = (time, min) => { let [h, m] = time.split(':').map(Number); let d = new Date(0, 0, 0, h, m); d.setMinutes(d.getMinutes() + parseInt(min)); return d.toTimeString().slice(0, 5); };
 
         window.logAction = (msg) => {
-            if (isFanMode) return; const time = new Date().toLocaleTimeString('pl-PL');
+            if (isFanMode || isAssistantMode) return; const time = new Date().toLocaleTimeString('pl-PL');
             if (!state.logs) state.logs = []; state.logs.push(`[${time}] ${msg}`);
             if(state.logs.length > 50) state.logs.shift();
         };
@@ -2237,7 +3367,7 @@
 
             el.innerHTML = `
                 <div class="tournament-dashboard-card">
-                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju</h3>
+                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju${state.meta && state.meta.tournamentName ? ' · ' + esc(state.meta.tournamentName) : ''}</h3>
                     <div class="tournament-dashboard-grid">
                         <div class="dashboard-stat"><div class="dashboard-stat-label">👥 Drużyny</div><div class="dashboard-stat-value">${teams.length}</div></div>
                         <div class="dashboard-stat"><div class="dashboard-stat-label">⚽ Mecze</div><div class="dashboard-stat-value">${playedMatches} / ${totalMatches}</div></div>
@@ -2335,17 +3465,296 @@
             state.matches.forEach(m => { m.time = curr; curr = window.addMin(curr, parseInt(state.settings.gDur) + parseInt(state.settings.gBreak)); });
 
             window.logAction("Wygenerowano nowy terminarz meczów grupowych.");
-            window.save(); window.renderDashboard(); switchTab('mecze');
+            window.save(); window.renderDashboard();
+            switchTab(window.matchMedia('(min-width: 1024px)').matches ? 'nazywo' : 'mecze');
+        };
+
+        window.syncTournamentMeta = (field, value) => {
+            if (isFanMode) return;
+            if (!state.meta) state.meta = {};
+            state.meta[field] = String(value || '').trim();
+            window.save();
+            window.renderDashboard();
+        };
+
+        window.syncTournamentMetaToForm = () => {
+            const nameEl = document.getElementById('tournament-name');
+            if (nameEl && state.meta && state.meta.tournamentName) nameEl.value = state.meta.tournamentName;
+        };
+
+        window.renderFanRulesBox = () => {
+            const box = document.getElementById('fan-rules-content');
+            if (!box) return;
+            const adv = (state.settings && state.settings.advCount) ? state.settings.advCount : 4;
+            const groups = state.groups ? Object.keys(state.groups).length : 0;
+            const perGroup = groups > 0 ? Math.floor(adv / groups) : adv;
+            box.innerHTML = `<strong>Punkty:</strong> zwycięstwo 3 · remis 1 · porażka 0<br>
+                <strong>Remis w tabeli:</strong> bezpośrednie mecze → bilans bezpośredni → bramki H2H → bilans ogólny → bramki zdobyte<br>
+                <strong>Awans:</strong> TOP ${perGroup || adv} z każdej grupy (łącznie ${adv} drużyn)`;
+        };
+
+        window.printLiveView = () => {
+            document.body.classList.add('print-live');
+            window.print();
+            setTimeout(() => document.body.classList.remove('print-live'), 500);
+        };
+
+        window.openHallView = () => {
+            if (!activeKey) return;
+            const url = window.location.href.split('?')[0] + `?view=hall&id=${encodeURIComponent(activeKey)}`;
+            window.open(url, '_blank', 'noopener');
+        };
+
+        window.requestHallFullscreen = () => {
+            const el = document.documentElement;
+            if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+        };
+
+        window.captureInlineScoreDrafts = () => {
+            if (!window.inlineScoreDrafts) window.inlineScoreDrafts = {};
+            document.querySelectorAll('.live-score-inputs input[id^="live-g"]').forEach(inp => {
+                if (!isVisibleScoreInput(inp)) return;
+                const m = inp.id.match(/^live-g([12])-(\d+)/);
+                if (!m) return;
+                const matchId = parseInt(m[2], 10);
+                if (!window.inlineScoreDrafts[matchId]) window.inlineScoreDrafts[matchId] = {};
+                window.inlineScoreDrafts[matchId]['g' + m[1]] = inp.value;
+            });
+        };
+
+        window.syncInlineScoreDraft = (matchId, side, val) => {
+            if (!window.inlineScoreDrafts) window.inlineScoreDrafts = {};
+            if (!window.inlineScoreDrafts[matchId]) window.inlineScoreDrafts[matchId] = {};
+            window.inlineScoreDrafts[matchId]['g' + side] = val;
+            window.scheduleLiveDraftPush(matchId);
+            if (isHallMode) window.renderHallView();
+        };
+
+        window.clearInlineScoreDraft = (matchId) => {
+            if (window.inlineScoreDrafts && window.inlineScoreDrafts[matchId]) delete window.inlineScoreDrafts[matchId];
+        };
+
+        window.syncInlineScoreFromRow = (matchId, btnEl) => {
+            const wrap = btnEl && btnEl.closest ? btnEl.closest('.live-score-inputs') : null;
+            if (!wrap) return;
+            const g1El = wrap.querySelector('input[data-score="g1"]') || wrap.querySelector('input[id^="live-g1-"]');
+            const g2El = wrap.querySelector('input[data-score="g2"]') || wrap.querySelector('input[id^="live-g2-"]');
+            if (g1El) window.syncInlineScoreDraft(matchId, 1, g1El.value === '' ? '0' : g1El.value);
+            if (g2El) window.syncInlineScoreDraft(matchId, 2, g2El.value === '' ? '0' : g2El.value);
+        };
+
+        window.readInlineScoreValues = (matchId, btnEl) => {
+            window.syncInlineScoreFromRow(matchId, btnEl);
+            const wrap = btnEl && btnEl.closest ? btnEl.closest('.live-score-inputs') : null;
+            if (wrap) {
+                const g1El = wrap.querySelector('input[data-score="g1"]') || wrap.querySelector('input[id^="live-g1-"]');
+                const g2El = wrap.querySelector('input[data-score="g2"]') || wrap.querySelector('input[id^="live-g2-"]');
+                return {
+                    g1: readScoreFromInputEl(g1El, 0),
+                    g2: readScoreFromInputEl(g2El, 0),
+                };
+            }
+            let g1Raw;
+            let g2Raw;
+            document.querySelectorAll('input[data-score="g1"][data-match-id="' + matchId + '"], input[id^="live-g1-' + matchId + '"]').forEach(el => {
+                if (!isVisibleScoreInput(el)) return;
+                if (g1Raw === undefined || (g1Raw === '' && el.value !== '')) g1Raw = el.value;
+            });
+            document.querySelectorAll('input[data-score="g2"][data-match-id="' + matchId + '"], input[id^="live-g2-' + matchId + '"]').forEach(el => {
+                if (!isVisibleScoreInput(el)) return;
+                if (g2Raw === undefined || (g2Raw === '' && el.value !== '')) g2Raw = el.value;
+            });
+            const draft = (window.inlineScoreDrafts && window.inlineScoreDrafts[matchId]) || {};
+            if (g1Raw === undefined) g1Raw = draft.g1;
+            if (g2Raw === undefined) g2Raw = draft.g2;
+            return {
+                g1: parseNonNegativeScore(g1Raw, true),
+                g2: parseNonNegativeScore(g2Raw, true),
+            };
+        };
+
+        window.hasInlineScoreDrafts = () => {
+            if (!window.inlineScoreDrafts) return false;
+            return Object.keys(window.inlineScoreDrafts).some((id) => {
+                const d = window.inlineScoreDrafts[id];
+                return d && (String(d.g1 ?? '') !== '' || String(d.g2 ?? '') !== '');
+            });
+        };
+
+        window.isEditingInlineScore = () => {
+            const ae = document.activeElement;
+            return !!(ae && ae.closest && ae.closest('.live-score-inputs'));
+        };
+
+        window.isEditingMatchModal = () => {
+            const modal = document.getElementById('matchModal');
+            return !!(modal && modal.style.display === 'block');
+        };
+
+        /** Asystent: polling co 5 s — nie przerysowuj listy podczas wpisywania wyniku */
+        window.refreshAssistantMatchesView = (force) => {
+            if (!isAssistantMode) return;
+            if (!force && (window.hasInlineScoreDrafts() || window.isEditingInlineScore() || window.isEditingMatchModal())) return;
+            window.filterAndRenderMatches();
+        };
+
+        window.saveInlineScoreFromBtn = (ev) => {
+            const btn = ev && ev.currentTarget;
+            if (!btn) return;
+            const matchId = parseInt(btn.getAttribute('data-match-id'), 10);
+            const isPo = btn.getAttribute('data-is-po') === '1';
+            if (!matchId || isNaN(matchId)) {
+                alert('Błąd zapisu wyniku — odśwież stronę (Ctrl+F5) i spróbuj ponownie.');
+                return;
+            }
+            window.saveInlineScore(matchId, isPo, btn);
+        };
+
+        window.saveInlineScore = (matchId, isPo, btnEl) => {
+            if (isFanMode || isHallMode) return;
+            const resolved = resolveMatchForSave(matchId, isPo);
+            matchId = resolved.matchId;
+            isPo = resolved.isPo;
+            const m = resolved.m;
+            if (!m) {
+                alert('Nie znaleziono meczu do zapisu.');
+                return;
+            }
+            if ((m.t1 && m.t1.id === -99) || (m.t2 && m.t2.id === -99)) {
+                alert('Mecz z wolnym losem jest rozstrzygany automatycznie.');
+                return;
+            }
+            window.syncInlineScoreFromRow(matchId, btnEl);
+            let { g1, g2 } = window.readInlineScoreValues(matchId, btnEl);
+            if (!Number.isFinite(g1)) g1 = parseNonNegativeScore(m.g1, true);
+            if (!Number.isFinite(g2)) g2 = parseNonNegativeScore(m.g2, true);
+            if (!Number.isFinite(g1) || !Number.isFinite(g2) || g1 < 0 || g2 < 0) {
+                alert('Wpisz poprawny wynik (liczby ≥ 0).');
+                return;
+            }
+            if (isPo && g1 === g2) { openMatch(matchId, true); return; }
+            window.clearHallLiveMatchMeta();
+            if (isAssistantMode) {
+                window.persistMatchViaAssistant({ matchId, isPo, g1, g2, s1: m.s1 || [], s2: m.s2 || [] })
+                    .then(() => {
+                        window.clearInlineScoreDraft(matchId);
+                        window.refreshAssistantMatchesView(true);
+                    });
+                return;
+            }
+            m.g1 = g1; m.g2 = g2; m.played = true;
+            m.pen1 = null; m.pen2 = null;
+            window.clearInlineScoreDraft(matchId);
+            window.logAction(`Wynik meczu #${m.id}: ${m.t1.name} ${g1}:${g2} ${m.t2.name}`);
+            window.save();
+            if (!isPo) window.calcTables();
+            else { window.renderPlayoffTree(); window.renderPodium(); }
+            window.filterAndRenderMatches();
+            window.renderDashboard();
+            if (isHallMode) window.renderHallView();
+        };
+
+        window.persistMatchViaAssistant = (payload) => {
+            if (!activeKey || !assistantTokenParam) {
+                alert('Brak tokenu asystenta w linku.');
+                return Promise.resolve();
+            }
+            return assistantSaveMatchCallable({ key: activeKey, token: assistantTokenParam, ...payload })
+                .then(() => fetchRtdbRest(window.getTournamentDbPath()))
+                .then(data => {
+                    if (!payload.live) {
+                        const modal = document.getElementById('matchModal');
+                        if (modal && modal.style.display === 'block') {
+                            modal.style.display = 'none';
+                            state.active = null;
+                        }
+                    }
+                    if (typeof window.applyTournamentState === 'function') window.applyTournamentState(data);
+                })
+                .catch(err => {
+                    const msg = (err && err.message) ? err.message : 'Zapis nie powiódł się';
+                    alert('❌ ' + msg);
+                });
+        };
+
+        window.syncActiveMatchFromState = (matchId, isPo) => {
+            const modal = document.getElementById('matchModal');
+            if (modal && modal.style.display === 'block' && state.active && state.active.id === matchId && !!state.active.isPo === !!isPo) {
+                return;
+            }
+            const arr = isPo ? (state.playoffs || []) : (state.matches || []);
+            const m = arr.find(x => x.id === matchId);
+            if (!m) return;
+            state.active = JSON.parse(JSON.stringify(m));
+            state.active.isPo = isPo;
+            if (!state.active.s1) state.active.s1 = [];
+            if (!state.active.s2) state.active.s2 = [];
+            if (!modal || modal.style.display !== 'block') return;
+            document.getElementById('mTitle').innerText = m.n || ('Mecz # ' + window.getGlobalMatchNo(m, isPo) + (m.group && !isPo ? ' · Grupa ' + m.group : ''));
+            document.getElementById('mT1').innerText = m.t1.name;
+            document.getElementById('mT2').innerText = m.t2.name;
+            const g1El = document.getElementById('mG1');
+            const g2El = document.getElementById('mG2');
+            if (g1El && document.activeElement !== g1El) g1El.value = m.g1;
+            if (g2El && document.activeElement !== g2El) g2El.value = m.g2;
+            const pen1El = document.getElementById('mPen1');
+            const pen2El = document.getElementById('mPen2');
+            if (pen1El && document.activeElement !== pen1El) pen1El.value = m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : '';
+            if (pen2El && document.activeElement !== pen2El) pen2El.value = m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : '';
+            window.checkPenaltyVisibility();
+            window.renderSc();
+        };
+
+        window.renderHallView = () => {
+            if (!isHallMode) return;
+            const title = (state.meta && state.meta.tournamentName) ? state.meta.tournamentName : 'Turniej';
+            const titleEl = document.getElementById('hall-title');
+            if (titleEl) titleEl.textContent = title;
+            const inPlayoff = window.isPlayoffPhase();
+            const metaEl = document.getElementById('hall-meta');
+            if (metaEl) {
+                const phase = window.getHallTournamentPodium()
+                    ? 'Turniej zakończony'
+                    : (inPlayoff ? 'Faza pucharowa' : 'Faza grupowa');
+                metaEl.textContent = `${new Date().toLocaleDateString('pl-PL')} · ${phase}`;
+            }
+            const allMatches = getHallAllMatches();
+            const played = allMatches.filter(m => m.played);
+            renderHallLivePanel(window.getHallCurrentMatch());
+            renderHallPlayedSection(played);
+            const hallTables = document.getElementById('hall-tables');
+            if (hallTables) {
+                if (inPlayoff) {
+                    hallTables.innerHTML = renderHallPlayoffSidebar();
+                } else if (state.groups) {
+                    let html = '';
+                    Object.keys(state.groups).forEach(gn => {
+                        const st = window.getSortedGroupStats(gn).slice(0, 6);
+                        html += `<div class="hall-group-block"><div class="hall-next-label">Grupa ${gn}</div><table class="hall-table-mini standings-table"><tr><th>#</th><th>Drużyna</th><th>Pkt</th></tr>`;
+                        st.forEach(s => { html += `<tr><td>${s.rank}</td><td style="text-align:left;">${esc(s.t.name)}</td><td><b>${s.pkt}</b></td></tr>`; });
+                        html += '</table></div>';
+                    });
+                    hallTables.innerHTML = html || '<p style="color:#64748b;">Brak tabel</p>';
+                } else {
+                    hallTables.innerHTML = '<p style="color:#64748b;">Brak tabel</p>';
+                }
+            }
+            const hallRules = document.getElementById('hall-rules');
+            if (hallRules) {
+                window.renderFanRulesBox();
+                hallRules.innerHTML = document.getElementById('fan-rules-content') ? document.getElementById('fan-rules-content').innerHTML : '';
+            }
         };
 
         window.renderFilterBar = () => {
-            const bar = document.getElementById('match-filter-bar'); if(!bar) return;
+            const bars = document.querySelectorAll('.match-filter-bar');
+            if (!bars.length) return;
             if (window._demoStoryFanEmbed && window._demoStoryFanTab === 'tabele') {
-                bar.innerHTML = '';
-                bar.classList.remove('fan-filters-visible');
+                bars.forEach(bar => { bar.innerHTML = ''; bar.classList.remove('fan-filters-visible'); });
                 return;
             }
-            const hideGroupFilters = window._demoStoryFanEmbed && window._demoStoryFanTab === 'playoff';
+            const hideGroupFilters = (window._demoStoryFanEmbed && window._demoStoryFanTab === 'playoff')
+                || (isAssistantMode && window.isPlayoffPhase());
             let html = `
                 <button class="filter-btn ${currentStatusFilter==='all'?'active':''}" onclick="setStatusFilter('all')">Wszystkie</button>
                 <button class="filter-btn ${currentStatusFilter==='pending'?'active':''}" onclick="setStatusFilter('pending')">Oczekujące</button>
@@ -2356,40 +3765,46 @@
                 <button class="filter-btn ${currentGroupFilter==='all'?'active':''}" onclick="setGroupFilter('all')">Całość</button>`;
                 if(state.groups) { Object.keys(state.groups).forEach(gn => { html += `<button class="filter-btn ${currentGroupFilter===gn?'active':''}" onclick="setGroupFilter('${gn}')">Gr. ${gn}</button>`; }); }
             }
-            bar.innerHTML = html;
-            if (window._demoStoryFanEmbed && (window._demoStoryFanTab === 'mecze' || window._demoStoryFanTab === 'playoff')) {
-                bar.classList.add('fan-filters-visible');
-            } else {
-                bar.classList.remove('fan-filters-visible');
-            }
+            bars.forEach(bar => {
+                bar.innerHTML = html;
+                if (window._demoStoryFanEmbed && (window._demoStoryFanTab === 'mecze' || window._demoStoryFanTab === 'playoff')) {
+                    bar.classList.add('fan-filters-visible');
+                } else {
+                    bar.classList.remove('fan-filters-visible');
+                }
+            });
         };
 
         window.setStatusFilter = (status) => { currentStatusFilter = status; window.renderFilterBar(); window.filterAndRenderMatches(); window.renderPlayoffTree(); };
         window.setGroupFilter = (group) => { currentGroupFilter = group; window.renderFilterBar(); window.filterAndRenderMatches(); window.renderPlayoffTree(); };
 
         window.filterAndRenderMatches = () => {
-            const cont = document.getElementById('matches-container'); if(!cont) return;
+            window.captureInlineScoreDrafts();
+            const containers = [...document.querySelectorAll('.matches-render-target')];
+            if (!containers.length) return;
             if (window._demoStoryFanEmbed && typeof window.syncDemoStoryState === 'function') {
                 if (!state.matches || !state.matches.length) window.syncDemoStoryState();
             }
             if (!state.matches) return;
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            let filtered = [...state.matches];
+            const assistantPlayoffTable = isAssistantMode && window.isPlayoffPhase();
+            const assistantBanner = document.getElementById('assistant-banner');
+            if (assistantBanner && isAssistantMode) {
+                assistantBanner.innerHTML = assistantPlayoffTable
+                    ? '🧑‍⚖️ <b>Asystent — faza pucharowa</b> — wpisuj wyniki meczów play-off (ćwierćfinał, półfinał, finał, 3. miejsce).'
+                    : '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.';
+            }
+            let filtered = assistantPlayoffTable ? [...(state.playoffs || [])] : [...state.matches];
+            let tableIsPo = assistantPlayoffTable;
             if(currentStatusFilter === 'pending') filtered = filtered.filter(m => !m.played);
             if(currentStatusFilter === 'played') filtered = filtered.filter(m => m.played);
-            if(currentGroupFilter !== 'all') { if(currentGroupFilter === 'PO') filtered = []; else filtered = filtered.filter(m => m.group === currentGroupFilter); }
+            if(!assistantPlayoffTable && currentGroupFilter !== 'all') { if(currentGroupFilter === 'PO') filtered = []; else filtered = filtered.filter(m => m.group === currentGroupFilter); }
 
             const renderPoCard = (m, extraStyle = '', extraAlert = '') => {
-                const scoreDisplay = m.played ? `${m.g1}:${m.g2} ${m.pen1 != null ? `(k. ${m.pen1}:${m.pen2})` : ''}` : '-:-';
-                const statusCls = m.played ? 'match-card--played' : 'match-card--pending';
-                const highlightCls = extraStyle ? ' match-card--highlight' : '';
-                return `
-                    <div class="match-card match-card--po ${statusCls}${highlightCls}" ${extraStyle} onclick="openMatch(${m.id}, true)">
-                        <span class="match-time-badge" style="background:#ff8b00;">${esc(m.n)}</span>
-                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
-                        <div style="text-align:center;">${renderMatchScoreBlock(m, scoreDisplay, { isPo: true, scoreStyle: 'background:#00875a;', extraAlert })}</div>
-                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
-                    </div>`;
+                return renderPoMatchCardHTML(m, {
+                    extraStyle: extraStyle,
+                    extraAlert: extraAlert,
+                });
             };
 
             const isHighlightPlayoff = (m) => {
@@ -2403,7 +3818,7 @@
 
             let playoffShortcutHTML = '';
             const hasGroupBlock = filtered.length > 0;
-            if ((state.playoffs || []).length > 0) {
+            if (!assistantPlayoffTable && (state.playoffs || []).length > 0) {
                 let highlights = (state.playoffs || []).filter(isHighlightPlayoff);
                 if (currentStatusFilter === 'pending') highlights = highlights.filter(m => !m.played);
                 if (currentStatusFilter === 'played') highlights = highlights.filter(m => m.played);
@@ -2418,35 +3833,71 @@
                 }
             }
 
-            let groupSectionHTML = hasGroupBlock ? renderMatchSectionHead('⚽', 'Faza grupowa') : '';
+            let groupSectionHTML = assistantPlayoffTable
+                ? (hasGroupBlock ? renderMatchSectionHead('🏆', 'Faza pucharowa') : '')
+                : (hasGroupBlock ? renderMatchSectionHead('⚽', 'Faza grupowa') : '');
 
-            let matchesHTML = filtered.map(m => {
-                let originalIdx = state.matches.findIndex(x => x.id === m.id);
-                let scoreText = m.played ? `${m.g1}:${m.g2}` : '-:-';
-                let upDownButtons = fanRo ? '' : `<div class="order-controls" onclick="event.stopPropagation()"><button class="order-btn" onclick="moveMatch(${originalIdx}, -1)">↑</button><button class="order-btn" onclick="moveMatch(${originalIdx}, 1)">↓</button></div>`;
-                const statusCls = m.played ? 'match-card--played' : 'match-card--pending';
-                return `
-                    <div class="match-card ${statusCls}" onclick="openMatch(${m.id})">
-                        <span class="match-time-badge">${esc(m.time)}</span>
-                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
-                        <div>${renderMatchScoreBlock(m, scoreText, { isPo: false })}</div>
-                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
-                        ${upDownButtons}
-                    </div>`;
-            }).join('');
+            const tableOpts = {
+                readonly: fanRo,
+                showScorers: !fanRo,
+                isPo: tableIsPo,
+            };
 
-            if (isDemoMode) {
-                let playoffHTML = '<h3 style="margin-top:30px; margin-bottom:15px; color:#102a43; border-bottom: 2px solid #102a43; padding-bottom:5px;">🏆 DRABINKA PUCHAROWA (PLAY-OFF DEMO)</h3>';
-                playoffHTML += (state.playoffs || []).map(m => {
-                    let highlightStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
-                    let actionAlert = !m.played ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
-                    return renderPoCard(m, highlightStyle, actionAlert);
-                }).join('');
-                cont.innerHTML = groupSectionHTML + matchesHTML + playoffShortcutHTML + playoffHTML;
-            } else {
-                if (filtered.length === 0 && !playoffShortcutHTML) { cont.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>'; return; }
-                cont.innerHTML = groupSectionHTML + matchesHTML + playoffShortcutHTML;
-            }
+            const matchesTableHTML = renderMatchesTableHTML(filtered, tableOpts);
+
+            const bodyHTML = (filtered.length === 0 && !playoffShortcutHTML)
+                ? '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>'
+                : (groupSectionHTML + matchesTableHTML + playoffShortcutHTML);
+
+            const emptyMatchesHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>';
+
+            containers.forEach(cont => {
+                const isLivePanel = cont.id === 'live-matches-container';
+                const isAssistantPanel = cont.id === 'assistant-matches-container';
+                const isMatchesPanel = cont.id === 'matches-container';
+                const useTableLayout = (isLivePanel || isAssistantPanel || isMatchesPanel) && !isDemoMode;
+
+                if (useTableLayout && !shouldRenderMatchContainer(cont.id)) {
+                    cont.innerHTML = '';
+                    return;
+                }
+
+                if (useTableLayout) {
+                    const panelTableOpts = {
+                        readonly: tableOpts.readonly,
+                        showScorers: tableOpts.showScorers,
+                        isPo: tableOpts.isPo,
+                        idSuffix: getMatchInputIdSuffix(cont.id),
+                    };
+                    const focusedId = document.activeElement && document.activeElement.id && String(document.activeElement.id).startsWith('live-g')
+                        ? document.activeElement.id : null;
+                    cont.innerHTML = (filtered.length === 0 && !playoffShortcutHTML)
+                        ? emptyMatchesHTML
+                        : (groupSectionHTML + renderMatchesTableHTML(filtered, panelTableOpts) + (playoffShortcutHTML ? ((isLivePanel || isAssistantPanel) ? '<div style="margin-top:12px;">' + playoffShortcutHTML + '</div>' : playoffShortcutHTML) : ''));
+                    if (focusedId) {
+                        const el = document.getElementById(focusedId);
+                        if (el) {
+                            el.focus();
+                            if (typeof el.setSelectionRange === 'function' && el.value) {
+                                const len = String(el.value).length;
+                                el.setSelectionRange(len, len);
+                            }
+                        }
+                    }
+                    return;
+                }
+                if (isDemoMode) {
+                    let playoffHTML = '<h3 style="margin-top:30px; margin-bottom:15px; color:#102a43; border-bottom: 2px solid #102a43; padding-bottom:5px;">🏆 DRABINKA PUCHAROWA (PLAY-OFF DEMO)</h3>';
+                    playoffHTML += (state.playoffs || []).map(m => {
+                        let highlightStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
+                        let actionAlert = !m.played ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
+                        return renderPoCard(m, highlightStyle, actionAlert);
+                    }).join('');
+                    cont.innerHTML = groupSectionHTML + matchesTableHTML + playoffShortcutHTML + playoffHTML;
+                } else {
+                    cont.innerHTML = bodyHTML;
+                }
+            });
         };
 
         window.moveMatch = (idx, dir) => {
@@ -2506,69 +3957,166 @@
 
         /* --- NOWA MODYFIKACJA: IDEALNE WYRÓWNANIE STRZAŁEK W KIERUNKU PRAWEJ KRAWĘDZI --- */
         window.calcTables = () => {
-            const cont = document.getElementById('tables-container'); if(!cont) return;
+            const containers = [...document.querySelectorAll('.tables-render-target')];
+            if (!containers.length) return;
             if (window._demoStoryFanEmbed && (!state.groups || !Object.keys(state.groups).length)) {
                 if (typeof window.syncDemoStoryState === 'function') window.syncDemoStoryState();
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            cont.innerHTML = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie punktowym decydują miedzy sobą bezpośrednie starcia.</div>';
+            const infoBanner = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie punktowym decydują miedzy sobą bezpośrednie starcia.</div>';
 
             let advIds = window.getAdvancingTeamsFull().map(t => t.id); let numGroups = Object.keys(state.groups || {}).length;
             let advCount = state.settings.advCount || 4; let anyUnconfirmedAbsoluteRemis = false;
 
-            Object.keys(state.groups || {}).forEach(gn => {
-                let st = window.getSortedGroupStats(gn); let rowsHTML = '';
-                let cutoffIndex = Math.floor(advCount / numGroups) - 1; if(cutoffIndex < 0) cutoffIndex = 0;
+            const buildTablesBody = (hideControls) => {
+                let body = '';
+                Object.keys(state.groups || {}).forEach(gn => {
+                    let st = window.getSortedGroupStats(gn); let rowsHTML = '';
+                    let cutoffIndex = Math.floor(advCount / numGroups) - 1; if(cutoffIndex < 0) cutoffIndex = 0;
 
-                let hasDbCorrection = state.settings && state.settings.customTableOrder && state.settings.customTableOrder[gn];
-                let hasLocalCorrection = tempLocalOrders[gn] !== undefined;
-                let isConfirmed = state.settings && state.settings.confirmedTableOrder && state.settings.confirmedTableOrder[gn];
+                    let hasDbCorrection = state.settings && state.settings.customTableOrder && state.settings.customTableOrder[gn];
+                    let hasLocalCorrection = tempLocalOrders[gn] !== undefined;
+                    let isConfirmed = state.settings && state.settings.confirmedTableOrder && state.settings.confirmedTableOrder[gn];
 
-                let detectRemisAlert = false;
-                if(!isConfirmed && st[cutoffIndex] && st[cutoffIndex+1]) {
-                    if(window.isAbsoluteRemis(st[cutoffIndex], st[cutoffIndex+1])) { detectRemisAlert = true; anyUnconfirmedAbsoluteRemis = true; }
-                }
-
-                st.forEach((s, idx) => {
-                    let isPewniak = s.rank === 1 && numGroups <= advCount;
-                    let isAdvancing;
-                    if (state.settings.qualifiedTeamIds && state.settings.qualifiedTeamIds.length) {
-                        isAdvancing = state.settings.qualifiedTeamIds.includes(s.t.id);
-                    } else {
-                        isAdvancing = advIds.includes(s.t.id) && (isPewniak || s.m > 0);
+                    let detectRemisAlert = false;
+                    if(!isConfirmed && st[cutoffIndex] && st[cutoffIndex+1]) {
+                        if(window.isAbsoluteRemis(st[cutoffIndex], st[cutoffIndex+1])) { detectRemisAlert = true; anyUnconfirmedAbsoluteRemis = true; }
                     }
-                    let rowClass = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1)) ? 'class="absolute-remis-row"' : (isAdvancing ? 'class="advancing-row"' : '');
-                    
-                    // Zmiana struktury przycisków na opakowany boks
-                    let arrowControlsHTML = fanRo ? '' : `
-                        <div class="table-arrow-wrapper">
-                            <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, -1)">↑</button>
-                            <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
-                        </div>`;
-                        
-                    let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
 
-                    // Nadanie klasy table-team-cell dającej elastyczny podział komórki
-                    rowsHTML += `<tr ${rowClass}><td class="table-team-cell">${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
+                    st.forEach((s, idx) => {
+                        let isPewniak = s.rank === 1 && numGroups <= advCount;
+                        let isAdvancing;
+                        if (state.settings.qualifiedTeamIds && state.settings.qualifiedTeamIds.length) {
+                            isAdvancing = state.settings.qualifiedTeamIds.includes(s.t.id);
+                        } else {
+                            isAdvancing = advIds.includes(s.t.id) && (isPewniak || s.m > 0);
+                        }
+                        let rowClass = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1)) ? 'class="absolute-remis-row"' : (isAdvancing ? 'class="advancing-row"' : '');
+
+                        let arrowControlsHTML = hideControls ? '' : `
+                            <div class="table-arrow-wrapper">
+                                <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, -1)">↑</button>
+                                <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
+                            </div>`;
+
+                        let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
+                        rowsHTML += `<tr ${rowClass}><td class="table-team-cell">${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
+                    });
+
+                    let headerBadgeHTML = '';
+                    if(!hideControls) {
+                        if (detectRemisAlert) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#ff8b00; background:#fff0b3; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">⚠️ REMIS ABSOLUTNY! Użyj strzałek</span>`;
+                        else if (isConfirmed) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#00875a; background:#e3fcef; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">✍️ Układ zatwierdzony</span>`;
+                        if(hasLocalCorrection) headerBadgeHTML += `<button class="table-save-btn" onclick="confirmTableOrder('${gn}')">✅ ZATWIERDŹ UKŁAD</button>`;
+                        if(hasDbCorrection || hasLocalCorrection) headerBadgeHTML += `<button class="table-reset-btn" onclick="resetTableOrder('${gn}')">🔄 AUTOMAT</button>`;
+                    } else if (detectRemisAlert) {
+                        headerBadgeHTML = `<span style="font-size:10px; font-weight:bold; color:#ff8b00;">⚠️ remis</span>`;
+                    }
+                    body += `<div class="card standings-group-card"><h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table class="standings-table">${STANDINGS_TABLE_COLGROUP}<tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BZ</th><th>BS</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
                 });
+                return body;
+            };
 
-                let headerBadgeHTML = '';
-                if(!fanRo) {
-                    if (detectRemisAlert) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#ff8b00; background:#fff0b3; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">⚠️ REMIS ABSOLUTNY! Użyj strzałek</span>`;
-                    else if (isConfirmed) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#00875a; background:#e3fcef; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">✍️ Układ zatwierdzony</span>`;
+            const fullBody = buildTablesBody(fanRo);
+            const compactBody = buildTablesBody(true);
 
-                    if(hasLocalCorrection) headerBadgeHTML += `<button class="table-save-btn" onclick="confirmTableOrder('${gn}')">✅ ZATWIERDŹ UKŁAD</button>`;
-                    if(hasDbCorrection || hasLocalCorrection) headerBadgeHTML += `<button class="table-reset-btn" onclick="resetTableOrder('${gn}')">🔄 AUTOMAT</button>`;
+            containers.forEach(cont => {
+                const compact = cont.getAttribute('data-compact') === 'true';
+                if (compact && window.isPlayoffPhase()) {
+                    cont.innerHTML = renderHallPlayoffSidebar();
+                    return;
                 }
-                cont.innerHTML += `<div class="card standings-group-card"><h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table class="standings-table">${STANDINGS_TABLE_COLGROUP}<tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BZ</th><th>BS</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
+                cont.innerHTML = (compact ? '' : infoBanner) + (compact ? compactBody : fullBody);
             });
 
-            const poBtn = document.getElementById('btn-start-po');
-            if(poBtn) {
-                if (isDemoMode || window._demoStoryFanEmbed) { poBtn.style.display = 'none'; }
+            ['btn-start-po', 'btn-start-po-live'].forEach(btnId => {
+                const poBtn = document.getElementById(btnId);
+                if(!poBtn) return;
+                if (isDemoMode || window._demoStoryFanEmbed) { poBtn.style.display = 'none'; return; }
+                poBtn.style.display = '';
                 if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
                 else { poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer'; poBtn.innerText = "START PLAY-OFF"; }
+            });
+
+            const remisGroups = [];
+            Object.keys(state.groups || {}).forEach(gn => {
+                let st = window.getSortedGroupStats(gn);
+                let cutoffIndex = Math.floor((state.settings.advCount || 4) / Math.max(Object.keys(state.groups || {}).length, 1)) - 1;
+                if (cutoffIndex < 0) cutoffIndex = 0;
+                const isConfirmed = state.settings && state.settings.confirmedTableOrder && state.settings.confirmedTableOrder[gn];
+                if (!isConfirmed && st[cutoffIndex] && st[cutoffIndex + 1] && window.isAbsoluteRemis(st[cutoffIndex], st[cutoffIndex + 1])) {
+                    remisGroups.push(gn);
+                }
+            });
+            const liveCta = document.getElementById('live-table-order-cta');
+            if (liveCta) {
+                if (remisGroups.length && !fanRo) {
+                    liveCta.style.display = 'block';
+                    liveCta.innerHTML = remisGroups.map(gn =>
+                        `<button type="button" onclick="openTableOrderDrawer('${gn}')">⚠️ Edytuj kolejność — Grupa ${gn}</button>`
+                    ).join('');
+                } else {
+                    liveCta.style.display = 'none';
+                    liveCta.innerHTML = '';
+                }
             }
+        };
+
+        window.openTableOrderDrawer = (gn) => {
+            if (isFanMode || isHallMode || isAssistantMode) return;
+            tableOrderDrawerGroup = gn;
+            const drawer = document.getElementById('table-order-drawer');
+            const title = document.getElementById('table-order-drawer-title');
+            const body = document.getElementById('table-order-drawer-body');
+            if (!drawer || !body) return;
+            if (title) title.textContent = 'Edytuj kolejność — Grupa ' + gn;
+            window.renderTableOrderDrawerBody();
+            drawer.classList.add('is-open');
+            drawer.setAttribute('aria-hidden', 'false');
+        };
+
+        window.renderTableOrderDrawerBody = () => {
+            const gn = tableOrderDrawerGroup;
+            const body = document.getElementById('table-order-drawer-body');
+            if (!gn || !body) return;
+            const st = window.getSortedGroupStats(gn);
+            const advCount = state.settings.advCount || 4;
+            const numGroups = Object.keys(state.groups || {}).length;
+            let cutoffIndex = Math.floor(advCount / numGroups) - 1;
+            if (cutoffIndex < 0) cutoffIndex = 0;
+            body.innerHTML = st.map((s, idx) => {
+                const isRemisZone = idx === cutoffIndex || idx === cutoffIndex + 1;
+                return `<div class="table-order-drawer-row${isRemisZone ? ' is-remis' : ''}">
+                    <span style="font-weight:800; width:24px;">${idx + 1}.</span>
+                    <span style="flex:1; font-weight:700;">${esc(s.t.name)}</span>
+                    <button type="button" class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, -1)">↑</button>
+                    <button type="button" class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
+                </div>`;
+            }).join('');
+            const confirmBtn = document.getElementById('table-order-drawer-confirm');
+            if (confirmBtn) confirmBtn.onclick = () => window.confirmTableOrderFromDrawer();
+        };
+
+        window.closeTableOrderDrawer = () => {
+            const drawer = document.getElementById('table-order-drawer');
+            if (drawer) { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); }
+            tableOrderDrawerGroup = null;
+        };
+
+        window.confirmTableOrderFromDrawer = () => {
+            if (!tableOrderDrawerGroup || !tempLocalOrders[tableOrderDrawerGroup]) {
+                alert('Użyj strzałek, aby zmienić kolejność drużyn.');
+                return;
+            }
+            window.confirmTableOrder(tableOrderDrawerGroup);
+            window.renderTableOrderDrawerBody();
+            window.closeTableOrderDrawer();
+        };
+
+        window.resetTableOrderFromDrawer = () => {
+            if (!tableOrderDrawerGroup) return;
+            window.resetTableOrder(tableOrderDrawerGroup);
+            window.renderTableOrderDrawerBody();
         };
 
         window.isAbsoluteRemis = (a, b) => { return a.pkt === b.pkt && (a.h2h_pkt || 0) === (b.h2h_pkt || 0) && (a.h2h_bz - a.h2h_bs) === (b.h2h_bz - b.h2h_bs) && a.h2h_bz === b.h2h_bz && (a.bz - a.bs) === (b.bz - b.bs) && a.bz === b.bz; };
@@ -2584,6 +4132,7 @@
             if(isFanMode) return; let st = window.getSortedGroupStats(gn); if(index + dir < 0 || index + dir >= st.length) return;
             let currentOrder = st.map(s => s.t.id); let temp = currentOrder[index]; currentOrder[index] = currentOrder[index + dir]; currentOrder[index + dir] = temp;
             tempLocalOrders[gn] = currentOrder; window.calcTables();
+            if (tableOrderDrawerGroup === gn) window.renderTableOrderDrawerBody();
         };
 
         window.confirmTableOrder = (gn) => {
@@ -2677,7 +4226,16 @@
             document.getElementById('penalty-section').style.display = (!isNaN(g1) && !isNaN(g2) && g1 === g2) ? 'block' : 'none';
         };
 
+        window.syncLiveFromModalInputs = () => {
+            if (!state.active || state.active.played) return;
+            state.active.g1 = parseInt(document.getElementById('mG1').value, 10) || 0;
+            state.active.g2 = parseInt(document.getElementById('mG2').value, 10) || 0;
+            window.pushLiveMatchFromActive();
+            if (isHallMode) window.renderHallView();
+        };
+
         window.saveMatch = () => {
+            if (!state.active) return;
             state.active.g1 = parseInt(document.getElementById('mG1').value)||0; state.active.g2 = parseInt(document.getElementById('mG2').value)||0;
             if (state.active.isPo && state.active.g1 === state.active.g2) {
                 state.active.pen1 = parseInt(document.getElementById('mPen1').value); state.active.pen2 = parseInt(document.getElementById('mPen2').value);
@@ -2713,6 +4271,27 @@
             }
 
             window.logAction(`Zapisano wynik meczu #${state.active.id}: ${state.active.t1.name} ${state.active.g1}:${state.active.g2} ${state.active.t2.name}.`);
+            window.clearHallLiveMatchMeta();
+            if (isAssistantMode) {
+                const wasPo = !!state.active.isPo;
+                const savedMatchId = state.active.id;
+                window.persistMatchViaAssistant({
+                    matchId: savedMatchId,
+                    isPo: wasPo,
+                    g1: state.active.g1,
+                    g2: state.active.g2,
+                    pen1: state.active.pen1,
+                    pen2: state.active.pen2,
+                    s1: state.active.s1 || [],
+                    s2: state.active.s2 || [],
+                }).then(() => {
+                    window.clearInlineScoreDraft(savedMatchId);
+                    window.closeModal('matchModal');
+                    state.active = null;
+                    window.refreshAssistantMatchesView(true);
+                });
+                return;
+            }
             window.save(); window.closeModal('matchModal'); 
             if(!state.active.isPo) window.calcTables();
             else { window.renderPlayoffTree(); window.renderPodium(); }
@@ -2726,7 +4305,7 @@
             const getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
             const finalDecided = f && window.isMatchDecided(f);
             const gold = finalDecided ? getW(f) : {name:"-"}; const silver = finalDecided ? getL(f) : {name:"-"}; const bronze = m3?.played && window.isMatchDecided(m3) ? getW(m3) : {name:"-"};
-            const gkAward = window.formatGkAwardHTML(s.gk);
+            const gkAward = window.formatGkAwardHTML(s.gk, s.allGk);
             const scorerAward = window.formatScorerAwardHTML(s.scorer);
             const now = new Date().toLocaleString('pl-PL'); const el = document.createElement('div');
 
@@ -2774,13 +4353,89 @@
             }).save();
         };
 
-        window.showQR = () => {
-            const fanUrl = window.location.href.split('?')[0] + `?view=fan&id=${activeKey}`;
-            const qrCont = document.getElementById('qrImgContainer'); const qrTxt = document.getElementById('qrLinkTxt');
-            if(qrCont && qrTxt) {
-                qrCont.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fanUrl)}" alt="">`;
-                qrTxt.innerText = fanUrl; document.getElementById('qrModal').style.display='block';
+        window.showQR = () => window.showShareModal('fan');
+
+        window.buildShareUrl = (kind) => {
+            const base = window.location.href.split('?')[0];
+            if (kind === 'hall') return `${base}?view=hall&id=${encodeURIComponent(activeKey)}`;
+            if (kind === 'assistant' && cachedAssistantToken) {
+                return `${base}?view=assistant&id=${encodeURIComponent(activeKey)}&token=${encodeURIComponent(cachedAssistantToken)}`;
             }
+            return `${base}?view=fan&id=${encodeURIComponent(activeKey)}`;
+        };
+
+        window.renderShareQr = (containerId, url) => {
+            const el = document.getElementById(containerId);
+            if (el) el.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}" alt="" style="display:inline-block;">`;
+        };
+
+        window.switchShareTab = (tab) => {
+            document.querySelectorAll('#shareModal .share-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-share-tab') === tab);
+            });
+            document.querySelectorAll('#shareModal .share-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'share-panel-' + tab);
+            });
+            if (tab === 'assistant') window.ensureAssistantShareLink(false);
+        };
+
+        window.showShareModal = (tab) => {
+            if (!activeKey) return;
+            const fanUrl = window.buildShareUrl('fan');
+            const hallUrl = window.buildShareUrl('hall');
+            const fanUrlEl = document.getElementById('share-url-fan');
+            const hallUrlEl = document.getElementById('share-url-hall');
+            if (fanUrlEl) fanUrlEl.textContent = fanUrl;
+            if (hallUrlEl) hallUrlEl.textContent = hallUrl;
+            window.renderShareQr('share-qr-fan', fanUrl);
+            window.renderShareQr('share-qr-hall', hallUrl);
+            window.switchShareTab(tab || 'fan');
+            document.getElementById('shareModal').style.display = 'block';
+        };
+
+        window.copyShareUrl = (kind) => {
+            const url = window.buildShareUrl(kind);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => alert('Skopiowano link do schowka.')).catch(() => prompt('Kopiuj link:', url));
+            } else {
+                prompt('Kopiuj link:', url);
+            }
+        };
+
+        window.ensureAssistantShareLink = (forceNew) => {
+            if (!activeKey) return;
+            const loading = document.getElementById('share-assistant-loading');
+            const ready = document.getElementById('share-assistant-ready');
+            const genBtn = document.getElementById('share-generate-assistant-btn');
+            if (cachedAssistantToken && !forceNew) {
+                const url = window.buildShareUrl('assistant');
+                if (ready) ready.style.display = 'block';
+                if (loading) loading.style.display = 'none';
+                if (genBtn) genBtn.style.display = 'none';
+                const urlEl = document.getElementById('share-url-assistant');
+                if (urlEl) urlEl.textContent = url;
+                window.renderShareQr('share-qr-assistant', url);
+                return;
+            }
+            if (loading) loading.style.display = 'block';
+            if (ready) ready.style.display = 'none';
+            if (genBtn) genBtn.disabled = true;
+            generateAssistantTokenCallable({ key: activeKey })
+                .then(res => {
+                    cachedAssistantToken = res.data.token;
+                    const url = window.buildShareUrl('assistant');
+                    if (loading) loading.style.display = 'none';
+                    if (ready) ready.style.display = 'block';
+                    if (genBtn) { genBtn.style.display = 'none'; genBtn.disabled = false; }
+                    const urlEl = document.getElementById('share-url-assistant');
+                    if (urlEl) urlEl.textContent = url;
+                    window.renderShareQr('share-qr-assistant', url);
+                })
+                .catch(err => {
+                    if (loading) loading.style.display = 'none';
+                    if (genBtn) genBtn.disabled = false;
+                    alert('❌ Nie udało się wygenerować linku asystenta: ' + ((err && err.message) || 'błąd serwera'));
+                });
         };
 
         window.switchTab = (t) => { 
@@ -2798,33 +4453,66 @@
                 }
             }
 
-            if(t==='tabele') window.calcTables(); 
-            if(t==='podium') window.renderPodium(); 
+            if(t==='tabele') window.calcTables();
+            if(t==='nazywo') { window.renderFilterBar(); window.filterAndRenderMatches(); window.calcTables(); }
+            if(t==='podium') window.renderPodium();
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); } 
             if(t==='playoff') window.renderPlayoffTree();
-            if(t==='archiwum') window.renderLogs(); 
+            if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); } 
         };
 
         window.openMatch = (id, isPo=false) => {
-            if(isFanMode) return; const m = isPo ? state.playoffs.find(x=>x.id===id) : state.matches.find(x=>x.id===id);
-            if(m.t1.id === -99 || m.t2.id === -99) { alert("Mecze z wolnym losem są automatycznie rozstrzygane."); return; }
+            if(isFanMode || isHallMode) return; const m = isPo ? state.playoffs.find(x=>x.id===id) : state.matches.find(x=>x.id===id);
+            if(!m || m.t1.id === -99 || m.t2.id === -99) { alert("Mecze z wolnym losem są automatycznie rozstrzygane."); return; }
             state.active = JSON.parse(JSON.stringify(m)); state.active.isPo = isPo;
-            document.getElementById('mTitle').innerText = m.n || "Mecz #" + m.id;
+            if (!state.active.s1) state.active.s1 = [];
+            if (!state.active.s2) state.active.s2 = [];
+            const draft = window.inlineScoreDrafts && window.inlineScoreDrafts[id];
+            if (draft && !m.played) {
+                if (draft.g1 !== undefined && draft.g1 !== '') state.active.g1 = parseInt(draft.g1, 10) || 0;
+                if (draft.g2 !== undefined && draft.g2 !== '') state.active.g2 = parseInt(draft.g2, 10) || 0;
+            }
+            if (state.active.g1 == null || isNaN(state.active.g1)) state.active.g1 = 0;
+            if (state.active.g2 == null || isNaN(state.active.g2)) state.active.g2 = 0;
+            document.getElementById('mTitle').innerText = m.n || ('Mecz # ' + window.getGlobalMatchNo(m, isPo) + (m.group && !isPo ? ' · Grupa ' + m.group : ''));
             document.getElementById('mT1').innerText = m.t1.name; document.getElementById('mT2').innerText = m.t2.name;
-            document.getElementById('mG1').value = m.g1; document.getElementById('mG2').value = m.g2;
+            document.getElementById('mG1').value = state.active.g1;
+            document.getElementById('mG2').value = state.active.g2;
             document.getElementById('btn-sc1').innerText = "+ GOL " + m.t1.name; document.getElementById('btn-sc2').innerText = "+ GOL " + m.t2.name;
             document.getElementById('mPen1').value = m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : '';
             document.getElementById('mPen2').value = m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : '';
             window.checkPenaltyVisibility(); window.renderSc(); document.getElementById('matchModal').style.display='block';
         };
 
-        window.addSc = (n) => { if(!state.active['s'+n]) state.active['s'+n]=[]; state.active['s'+n].push({name:''}); state.active['g'+n]++; document.getElementById('mG'+n).value = state.active['g'+n]; window.checkPenaltyVisibility(); window.renderSc(); };
+        window.addSc = (n) => {
+            if (!state.active) return;
+            if (!state.active['s' + n]) state.active['s' + n] = [];
+            state.active['s' + n].push({ name: '' });
+            state.active['g' + n] = (parseInt(state.active['g' + n], 10) || 0) + 1;
+            document.getElementById('mG' + n).value = state.active['g' + n];
+            window.checkPenaltyVisibility();
+            window.renderSc();
+            window.pushLiveMatchFromActive();
+            if (isHallMode) window.renderHallView();
+        };
+
+        window.removeSc = (n, i) => {
+            if (!state.active || !state.active['s' + n]) return;
+            state.active['s' + n].splice(i, 1);
+            state.active['g' + n] = Math.max(0, (parseInt(state.active['g' + n], 10) || 0) - 1);
+            document.getElementById('mG' + n).value = state.active['g' + n];
+            window.checkPenaltyVisibility();
+            window.renderSc();
+            window.pushLiveMatchFromActive();
+            if (isHallMode) window.renderHallView();
+        };
 
         window.renderSc = () => {
+            if (!state.active) return;
             const d = n => (state.active['s'+n]||[]).map((s,i)=>`
                 <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center;">
                     <input type="text" value="${escAttr(s.name)}" onchange="state.active.s${n}[${i}].name=this.value" style="font-size:12px; flex:1; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;">
-                    <button onclick="state.active.s${n}.splice(${i},1);state.active.g${n}--;window.renderSc();document.getElementById('mG${n}').value=state.active.g${n};window.checkPenaltyVisibility();" style="color:#de350b; border:none; background:none; font-size:20px; cursor:pointer; font-weight:bold; padding:0 5px;">&times;</button>
+                    <button onclick="removeSc(${n}, ${i})" style="color:#de350b; border:none; background:none; font-size:20px; cursor:pointer; font-weight:bold; padding:0 5px;">&times;</button>
                 </div>`).join('');
             document.getElementById('sc1').innerHTML=d(1); document.getElementById('sc2').innerHTML=d(2);
         };
@@ -2858,12 +4546,65 @@
             }).then(() => location.reload());
         };
 
+        window.isTournamentReadyToArchive = function () {
+            const f = window.findGrandFinalMatch && window.findGrandFinalMatch();
+            return !!(f && f.played && window.isMatchDecided && window.isMatchDecided(f));
+        };
+
+        window.renderArchiveClosePanel = () => {
+            const panel = document.getElementById('archive-close-panel');
+            if (!panel || isFanMode || isAssistantMode || isDemoMode || !activeKey) {
+                if (panel) panel.style.display = 'none';
+                return;
+            }
+            panel.style.display = 'block';
+            if (window.isTournamentReadyToArchive()) {
+                const f = window.findGrandFinalMatch();
+                const getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
+                const gold = getW(f);
+                panel.className = 'archive-close-panel';
+                panel.innerHTML =
+                    '<h4>🏆 Turniej ukończony — zapisz wyniki na stałe</h4>' +
+                    '<p>Wielki finał rozstrzygnięty (<b>' + esc(gold.name) + '</b>). Zarchiwizuj turniej, aby dodać go do listy zakończonych i wysłać raport do centralnego archiwum serwera.</p>' +
+                    '<div class="archive-close-actions">' +
+                    '<button type="button" class="btn-main" style="background:#0052cc;" onclick="archiveTournament()">💾 ZARCHIWIZUJ I ZAKOŃCZ TURNIEJ</button>' +
+                    '<button type="button" class="btn-main" style="background:#de350b;" onclick="exportToPDF()">📥 GENERUJ RAPORT PDF</button>' +
+                    '</div>';
+            } else {
+                panel.className = 'archive-close-panel is-pending';
+                panel.innerHTML =
+                    '<h4>⏳ Archiwizacja po finale</h4>' +
+                    '<p>Po rozegraniu i rozstrzygnięciu <b>Wielkiego Finału</b> tutaj pojawi się przycisk zapisu ukończonego turnieju. Możesz też użyć zakładki <b>Podium</b>.</p>';
+            }
+        };
+
         window.archiveTournament = () => {
-            if(isFanMode) return; let archiveName = prompt("Podaj nazwę dla archiwum:"); if(!archiveName) return;
+            if (isFanMode || isAssistantMode || !activeKey) return;
+            if (!window.isTournamentReadyToArchive()) {
+                alert('Turniej można zarchiwizować dopiero po rozstrzygnięciu Wielkiego Finału.');
+                return;
+            }
+            const defaultName = (state.meta && state.meta.tournamentName)
+                ? String(state.meta.tournamentName).trim().toUpperCase()
+                : '';
+            let archiveName = prompt('Podaj nazwę dla archiwum:', defaultName);
+            if (!archiveName) return;
             archiveName = archiveName.trim().toUpperCase();
-            let archivePayload = { ...state, _meta_name: archiveName, _meta_date: new Date().toLocaleString('pl-PL'), _license_owner: activeKey };
+            const { active, archiwum, wstrzymane, ...cleanState } = state;
+            let archivePayload = {
+                ...cleanState,
+                _meta_name: archiveName,
+                _meta_date: new Date().toLocaleString('pl-PL'),
+                _license_owner: activeKey,
+            };
+            window.logAction('Zarchiwizowano turniej: ' + archiveName);
             db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').push(archivePayload);
-            db.ref('archiwum').push(archivePayload).then(() => { alert("✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!"); });
+            db.ref('archiwum').push(archivePayload).then(() => {
+                alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!');
+                window.renderArchiveClosePanel();
+            }).catch(() => {
+                alert('❌ Nie udało się zapisać w centralnym archiwum. Lokalna kopia mogła zostać utworzona — sprawdź listę poniżej.');
+            });
         };
 
         window.freezeTournament = () => {
@@ -2919,6 +4660,7 @@
                 html += Object.keys(archiveDatabase).reverse().map(key => { let t = archiveDatabase[key]; return `<div class="archive-item" onclick="openArchive('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'archive')">✖ USUŃ</button><b style="font-size:14px;">${esc(t._meta_name)}</b><br><small style="color:#666;">🗓 Zakończono: ${esc(t._meta_date)}</small></div>`; }).join('');
             }
             cont.innerHTML = html;
+            window.renderArchiveClosePanel();
         };
 
         window.padTopN = function(arr, n) {
@@ -2927,14 +4669,40 @@
             return out;
         };
 
+        window.goalkeepersStatsEqual = function(a, b) {
+            if (!a || !b) return false;
+            return a.ck === b.ck && a.lost === b.lost && a.m === b.m;
+        };
+
+        window.formatGkRankLabel = function(rank, ex) {
+            return rank + (ex ? ' ex.' : '.');
+        };
+
+        window.buildGoalkeepersTopRanked = function(gArr, maxRank) {
+            maxRank = maxRank || 3;
+            const sorted = window.sortGoalkeepers(gArr || []);
+            const rows = [];
+            let rank = 0;
+            for (let i = 0; i < sorted.length; i++) {
+                const gk = sorted[i];
+                if (i === 0 || !window.goalkeepersStatsEqual(gk, sorted[i - 1])) {
+                    rank = i + 1;
+                }
+                if (rank > maxRank) break;
+                const ex = (i > 0 && window.goalkeepersStatsEqual(gk, sorted[i - 1]))
+                    || (i + 1 < sorted.length && window.goalkeepersStatsEqual(gk, sorted[i + 1]));
+                rows.push({ gk: gk, rank: rank, ex: ex });
+            }
+            return rows;
+        };
+
         window.sortGoalkeepers = function(arr) {
             return arr.slice().sort(function(a, b) {
                 if (b.ck !== a.ck) return b.ck - a.ck;
                 if (a.lost !== b.lost) return a.lost - b.lost;
                 const avgA = a.m > 0 ? a.lost / a.m : 999;
                 const avgB = b.m > 0 ? b.lost / b.m : 999;
-                if (avgA !== avgB) return avgA - avgB;
-                return (a.n || '').localeCompare(b.n || '', 'pl');
+                return avgA - avgB;
             });
         };
 
@@ -2946,16 +4714,20 @@
 
         window.buildPodiumTopListsHTML = function(stats) {
             const topSc = window.padTopN(stats.topSc, 3);
-            const topGk = window.padTopN(stats.topGk, 3);
             const topScHTML = topSc.map(function(x, i) {
                 if (!x) return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>';
                 const p = window.parseScorerEntry(x);
-                return '<div class="podium-top-row"><span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(p.name) + (p.team ? ' <span class="podium-top-team">(' + esc(p.team) + ')</span>' : '') + ' <b class="podium-top-stat">(' + x[1] + '⚽)</b></div>';
+                return '<div class="podium-top-row"><span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(p.name) + (p.team ? ' <span class="podium-top-team">(' + esc(p.team) + ')</span>' : '') + ' <b class="podium-top-stat">(' + window.formatPolishGoals(x[1]) + ')</b></div>';
             }).join('');
-            const topGkHTML = topGk.map(function(x, i) {
-                if (!x) return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>';
-                return '<div class="podium-top-row"><span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(x.n) + ' <span class="podium-top-team">(' + esc(x.t) + ')</span> <b class="podium-top-stat">(' + window.formatGkStatLabel(x) + ')</b></div>';
-            }).join('');
+            const gkRows = window.buildGoalkeepersTopRanked(stats.allGk || stats.topGk || [], 3);
+            const topGkHTML = gkRows.length === 0
+                ? [1, 2, 3].map(function(i) {
+                    return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + i + '.</span> —</div>';
+                }).join('')
+                : gkRows.map(function(row) {
+                    const label = window.formatGkRankLabel(row.rank, row.ex);
+                    return '<div class="podium-top-row"><span class="podium-top-rank">' + label + '</span> ' + esc(row.gk.n) + ' <span class="podium-top-team">(' + esc(row.gk.t) + ')</span> <b class="podium-top-stat">(' + window.formatGkStatLabel(row.gk) + ')</b></div>';
+                }).join('');
             return '<div class="podium-top-grid"><div><div class="podium-top-col-title">TOP 3 STRZELCÓW</div>' + topScHTML + '</div><div><div class="podium-top-col-title">TOP 3 BRAMKARZY</div>' + topGkHTML + '</div></div>';
         };
 
@@ -2979,9 +4751,15 @@
             return window.formatPlayerAwardHTML(p.name, p.team);
         };
 
-        window.formatGkAwardHTML = function(gk) {
-            if (!gk) return '—';
-            return window.formatPlayerAwardHTML(gk.n, gk.t);
+        window.formatGkAwardHTML = function(gk, allGk) {
+            const winners = (typeof window.buildGoalkeepersTopRanked === 'function' && allGk)
+                ? window.buildGoalkeepersTopRanked(allGk, 1)
+                : (gk ? [{ gk: gk, rank: 1, ex: false }] : []);
+            if (!winners.length) return '—';
+            const html = winners.map(function (row) {
+                return window.formatPlayerAwardHTML(row.gk.n, row.gk.t);
+            }).join('<br>');
+            return winners.length > 1 ? html + ' <span class="podium-award-team">(ex aequo)</span>' : html;
         };
 
         window.calcStats = () => {
@@ -3032,7 +4810,7 @@
                 return b[1] - a[1] || a[0].localeCompare(b[0], 'pl');
             });
             const gArr = window.sortGoalkeepers(Object.values(gkMap).filter(function(x) { return x.m > 0; }));
-            return { scorer: sArr[0], gk: gArr[0], topSc: sArr.slice(0, 3), topGk: gArr.slice(0, 3) };
+            return { scorer: sArr[0], gk: gArr[0], topSc: sArr.slice(0, 3), allGk: gArr, topGk: gArr.slice(0, 3) };
         };
 
         window.findGrandFinalMatch = () => {
@@ -3062,11 +4840,12 @@
             return `<div class="bracket-match ${statusCls}${variantCls}" onclick="openMatch(${m.id}, true)">
                 ${trophy}
                 <span class="${labelCls}">${esc(badge)}</span>
-                <div class="bracket-teams">
-                    <div class="bm-team" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
-                    <div class="bm-team" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
+                <div class="bracket-teams bracket-teams--inline">
+                    <span class="bm-team" title="${esc(m.t1.name)}">${esc(m.t1.name)}</span>
+                    <span class="bm-sep"> — </span>
+                    <span class="bm-team" title="${esc(m.t2.name)}">${esc(m.t2.name)}</span>
+                    <span class="${scoreCls}">${scoreDisplay}</span>
                 </div>
-                <span class="${scoreCls}">${scoreDisplay}</span>
             </div>`;
         };
 
@@ -3115,18 +4894,7 @@
                 displayCont.innerHTML = bracketHTML;
                 return;
             }
-            displayCont.innerHTML = po.map(m => {
-                let scoreDisplay = m.played ? `${m.g1}:${m.g2} ${m.pen1!=null ? `(k. ${m.pen1}:${m.pen2})` : ''}` : '-:-';
-                const badge = fanRo ? (m.n || m.time) : m.time;
-                const statusCls = m.played ? 'match-card--played' : 'match-card--pending';
-                return `
-                    <div class="match-card match-card--po ${statusCls}" onclick="openMatch(${m.id}, true)">
-                        <span class="match-time-badge" style="background:#ff8b00;">${esc(badge)}</span>
-                        <div class="team-left" title="${esc(m.t1.name)}">${esc(m.t1.name)}</div>
-                        <div>${renderMatchScoreBlock(m, scoreDisplay, { isPo: true, scoreStyle: 'background:#00875a;' })}</div>
-                        <div class="team-right" title="${esc(m.t2.name)}">${esc(m.t2.name)}</div>
-                    </div>`;
-            }).join('');
+            displayCont.innerHTML = po.map(m => renderPoMatchCardHTML(m, { badge: fanRo ? (m.n || m.time) : m.time })).join('');
         };
 
         window.renderPodium = () => {
@@ -3140,21 +4908,18 @@
                         ? `🏆 <b>Podium wkrótce dostępne</b><br>Finał zakończył się remisem — klasyfikacja końcowa pojawi się po rozstrzygnięciu meczu (np. rzutami karnymi).`
                         : `🏆 <b>Klasyfikacja końcowa zablokowana</b><br>Finał nie może zakończyć się remisem bez zwycięzcy. Wpisz wynik z przewagą jednej drużyny lub uzupełnij rzuty karne w protokole meczu.`);
                 document.getElementById('podium-view').innerHTML = `<div class="card" style="text-align:center; padding:30px; color:#666;">${blockedMsg}</div>`;
-                document.getElementById('btn-pdf-final').style.display = 'none';
                 return;
             }
             const getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
             const getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
             const gold = getW(f); const silver = getL(f); const bronze = m3?.played ? getW(m3) : {name:"—"};
 
-            let podiumHTML = `<div class="podium-scene"><div class="podium-main"><div class="podium-winner">🏆 ${esc(gold.name)}</div></div><div class="steps"><div class="step silver">🥈 2. MIEJSCE<br>${esc(silver.name)}</div><div class="step gold">🥇 1. MIEJSCE<br>${esc(gold.name)}</div><div class="step bronze">🥉 3. MIEJSCE<br>${esc(bronze.name)}</div></div><div class="awards-banner"><div class="award-box"><h4>⚽ KRÓL STRZELCÓW</h4><b>${window.formatScorerAwardHTML(s.scorer)}</b></div><div class="award-box"><h4>🧤 ZŁOTA RĘKAWICA</h4><b>${window.formatGkAwardHTML(s.gk)}</b></div></div>${window.buildPodiumTopListsHTML(s)}</div>`;
-            if (!window._demoStoryPodiumEmbed) {
-                podiumHTML += `<button class="btn-main" onclick="archiveTournament()" style="background:#0052cc; margin-top:20px; margin-bottom:5px;">💾 ZARCHIWIZUJ TURNIEJ</button>`;
-            } else {
+            let podiumHTML = `<div class="podium-scene"><div class="podium-main"><div class="podium-winner">🏆 ${esc(gold.name)}</div></div><div class="steps"><div class="step silver">🥈 2. MIEJSCE<br>${esc(silver.name)}</div><div class="step gold">🥇 1. MIEJSCE<br>${esc(gold.name)}</div><div class="step bronze">🥉 3. MIEJSCE<br>${esc(bronze.name)}</div></div><div class="awards-banner"><div class="award-box"><h4>⚽ KRÓL STRZELCÓW</h4><b>${window.formatScorerAwardHTML(s.scorer)}</b></div><div class="award-box"><h4>🧤 ZŁOTA RĘKAWICA</h4><b>${window.formatGkAwardHTML(s.gk, s.allGk)}</b></div></div>${window.buildPodiumTopListsHTML(s)}</div>`;
+            if (window._demoStoryPodiumEmbed) {
                 podiumHTML += `<p style="text-align:center; font-size:12px; color:#00875a; margin-top:16px; font-weight:bold;">✓ Wyliczone automatycznie z protokołu meczowego</p>`;
             }
             document.getElementById('podium-view').innerHTML = podiumHTML;
-            document.getElementById('btn-pdf-final').style.display = window._demoStoryPodiumEmbed ? 'none' : 'block';
+            window.renderArchiveClosePanel();
         };
 
         } // end _appRenderBridgeReady
@@ -3169,11 +4934,31 @@
         const dbPath = dbPathLive;
         const readonlyCSS = 'header button, .btn-main, .order-controls, .time-setting, #setup-view, #btn-theme, .table-order-btn, .table-reset-btn, .table-save-btn, .filter-bar { display: none !important; } .match-card, .bracket-match { cursor: default !important; pointer-events: none !important; } input, select { pointer-events: none !important; border: none !important; background: transparent !important; color: inherit !important; outline: none !important; -webkit-appearance: none; appearance: none; } ';
 
-        if (isFanMode) {
+        if (isHallMode) {
+            document.body.classList.add('hall-view');
+            document.getElementById('license-countdown').style.display = 'none';
+            document.getElementById('btn-qr').style.display = 'none';
+            document.querySelectorAll('.header-organizer-actions button').forEach(btn => { btn.style.display = 'none'; });
+            window.renderHallView();
+            setInterval(() => { if (isHallMode) window.renderHallView(); }, 1500);
+        } else if (isAssistantMode) {
+            if (!activeKey || !assistantTokenParam) {
+                document.body.classList.add('assistant-view');
+                document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color:#de350b; background:#fff0f0; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px;">Asystent — brak tokenu</span>`;
+            } else {
+                document.body.classList.add('assistant-view');
+                document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color:#1e3a8a; background:#eef2ff; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px;">🧑‍⚖️ TRYB ASYSTENTA</span>`;
+                document.getElementById('license-countdown').style.display = 'none';
+                document.getElementById('btn-qr').style.display = 'none';
+                document.querySelectorAll('.header-organizer-actions button').forEach(btn => { btn.style.display = 'none'; });
+                setTimeout(() => { window.renderFilterBar(); window.refreshAssistantMatchesView(true); }, 50);
+            }
+        } else if (isFanMode) {
             document.body.classList.add('fan-view');
-            document.head.insertAdjacentHTML('beforeend', '<style>' + readonlyCSS + 'button[onclick*="start"], button[onclick*="sklady"], button[onclick*="grupy"], button[onclick*="archiwum"] { display: none !important; }</style>');
+            document.head.insertAdjacentHTML('beforeend', '<style>' + readonlyCSS + 'button[onclick*="start"], button[onclick*="sklady"], button[onclick*="grupy"], button[onclick*="archiwum"], button[onclick*="nazywo"] { display: none !important; }</style>');
             document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color: #ffcc00; background: rgba(0,0,0,0.3); padding: 3px 10px; border-radius: 12px; font-size: 11px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px;">🔴 WYNIKI LIVE (KIBIC)</span>`;
             document.getElementById('license-countdown').style.display = 'none';
+            window.renderFanRulesBox();
             setTimeout(() => switchTab('mecze'), 50);
             if (archiveId || localArchiveId) {
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
@@ -3190,6 +4975,11 @@
         function applyTournamentState(d) {
             if (window.DemoStoryController && DemoStoryController.isActive()) return;
             if (isFanMode && document.getElementById('app-header-title').innerText.includes("ARCHIWUM") && !archiveId && !localArchiveId) return;
+            const matchModal = document.getElementById('matchModal');
+            const modalOpen = matchModal && matchModal.style.display === 'block';
+            const localActiveSnapshot = modalOpen && state.active
+                ? JSON.parse(JSON.stringify(state.active))
+                : null;
             if (d) {
                 state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
                 if (archiveId || localArchiveId) {
@@ -3197,18 +4987,32 @@
                     initArchiveViewer(d);
                 }
                 window.renderInputs();
+                window.syncTournamentMetaToForm();
                 if (state.groups && Object.keys(state.groups).length > 0) {
-                    window.renderGroupsList(); window.filterAndRenderMatches();
+                    window.renderGroupsList();
+                    if (!isAssistantMode) window.filterAndRenderMatches();
                     window.renderPlayoffTree();
                 }
             } else {
-                state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [] };
+                state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], meta: {} };
+            }
+            if (localActiveSnapshot) {
+                state.active = localActiveSnapshot;
             }
             document.body.classList.remove('theme-dedicated');
-            if (document.getElementById('tabele').classList.contains('active')) window.calcTables();
+            const activeTab = document.querySelector('.tab-content.active');
+            if (activeTab && (activeTab.id === 'tabele' || activeTab.id === 'nazywo')) window.calcTables();
+            if (activeTab && activeTab.id === 'nazywo') { window.renderFilterBar(); window.filterAndRenderMatches(); }
+            window.renderFanRulesBox();
+            if (isHallMode) window.renderHallView();
+            if (isAssistantMode && assistantTokenParam) {
+                window.renderFilterBar();
+                window.refreshAssistantMatchesView(false);
+            }
             window.renderLogs();
             window.renderDashboard();
         }
+        window.applyTournamentState = applyTournamentState;
 
         if (activeKey && !isDemoMode && viewMode !== 'archive') {
             startLicenseHeaderWatch(activeKey);
@@ -3220,15 +5024,16 @@
             window.renderGroupsList();
             window.filterAndRenderMatches();
             window.renderPlayoffTree();
+            window.syncTournamentMetaToForm();
             document.body.classList.remove('theme-dedicated');
             window.switchTab('start');
             window.renderDashboard();
         } else if (useRtdbRestForOrganizer()) {
             fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => applyTournamentState(null));
-            if (isFanMode) {
+            if (isFanMode || isHallMode || isAssistantMode) {
                 setInterval(() => {
                     fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => {});
-                }, 8000);
+                }, isHallMode ? 1500 : (isAssistantMode ? 5000 : 8000));
             }
         } else {
             let rtdbLiveLoaded = false;

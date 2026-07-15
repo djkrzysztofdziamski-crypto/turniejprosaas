@@ -8,6 +8,7 @@ const admin = require('firebase-admin');
 const { activateLicenseByKey } = require('./lib/licensing');
 const { getActiveProducts, productToPublic } = require('./lib/billing/catalog');
 const { fulfillOrder } = require('./lib/billing/fulfillOrder');
+const { handlePaymentFailure } = require('./lib/billing/handlePaymentFailure');
 const { resendOrderEmail } = require('./lib/billing/resendOrderEmail');
 const { verifyEmailTransport } = require('./lib/billing/email');
 const {
@@ -15,7 +16,9 @@ const {
   parseCheckoutSession,
   createCheckoutSession,
   verifyWebhookEvent,
+  isSessionPaid,
 } = require('./lib/billing/providers/stripe');
+const { generateAssistantToken, assistantSaveMatch } = require('./lib/assistant');
 
 admin.initializeApp();
 const db = admin.database();
@@ -54,6 +57,7 @@ exports.createCheckoutSession = functions.region('europe-west1').https.onCall(as
   try {
     return await createCheckoutSession({ productId, customerEmail });
   } catch (err) {
+    console.error('createCheckoutSession error:', err.type || err.code, err.message);
     throw toHttpsError(err);
   }
 });
@@ -80,6 +84,26 @@ exports.verifyEmailConfig = functions.region('europe-west1').https.onCall(async 
     throw new functions.https.HttpsError('permission-denied', 'Wymagane uprawnienia administratora.');
   }
   return verifyEmailTransport();
+});
+
+exports.generateAssistantToken = functions.region('europe-west1').https.onCall(async (data) => {
+  const key = String(data?.key || '').trim();
+  if (!key) {
+    throw new functions.https.HttpsError('invalid-argument', 'Wymagany klucz licencji.');
+  }
+  try {
+    return await generateAssistantToken(db, key);
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.assistantSaveMatch = functions.region('europe-west1').https.onCall(async (data) => {
+  try {
+    return await assistantSaveMatch(db, data || {});
+  } catch (err) {
+    throw toHttpsError(err);
+  }
 });
 
 exports.paymentWebhook = functions.region('europe-west1').https.onRequest(async (req, res) => {
@@ -119,10 +143,26 @@ exports.paymentWebhook = functions.region('europe-west1').https.onRequest(async 
   }
 
   try {
+    const session = event.data.object;
+
     if (event.type === 'checkout.session.completed') {
-      const order = parseCheckoutSession(event.data.object);
+      if (!isSessionPaid(session)) {
+        console.log(
+          'Checkout completed, payment unpaid — czekam na async:',
+          session.id,
+          session.payment_status,
+        );
+      } else {
+        const order = parseCheckoutSession(session);
+        const result = await fulfillOrder(db, order);
+        console.log('Order fulfilled:', result.key, order.paymentId, result.email);
+      }
+    } else if (event.type === 'checkout.session.async_payment_succeeded') {
+      const order = parseCheckoutSession(session);
       const result = await fulfillOrder(db, order);
-      console.log('Order fulfilled:', result.key, order.paymentId, result.email);
+      console.log('Async payment fulfilled:', result.key, order.paymentId, result.email);
+    } else if (event.type === 'checkout.session.async_payment_failed') {
+      await handlePaymentFailure(db, session);
     }
 
     res.json({ received: true });

@@ -24,7 +24,21 @@ function parseCheckoutSession(session) {
     source: 'stripe',
     paymentId: session.id,
     customerEmail: email || null,
+    paymentStatus: session.payment_status || null,
   };
+}
+
+function isSessionPaid(session) {
+  return session.payment_status === 'paid';
+}
+
+function getPaymentMethodTypes() {
+  const raw = functions.config().stripe?.payment_method_types;
+  if (raw) {
+    return raw.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  // p24 wymaga osobnej aktywacji w Stripe Live (Settings → Payment methods)
+  return ['card', 'blik'];
 }
 
 async function createCheckoutSession({ productId, customerEmail }) {
@@ -48,7 +62,7 @@ async function createCheckoutSession({ productId, customerEmail }) {
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     customer_email: customerEmail || undefined,
-    payment_method_types: ['card', 'blik', 'p24'],
+    payment_method_types: getPaymentMethodTypes(),
     line_items: [{
       price_data: {
         currency: 'pln',
@@ -82,4 +96,5 @@ module.exports = {
   parseCheckoutSession,
   createCheckoutSession,
   verifyWebhookEvent,
+  isSessionPaid,
 };

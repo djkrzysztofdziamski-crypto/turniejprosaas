@@ -16,12 +16,17 @@
     --color-border-soft: #486581;
 
     /* Surfaces — light (panel sędziego) */
-    --color-app-bg: #f0f4f8;
-    --color-app-bg-subtle: #e8eef4;
+    --color-app-bg: #f8fafc;
+    --color-app-bg-subtle: #f1f5f9;
     --color-app-surface: #ffffff;
-    --color-app-border: #c5d0db;
-    --color-app-text: #1a2b3c;
-    --color-app-text-muted: #5a6b7d;
+    --color-app-surface-muted: #f1f5f9;
+    --color-app-border: #e2e8f0;
+    --color-app-border-strong: #cbd5e1;
+    --color-app-text: #0f172a;
+    --color-app-text-muted: #64748b;
+    --color-table-head-bg: #eef2ff;
+    --color-table-head-text: #334155;
+    --color-glow-panel: 0 0 0 1px rgba(0, 82, 204, 0.07), 0 8px 28px rgba(11, 31, 51, 0.07);
 
     /* Text on dark */
     --color-text: #ffffff;
@@ -50,8 +55,14 @@
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 14px;
-    --shadow-card: 0 2px 12px rgba(11, 31, 51, 0.08);
-    --shadow-elevated: 0 8px 28px rgba(0, 0, 0, 0.28);
+    --shadow-card: 0 0 0 1px rgba(0, 82, 204, 0.05), 0 4px 18px rgba(11, 31, 51, 0.06);
+    --shadow-elevated: 0 0 0 1px rgba(0, 82, 204, 0.08), 0 12px 32px rgba(11, 31, 51, 0.1);
+    --font-size-body: 14px;
+    --font-size-table: 12px;
+    --font-size-nav-tab: 12px;
+    --row-height-table: 30px;
+    --row-height-table-compact: 26px;
+    --radius-panel: 8px;
 
     /* Layout */
     --max-content: 1080px;
