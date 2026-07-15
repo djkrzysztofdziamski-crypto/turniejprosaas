@@ -51,7 +51,7 @@
 >
 > Zauważ, co się stało: **rodzice mogli sprawdzać wyniki sami** — bez dzwonienia do Ciebie. Ty widziałeś, że **został jeden mecz** — i wiedziałeś, gdzie jesteś. Po finałe **podium, król strzelców i bramkarz** — bez kartki i Excela o dziesiątej wieczorem.  
 >
-> To nie jest kolejny generator drabinki na tydzień przed turniejem. To **Twój spokój w niedzielę na hali** — kiedy liczy się każda minuta i każde pytanie od rodzica.  
+> To nie jest kolejny generator drabinki na tydzień przed turniejem. To **Twój spokój w niedzielę na turnieju** — kiedy liczy się każda minuta i każde pytanie od rodzica.  
 >
 > **Twój turniej może wyglądać tak samo.** Pakiet na dzień lub weekend turnieju — wchodzisz z kluczem, grasz, domykasz.  
 >
@@ -95,7 +95,7 @@
 
 **Jak mówić:**
 
-> „«Wyślę wyniki wieczorem» to zdanie, które rodzice słyszą za często. W 2026 roku oczekują **live** — tak jak wszędzie indziej. Ty wpisujesz wynik po meczu, oni widzą od razu. **Bez aplikacji, bez konta** — link lub QR na hali.”
+> „«Wyślę wyniki wieczorem» to zdanie, które rodzice słyszą za często. W 2026 roku oczekują **live** — tak jak wszędzie indziej. Ty wpisujesz wynik po meczu, oni widzą od razu. **Bez aplikacji, bez konta** — link lub QR przy boisku.”
 
 **Unikaj:** „Synchronizacja w chmurze w czasie rzeczywistym.”
 
@@ -159,7 +159,7 @@
 
 **Odpowiedź:**
 
-> „Pytanie nie brzmi «czy macie narzędzie», tylko **«jak wygląda mój dzień na hali»**. Czy rodzice sami widzą wyniki live? Czy po finałe **nie liczysz podium ręcznie**? Czy wiesz w każdej chwili, ile meczów zostało?  
+> „Pytanie nie brzmi «czy macie narzędzie», tylko **«jak wygląda mój dzień turnieju»**. Czy rodzice sami widzą wyniki live? Czy po finałe **nie liczysz podium ręcznie**? Czy wiesz w każdej chwili, ile meczów zostało?  
 >
 > Zamiast porównywać listy funkcji — **pokażę Ci 2-minutowy finał turnieju**. Sam ocenisz, czy to daje Ci spokój, którego szukasz.”
 
@@ -171,7 +171,7 @@
 
 **Odpowiedź:**
 
-> „Toornament pomaga **przed turniejem**. TurniejPro jest pod **dzień turnieju na hali** — rodzice na telefonie, wyniki na bieżąco, finał, podium, archiwum. Po polsku, pod piłkę nożną halową, **16 drużyn w jeden weekend**.  
+> „Toornament pomaga **przed turniejem**. Turniejomat jest pod **dzień turnieju piłkarskiego** — rodzice na telefonie, wyniki na bieżąco, finał, podium, archiwum. Po polsku, na hali, orliku i boisku szkolnym, **16 drużyn w jeden weekend**.  
 >
 > Nie musisz rezygnować z tego, co masz — pytanie brzmi: **kto odbiera telefony w niedzielę?** Zobacz demo finału i powiedz, czy to Twój problem.”
 
@@ -209,7 +209,7 @@
 
 **Odpowiedź:**
 
-> „Internet to ważny temat — **nie udajemy, że go nie ma**. W praktyce: wpisujesz wyniki na telefonie, system synchronizuje, gdy sieć wraca. Rodzice na zewnątrz hali często mają lepszy zasięg niż Ty w środku.  
+> „Internet to ważny temat — **nie udajemy, że go nie ma**. W praktyce: wpisujesz wyniki na telefonie, system synchronizuje, gdy sieć wraca. Rodzice przy boisku lub przy wejściu często mają lepszy zasięg niż Ty przy stole sędziowskim.  
 >
 > Przed turniejem dostajesz **konkretne wskazówki** z kluczem licencyjnym. A teraz — zobacz **co dzieje się po finałe**, gdy wynik jest wpisany. To jest moment, którego nie rozwiąże kartka, nawet offline.”
 
@@ -257,7 +257,7 @@
 
 ### Wariant B — cold / krótki kontakt
 
-> „Nie będę opowiadał o funkcjach. **Zobacz finał turnieju 16 drużyn** — tak jak w niedzielę na hali. Jak Ci pasuje, daję Ci telefon albo link. **Start: «Zobacz finał turnieju».**”
+> „Nie będę opowiadał o funkcjach. **Zobacz finał turnieju 16 drużyn** — tak jak w niedzielę na Twoim turnieju. Jak Ci pasuje, daję Ci telefon albo link. **Start: «Zobacz finał turnieju».**”
 
 ---
 
@@ -286,7 +286,7 @@
 
 ### E4 — warianty wpisu finału (dla sprzedawcy)
 
-Demo domyślnie kończy się wynikiem **3:2** — szybko, bez komplikacji. Możesz pokazać **dramatyczny finał remisowy**, żeby podkreślić, że system zna reguły pucharu tak jak Ty na hali.
+Demo domyślnie kończy się wynikiem **3:2** — szybko, bez komplikacji. Możesz pokazać **dramatyczny finał remisowy**, żeby podkreślić, że system zna reguły pucharu tak jak Ty na turnieju.
 
 | Wariant | Wpis organizatora | Efekt w demo | Kiedy użyć |
 |---------|-------------------|--------------|------------|
@@ -302,7 +302,7 @@ Demo domyślnie kończy się wynikiem **3:2** — szybko, bez komplikacji. Może
 **Scenariusz sprzedażowy (remis + karne, ~30 s dłużej):**
 
 1. Na E4 wpisz **0:0** — pojawi się sekcja karnych (jak w pełnej wersji organizatora).
-2. Powiedz: *„Tak samo działa u Ciebie na hali — remis w pucharze, karne, wpisujesz końcowy wynik.”*
+2. Powiedz: *„Tak samo działa u Ciebie na turnieju — remis w pucharze, karne, wpisujesz końcowy wynik.”*
 3. Wpisz **5:4** → E5 podium z `(k. 5:4)` w protokole.
 4. Opcjonalnie pokaż odrzucenie **4:4**: *„System nie pozwoli zamknąć finału bez zwycięzcy — tak jak w regulaminie.”*
 
@@ -356,7 +356,7 @@ Demo domyślnie kończy się wynikiem **3:2** — szybko, bez komplikacji. Może
 >
 > Jak będziesz miał termin — **odezwij się**. Chętnie pomogę przed pierwszym meczem.  
 >
-> Powodzenia na hali.”
+> Powodzenia na turnieju.”
 
 **Nie rób:** presji, rabatu z marszu, listy funkcji „na zakończenie”.
 

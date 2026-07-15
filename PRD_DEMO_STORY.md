@@ -28,7 +28,7 @@ Demo **nie jest** hubem funkcji, szkoleniem ani onboardingiem technicznym.
 
 ### 2.1 Cel główny
 
-Zwiększyć konwersję od pierwszego kontaktu z produktem do **aktywacji licencji TurniejPro SaaS** poprzez doświadczenie emocjonalne i operacyjne, które organizator utożsamia ze swoim turniejem (16 drużyn, finał, rodzice na hali).
+Zwiększyć konwersję od pierwszego kontaktu z produktem do **aktywacji licencji TurniejPro SaaS** poprzez doświadczenie emocjonalne i operacyjne, które organizator utożsamia ze swoim turniejem (16 drużyn, finał, rodzice przy boisku).
 
 ### 2.2 Cele biznesowe
 
@@ -57,11 +57,11 @@ Zwiększyć konwersję od pierwszego kontaktu z produktem do **aktywacji licencj
 |---------|------|
 | **Kim jest** | Trener, członek klubu, koordynator akcji promocyjnej, „sędzia przy stoliku” |
 | **Skala turnieju** | 16 drużyn (4 grupy × 4), faza grupowa + play-off + finał (~56 meczów) |
-| **Kontekst** | Turniej za 7–14 dni; hala sportowa; rodzice i kibice na miejscu |
+| **Kontekst** | Turniej za 7–14 dni; hala, orlik lub boisko szkolne; rodzice i kibice na miejscu |
 | **Obecne narzędzia** | Excel, WhatsApp, kartka, czasem Toornament/Challonge/Turniejomat |
 | **Ból** | Telefony od rodziców, ręczne liczenie tabel i podium, stres w końcówce dnia |
 | **Motywator** | Profesjonalny wizerunek turnieju + mniej pracy w dniu eventu |
-| **Bariera** | „Czy dam radę technicznie?”, „Czy internet na hali wytrzyma?”, „Ile to kosztuje?” |
+| **Bariera** | „Czy dam radę technicznie?”, „Czy internet na obiekcie wytrzyma?”, „Ile to kosztuje?” |
 
 ### 3.2 Persona wtórna: Rodzic / kibic (implicit)
 
@@ -279,10 +279,10 @@ Obiekcje, które demo **musi adresować** (w copy, ekranach lub FAQ tuż przy CT
 | **Co po turnieju?** | Archiwum, protokół, wyniki zostają | Ekran Archiwum |
 | **Ile to kosztuje?** | Pakiety: 1 dzień / weekend / miesiąc | Ekran CTA |
 | **Co jeśli internet padnie?** | FAQ / 1 linia przy CTA (do ustalenia z produktem) | CTA / FAQ |
-| **Czym różnicie się od Toornament/Challonge?** | Cały dzień na hali + kibic live + podium PL-football | Kibic + Podium |
+| **Czym różnicie się od Toornament/Challonge?** | Cały dzień turnieju + kibic live + podium PL-football | Kibic + Podium |
 | **Czym różnicie się od Excel/WhatsApp?** | Rodzice sami sprawdzają; podium automatycznie | Kibic + Podium |
 | **Czy mogę zepsuć turniej jednym kliknięciem?** | Opcjonalnie: wzmianka o cofnięciu / wsparcie (poza głównym flow) | FAQ przy CTA |
-| **Czy to działa na telefonie na hali?** | Widok kibica na mobile; organizator na tablecie/telefonie | Ekran Kibic |
+| **Czy to działa na telefonie przy boisku?** | Widok kibica na mobile; organizator na tablecie/telefonie | Ekran Kibic |
 
 ---
 

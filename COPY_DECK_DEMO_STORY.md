@@ -72,7 +72,7 @@ Król strzelców: Kowalski (7 bramek) · Bramkarz turnieju: Nowak (4 czyste kont
 | Element | Copy |
 |---------|------|
 | **Eyebrow** | TurniejPro SaaS |
-| **Nagłówek (H1)** | Zobacz finał turnieju — bez chaosu na hali |
+| **Nagłówek (H1)** | Zobacz finał turnieju — bez chaosu w dniu zawodów |
 | **Podnagłówek** | 2 minuty. Jedna historia. Twój turniej może wyglądać tak samo. |
 | **Body (opcjonalnie)** | Nie musisz konfigurować systemu. Zobacz, jak wygląda ostatni mecz i zamknięcie turnieju z TurniejPro. |
 | **CTA primary** | Zobacz finał turnieju |
@@ -94,7 +94,7 @@ Król strzelców: Kowalski (7 bramek) · Bramkarz turnieju: Nowak (4 czyste kont
 | **Licznik 1** | 16 drużyn |
 | **Licznik 2** | 56 meczów |
 | **Licznik 3** | 55 rozegranych |
-| **Podnagłówek** | Został jeden mecz. Cała hala czeka na wynik. |
+| **Podnagłówek** | Został jeden mecz. Cały obiekt czeka na wynik. |
 | **CTA primary** | Zobacz, co widzą rodzice |
 | **Microcopy** | Memoriał Wiosenny 2026 · Hala OSiR |
 
@@ -199,7 +199,7 @@ Wpisz wynik finału, aby zamknąć turniej.
 | Element | Copy |
 |---------|------|
 | **Nagłówek (H1)** | Twój turniej może wyglądać tak samo |
-| **Podnagłówek** | 16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na hali |
+| **Podnagłówek** | 16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na boisku |
 | **Bullet 1** | Rodzice sami sprawdzają terminarz i wyniki |
 | **Bullet 2** | Ty wpisujesz wyniki — tabela i play-off się aktualizują |
 | **Bullet 3** | Po finałe: podium, król strzelców, bramkarz — automatycznie |
@@ -289,14 +289,14 @@ Do użycia przy CTA, w rozwijanym FAQ lub tooltipach.
 
 | Obiekcja | Odpowiedź (copy) |
 |----------|------------------|
-| Czy 16 drużyn to obsłużycie? | Tak. Demo pokazuje turniej 16 drużyn, 56 meczów, play-off i finał — dokładnie taki format, jaki prowadzisz na hali. |
+| Czy 16 drużyn to obsłużycie? | Tak. Demo pokazuje turniej 16 drużyn, 32 mecze, play-off i finał — dokładnie taki format, jaki prowadzisz na hali, orliku albo boisku szkolnym. |
 | Rodzice muszą coś instalować? | Nie. Wystarczy link lub kod QR. Bez aplikacji, bez zakładania konta. |
 | Czy dam radę w dniu turnieju? | Tak. W demo wpisujesz jeden wynik finału — reszta (podium, statystyki) dzieje się automatycznie. |
 | Ile to kosztuje? | Pakiety dopasowane do turnieju: 1 dzień, weekend lub miesiąc. Szczegóły przy aktywacji lub w ofercie. |
 | Co po turnieju? | Turniej trafia do archiwum. Wyniki i protokół zostają — nie musisz nic kopiować tego samego wieczoru. |
-| Co jeśli internet na hali słabnieje? | System synchronizuje wyniki w chmurze. Szczegóły techniczne otrzymasz z kluczem licencyjnym. |
+| Co jeśli internet na obiekcie słabnieje? | System synchronizuje wyniki w chmurze. Szczegóły techniczne otrzymasz z kluczem licencyjnym. |
 | Czym różnicie się od Excela i WhatsAppa? | Rodzice sami widzą wyniki live. Ty nie jesteś infolinią. Po finałe nie liczysz podium na kartce. |
-| Czym różnicie się od Toornament / Challonge? | TurniejPro jest pod dzień turnieju na hali — wyniki live, tabela, play-off i podium w jednym miejscu, po polsku, pod piłkę nożną. |
+| Czym różnicie się od Toornament / Challonge? | Turniejomat jest pod dzień turnieju piłkarskiego — wyniki live, tabela, play-off i podium w jednym miejscu, po polsku, na hali, orliku i boisku szkolnym. |
 | Czy mogę zepsuć turniej jednym kliknięciem? | Kluczowe akcje mają potwierdzenia. Możesz też cofnąć ostatni stan przed regeneracją danych. |
 | Czy to działa na telefonie? | Tak. Organizator i kibic mogą korzystać z telefonu — demo pokazuje widok kibica na mobile. |
 

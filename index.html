@@ -1960,7 +1960,7 @@
                 <button type="button" class="share-copy-btn" onclick="copyShareUrl('fan')">Kopiuj link</button>
             </div>
             <div id="share-panel-hall" class="share-panel">
-                <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Widok projektora — następny mecz i tabele.</p>
+                <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Duży ekran na obiekcie (projektor / TV) — aktualny mecz i tabele.</p>
                 <div id="share-qr-hall" style="margin:12px auto;"></div>
                 <p id="share-url-hall" style="font-size:11px; word-break:break-all; color:#0747a6; font-weight:bold;"></p>
                 <button type="button" class="share-copy-btn" onclick="copyShareUrl('hall')">Kopiuj link</button>
@@ -2875,7 +2875,7 @@
     function confirmBlock(key, btnEl) {
         if (!isAdminSession()) return;
         const name = (btnEl && btnEl.closest('tr')?.querySelector('.lic-col-notatka')?.getAttribute('title')) || key;
-        if (confirm(`🚨 OSTRZEŻENIE SYSTEMOWE!\n\nCzy na pewno chcesz NATYCHMIAST ZABLOKOWAĆ licencję dla:\n[${name}]?\n\nSędzia na hali straci uprawnienia do zapisu wyników w tej samej sekundzie!`)) {
+        if (confirm(`🚨 OSTRZEŻENIE SYSTEMOWE!\n\nCzy na pewno chcesz NATYCHMIAST ZABLOKOWAĆ licencję dla:\n[${name}]?\n\nSędzia / organizator straci uprawnienia do zapisu wyników w tej samej sekundzie!`)) {
             db.ref('licencje/' + key).update({ status: 'zablokowany' });
         }
     }

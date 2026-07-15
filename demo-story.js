@@ -68,7 +68,7 @@
 
             eyebrow: 'Turniejomat',
 
-            h1: 'Zobacz finał turnieju — bez chaosu na hali',
+            h1: 'Zobacz finał turnieju — bez chaosu w dniu zawodów',
 
             sub: '2 minuty. Jedna historia. Twój turniej może wyglądać tak samo.',
 
@@ -84,7 +84,7 @@
 
             h1: 'Turniej 16 drużyn. 32 mecze. Finał za chwilę.',
 
-            sub: 'Został jeden mecz. Cała hala czeka na wynik.',
+            sub: 'Został jeden mecz. Cały obiekt czeka na wynik.',
 
             cta: 'Zobacz, co widzą rodzice'
 
@@ -136,7 +136,7 @@
 
             h1: 'Twój turniej może wyglądać tak samo',
 
-            sub: '16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na hali',
+            sub: '16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na boisku',
 
             bullets: [
 
@@ -1124,7 +1124,7 @@
 
         html += '<div id="demo-live-embed-host" class="demo-embed-app"></div>';
 
-        html += '<p class="demo-micro" style="margin-top:14px;">Tryb hali — widok projektora:</p>';
+        html += '<p class="demo-micro" style="margin-top:14px;">Tryb Hala — duży ekran / projektor na obiekcie:</p>';
 
         html += '<div id="demo-hall-embed-host" class="demo-hall-embed-host"></div>';
 
