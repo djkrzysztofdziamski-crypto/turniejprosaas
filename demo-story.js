@@ -148,6 +148,10 @@
 
             ],
 
+            ctaLanding: 'Zobacz prezentację na turniejomat.pl',
+
+            ctaLandingSub: 'Cennik, funkcje i jak uruchomić turniej u siebie',
+
             ctaPrimary: 'Aktywuj licencję na mój turniej',
 
             ctaSecondary: 'Zamów klucz na weekend turnieju',
@@ -202,6 +206,7 @@
 
     const SALES_EMAIL = 'admin@turniejomat.pl';
     const APP_URL = 'https://app.turniejomat.pl/';
+    const LANDING_URL = 'https://turniejomat.pl/';
 
 
 
@@ -691,6 +696,12 @@
 
             ],
 
+            meta: {
+
+                tournamentName: meta.name || 'Memoriał Wiosenny 2026'
+
+            },
+
             _demoStory: {
 
                 tournamentId: meta.id || 'DEMO-STORY-2026',
@@ -1115,7 +1126,7 @@
 
         html += '<p class="demo-micro" style="margin-top:14px;">Tryb hali — widok projektora:</p>';
 
-        html += '<div id="demo-hall-embed-host" class="demo-embed-app demo-hall-embed-host"></div>';
+        html += '<div id="demo-hall-embed-host" class="demo-hall-embed-host"></div>';
 
         return html;
 
@@ -1267,6 +1278,14 @@
 
             '<div class="demo-cta-zone">' +
 
+            '<div class="demo-landing-cta-wrap">' +
+
+            '<p class="demo-landing-cta-label">' + copy.ctaLandingSub + '</p>' +
+
+            '<a href="' + LANDING_URL + '" class="demo-btn-landing" data-demo-action="landing" data-cta-id="CTA-LANDING" target="_blank" rel="noopener noreferrer">' + copy.ctaLanding + '</a>' +
+
+            '</div>' +
+
             '<button type="button" class="demo-btn-primary" data-demo-action="license-cta" data-cta-id="CTA-08">' + copy.ctaPrimary + '</button>' +
 
             '<a href="' + buildSalesMailto('Zamówienie klucza na weekend — Turniejomat') + '" class="demo-btn-secondary" data-demo-action="mailto" data-cta-id="CTA-09">' + copy.ctaSecondary + '</a>' +
@@ -1373,11 +1392,57 @@
 
 
 
+    function resetHallViewCache() {
+
+        window._hallHeaderSig = '';
+
+        window._hallLiveRenderSig = '';
+
+        window._hallPlayedSig = '';
+
+        window._hallTablesHtml = '';
+
+        window._hallRulesHtml = '';
+
+        window._hallLiveScoreKey = '';
+
+    }
+
+
+
+    function renderDemoHallEmbed() {
+
+        if (typeof global.syncDemoStoryState === 'function') global.syncDemoStoryState();
+
+        resetHallViewCache();
+
+        if (global.renderHallView) global.renderHallView();
+
+        const body = document.getElementById('hall-live-body');
+
+        if (body && /Oczekiwanie na terminarz|Brak zaplanowanych meczów/.test(body.textContent || '')) {
+
+            if (typeof global.syncDemoStoryState === 'function') global.syncDemoStoryState();
+
+            resetHallViewCache();
+
+            if (global.renderHallView) global.renderHallView();
+
+        }
+
+    }
+
+
+
     function mountOrganizerEmbed(hostEl) {
 
         teardownActiveEmbed();
 
+        ensureRenderBridge();
+
         applyStateToApp();
+
+        if (typeof global.syncDemoStoryState === 'function') global.syncDemoStoryState();
 
         global._demoStoryOrganizerEmbed = true;
 
@@ -1409,7 +1474,17 @@
 
             mountNodes(EMBED_NODES.hall, hallHost);
 
-            if (global.renderHallView) global.renderHallView();
+            renderDemoHallEmbed();
+
+            if (typeof global.requestAnimationFrame === 'function') {
+
+                global.requestAnimationFrame(function () {
+
+                    if (global._demoStoryOrganizerEmbed) renderDemoHallEmbed();
+
+                });
+
+            }
 
         }
 
@@ -2140,11 +2215,11 @@
 
             const action = btn.getAttribute('data-demo-action');
 
-            if (action === 'mailto') {
+            if (action === 'mailto' || action === 'landing') {
 
                 track('demo_story_cta_clicked', {
 
-                    cta_id: btn.getAttribute('data-cta-id') || 'CTA-MAIL',
+                    cta_id: btn.getAttribute('data-cta-id') || (action === 'landing' ? 'CTA-LANDING' : 'CTA-MAIL'),
 
                     step_id: demoStoryStep,
 
