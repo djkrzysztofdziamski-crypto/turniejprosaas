@@ -15,7 +15,7 @@ const PRODUCTS = {
   },
   'football-month': {
     id: 'football-month',
-    label: 'Abonament miesięczny — piłka nożna',
+    label: 'Pakiet miesięczny — piłka nożna',
     sports: ['football'],
     duration: 'miesiac',
     typ: 'miesiac',

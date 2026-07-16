@@ -40,7 +40,7 @@ Plik: `functions/lib/billing/catalog.js`
 | productId | Sport(y) | Czas | Cena |
 |-----------|----------|------|------|
 | `football-weekend` | football | 72 h | 79 zł |
-| `football-month` | football | 30 dni | 149 zł |
+| `football-month` | football | 30 dni | 149 zł | Pakiet miesięczny |
 
 Dodanie darta / poola = nowy wpis w katalogu + nowy silnik sportowy — **bez zmiany webhooka**.
 

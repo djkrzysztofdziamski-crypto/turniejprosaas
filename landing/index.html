@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Turniejomat.pl — Spokój organizatora w dniu turnieju</title>
-    <meta name="description" content="Turniejomat — wyniki live dla rodziców, tabele i podium po finałe. Pakiet weekendowy 79 zł lub abonament 149 zł/mies. Demo bez rejestracji.">
+    <meta name="description" content="Turniejomat — wyniki live dla rodziców, tabele i podium po finałe. Pakiet weekendowy 79 zł lub pakiet miesięczny 149 zł. Demo bez rejestracji.">
     <link rel="icon" type="image/webp" href="icon.webp">
     <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
     <style>
@@ -312,7 +312,7 @@
 <!--
 ================================================================================
 TURNIEJOMAT — LANDING COPY 2026
-Ceny zatwierdzone: Weekend 79 zł | Abonament 149 zł/mies. (brutto, do 31.12.2026)
+Ceny zatwierdzone: Weekend 79 zł | Pakiet miesięczny 149 zł (brutto, do 31.12.2026)
 Bez commita — skopiuj sekcje do projektu stronaturniejomat.netlify.app
 ================================================================================
 -->
@@ -438,7 +438,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
 
         <div class="pricing-toggle" aria-hidden="true">
             <span class="active">Płatność za turniej</span>
-            <span>Abonament miesięczny</span>
+            <span>Pakiet miesięczny</span>
         </div>
 
         <div class="checkout-email-wrap">
@@ -490,22 +490,22 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
                 <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Pakiet%20Weekendowy%2079%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
-            <!-- ABONAMENT MIESIĘCZNY -->
+            <!-- PAKIET MIESIĘCZNY -->
             <article class="price-card price-card--featured">
-                <p class="price-label">Abonament sezonowy</p>
-                <h3 style="margin:0 0 4px;">Miesięczny</h3>
+                <p class="price-label">Pakiet miesięczny</p>
+                <h3 style="margin:0 0 4px;">30 dni</h3>
                 <p class="price-desc">Dla lig, hal i organizatorów z regularnym kalendarzem rozgrywek.</p>
-                <p class="price-amount">149 zł <small>brutto / miesiąc</small></p>
+                <p class="price-amount">149 zł <small>brutto / 30 dni</small></p>
                 <ul class="price-list">
                     <li>✅ <strong>Nielimitowana liczba turniejów</strong> w okresie 30 dni</li>
                     <li>✅ Wszystkie funkcje pakietu weekendowego</li>
                     <li>✅ Cyfrowe archiwum zakończonych turniejów</li>
                     <li>✅ Wstrzymywanie i wznawianie sesji</li>
-                    <li>✅ Opłaca się od <strong>2 turniejów miesięcznie</strong></li>
+                    <li>✅ Opłaca się od <strong>2 turniejów w miesiącu</strong></li>
                     <li>✅ Priorytetowe wsparcie w weekendy</li>
                 </ul>
-                <button type="button" class="btn btn-primary" data-checkout-product="football-month" onclick="startCheckout('football-month', this)" disabled>Zamów abonament miesięczny</button>
-                <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Abonament%20Miesi%C4%99czny%20149%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
+                <button type="button" class="btn btn-primary" data-checkout-product="football-month" onclick="startCheckout('football-month', this)" disabled>Zamów pakiet miesięczny</button>
+                <span class="checkout-fallback">lub <a href="mailto:admin@turniejomat.pl?subject=Zam%C3%B3wienie%3A%20Pakiet%20Miesi%C4%99czny%20149%20z%C5%82%20%E2%80%94%20Turniejomat">zamów mailowo</a></span>
             </article>
 
         </div>
@@ -687,7 +687,7 @@ SEKCJA 8 — STOPKA
             buttons.forEach(function (b) {
                 b.disabled = !isCheckoutReady();
                 if (b.dataset.checkoutProduct === 'football-weekend') b.textContent = 'Zamów pakiet weekendowy';
-                if (b.dataset.checkoutProduct === 'football-month') b.textContent = 'Zamów abonament miesięczny';
+                if (b.dataset.checkoutProduct === 'football-month') b.textContent = 'Zamów pakiet miesięczny';
             });
             const msg = (err && err.message) ? err.message : String(err);
             if (msg.includes('failed-precondition') || msg.includes('Autopay') || msg.includes('Stripe')) {
