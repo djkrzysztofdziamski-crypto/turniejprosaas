@@ -45,7 +45,7 @@ async function main() {
   // --- FRONT: app / demo / admin ---
   for (const [name, url, needles] of [
     ['App (bramka)', APP_URL, ['Turniejomat', 'btn-submit', 'demo']],
-    ['Demo Story', DEMO_URL, ['demo-story', 'Zobacz finał', 'demo-story.js']],
+    ['Demo Story', DEMO_URL, ['demo-story', 'demo-story.js']],
     ['Admin', ADMIN_URL, ['Turniejomat', 'admin']],
   ]) {
     try {
@@ -60,13 +60,15 @@ async function main() {
     }
   }
 
-  // Demo JS — ostatni deploy
+  // Demo JS — ostatni deploy (CTA jest w JS, nie w HTML shell)
   try {
     const { res, text } = await fetchText(DEMO_URL.replace(/\/?$/, '/') + 'demo-story.js');
     if (res.ok && text.includes('renderDemoHallEmbed')) pass('Demo JS: renderDemoHallEmbed (737ce45+)');
     else fail('Demo JS: brak renderDemoHallEmbed');
     if (text.includes('ctaLanding')) pass('Demo JS: CTA landing 6/6');
     else fail('Demo JS: brak CTA landing');
+    if (text.includes('Zobacz finał')) pass('Demo JS: zawiera „Zobacz finał”');
+    else fail('Demo JS: brak „Zobacz finał”');
   } catch (e) {
     fail('Demo JS fetch', e.message);
   }
@@ -84,11 +86,14 @@ async function main() {
       'checkout-withdrawal',
       'football-weekend',
       'football-month',
-      'legal/regulamin-serwisu.html',
     ];
     for (const c of landingChecks) {
       (text.includes(c) ? pass : fail)(`Landing: ${c}`);
     }
+    const legalOk =
+      text.includes('legal/regulamin-serwisu.html') ||
+      text.includes('/legal/regulamin-serwisu');
+    (legalOk ? pass : fail)('Landing: link regulamin serwisu');
   } catch (e) {
     fail('Landing fetch', e.message);
   }
