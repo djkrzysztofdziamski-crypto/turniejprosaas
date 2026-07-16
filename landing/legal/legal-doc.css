@@ -78,6 +78,41 @@
 }
 .legal-page-footer a { color: #57d9a3; font-weight: 700; text-decoration: none; margin: 0 8px; }
 
+/* Autopay — baner metod płatności */
+.autopay-methods {
+  margin: 16px 0 20px;
+  padding: 12px 14px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(72, 101, 129, 0.35);
+  box-sizing: border-box;
+}
+.autopay-methods__label {
+  margin: 0 0 8px;
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a6b7d;
+  text-align: center;
+}
+.autopay-methods__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+@media (max-width: 479px) {
+  .autopay-methods {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .autopay-methods__img {
+    min-width: 420px;
+  }
+}
+
 @media print {
   body { background: #fff !important; color: #111 !important; }
   .legal-wrap, .legal-wrap p, .legal-wrap li { color: #111 !important; }

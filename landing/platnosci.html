@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Płatności — Turniejomat.pl</title>
+    <meta name="description" content="Płatności online Turniejomat obsługuje Autopay S.A. — BLIK, przelew i inne metody. Bezpiecznie, bez przechowywania danych kart.">
+    <link rel="icon" type="image/webp" href="icon.webp">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
+    <link rel="stylesheet" href="css/responsive.css?v=20260716r2">
+    <style>
+        :root {
+            --bg-deep: var(--color-bg-deep);
+            --bg-card: var(--color-bg-card);
+            --border: var(--color-border-soft);
+            --text: var(--color-text);
+            --text-muted: var(--color-text-muted);
+            --text-soft: var(--color-text-soft);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background: var(--bg-deep);
+            color: var(--text);
+            line-height: 1.55;
+            min-height: 100dvh;
+        }
+        h1, h2 { font-family: var(--font-display); }
+        a { color: #57d9a3; font-weight: 700; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: calc(20px + var(--safe-top, 0px)) 0 0;
+        }
+        header img { height: 40px; width: auto; display: block; }
+        .home-link { font-size: 13px; font-weight: 700; color: #57d9a3; }
+        main { padding: 36px 0 56px; }
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+            margin: 0 0 12px;
+            line-height: 1.2;
+        }
+        .lead {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin: 0 0 28px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px 20px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #57d9a3;
+        }
+        .card p, .card li {
+            margin: 0 0 8px;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+        .card ul { margin: 0; padding-left: 20px; }
+        .autopay-methods {
+            margin: 0 0 24px;
+            padding: 14px 16px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid rgba(72, 101, 129, 0.35);
+        }
+        .autopay-methods__label {
+            margin: 0 0 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #5a6b7d;
+            text-align: center;
+        }
+        .autopay-methods__img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 14px;
+            text-decoration: none;
+            border: none;
+        }
+        .btn-primary { background: var(--color-accent); color: #fff; }
+        .btn-primary:hover { background: var(--color-accent-hover); text-decoration: none; }
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: #57d9a3; text-decoration: none; }
+        footer {
+            text-align: center;
+            padding: 24px 20px calc(28px + var(--safe-bottom, 0px));
+            font-size: 12px;
+            color: var(--text-soft);
+            border-top: 1px solid rgba(72, 101, 129, 0.4);
+        }
+        footer a { margin: 0 8px; }
+        @media (max-width: 479px) {
+            .autopay-methods {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .autopay-methods__img { min-width: 420px; }
+            .cta-row { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <a href="/"><img src="logo.webp" alt="Turniejomat — strona główna"></a>
+        <a class="home-link" href="/">← Strona główna</a>
+    </header>
+
+    <main>
+        <h1>Płatności online</h1>
+        <p class="lead">
+            Zakup licencji Turniejomat odbywa się przez bezpieczną bramkę
+            <strong style="color:#fff;">Autopay S.A.</strong>
+            Turniejomat nie przechowuje danych kart płatniczych.
+        </p>
+
+        <figure class="autopay-methods" aria-label="Metody płatności Autopay">
+            <p class="autopay-methods__label">Akceptowane metody płatności</p>
+            <img class="autopay-methods__img" src="img/autopay-metody-platnosci.png" width="1200" height="120" alt="Autopay — BLIK, przelewy bankowe i inne metody płatności online" decoding="async">
+        </figure>
+
+        <div class="card">
+            <h2>Jak wygląda zakup?</h2>
+            <ul>
+                <li>Wybierasz pakiet na stronie cennika i podajesz e-mail.</li>
+                <li>Akceptujesz regulaminy i przechodzisz na stronę Autopay.</li>
+                <li>Płacisz BLIK-iem, przelewem lub inną metodą dostępną u operatora.</li>
+                <li>Po potwierdzeniu płatności klucz licencyjny trafia na Twój e-mail.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Dokumenty</h2>
+            <p>
+                Szczegóły zakupu: <a href="/legal/regulamin-uslug-platnych.html">Regulamin Usług Płatnych</a><br>
+                Serwis: <a href="/legal/regulamin-serwisu.html">Regulamin Serwisu</a><br>
+                Dane: <a href="/legal/polityka-prywatnosci.html">Polityka Prywatności</a>
+            </p>
+        </div>
+
+        <div class="cta-row">
+            <a class="btn btn-primary" href="/#cennik">Przejdź do cennika</a>
+            <a class="btn btn-secondary" href="mailto:admin@turniejomat.pl?subject=Pytanie%20o%20p%C5%82atno%C5%9B%C4%87%20%E2%80%94%20Turniejomat">Napisz w sprawie płatności</a>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <a href="/">Strona główna</a>
+    <a href="/#cennik">Cennik</a>
+    <a href="/legal/regulamin-uslug-platnych.html">Usługi płatne</a>
+    <a href="mailto:admin@turniejomat.pl">Kontakt</a>
+    <p style="margin:12px 0 0;">Turniejomat © 2026 · płatności: Autopay S.A.</p>
+</footer>
+</body>
+</html>
