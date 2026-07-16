@@ -5719,6 +5719,17 @@
                 : null;
             if (d) {
                 state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
+                // Wyczyść lokalne drafty wyniku dla meczów już zamkniętych przez asystenta / inny klient
+                if (window.inlineScoreDrafts) {
+                    const playedIds = new Set(
+                        [...(state.matches || []), ...(state.playoffs || [])]
+                            .filter(m => m && m.played)
+                            .map(m => m.id)
+                    );
+                    Object.keys(window.inlineScoreDrafts).forEach(id => {
+                        if (playedIds.has(Number(id)) || playedIds.has(id)) delete window.inlineScoreDrafts[id];
+                    });
+                }
                 if (archiveId || localArchiveId) {
                     document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
                     initArchiveViewer(d);
@@ -5767,10 +5778,18 @@
             window.renderDashboard();
         } else if (useRtdbRestForOrganizer()) {
             fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => applyTournamentState(null));
-            if (isFanMode || isHallMode || isAssistantMode) {
+            // REST nie ma on('value') — bez pollingu organizator/sędzia (Na żywo) nie widzi
+            // zapisów asystenta aż do F5. Hala/kibic/asystent już pollowały.
+            const pollMs = isHallMode ? 1500
+                : isAssistantMode ? 5000
+                : isFanMode ? 8000
+                : 2000;
+            const shouldPoll = isFanMode || isHallMode || isAssistantMode
+                || (activeKey && !isDemoMode && viewMode !== 'archive' && viewMode !== 'admin');
+            if (shouldPoll) {
                 setInterval(() => {
                     fetchRtdbRest(dbPath).then(applyTournamentState).catch(() => {});
-                }, isHallMode ? 1500 : (isAssistantMode ? 5000 : 8000));
+                }, pollMs);
             }
         } else {
             let rtdbLiveLoaded = false;
