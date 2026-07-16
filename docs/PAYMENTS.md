@@ -95,7 +95,7 @@ W `functions/.env.turniejprosaas`:
 ```
 PAYMENT_PROVIDER=autopay
 AUTOPAY_SERVICE_ID=123456
-AUTOPAY_GATEWAY_URL=https://pay.autopay.eu
+AUTOPAY_GATEWAY_URL=https://pay.autopay.eu/payment
 ```
 
 Test hash (przykład z dokumentacji Autopay):
@@ -106,7 +106,7 @@ node scripts/qa-autopay-hash.mjs
 
 **Przepływ Autopay:**
 1. `createCheckoutSession` → hash startu + zapis `platnosci_oczekujace/{orderId}`
-2. Landing auto-submit POST na bramkę (`pay.autopay.eu` / `testpay.autopay.eu`)
+2. Landing auto-submit POST na bramkę (`pay.autopay.eu/payment` / `testpay.autopay.eu/payment`)
 3. Po płatności Autopay wysyła ITN (POST `transactions` = base64 XML)
 4. Funkcja weryfikuje hash (serviceID + hash z `<transactionList>`), wywołuje `fulfillOrder`, odpowiada XML `confirmationList` / `transactionsConfirmations` / `CONFIRMED`
 

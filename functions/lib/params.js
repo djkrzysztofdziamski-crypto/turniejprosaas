@@ -59,8 +59,8 @@ const autopayServiceId = defineString('AUTOPAY_SERVICE_ID', {
 });
 
 const autopayGatewayUrl = defineString('AUTOPAY_GATEWAY_URL', {
-  default: 'https://pay.autopay.eu',
-  description: 'URL bramki Autopay (prod: pay.autopay.eu, test: testpay.autopay.eu)',
+  default: 'https://pay.autopay.eu/payment',
+  description: 'URL startu transakcji Autopay (prod: pay.autopay.eu/payment, test: testpay.autopay.eu/payment)',
 });
 
 /** Sekrety wymagane przy checkout + webhook + email (Stripe legacy) */
@@ -126,7 +126,12 @@ function getAutopaySharedKey() {
 }
 
 function getAutopayGatewayUrl() {
-  return String(autopayGatewayUrl.value() || 'https://pay.autopay.eu').trim();
+  let url = String(autopayGatewayUrl.value() || 'https://pay.autopay.eu/payment').trim();
+  // Host bez ścieżki → 404 na Autopay; start transakcji wymaga /payment
+  if (/^https?:\/\/(test)?pay\.autopay\.eu\/?$/i.test(url)) {
+    url = url.replace(/\/?$/, '') + '/payment';
+  }
+  return url;
 }
 
 module.exports = {

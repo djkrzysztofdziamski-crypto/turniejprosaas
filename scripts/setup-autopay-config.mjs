@@ -20,7 +20,7 @@ const ENV_FILE = join(ROOT, 'functions', '.env.turniejprosaas');
 
 const serviceId = process.env.AUTOPAY_SERVICE_ID || '';
 const sharedKey = process.env.AUTOPAY_SHARED_KEY || '';
-const gatewayUrl = process.env.AUTOPAY_GATEWAY_URL || 'https://pay.autopay.eu';
+const gatewayUrl = process.env.AUTOPAY_GATEWAY_URL || 'https://pay.autopay.eu/payment';
 
 if (!serviceId || !sharedKey) {
   console.error('Ustaw AUTOPAY_SERVICE_ID i AUTOPAY_SHARED_KEY w środowisku.');

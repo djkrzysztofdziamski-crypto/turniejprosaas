@@ -23,9 +23,12 @@ function generateOrderId() {
  * Description Autopay: tylko A-Z a-z 0-9 oraz . : - , spacja (max 79).
  */
 function sanitizeAutopayDescription(text) {
+  const map = {
+    ą: 'a', ć: 'c', ę: 'e', ł: 'l', ń: 'n', ó: 'o', ś: 's', ź: 'z', ż: 'z',
+    Ą: 'A', Ć: 'C', Ę: 'E', Ł: 'L', Ń: 'N', Ó: 'O', Ś: 'S', Ź: 'Z', Ż: 'Z',
+  };
   return String(text || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, (ch) => map[ch] || ch)
     .replace(/[—–−]/g, '-')
     .replace(/[^A-Za-z0-9.:,\- ]/g, ' ')
     .replace(/\s+/g, ' ')
