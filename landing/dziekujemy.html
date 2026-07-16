@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dziękujemy za zakup — Turniejomat.pl</title>
+    <meta name="description" content="Zakup licencji Turniejomat zakończony. Klucz dostępowy wysłaliśmy na Twój e-mail.">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/webp" href="icon.webp">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
+    <link rel="stylesheet" href="css/responsive.css?v=20260716r2">
+    <style>
+        :root {
+            --bg-deep: var(--color-bg-deep);
+            --bg-card: var(--color-bg-card);
+            --border: var(--color-border-soft);
+            --text: var(--color-text);
+            --text-muted: var(--color-text-muted);
+            --text-soft: var(--color-text-soft);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 82, 204, 0.22), transparent 55%),
+                var(--bg-deep);
+            color: var(--text);
+            line-height: 1.55;
+            min-height: 100dvh;
+        }
+        h1 { font-family: var(--font-display); }
+        a { color: #57d9a3; font-weight: 700; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .shell {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: calc(28px + var(--safe-top, 0px)) 20px calc(40px + var(--safe-bottom, 0px));
+        }
+        .brand {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+        .brand img { height: 44px; width: auto; display: block; }
+        .panel {
+            background: linear-gradient(165deg, rgba(25, 58, 92, 0.95) 0%, var(--bg-card) 100%);
+            border: 1px solid rgba(87, 217, 163, 0.35);
+            border-radius: 16px;
+            padding: 32px 28px 28px;
+            box-shadow: 0 0 0 1px rgba(0, 82, 204, 0.08), 0 18px 48px rgba(0, 0, 0, 0.28);
+            text-align: center;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 16px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(87, 217, 163, 0.12);
+            border: 1px solid rgba(87, 217, 163, 0.35);
+            color: #57d9a3;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #57d9a3;
+            box-shadow: 0 0 0 3px rgba(87, 217, 163, 0.25);
+        }
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(24px, 5vw, 30px);
+            line-height: 1.2;
+        }
+        .lead {
+            margin: 0 0 24px;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+        .meta-box {
+            text-align: left;
+            background: rgba(11, 31, 51, 0.55);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin: 0 0 22px;
+        }
+        .meta-row {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 8px 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(72, 101, 129, 0.35);
+            font-size: 14px;
+        }
+        .meta-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .meta-row:first-child { padding-top: 0; }
+        .meta-label {
+            color: var(--text-soft);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            padding-top: 2px;
+        }
+        .meta-value {
+            color: #fff;
+            font-weight: 700;
+            word-break: break-word;
+        }
+        .meta-value--muted { color: var(--text-muted); font-weight: 600; }
+        .steps {
+            text-align: left;
+            margin: 0 0 24px;
+            padding: 0;
+            list-style: none;
+        }
+        .steps li {
+            position: relative;
+            padding: 0 0 12px 28px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .steps li:last-child { padding-bottom: 0; }
+        .steps li::before {
+            content: attr(data-n);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 82, 204, 0.35);
+            border: 1px solid rgba(87, 217, 163, 0.4);
+            color: #57d9a3;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .cta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 15px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--color-accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+            text-decoration: none;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover {
+            border-color: #57d9a3;
+            color: #fff;
+            text-decoration: none;
+        }
+        .footnote {
+            margin: 18px 0 0;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+        footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+        footer a { margin: 0 8px; }
+        @media (max-width: 479px) {
+            .panel { padding: 24px 18px 20px; }
+            .meta-row { grid-template-columns: 1fr; gap: 2px; }
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <div class="brand">
+        <a href="/"><img src="logo.webp" alt="Turniejomat"></a>
+    </div>
+
+    <main class="panel" role="status">
+        <div class="badge"><span class="badge-dot" aria-hidden="true"></span> Płatność przyjęta</div>
+        <h1>Dziękujemy za zakup</h1>
+        <p class="lead" id="lead-copy">
+            Licencja Turniejomat jest gotowa. Klucz dostępowy właśnie wysłaliśmy na Twój e-mail.
+        </p>
+
+        <div class="meta-box" aria-label="Podsumowanie zakupu">
+            <div class="meta-row">
+                <div class="meta-label">Pakiet</div>
+                <div class="meta-value" id="meta-product">Licencja Turniejomat</div>
+            </div>
+            <div class="meta-row">
+                <div class="meta-label">E-mail</div>
+                <div class="meta-value" id="meta-email">—</div>
+            </div>
+            <div class="meta-row">
+                <div class="meta-label">Zamówienie</div>
+                <div class="meta-value meta-value--muted" id="meta-order">—</div>
+            </div>
+        </div>
+
+        <ol class="steps">
+            <li data-n="1">Sprawdź skrzynkę (także folder Spam / Oferty).</li>
+            <li data-n="2">Skopiuj klucz licencyjny z wiadomości.</li>
+            <li data-n="3">Zaloguj się w aplikacji i wklej klucz.</li>
+        </ol>
+
+        <div class="cta">
+            <a class="btn btn-primary" href="https://app.turniejomat.pl/">Zaloguj się do aplikacji</a>
+            <a class="btn btn-ghost" href="/#cennik">Wróć do cennika</a>
+        </div>
+
+        <p class="footnote">
+            Brak maila? Napisz na
+            <a href="mailto:admin@turniejomat.pl?subject=Brak%20klucza%20po%20zakupie%20%E2%80%94%20Turniejomat">admin@turniejomat.pl</a>
+            i podaj numer zamówienia.
+        </p>
+    </main>
+
+    <footer>
+        <a href="/">Strona główna</a>
+        <a href="/platnosci.html">Płatności</a>
+        <a href="/legal/regulamin-uslug-platnych.html">Regulamin</a>
+    </footer>
+</div>
+
+<script>
+(function () {
+    var PRODUCT_LABELS = {
+        'football-weekend': 'Pakiet weekendowy — 79 zł',
+        'football-month': 'Abonament miesięczny — 149 zł'
+    };
+
+    function readStore(key) {
+        try { return sessionStorage.getItem(key) || ''; } catch (_) { return ''; }
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var orderId = params.get('OrderID') || params.get('orderId') || params.get('order') || readStore('tp_checkout_order') || '';
+    var email = params.get('email') || readStore('tp_checkout_email') || '';
+    var productId = params.get('product') || readStore('tp_checkout_product') || '';
+
+    var productEl = document.getElementById('meta-product');
+    var emailEl = document.getElementById('meta-email');
+    var orderEl = document.getElementById('meta-order');
+    var leadEl = document.getElementById('lead-copy');
+
+    if (productEl) {
+        productEl.textContent = PRODUCT_LABELS[productId] || 'Licencja Turniejomat';
+    }
+    if (emailEl) {
+        emailEl.textContent = email || 'adres podany przy zakupie';
+    }
+    if (orderEl) {
+        orderEl.textContent = orderId || 'potwierdzone przez Autopay';
+    }
+    if (leadEl && email) {
+        leadEl.innerHTML = 'Licencja Turniejomat jest gotowa. Klucz dostępowy wysłaliśmy na <strong style="color:#fff;">' +
+            email.replace(/</g, '&lt;') + '</strong>.';
+    }
+
+    try {
+        sessionStorage.removeItem('tp_checkout_product');
+        sessionStorage.removeItem('tp_checkout_order');
+    } catch (_) {}
+})();
+</script>
+</body>
+</html>

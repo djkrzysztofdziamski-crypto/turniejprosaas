@@ -234,6 +234,53 @@
         .checkout-trust { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; font-size: 12px; color: var(--text-soft); }
         .checkout-trust span { display: inline-flex; align-items: center; gap: 6px; }
 
+        /* Autopay — metody płatności */
+        .autopay-methods {
+            margin: 16px auto 8px;
+            max-width: 720px;
+            padding: 12px 14px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid rgba(72, 101, 129, 0.35);
+            box-sizing: border-box;
+        }
+        .autopay-methods__label {
+            margin: 0 0 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #5a6b7d;
+            text-align: center;
+        }
+        .autopay-methods__img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+        .autopay-methods--compact {
+            margin: 20px auto 0;
+            max-width: 640px;
+            padding: 10px 12px;
+        }
+        .autopay-methods--footer {
+            margin: 18px auto 0;
+            max-width: 560px;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.95);
+        }
+        @media (max-width: 479px) {
+            .autopay-methods {
+                padding: 10px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .autopay-methods__img {
+                min-width: 420px;
+            }
+        }
+
         /* B2B */
         .b2b {
             background: var(--bg-card);
@@ -415,7 +462,13 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
             Płatności online obsługuje <strong style="color:#fff;">Autopay S.A.</strong> (operator płatności).
             Dane płatnicze (BLIK, karta, przelew) podajesz bezpośrednio na bezpiecznej stronie Autopay —
             Turniejomat nie przechowuje danych kart płatniczych.
+            <a href="/platnosci.html" style="color:#57d9a3; font-weight:700;">Więcej o płatnościach →</a>
         </p>
+
+        <figure class="autopay-methods" aria-label="Metody płatności Autopay">
+            <p class="autopay-methods__label">Akceptowane metody płatności</p>
+            <img class="autopay-methods__img" src="img/autopay-metody-platnosci.png" width="1200" height="120" alt="Autopay — BLIK, przelewy bankowe i inne metody płatności online" loading="lazy" decoding="async">
+        </figure>
 
         <div class="pricing-grid">
 
@@ -497,11 +550,16 @@ SEKCJA 8 — STOPKA
     <div class="footer-links">
         <a href="https://demo.turniejomat.pl">Demo</a>
         <a href="https://app.turniejomat.pl">Aplikacja (mam klucz)</a>
+        <a href="/#cennik">Cennik</a>
+        <a href="/platnosci.html">Płatności</a>
         <a href="/legal/regulamin-serwisu.html">Regulamin serwisu</a>
         <a href="/legal/regulamin-uslug-platnych.html">Usługi płatne</a>
         <a href="/legal/polityka-prywatnosci.html">Polityka prywatności</a>
         <a href="mailto:admin@turniejomat.pl">Kontakt</a>
     </div>
+    <figure class="autopay-methods autopay-methods--footer" aria-label="Metody płatności Autopay">
+        <img class="autopay-methods__img" src="img/autopay-metody-platnosci.png" width="1200" height="120" alt="Płatności obsługuje Autopay" loading="lazy" decoding="async">
+    </figure>
     <p class="brand-footer">Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
     <p style="margin-top:6px;">admin@turniejomat.pl</p>
 </footer>
@@ -608,12 +666,19 @@ SEKCJA 8 — STOPKA
             });
             const data = result.data || {};
             if (data.provider === 'autopay' && data.url && data.fields) {
-                try { sessionStorage.setItem('tp_checkout_email', email); } catch (_) {}
+                try {
+                    sessionStorage.setItem('tp_checkout_email', email);
+                    sessionStorage.setItem('tp_checkout_product', productId);
+                    if (data.orderId) sessionStorage.setItem('tp_checkout_order', data.orderId);
+                } catch (_) {}
                 submitPaymentForm(data);
                 return;
             }
             if (data.url) {
-                try { sessionStorage.setItem('tp_checkout_email', email); } catch (_) {}
+                try {
+                    sessionStorage.setItem('tp_checkout_email', email);
+                    sessionStorage.setItem('tp_checkout_product', productId);
+                } catch (_) {}
                 window.location.href = data.url;
                 return;
             }

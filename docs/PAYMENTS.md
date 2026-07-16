@@ -217,7 +217,8 @@ CSP landing: `connect-src` musi zawierać `https://*.cloudfunctions.net`. Form P
 1. Klient klika „Zamów” na landingu → bramka Autopay (BLIK / przelew / karta)
 2. ITN → licencja aktywna + wpis w `zamowienia/`
 3. Email z kluczem (jeśli SMTP skonfigurowany)
-4. Klient wraca na stronę powrotu (konfiguracja w panelu Autopay) → `app.turniejomat.pl/?checkout=success`
+4. Klient wraca na stronę powrotu Autopay → `https://turniejomat.pl/dziekujemy.html`
+   (legacy: `app.turniejomat.pl/?checkout=success` przekierowuje na stronę podziękowania)
 
 Fallback: link „zamów mailowo” na landingu.
 

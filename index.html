@@ -2440,13 +2440,13 @@
         }
 
         if (urlParams.get('checkout') === 'success' || urlParams.get('paid') === '1') {
-            showMsg('✅ Płatność przyjęta! Klucz licencyjny wysłaliśmy na Twój email (sprawdź też spam). Wpisz go poniżej lub użyj linku z wiadomości.', 'success');
-            if (window.history.replaceState) {
-                const clean = new URL(window.location.href);
-                clean.searchParams.delete('checkout');
-                clean.searchParams.delete('paid');
-                window.history.replaceState({}, '', clean.pathname + (clean.search || ''));
-            }
+            const thanks = new URL('https://turniejomat.pl/dziekujemy.html');
+            ['OrderID', 'ServiceID', 'Hash', 'order', 'email', 'product'].forEach((k) => {
+                const v = urlParams.get(k);
+                if (v) thanks.searchParams.set(k, v);
+            });
+            window.location.replace(thanks.toString());
+            return;
         }
     }
 
