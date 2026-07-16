@@ -448,7 +448,7 @@
         #view-app .share-panel.active { display: block; }
         #view-app .share-copy-btn { margin-top: 8px; background: #eef2ff; border: 1px solid #c7d2fe; color: #0052cc; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; }
         #view-app .share-generate-btn { background: var(--color-accent); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        /* --- Tryb asystenta --- */
+        /* --- Tryb asystenta: ta sama tabela co Na żywo u sędziego --- */
         body.assistant-view #view-app header .header-organizer-actions,
         body.assistant-view #view-app #tournament-dashboard,
         body.assistant-view #view-app .nav-tabs,
@@ -456,44 +456,53 @@
         body.assistant-view #view-app #hall-screen { display: none !important; }
         body.assistant-view #view-app #assistant-screen { display: block; }
         body.assistant-view #view-app { background: var(--color-app-bg); min-height: 100vh; }
-        #view-app #assistant-screen { display: none; padding: 8px 12px 16px; max-width: 900px; margin: 0 auto; }
-        #view-app #assistant-screen .assistant-banner { padding: 8px 12px; font-size: 12px; margin-bottom: 8px; }
-        #view-app #assistant-screen .filter-bar { padding: 6px 8px; margin-bottom: 8px; }
-        #view-app .assistant-banner { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e3a8a; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+        #view-app #assistant-screen { display: none; padding: 8px 10px 14px; max-width: 960px; margin: 0 auto; }
+        #view-app #assistant-screen .assistant-banner { padding: 7px 10px; font-size: 12px; margin-bottom: 8px; }
+        #view-app #assistant-screen .filter-bar { padding: 5px 7px; margin-bottom: 8px; }
+        #view-app .assistant-banner { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e3a8a; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+        #view-app #assistant-screen .live-match-table { font-size: 12px; }
+        #view-app #assistant-screen .live-match-table th { padding: 4px 5px; font-size: 8px; }
+        #view-app #assistant-screen .live-match-table td { padding: 3px 5px; }
+        #view-app #assistant-screen .live-match-teams { font-size: 12px; max-width: 240px; }
+        #view-app #assistant-screen .live-score-inputs input { width: 34px; padding: 3px 3px; font-size: 13px; }
+        #view-app #assistant-screen .live-score-save { padding: 4px 8px; font-size: 11px; min-height: 28px; }
+        #view-app #assistant-screen .assistant-scorers-btn { padding: 4px 8px; font-size: 10px; min-height: 28px; }
+        #view-app #assistant-screen .match-section-head { font-size: 12px; margin: 4px 0 6px; }
+        /* Legacy karty asystenta (gdyby coś jeszcze renderowało) — niskie, subtelne */
         #view-app .assistant-match-card {
             background: #fff;
             border: 1px solid var(--color-app-border);
-            border-left: 4px solid #ff8b00;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+            border-left: 3px solid #ff8b00;
+            border-radius: 6px;
+            padding: 5px 8px;
+            margin-bottom: 4px;
+            box-shadow: none;
         }
-        #view-app .assistant-match-card.is-played { border-left-color: #00875a; background: linear-gradient(90deg, #f6fffb 0%, #fff 35%); }
-        #view-app .assistant-match-card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+        #view-app .assistant-match-card.is-played { border-left-color: #00875a; background: linear-gradient(90deg, #f6fffb 0%, #fff 40%); }
+        #view-app .assistant-match-card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-bottom: 3px; }
         #view-app .assistant-match-card-teams {
-            font-weight: 800;
-            font-size: 14px;
-            line-height: 1.35;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1.2;
             color: #172b4d;
             word-break: break-word;
         }
-        #view-app .assistant-match-card-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 10px; margin: 0 6px; }
+        #view-app .assistant-match-card-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; }
         #view-app .assistant-match-card-actions {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 4px;
             justify-content: space-between;
         }
-        #view-app .assistant-match-card-actions .live-score-cell { justify-content: flex-start; flex: 1 1 160px; }
+        #view-app .assistant-match-card-actions .live-score-cell { justify-content: flex-start; flex: 1 1 140px; }
         #view-app .assistant-scorers-btn--card {
-            flex: 1 1 120px;
-            min-height: 42px;
-            padding: 10px 14px;
-            font-size: 13px;
-            border-radius: 8px;
+            flex: 0 1 auto;
+            min-height: 28px;
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 5px;
         }
         body.assistant-view #matchModal .modal-content {
             margin: 2vh auto;
@@ -515,6 +524,9 @@
             body.assistant-view #matchModal .match-modal-scorers-grid { grid-template-columns: 1fr; }
             body.assistant-view #matchModal .goal-btn-container { grid-template-columns: 1fr; }
             body.assistant-view #matchModal .match-modal-score-row b { flex: 1 1 40%; max-width: 48%; }
+            #view-app #assistant-screen .live-match-teams { max-width: 120px; font-size: 11px; }
+            #view-app #assistant-screen .live-match-table th { font-size: 7px; padding: 3px 3px; }
+            #view-app #assistant-screen .live-match-table td { padding: 2px 3px; font-size: 11px; }
         }
         #view-app .podium-main { border: 3px solid #ffcc00; border-radius: 15px; padding: 25px; text-align: center; background: white; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(255,204,0,0.2); }
         #view-app .podium-winner { font-size: 30px; font-weight: 800; color: #102a43; }
@@ -4591,9 +4603,7 @@
                     };
                     const focusedId = document.activeElement && document.activeElement.id && String(document.activeElement.id).startsWith('live-g')
                         ? document.activeElement.id : null;
-                    const matchesHTML = isAssistantPanel
-                        ? renderAssistantMatchCardsHTML(filtered, panelTableOpts)
-                        : renderMatchesTableHTML(filtered, panelTableOpts);
+                    const matchesHTML = renderMatchesTableHTML(filtered, panelTableOpts);
                     cont.innerHTML = (filtered.length === 0 && !playoffShortcutHTML)
                         ? emptyMatchesHTML
                         : (groupSectionHTML + matchesHTML + (playoffShortcutHTML ? ((isLivePanel || isAssistantPanel) ? '<div style="margin-top:12px;">' + playoffShortcutHTML + '</div>' : playoffShortcutHTML) : ''));
