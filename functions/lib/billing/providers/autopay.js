@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const { getProduct } = require('../catalog');
 const { autopayHash, verifyAutopayHash } = require('../autopay/hash');
-const { parseItnTransactionXml, buildItnConfirmationXml } = require('../autopay/xml');
+const { parseItnTransactionListXml, buildItnConfirmationXml } = require('../autopay/xml');
 const { savePendingCheckout, loadPendingCheckout, markPendingCheckout } = require('../pendingCheckout');
 const {
   getAutopayServiceId,
@@ -17,6 +17,20 @@ function generateOrderId() {
   const rand = crypto.randomBytes(4).toString('hex').toUpperCase();
   const id = 'TP' + Date.now().toString(36).toUpperCase() + rand;
   return id.replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32);
+}
+
+/**
+ * Description Autopay: tylko A-Z a-z 0-9 oraz . : - , spacja (max 79).
+ */
+function sanitizeAutopayDescription(text) {
+  return String(text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[—–−]/g, '-')
+    .replace(/[^A-Za-z0-9.:,\- ]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 79);
 }
 
 function buildStartHash({ serviceID, orderID, amount, customerEmail, description, currency }) {
@@ -48,7 +62,7 @@ async function createAutopayPayment(db, { productId, customerEmail, termsVersion
 
   const orderID = generateOrderId();
   const amount = formatAmountPln(product.priceGrosze);
-  const description = ('Turniejomat — ' + product.label).slice(0, 79);
+  const description = sanitizeAutopayDescription('Turniejomat - ' + (product.label || product.id));
   const hash = buildStartHash({
     serviceID,
     orderID,
@@ -116,16 +130,29 @@ function buildItnResponse(tx, confirmed) {
 function parseAutopayItnBody(body) {
   const transactionsB64 = body?.transactions || body?.Transactions;
   if (!transactionsB64) return null;
-  const xml = Buffer.from(String(transactionsB64), 'base64').toString('utf8');
-  const txMatch = xml.match(/<transaction[\s\S]*?<\/transaction>/i);
-  if (!txMatch) return null;
-  return parseItnTransactionXml(txMatch[0]);
+  let xml;
+  try {
+    xml = Buffer.from(String(transactionsB64), 'base64').toString('utf8');
+  } catch (_) {
+    return null;
+  }
+  return parseItnTransactionListXml(xml);
 }
 
 async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
   const tx = parseAutopayItnBody(req.body || {});
   if (!tx || !tx.orderID) {
     return { status: 400, body: 'Invalid ITN payload' };
+  }
+
+  const configuredServiceId = getAutopayServiceId();
+  if (configuredServiceId && tx.serviceID && String(tx.serviceID) !== String(configuredServiceId)) {
+    console.error('Autopay ITN serviceID mismatch', tx.serviceID, configuredServiceId);
+    return {
+      status: 200,
+      contentType: 'application/xml; charset=UTF-8',
+      body: buildItnResponse(tx, false),
+    };
   }
 
   const hashOk = verifyItnHash(tx);
@@ -148,6 +175,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
     };
   }
 
+  // Idempotencja: już zrealizowane — CONFIRMED bez ponownego fulfill
   if (pending.status === 'completed') {
     return {
       status: 200,
@@ -160,6 +188,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
   const amountOk = !expectedAmount || String(tx.amount) === String(expectedAmount) ||
     String(tx.startAmount) === String(expectedAmount);
 
+  // Model uproszczony Autopay: potwierdzaj ITN gdy hash + kwota OK (także PENDING/FAILURE)
   let confirmed = hashOk && amountOk;
 
   try {
@@ -186,6 +215,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
         paymentStatus: tx.paymentStatus,
       });
     } else if (tx.paymentStatus === 'FAILURE') {
+      // Nie anuluj wcześniejszego SUCCESS (inny RemoteID) — tu pending jeszcze nie completed
       await markPendingCheckout(db, tx.orderID, {
         status: 'failed',
         remoteID: tx.remoteID || null,
@@ -199,6 +229,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
         });
       }
     } else {
+      // PENDING i inne — tylko zapis statusu; odpowiedź CONFIRMED jeśli autentyczne
       await markPendingCheckout(db, tx.orderID, {
         status: String(tx.paymentStatus || 'pending').toLowerCase(),
         remoteID: tx.remoteID || null,
@@ -224,4 +255,5 @@ module.exports = {
   verifyItnHash,
   parseAutopayItnBody,
   formatAmountPln,
+  sanitizeAutopayDescription,
 };

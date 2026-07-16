@@ -1,3 +1,26 @@
+/**
+ * Autopay ITN XML — parse + confirmation (zgodnie z developers.autopay.pl).
+ *
+ * ITN request (Base64 → XML):
+ *   <transactionList>
+ *     <serviceID>…</serviceID>
+ *     <transactions><transaction>…</transaction></transactions>
+ *     <hash>…</hash>
+ *   </transactionList>
+ *
+ * ITN response:
+ *   <confirmationList>
+ *     <serviceID>…</serviceID>
+ *     <transactionsConfirmations>
+ *       <transactionConfirmed>
+ *         <orderID>…</orderID>
+ *         <confirmation>CONFIRMED|NOTCONFIRMED</confirmation>
+ *       </transactionConfirmed>
+ *     </transactionsConfirmations>
+ *     <hash>…</hash>
+ *   </confirmationList>
+ */
+
 function readXmlTag(xml, tag) {
   if (!xml) return '';
   const re = new RegExp('<' + tag + '>([^<]*)</' + tag + '>', 'i');
@@ -21,15 +44,36 @@ function parseItnTransactionXml(xml) {
   };
 }
 
+/**
+ * Parsuje pełny dokument transactionList (serviceID + hash na poziomie listy).
+ */
+function parseItnTransactionListXml(xml) {
+  const full = String(xml || '');
+  const listServiceID = readXmlTag(full, 'serviceID') || readXmlTag(full, 'ServiceID');
+  const listHash = readXmlTag(full, 'hash') || readXmlTag(full, 'Hash');
+
+  const txMatch = full.match(/<transaction\b[\s\S]*?<\/transaction>/i);
+  if (!txMatch) return null;
+
+  const tx = parseItnTransactionXml(txMatch[0]);
+  return {
+    ...tx,
+    serviceID: listServiceID || tx.serviceID,
+    hash: listHash || tx.hash,
+  };
+}
+
 function buildItnConfirmationXml({ serviceID, orderID, confirmation, hash }) {
   return '<?xml version="1.0" encoding="UTF-8"?>' +
     '<confirmationList>' +
-    '<confirmation>' +
     '<serviceID>' + escapeXml(serviceID) + '</serviceID>' +
+    '<transactionsConfirmations>' +
+    '<transactionConfirmed>' +
     '<orderID>' + escapeXml(orderID) + '</orderID>' +
     '<confirmation>' + escapeXml(confirmation) + '</confirmation>' +
+    '</transactionConfirmed>' +
+    '</transactionsConfirmations>' +
     '<hash>' + escapeXml(hash) + '</hash>' +
-    '</confirmation>' +
     '</confirmationList>';
 }
 
@@ -43,6 +87,8 @@ function escapeXml(value) {
 }
 
 module.exports = {
+  readXmlTag,
   parseItnTransactionXml,
+  parseItnTransactionListXml,
   buildItnConfirmationXml,
 };

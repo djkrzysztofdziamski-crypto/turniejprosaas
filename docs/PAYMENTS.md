@@ -108,10 +108,29 @@ node scripts/qa-autopay-hash.mjs
 1. `createCheckoutSession` → hash startu + zapis `platnosci_oczekujace/{orderId}`
 2. Landing auto-submit POST na bramkę (`pay.autopay.eu` / `testpay.autopay.eu`)
 3. Po płatności Autopay wysyła ITN (POST `transactions` = base64 XML)
-4. Funkcja weryfikuje hash, wywołuje `fulfillOrder`, odpowiada XML `CONFIRMED`
+4. Funkcja weryfikuje hash (serviceID + hash z `<transactionList>`), wywołuje `fulfillOrder`, odpowiada XML `confirmationList` / `transactionsConfirmations` / `CONFIRMED`
 
 Hash startu (minimalny): `SHA256(ServiceID|OrderID|Amount|klucz)`  
 Z opcjonalnymi polami (Description, Currency, CustomerEmail) — w kolejności numeracji pól w dokumentacji Autopay.
+
+`Description` jest sanityzowane do znaków dozwolonych przez Autopay (A–Z, cyfry, `.` `:` `-` `,` spacja).
+
+Odpowiedź ITN (wymagana struktura):
+
+```xml
+<confirmationList>
+  <serviceID>…</serviceID>
+  <transactionsConfirmations>
+    <transactionConfirmed>
+      <orderID>…</orderID>
+      <confirmation>CONFIRMED</confirmation>
+    </transactionConfirmed>
+  </transactionsConfirmations>
+  <hash>…</hash>
+</confirmationList>
+```
+
+Lokalny test: `node scripts/qa-autopay-itn.mjs`
 
 ### Stripe (legacy, opcjonalnie)
 
