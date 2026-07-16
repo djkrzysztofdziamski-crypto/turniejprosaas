@@ -206,21 +206,30 @@
         #view-app .live-split-standings { min-width: 0; }
         #view-app .live-panel-head { font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display); }
         #view-app .live-split-schedule.card,
-        #view-app .live-split-standings.card { padding: 10px 12px; margin-bottom: 10px; }
-        #view-app .live-split-standings .standings-group-card { margin-bottom: 6px; padding: 8px 10px; }
-        #view-app .live-split-standings .standings-group-card h4 { font-size: 11px; margin: 0 0 4px; line-height: 1.2; }
+        #view-app .live-split-standings.card { padding: 8px 10px; margin-bottom: 8px; }
+        #view-app .live-split-standings .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
+        #view-app .live-split-standings .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
         #view-app .live-split-standings .standings-group-card table { margin-top: 0; }
-        #view-app .live-split-standings .standings-group-card th { padding: 3px 5px; font-size: 8px; }
-        #view-app .live-split-standings .standings-group-card td { padding: 3px 5px; min-height: var(--row-height-table-compact, 26px); font-size: 11px; }
-        #view-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 6px; padding: 8px 10px; }
-        #view-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 11px; margin: 0 0 4px; }
+        #view-app .live-split-standings .standings-group-card th { padding: 1px 3px; font-size: 7px; line-height: 1.1; }
+        #view-app .live-split-standings .standings-group-card td { padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15; }
+        #view-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
+        #view-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
         #view-app .tables-render-target[data-compact="true"] table { margin-top: 0; }
-        #view-app .tables-render-target[data-compact="true"] th { padding: 3px 5px; font-size: 8px; }
-        #view-app .tables-render-target[data-compact="true"] td { padding: 3px 5px; min-height: var(--row-height-table-compact, 26px); font-size: 11px; }
+        #view-app .tables-render-target[data-compact="true"] th { padding: 1px 3px; font-size: 7px; line-height: 1.1; }
+        #view-app .tables-render-target[data-compact="true"] td { padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15; }
         #view-app .live-po-actions { margin-top: 8px; }
         #view-app .live-match-table-wrap { border: 1px solid var(--color-app-border); border-radius: var(--radius-md, 10px); overflow: hidden; box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08)); background: #fff; }
         #view-app .live-match-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0; font-family: var(--font-body); }
         #view-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
+        #view-app .live-match-table-wrap--playoff {
+            border-color: #fdba74;
+            box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.08), var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+        }
+        #view-app .live-match-table-wrap--playoff thead {
+            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+        }
+        #view-app .live-match-table-wrap--playoff .live-match-row--played { border-left-color: #00875a; }
+        #view-app .live-match-table-wrap--playoff .live-match-row--pending { border-left-color: #ea580c; }
         #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92); padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
         #view-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
         #view-app .live-match-table td { padding: 3px 6px; vertical-align: middle; border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2; }
@@ -1273,6 +1282,33 @@
         #view-demo-story .demo-embed-app .advancing-row td:first-child { border-left: 4px solid #00875a; }
         #view-demo-story .demo-embed-app .absolute-remis-row { background-color: #fff0b3 !important; }
         #view-demo-story .demo-embed-app .absolute-remis-row td:first-child { border-left: 4px solid #ff8b00; }
+        #view-demo-story .demo-embed-app .live-split { display: block; }
+        #view-demo-story .demo-embed-app .live-panel-head {
+            font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px;
+            padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display);
+        }
+        #view-demo-story .demo-embed-app .live-split-schedule.card,
+        #view-demo-story .demo-embed-app .live-split-standings.card { padding: 8px 10px; margin-bottom: 8px; }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card table { margin-top: 0; }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card th { padding: 1px 3px; font-size: 7px; }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card td {
+            padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15;
+        }
+        #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
+        #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
+        #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] th { padding: 1px 3px; font-size: 7px; }
+        #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] td { padding: 1px 3px; font-size: 10px; line-height: 1.15; }
+        @media (min-width: 900px) {
+            #view-demo-story .demo-embed-app .live-split {
+                display: grid; grid-template-columns: 1.55fr 1fr; gap: 10px; align-items: start;
+            }
+            #view-demo-story .demo-embed-app .live-split-schedule,
+            #view-demo-story .demo-embed-app .live-split-standings {
+                max-height: 420px; overflow-y: auto; padding-right: 4px; min-width: 0;
+            }
+        }
         #view-demo-story .demo-embed-app .filter-bar {
             display: flex; flex-wrap: wrap; gap: 5px;
             background: #fff; padding: 6px 8px; border-radius: 8px;
@@ -1301,6 +1337,15 @@
         }
         #view-demo-story .demo-embed-app .live-match-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0; font-family: var(--font-body); }
         #view-demo-story .demo-embed-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
+        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff {
+            border-color: #fdba74;
+            box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.08), var(--shadow-card);
+        }
+        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff thead {
+            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+        }
+        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff .live-match-row--played { border-left-color: #00875a; }
+        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff .live-match-row--pending { border-left-color: #ea580c; }
         #view-demo-story .demo-embed-app .live-match-table th {
             font-family: var(--font-display); font-size: 9px; font-weight: 800;
             letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92);
@@ -3716,8 +3761,9 @@
         opts = opts || {};
         const scorersCol = opts.showScorers ? '<th>Strzelcy</th>' : '';
         const groupCol = opts.isPo ? 'Faza' : 'Grupa';
+        const wrapCls = 'live-match-table-wrap' + (opts.isPo ? ' live-match-table-wrap--playoff' : '');
         const rows = filtered.map(m => renderMatchTableRow(m, opts)).join('');
-        return '<div class="live-match-table-wrap"><table class="live-match-table">' +
+        return '<div class="' + wrapCls + '"><table class="live-match-table">' +
             '<thead><tr>' +
             '<th>#</th><th>' + groupCol + '</th><th>Godz.</th><th class="col-teams">Mecz</th><th>Wynik</th>' +
             scorersCol + '<th></th>' +
@@ -4487,11 +4533,23 @@
                 if (highlights.length > 0) {
                     if (hasGroupBlock) playoffShortcutHTML += '<div class="match-section-divider"></div>';
                     playoffShortcutHTML += renderMatchSectionHead('🏆', 'Play-off', hasGroupBlock ? 'match-section-head--playoff' : '');
-                    playoffShortcutHTML += highlights.map(m => {
-                        const extraStyle = !m.played && !fanRo ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
-                        const extraAlert = !m.played && !fanRo ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
-                        return renderPoCard(m, extraStyle, extraAlert);
-                    }).join('');
+                    // Widok rodzica / demo fan: ta sama tabela co faza grupowa (filtry: wszystkie / oczekujące / zakończone)
+                    if (fanRo) {
+                        const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
+                            ? window.sortPlayoffMatchesByRound(highlights)
+                            : highlights;
+                        playoffShortcutHTML += renderMatchesTableHTML(poSorted, {
+                            readonly: true,
+                            showScorers: false,
+                            isPo: true,
+                        });
+                    } else {
+                        playoffShortcutHTML += highlights.map(m => {
+                            const extraStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
+                            const extraAlert = !m.played ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
+                            return renderPoCard(m, extraStyle, extraAlert);
+                        }).join('');
+                    }
                 }
             }
 
@@ -4517,7 +4575,7 @@
                 const isLivePanel = cont.id === 'live-matches-container';
                 const isAssistantPanel = cont.id === 'assistant-matches-container';
                 const isMatchesPanel = cont.id === 'matches-container';
-                const useTableLayout = (isLivePanel || isAssistantPanel || isMatchesPanel) && !isDemoMode;
+                const useTableLayout = (isLivePanel || isAssistantPanel || isMatchesPanel) && (!isDemoMode || window._demoStoryFanEmbed === true);
 
                 if (useTableLayout && !shouldRenderMatchContainer(cont.id)) {
                     cont.innerHTML = '';
@@ -4552,6 +4610,7 @@
                     return;
                 }
                 if (isDemoMode) {
+                    // Demo organizatora (nie fan): drabinka kartami. Fan embed idzie ścieżką useTableLayout wyżej.
                     let playoffHTML = '<h3 style="margin-top:30px; margin-bottom:15px; color:#102a43; border-bottom: 2px solid #102a43; padding-bottom:5px;">🏆 DRABINKA PUCHAROWA (PLAY-OFF DEMO)</h3>';
                     playoffHTML += (state.playoffs || []).map(m => {
                         let highlightStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
@@ -4687,8 +4746,12 @@
 
             containers.forEach(cont => {
                 const compact = cont.getAttribute('data-compact') === 'true';
+                // Na żywo / demo: w fazie pucharowej ZOSTAW tabele grup (zielona strefa awansu).
+                // Nie podmieniaj na hall-po-sidebar — po przeniesieniu #nazywo do demo-embed
+                // style hali (#view-app / .demo-hall-embed-host) nie działają → „surowy tekst”.
                 if (compact && window.isPlayoffPhase()) {
-                    cont.innerHTML = renderHallPlayoffSidebar();
+                    cont.innerHTML = compactBody
+                        || '<p style="color:#64748b;font-size:12px;margin:8px 0;">Brak tabel grupowych.</p>';
                     return;
                 }
                 cont.innerHTML = (compact ? '' : infoBanner) + (compact ? compactBody : fullBody);
@@ -5555,10 +5618,13 @@
                 return;
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            if (window._demoStoryFanEmbed) {
-                po = window.sortPlayoffMatchesByRound(po);
+            // Widok rodzica (fan + demo fan): ta sama konstrukcja tabeli co faza grupowa
+            if (fanRo) {
+                po = typeof window.sortPlayoffMatchesByRound === 'function'
+                    ? window.sortPlayoffMatchesByRound(po)
+                    : po;
                 displayCont.innerHTML = renderMatchSectionHead('🏆', 'Faza pucharowa') +
-                    renderMatchesTableHTML(po, { readonly: fanRo, showScorers: false, isPo: true });
+                    renderMatchesTableHTML(po, { readonly: true, showScorers: false, isPo: true });
                 return;
             }
             const bracketHTML = window.renderPlayoffBracketHTML(po, fanRo);
