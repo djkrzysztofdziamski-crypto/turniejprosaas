@@ -2,12 +2,12 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Turniejomat — panel organizatora</title>
     
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260713b">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -167,6 +167,7 @@
         #view-app .nav-tabs button { flex: 1; min-width: 70px; padding: 12px 6px; border: none; background: none; font-weight: 700; color: var(--color-app-text-muted); cursor: pointer; font-size: var(--font-size-nav-tab, 12px); text-transform: none; border-bottom: 4px solid transparent; font-family: var(--font-display); letter-spacing: 0.01em; }
         #view-app .nav-tabs button.active { color: var(--color-accent); border-bottom-color: var(--color-accent); background: #f4f8ff; }
         #view-app .nav-tabs button.nav-tab-live { color: var(--color-accent); font-weight: 800; }
+        /* Nav + live split: desktop od --bp-desktop (1024) — tablet landscape / laptop */
         @media (min-width: 1024px) { #view-app .nav-tabs .nav-mobile-only { display: none; } }
         @media (max-width: 1023px) { #view-app .nav-tabs .nav-desktop-only { display: none; } }
         #view-app .container { max-width: 1200px; margin: 15px auto; padding: 0 10px; }
@@ -1498,6 +1499,8 @@
             border: 1px solid #34d399;
         }
     </style>
+    <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
+    <link rel="stylesheet" href="css/responsive.css?v=20260716r2">
 </head>
 <body>
 
@@ -2001,6 +2004,25 @@
 </div>
 
 <script>
+    /**
+     * Breakpointy viewport (px) — sync z css/brand-tokens.css (--bp-*) i css/responsive.css.
+     * Telefon 6–7" · tablet 8/10/11/14" · laptop · monitor ~24" · portret + poziom.
+     */
+    window.TP_BREAKPOINTS = Object.freeze({
+        phone: 0,
+        phoneLg: 480,
+        tablet: 640,
+        tabletMd: 768,
+        tabletLg: 900,
+        desktop: 1024,
+        laptop: 1280,
+        desktopLg: 1536,
+        monitor: 1920,
+        shortHeight: 500
+    });
+    window.tpMqMin = (px) => window.matchMedia('(min-width: ' + px + 'px)');
+    window.tpIsDesktopLayout = () => window.tpMqMin(window.TP_BREAKPOINTS.desktop).matches;
+
     // --- 1. CONFIG CHMURY FIREBASE ---
     const firebaseConfig = { apiKey: "AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU", authDomain: "turniejprosaas.firebaseapp.com", databaseURL: "https://turniejprosaas-default-rtdb.europe-west1.firebasedatabase.app", projectId: "turniejprosaas", storageBucket: "turniejprosaas.firebasestorage.app", messagingSenderId: "141555836771", appId: "1:141555836771:web:d5f17180a21fded3d09556" };
 
@@ -4097,7 +4119,7 @@
 
             window.logAction("Wygenerowano nowy terminarz meczów grupowych.");
             window.save(); window.renderDashboard();
-            switchTab(window.matchMedia('(min-width: 1024px)').matches ? 'nazywo' : 'mecze');
+            switchTab(window.tpIsDesktopLayout() ? 'nazywo' : 'mecze');
         };
 
         window.syncTournamentMeta = (field, value) => {

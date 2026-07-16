@@ -1,0 +1,442 @@
+/**
+ * Turniejomat — responsywność (telefon / tablet / laptop / monitor)
+ * Skala zsynchronizowana z :root w brand-tokens.css (--bp-*).
+ *
+ * Media queries (literały px — wymagane przez CSS):
+ *   phone ………… max-width: 479px
+ *   phone-lg ……… max-width: 639px
+ *   tablet ……… min 640 / max 767
+ *   tablet-md …… min 768 / max 899
+ *   tablet-lg …… min 900 / max 1023
+ *   desktop ……… min 1024
+ *   laptop ……… min 1280
+ *   desktop-lg …… min 1536
+ *   monitor ……… min 1920
+ *   short ……… max-height: 500px (+ orientation: landscape)
+ */
+
+/* --- Baza: bezpieczne obszary (notch / home indicator) --- */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+}
+
+#view-app header {
+    padding-top: calc(12px + var(--safe-top));
+    padding-left: calc(20px + var(--safe-left));
+    padding-right: calc(20px + var(--safe-right));
+}
+
+#view-app .container {
+    max-width: var(--max-content-app, 1200px);
+    padding-left: max(var(--page-pad-x, 10px), var(--safe-left));
+    padding-right: max(var(--page-pad-x, 10px), var(--safe-right));
+    box-sizing: border-box;
+}
+
+#view-app {
+    padding-bottom: calc(80px + var(--safe-bottom));
+    min-height: 100dvh;
+}
+
+#view-login.active {
+    min-height: 100dvh;
+    height: auto;
+    padding: calc(16px + var(--safe-top)) 16px calc(16px + var(--safe-bottom));
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   TELEFON 6–7" — portret (szerokość CSS ~360–430px)
+   ========================================================= */
+@media (max-width: 479px) {
+    :root {
+        --page-pad-x: 8px;
+        --font-size-nav-tab: 11px;
+        --standings-stat-col: 36px;
+        --standings-pkt-col: 44px;
+        --standings-arrow-col: 48px;
+    }
+
+    #view-app header {
+        padding-left: calc(12px + var(--safe-left));
+        padding-right: calc(12px + var(--safe-right));
+        gap: 8px;
+    }
+
+    #view-app .nav-tabs button {
+        min-width: 64px;
+        padding: 10px 4px;
+    }
+
+    #view-app .card {
+        padding: 10px 10px;
+    }
+
+    #view-app .steps {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    #view-app .step.gold,
+    #view-app .step.silver,
+    #view-app .step.bronze {
+        height: auto;
+        min-height: 52px;
+        border-radius: 8px;
+    }
+
+    #view-app .awards-banner,
+    #view-app .podium-top-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #view-login .login-card {
+        width: 100%;
+        max-width: none;
+        padding: 24px 18px;
+    }
+}
+
+/* Telefon 6–7" + wąski tablet — do 639px */
+@media (max-width: 639px) {
+    #view-app .live-match-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #view-app .live-match-table {
+        min-width: 520px;
+    }
+
+    #view-app .live-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #view-app .live-toolbar-actions {
+        margin-left: 0;
+    }
+
+    #view-app .live-toolbar-actions .live-btn-secondary {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+}
+
+/* =========================================================
+   TABLET 8–11" — portret (640–1023)
+   ========================================================= */
+@media (min-width: 640px) and (max-width: 1023px) {
+    :root {
+        --page-pad-x: 14px;
+    }
+
+    #view-app .container {
+        max-width: var(--max-content-tablet, 960px);
+    }
+
+    #view-app .nav-tabs button {
+        min-width: 80px;
+        padding: 12px 8px;
+    }
+}
+
+/* Tablet 10–11" portret — jeden układ kolumn hali / demo */
+@media (max-width: 899px) {
+    #view-app .hall-grid,
+    #view-demo-story .demo-hall-embed-host .hall-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 719px) {
+    #view-app .hall-podium-wrap {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   TABLET landscape + LAPTOP mały (od 1024)
+   ========================================================= */
+@media (min-width: 1024px) {
+    :root {
+        --page-pad-x: 16px;
+    }
+
+    #view-app .container {
+        max-width: var(--max-content-app, 1200px);
+    }
+}
+
+/* =========================================================
+   LAPTOP (od 1280)
+   ========================================================= */
+@media (min-width: 1280px) {
+    :root {
+        --page-pad-x: 20px;
+    }
+
+    #view-app .container {
+        max-width: var(--max-content-laptop, 1320px);
+    }
+
+    #view-app .container.container--live {
+        max-width: min(100%, var(--max-content-laptop, 1320px));
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* =========================================================
+   DUŻY LAPTOP / MAŁY MONITOR (od 1536)
+   ========================================================= */
+@media (min-width: 1536px) {
+    #view-app .container,
+    #view-app .container.container--live {
+        max-width: var(--max-content-monitor, 1600px);
+    }
+
+    #view-app .live-split {
+        grid-template-columns: 1.6fr 1fr;
+        gap: 14px;
+    }
+}
+
+/* =========================================================
+   MONITOR STACJONARNY ~24" FHD+ (od 1920)
+   ========================================================= */
+@media (min-width: 1920px) {
+    :root {
+        --page-pad-x: 24px;
+        --font-size-body: 15px;
+        --font-size-table: 13px;
+    }
+
+    #view-app .container,
+    #view-app .container.container--live {
+        max-width: var(--max-content-monitor, 1600px);
+    }
+
+    #view-app .card {
+        padding: 14px 16px;
+    }
+
+    #view-app .live-split {
+        grid-template-columns: 1.65fr 1fr;
+        gap: 16px;
+    }
+}
+
+/* =========================================================
+   ORIENTACJA — telefon i tablet w poziomie
+   (niski viewport: nie gubić treści, zmniejszyć sticky chrome)
+   ========================================================= */
+@media (orientation: landscape) and (max-height: 500px) {
+    #view-app header {
+        padding-top: calc(6px + var(--safe-top));
+        padding-bottom: 6px;
+    }
+
+    #view-app .nav-tabs {
+        top: 40px;
+    }
+
+    #view-app .nav-tabs button {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    #view-app {
+        padding-bottom: calc(48px + var(--safe-bottom));
+    }
+
+    #view-app .live-split-schedule,
+    #view-app .live-split-standings {
+        max-height: none;
+        overflow: visible;
+    }
+
+    #view-login .login-card {
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+    }
+}
+
+/* Telefon / tablet landscape: treść czytelna, bez przycinania */
+@media (orientation: landscape) and (max-width: 1023px) {
+    #view-app .hall-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #view-app .container {
+        padding-left: max(12px, var(--safe-left));
+        padding-right: max(12px, var(--safe-right));
+    }
+
+    #view-app .awards-banner,
+    #view-app .podium-top-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Tablet landscape szeroki (≥900, nadal < desktop split intent) */
+@media (orientation: landscape) and (min-width: 900px) and (max-width: 1023px) {
+    #view-app .live-split {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 10px;
+        align-items: start;
+    }
+}
+
+/* Preferuj mniejszy ruch na urządzeniach z reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    #view-app .live-match-row,
+    #view-app .dashboard-stat {
+        transition: none;
+    }
+}
+
+/* =========================================================
+   ADMIN (admin.turniejomat.pl) — telefon / tablet / monitor
+   ========================================================= */
+#view-admin {
+    padding-left: max(12px, var(--safe-left));
+    padding-right: max(12px, var(--safe-right));
+    padding-bottom: max(20px, var(--safe-bottom));
+    min-height: 100dvh;
+    box-sizing: border-box;
+}
+
+#view-admin .container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#view-admin .admin-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+@media (max-width: 639px) {
+    #view-admin {
+        padding: calc(12px + var(--safe-top)) max(10px, var(--safe-left)) calc(16px + var(--safe-bottom)) max(10px, var(--safe-right));
+    }
+
+    #view-admin .container {
+        max-width: 100%;
+    }
+
+    #view-admin .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #view-admin .card {
+        padding: 14px 12px;
+    }
+
+    #view-admin .admin-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    #view-admin .admin-kpi-value {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    #view-admin .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #view-admin .form-grid > :first-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (min-width: 1280px) {
+    #view-admin .container {
+        max-width: min(1440px, calc(100vw - 48px));
+    }
+}
+
+@media (min-width: 1920px) {
+    #view-admin .container {
+        max-width: min(1600px, calc(100vw - 64px));
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    #view-admin {
+        padding-top: calc(8px + var(--safe-top));
+    }
+
+    #view-admin .card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+}
+
+/* =========================================================
+   DEMO STORY — czytelność na telefonie / tablecie (portret + poziom)
+   ========================================================= */
+@media (max-width: 639px) {
+    #view-demo-story .demo-screen {
+        padding: 16px 12px 40px;
+    }
+
+    #view-demo-story .demo-h1 {
+        font-size: clamp(20px, 6vw, 26px);
+    }
+
+    #view-demo-story .demo-embed-app,
+    #view-demo-story .demo-hall-embed-host {
+        max-height: min(70vh, 640px);
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #view-demo-story .demo-fan-tab {
+        min-width: 0;
+        flex: 1 1 30%;
+        font-size: 10px;
+        padding: 10px 6px;
+    }
+
+    #view-demo-story .demo-btn-primary,
+    #view-demo-story .demo-btn-landing,
+    #view-demo-story .demo-btn-secondary {
+        min-height: 48px;
+    }
+}
+
+@media (orientation: landscape) and (max-width: 1023px) {
+    #view-demo-story .demo-embed-app,
+    #view-demo-story .demo-hall-embed-host {
+        max-height: min(78vh, 520px);
+    }
+
+    #view-demo-story .demo-screen[data-step="2"],
+    #view-demo-story .demo-screen[data-step="3"],
+    #view-demo-story .demo-screen[data-step="5"] {
+        max-width: min(960px, 100%);
+    }
+}
+
+/* Touch targets — telefon / tablet */
+@media (max-width: 1023px) {
+    #view-app .nav-tabs button,
+    #view-app .filter-btn,
+    #view-login .btn-submit,
+    #view-login .btn-demo-story {
+        min-height: 44px;
+    }
+}

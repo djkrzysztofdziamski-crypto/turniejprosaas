@@ -67,6 +67,41 @@
     /* Layout */
     --max-content: 1080px;
 
+    /*
+     * Breakpointy CSS (szerokość viewport) — skala urządzeń Turniejomat
+     * Wartości px w @media muszą być literalne (CSS vars nie działają w warunkach media).
+     * Trzymać w sync z css/responsive.css oraz window.TP_BREAKPOINTS w index.html.
+     *
+     *  Telefon 6–7" portret …………… ~360–430px  → do --bp-phone-lg
+     *  Telefon 6–7" poziom …………… ~640–900×360 → --bp-tablet + orientation
+     *  Tablet 8" ……………………… ~768 / ~1024  → --bp-tablet-md / --bp-desktop
+     *  Tablet 10–11" ………………… ~820–834 / ~1180 → --bp-tablet-lg / --bp-laptop
+     *  Tablet 14" …………………… ~1000–1200 / ~1400+ → --bp-desktop / --bp-laptop+
+     *  Laptop ………………………… ~1280–1600 → --bp-laptop
+     *  Monitor stacjonarny ~24" …… ~1920–2560 → --bp-monitor
+     */
+    --bp-phone: 0px;
+    --bp-phone-lg: 480px;      /* większe telefony 6–7" */
+    --bp-tablet: 640px;        /* phone landscape / mały tablet 8" */
+    --bp-tablet-md: 768px;     /* tablet 8–10" portret */
+    --bp-tablet-lg: 900px;     /* tablet 10–11" portret */
+    --bp-desktop: 1024px;      /* tablet landscape / mały laptop — split Na żywo */
+    --bp-laptop: 1280px;       /* typowy laptop */
+    --bp-desktop-lg: 1536px;   /* duży laptop / mały monitor */
+    --bp-monitor: 1920px;      /* monitor ~24" FHD i szersze */
+    --bp-short-height: 500px;  /* niski viewport: phone/tablet landscape */
+
+    --max-content-phone: 100%;
+    --max-content-tablet: 960px;
+    --max-content-app: 1200px;
+    --max-content-laptop: 1320px;
+    --max-content-monitor: 1600px;
+    --page-pad-x: 10px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
     /* Stopka marki — jedna treść w całym projekcie */
     --brand-footer-text: 'Turniejomat © 2026 · powered by TurniejPro · Kris Dziamsky';
 }
