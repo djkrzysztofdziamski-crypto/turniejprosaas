@@ -314,6 +314,8 @@
 
         if (!isDemoStoryAutoContext()) return false;
 
+        if (getUrlDemoStep() != null) return false;
+
         let sess;
 
         try {
@@ -392,6 +394,12 @@
 
 
 
+    function playerFullName(p) {
+        if (!p) return '';
+        const full = ((p.firstName || '') + ' ' + (p.lastName || '')).trim();
+        return full || p.displayName || '';
+    }
+
     function mapScorers(scorers, playersById, sideTeamId) {
 
         if (!scorers || !scorers.length) return [];
@@ -404,7 +412,7 @@
 
             const p = playersById[s.playerId];
 
-            const name = p ? p.displayName : 'Strzelec';
+            const name = p ? (playerFullName(p) || 'Strzelec') : 'Strzelec';
 
             (s.goals || []).forEach(function () {
 
@@ -476,13 +484,15 @@
 
             });
 
+            const gkName = gkPlayer ? (playerFullName(gkPlayer) || gkPlayer.displayName || '—') : '—';
+
             const entry = {
 
                 id: numId,
 
                 name: t.name,
 
-                gk: gkPlayer ? gkPlayer.displayName : '—',
+                gk: gkName,
 
                 cap: '—'
 
@@ -624,7 +634,7 @@
 
                 displayName: p.displayName,
 
-                fullName: (p.firstName || '') + ' ' + (p.lastName || ''),
+                fullName: playerFullName(p) || p.displayName,
 
                 teamId: p.teamId,
 
@@ -974,6 +984,8 @@
 
         } else if (activeEmbedKind === 'organizer') {
 
+            teardownHallDemoSixteen();
+
             restoreNodes(EMBED_NODES.organizer);
 
             restoreNodes(EMBED_NODES.live);
@@ -1102,21 +1114,37 @@
 
                 '<span class="demo-phase-done">Play-off <span class="demo-check" aria-hidden="true">✓</span></span>' +
 
-                '<span class="demo-phase-sep">·</span>' +
-
-                '<span class="demo-phase-pending">Finał — czeka na Ciebie</span>' +
-
                 '</div>' +
 
                 '</div>';
 
         }
 
-        if (fin) {
+        const t1 = (fin && fin.t1 && fin.t1.name) || 'FC Orły Poznań';
 
-            html += '<div class="demo-final-highlight">🏆 ' + fin.n + ' · ' + fin.t1.name + ' vs ' + fin.t2.name + '</div>';
+        const t2 = (fin && fin.t2 && fin.t2.name) || 'United Luboń';
 
-        }
+        html += '<div class="demo-final-live-card" role="status">' +
+
+            '<div class="demo-final-live-title-row">' +
+
+            '<span class="demo-phase-final-pulse" aria-hidden="true"></span>' +
+
+            '<span class="demo-phase-final-label">WIELKI FINAŁ</span>' +
+
+            '</div>' +
+
+            '<div class="demo-final-live-matchup">' +
+
+            '<span class="demo-final-live-team">' + t1 + '</span>' +
+
+            '<span class="demo-final-live-vs">vs</span>' +
+
+            '<span class="demo-final-live-team">' + t2 + '</span>' +
+
+            '</div>' +
+
+            '</div>';
 
         html += '<div id="demo-organizer-embed-host" class="demo-embed-app"></div>';
 
@@ -1406,6 +1434,216 @@
 
         window._hallLiveScoreKey = '';
 
+        window._hallDemoListsSig = '';
+
+    }
+
+
+
+    let hallDemoClockTimer = null;
+
+
+
+    function getUrlDemoStep() {
+
+        const params = new URLSearchParams(global.location.search);
+
+        const raw = (params.get('step') || params.get('demoStep') || '').trim().toLowerCase();
+
+        if (!raw) return null;
+
+        if (raw === 'fan' || raw === 'kibic') return 2;
+
+        const n = parseInt(raw, 10);
+
+        if (isNaN(n) || n < 1 || n > 7) return null;
+
+        return n;
+
+    }
+
+
+
+    function buildDemoFanDeepLink() {
+
+        const u = new URL(global.location.href);
+
+        u.hash = '';
+
+        Array.from(u.searchParams.keys()).forEach(function (k) { u.searchParams.delete(k); });
+
+        if (global.location.hostname === 'demo.turniejomat.pl') {
+
+            u.searchParams.set('step', '2');
+
+        } else {
+
+            u.searchParams.set('id', 'DEMO-2026');
+
+            u.searchParams.set('step', '2');
+
+        }
+
+        return u.toString();
+
+    }
+
+
+
+    function formatHallDemoClock(d) {
+
+        const hh = String(d.getHours()).padStart(2, '0');
+
+        const mm = String(d.getMinutes()).padStart(2, '0');
+
+        return hh + ':' + mm;
+
+    }
+
+
+
+    function stopHallDemoClock() {
+
+        if (hallDemoClockTimer) {
+
+            clearInterval(hallDemoClockTimer);
+
+            hallDemoClockTimer = null;
+
+        }
+
+    }
+
+
+
+    function startHallDemoClock() {
+
+        const el = document.getElementById('hall-demo-clock');
+
+        if (!el) return;
+
+        stopHallDemoClock();
+
+        const tick = function () {
+
+            el.textContent = formatHallDemoClock(new Date());
+
+        };
+
+        tick();
+
+        hallDemoClockTimer = setInterval(tick, 1000);
+
+    }
+
+
+
+    function teardownHallDemoSixteen() {
+
+        stopHallDemoClock();
+
+        if (typeof global.stopHallSixteenClock === 'function') global.stopHallSixteenClock();
+
+        const grid = document.getElementById('hall-grid');
+
+        if (grid) grid.classList.remove('hall-grid--sixteen');
+
+        const qrCell = document.getElementById('hall-demo-qr-cell');
+
+        const clockCell = document.getElementById('hall-demo-clock-cell');
+
+        const nextPanel = document.getElementById('hall-demo-next-panel');
+
+        const donePanel = document.getElementById('hall-demo-done-panel');
+
+        if (qrCell) qrCell.setAttribute('aria-hidden', 'true');
+
+        if (clockCell) clockCell.setAttribute('aria-hidden', 'true');
+
+        if (nextPanel) nextPanel.setAttribute('aria-hidden', 'true');
+
+        if (donePanel) donePanel.setAttribute('aria-hidden', 'true');
+
+        const qr = document.getElementById('hall-demo-qr');
+
+        if (qr) qr.innerHTML = '';
+
+        const nextList = document.getElementById('hall-demo-next-list');
+
+        const doneList = document.getElementById('hall-demo-done-list');
+
+        if (nextList) nextList.innerHTML = '';
+
+        if (doneList) doneList.innerHTML = '';
+
+        global._hallDemoListsSig = '';
+
+    }
+
+
+
+    function setupHallDemoSixteen() {
+
+        if (typeof global.setupHallSixteenLayout === 'function') {
+
+            global.setupHallSixteenLayout({ qrUrl: buildDemoFanDeepLink() });
+
+            return;
+
+        }
+
+        const grid = document.getElementById('hall-grid');
+
+        if (!grid) return;
+
+        grid.classList.add('hall-grid--sixteen');
+
+        const qrCell = document.getElementById('hall-demo-qr-cell');
+
+        const clockCell = document.getElementById('hall-demo-clock-cell');
+
+        const nextPanel = document.getElementById('hall-demo-next-panel');
+
+        const donePanel = document.getElementById('hall-demo-done-panel');
+
+        if (qrCell) qrCell.setAttribute('aria-hidden', 'false');
+
+        if (clockCell) clockCell.setAttribute('aria-hidden', 'false');
+
+        if (nextPanel) nextPanel.setAttribute('aria-hidden', 'false');
+
+        if (donePanel) donePanel.setAttribute('aria-hidden', 'false');
+
+        const fanUrl = buildDemoFanDeepLink();
+
+        if (typeof global.renderShareQr === 'function') {
+
+            global.renderShareQr('hall-demo-qr', fanUrl);
+
+        } else {
+
+            const qr = document.getElementById('hall-demo-qr');
+
+            if (qr) {
+
+                qr.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' +
+
+                    encodeURIComponent(fanUrl) + '" alt="QR kibic" style="display:inline-block;">';
+
+            }
+
+        }
+
+        startHallDemoClock();
+
+        if (typeof global.renderHallDemoSixteenLists === 'function') {
+
+            global._hallDemoListsSig = '';
+
+            global.renderHallDemoSixteenLists();
+
+        }
+
     }
 
 
@@ -1418,6 +1656,8 @@
 
         if (global.renderHallView) global.renderHallView();
 
+        setupHallDemoSixteen();
+
         const body = document.getElementById('hall-live-body');
 
         if (body && /Oczekiwanie na terminarz|Brak zaplanowanych meczów/.test(body.textContent || '')) {
@@ -1427,6 +1667,8 @@
             resetHallViewCache();
 
             if (global.renderHallView) global.renderHallView();
+
+            setupHallDemoSixteen();
 
         }
 
@@ -2088,6 +2330,26 @@
 
 
         showEntry: function () {
+
+            const urlStep = getUrlDemoStep();
+
+            if (urlStep != null) {
+
+                if (!this.start('deep_link')) return;
+
+                if (urlStep >= 5 && !this.isFinalSaved()) {
+
+                    this.goTo(1);
+
+                    return;
+
+                }
+
+                this.goTo(urlStep);
+
+                return;
+
+            }
 
             clearDemoStorySession();
 

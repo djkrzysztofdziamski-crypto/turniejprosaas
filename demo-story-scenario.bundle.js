@@ -298,6 +298,132 @@ window.DEMO_SCENARIO_BUNDLE = {
         "teamId": "t02",
         "role": "field",
         "number": 7
+      },
+      {
+        "id": "p011",
+        "firstName": "Paweł",
+        "lastName": "Mazur",
+        "displayName": "Mazur",
+        "teamId": "t02",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p012",
+        "firstName": "Kamil",
+        "lastName": "Jankowski",
+        "displayName": "Jankowski",
+        "teamId": "t03",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p013",
+        "firstName": "Mateusz",
+        "lastName": "Kwiatkowski",
+        "displayName": "Kwiatkowski",
+        "teamId": "t04",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p014",
+        "firstName": "Jakub",
+        "lastName": "Piotrowski",
+        "displayName": "Piotrowski",
+        "teamId": "t05",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p015",
+        "firstName": "Filip",
+        "lastName": "Grabowski",
+        "displayName": "Grabowski",
+        "teamId": "t06",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p016",
+        "firstName": "Sebastian",
+        "lastName": "Pawlak",
+        "displayName": "Pawlak",
+        "teamId": "t07",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p017",
+        "firstName": "Maciej",
+        "lastName": "Michalski",
+        "displayName": "Michalski",
+        "teamId": "t08",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p018",
+        "firstName": "Andrzej",
+        "lastName": "Król",
+        "displayName": "Król",
+        "teamId": "t10",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p019",
+        "firstName": "Rafał",
+        "lastName": "Wieczorek",
+        "displayName": "Wieczorek",
+        "teamId": "t11",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p020",
+        "firstName": "Grzegorz",
+        "lastName": "Jabłoński",
+        "displayName": "Jabłoński",
+        "teamId": "t12",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p021",
+        "firstName": "Dawid",
+        "lastName": "Dudek",
+        "displayName": "Dudek",
+        "teamId": "t13",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p022",
+        "firstName": "Patryk",
+        "lastName": "Baran",
+        "displayName": "Baran",
+        "teamId": "t14",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p023",
+        "firstName": "Szymon",
+        "lastName": "Sikora",
+        "displayName": "Sikora",
+        "teamId": "t15",
+        "role": "goalkeeper",
+        "number": 1
+      },
+      {
+        "id": "p024",
+        "firstName": "Oskar",
+        "lastName": "Walczak",
+        "displayName": "Walczak",
+        "teamId": "t16",
+        "role": "goalkeeper",
+        "number": 1
       }
     ]
   },

@@ -7,15 +7,15 @@
     
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260717podium6">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=20260712"></script>
-    <script src="demo-story.js?v=20260712"></script>
+    <script src="demo-story-scenario.bundle.js?v=20260717podium6"></script>
+    <script src="demo-story.js?v=20260717podium6"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -219,17 +219,20 @@
         #view-app .tables-render-target[data-compact="true"] td { padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15; }
         #view-app .live-po-actions { margin-top: 8px; }
         #view-app .live-match-table-wrap { border: 1px solid var(--color-app-border); border-radius: var(--radius-md, 10px); overflow: hidden; box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08)); background: #fff; }
-        #view-app .live-match-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0; font-family: var(--font-body); }
+        #view-app .live-match-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; margin: 0; font-family: var(--font-body); }
+        #view-app .live-match-table col.col-no { width: 34px; }
+        #view-app .live-match-table col.col-group { width: 42px; }
+        #view-app .live-match-table col.col-time { width: 48px; }
+        #view-app .live-match-table col.col-teams { width: auto; }
+        /* Wynik: dwa inputy + „:” + ✓ — musi się zmieścić bez nachodzenia na Strzelcy/status */
+        #view-app .live-match-table col.col-score { width: 112px; }
+        #view-app .live-match-table col.col-scorers { width: 78px; }
+        #view-app .live-match-table col.col-status { width: 26px; }
         #view-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
-        #view-app .live-match-table-wrap--playoff {
-            border-color: #fdba74;
-            box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.08), var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
-        }
+        /* Play-off: identyczna ramka/geometria — tylko kolor nagłówka */
         #view-app .live-match-table-wrap--playoff thead {
             background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
         }
-        #view-app .live-match-table-wrap--playoff .live-match-row--played { border-left-color: #00875a; }
-        #view-app .live-match-table-wrap--playoff .live-match-row--pending { border-left-color: #ea580c; }
         #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92); padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
         #view-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
         #view-app .live-match-table td { padding: 3px 6px; vertical-align: middle; border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2; }
@@ -241,24 +244,58 @@
         #view-app .live-match-row.live-match-row--played:nth-child(even) { background: linear-gradient(90deg, #f6fffb 0%, #f8fafc 40%); }
         #view-app .live-match-row.live-match-row--pending { border-left-color: #ff8b00; }
         #view-app .live-match-no { font-family: var(--font-display); font-weight: 800; font-size: 12px; color: #42526e; font-variant-numeric: tabular-nums; line-height: 1; }
-        #view-app .live-group-badge { display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #0747a6; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2; }
+        #view-app .live-group-badge { display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #0747a6; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2; box-sizing: border-box; border: 1px solid transparent; }
+        #view-app .live-group-badge--po { background: #fff7ed; color: #b45309; }
         #view-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
         #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; max-width: 220px; }
         #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
         #view-app .live-match-teams .live-team-name { display: inline; }
         #view-app .live-score-display { font-family: var(--font-display); font-weight: 800; font-size: 13px; color: #172b4d; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; line-height: 1; }
-        #view-app .live-score-inputs { display: inline-flex; align-items: center; gap: 3px; }
-        #view-app .live-score-inputs input { width: 32px; text-align: center; font-weight: 800; font-family: var(--font-display); padding: 2px 3px; border: 1px solid var(--color-app-border-strong); border-radius: 4px; font-size: 12px; color: #172b4d; line-height: 1.2; }
+        #view-app .live-score-inputs { display: inline-flex; align-items: center; justify-content: center; gap: 2px; max-width: 100%; flex-wrap: nowrap; }
+        #view-app .live-score-inputs input { width: 28px; min-width: 28px; max-width: 28px; box-sizing: border-box; text-align: center; font-weight: 800; font-family: var(--font-display); padding: 2px 1px; border: 1px solid var(--color-app-border-strong); border-radius: 4px; font-size: 12px; color: #172b4d; line-height: 1.2; }
         #view-app .live-score-inputs input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 2px rgba(0,82,204,0.15); }
-        #view-app .live-score-inputs > span { font-weight: 800; color: #64748b; font-size: 11px; }
-        #view-app .live-score-save { background: var(--color-accent); color: #fff; border: none; border-radius: 4px; padding: 3px 6px; font-size: 10px; font-weight: 800; cursor: pointer; font-family: var(--font-display); line-height: 1.2; }
+        #view-app .live-score-inputs > span { font-weight: 800; color: #64748b; font-size: 11px; flex: 0 0 auto; }
+        #view-app .live-score-save { background: var(--color-accent); color: #fff; border: none; border-radius: 4px; padding: 2px 5px; font-size: 10px; font-weight: 800; cursor: pointer; font-family: var(--font-display); line-height: 1.2; flex: 0 0 auto; }
         #view-app .live-score-save:hover { filter: brightness(1.06); }
         #view-app .live-status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #cbd5e1; box-shadow: inset 0 1px 1px rgba(0,0,0,0.08); }
         #view-app .live-status-dot.is-played { background: #00875a; box-shadow: 0 0 0 1px rgba(0,135,90,0.2); }
-        #view-app .assistant-scorers-btn { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 3px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: var(--font-body); transition: border-color 0.12s, color 0.12s, background 0.12s; line-height: 1.2; }
+        #view-app .live-match-table td.col-score,
+        #view-app .live-match-table td.col-scorers,
+        #view-app .live-match-table td.col-status {
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        #view-app .live-match-table td.col-scorers { padding-left: 4px; padding-right: 4px; }
+        #view-app .live-match-table td.col-status { padding-left: 2px; padding-right: 4px; }
+        /* Kompaktowy Strzelcy w Na żywo / Mecze — bez powiększania */
+        #view-app .assistant-scorers-btn { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: var(--font-body); transition: border-color 0.12s, color 0.12s, background 0.12s; line-height: 1.2; max-width: 100%; box-sizing: border-box; }
         #view-app .assistant-scorers-btn:hover { border-color: var(--color-accent); color: var(--color-accent); background: #f4f8ff; }
         #view-app .assistant-scorers-btn--lead { background: #eef2ff; border-color: var(--color-accent); color: var(--color-accent); }
         #view-app .live-score-cell { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; justify-content: center; max-width: 100%; }
+        /* Karta Mecze: ta sama geometria kolumn co Na żywo (wynik / Strzelcy / status) */
+        #view-app #mecze .live-match-table col.col-score,
+        #view-app #matches-container .live-match-table col.col-score { width: 112px; }
+        #view-app #mecze .live-match-table col.col-scorers,
+        #view-app #matches-container .live-match-table col.col-scorers { width: 78px; }
+        #view-app #mecze .live-match-table col.col-status,
+        #view-app #matches-container .live-match-table col.col-status { width: 26px; }
+        #view-app #mecze .live-score-inputs,
+        #view-app #matches-container .live-score-inputs { display: inline-flex; align-items: center; justify-content: center; gap: 2px; max-width: 100%; flex-wrap: nowrap; }
+        #view-app #mecze .live-score-inputs input,
+        #view-app #matches-container .live-score-inputs input { width: 28px; min-width: 28px; max-width: 28px; box-sizing: border-box; }
+        #view-app #mecze .assistant-scorers-btn,
+        #view-app #matches-container .assistant-scorers-btn { padding: 2px 6px; font-size: 9px; min-height: 0; }
+        #view-app #mecze .live-match-table td.col-score,
+        #view-app #mecze .live-match-table td.col-scorers,
+        #view-app #mecze .live-match-table td.col-status,
+        #view-app #matches-container .live-match-table td.col-score,
+        #view-app #matches-container .live-match-table td.col-scorers,
+        #view-app #matches-container .live-match-table td.col-status {
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: middle;
+        }
         @media (min-width: 1024px) {
             #view-app .live-split { display: grid; grid-template-columns: 1.55fr 1fr; gap: 10px; align-items: start; }
             #view-app .live-split-schedule,
@@ -317,6 +354,11 @@
         #view-app .hall-meta { font-size: 12px; color: var(--color-app-text-muted); margin-top: 2px; }
         #view-app .hall-fs-btn { background: #fff; border: 1px solid var(--color-app-border-strong); padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; }
         #view-app .hall-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+        #view-app .hall-col-main { min-width: 0; }
+        #view-app .hall-col-side { min-width: 0; }
+        #view-app .hall-demo-qr-cell,
+        #view-app .hall-demo-clock-cell,
+        #view-app .hall-demo-slot { display: none; }
         #view-app .hall-panel { background: #fff; border: 1px solid var(--color-app-border); border-radius: 10px; padding: 10px 12px; box-shadow: var(--color-glow-panel, var(--shadow-card)); }
         #view-app .hall-next-label { font-size: 11px; font-weight: 800; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
         #view-app .hall-live-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
@@ -430,6 +472,285 @@
         @keyframes score-flash { 0% { background: #fff9c4; } 100% { background: transparent; } }
         #view-app .hall-flash { animation: score-flash 0.4s ease-out; }
         @media (max-width: 900px) { #view-app .hall-grid { grid-template-columns: 1fr; } }
+
+        /* --- Hala sędziego: ten sam układ 16 części co demo --- */
+        body.hall-view #view-app #hall-screen {
+            display: flex !important;
+            flex-direction: column;
+            height: 100vh;
+            max-height: 100vh;
+            box-sizing: border-box;
+            padding: 12px 16px 14px;
+            overflow: hidden;
+        }
+        body.hall-view #view-app .hall-header { flex-shrink: 0; }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            grid-template-areas:
+                "live live live qr"
+                "live live live qr"
+                "live live live clock"
+                "next next done done";
+            gap: 10px;
+            flex: 1;
+            min-height: 0;
+            align-items: stretch;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-col-main {
+            grid-area: live;
+            min-width: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-played-panel,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-col-side {
+            display: none !important;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-panel {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen #hall-live-body {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-team-name {
+            font-size: clamp(20px, 3.2vw, 40px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-digit {
+            font-size: clamp(56px, 11vw, 100px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-colon {
+            font-size: clamp(34px, 6.5vw, 56px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr-cell {
+            grid-area: qr;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            min-width: 0;
+            min-height: 0;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr img {
+            width: min(100%, 180px);
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: contain;
+            display: block;
+            border-radius: 6px;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-clock-cell {
+            grid-area: clock;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            min-width: 0;
+            min-height: 0;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-clock {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6.5vw, 64px);
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.08em;
+            color: #0f172a;
+            line-height: 1;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot {
+            display: flex !important;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            padding: 8px 10px;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot > .hall-next-label {
+            flex-shrink: 0;
+            margin-bottom: 0;
+            line-height: 1.1;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot--next { grid-area: next; }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot--done { grid-area: done; }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot-list {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+        body.hall-view #view-app .hall-demo-match-table-wrap {
+            border: 1px solid var(--color-app-border);
+            border-radius: var(--radius-md, 10px);
+            overflow: hidden;
+            box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+            background: #fff;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        body.hall-view #view-app .hall-demo-match-table-wrap--playoff thead,
+        body.hall-view #view-app .live-match-table-wrap--playoff.hall-demo-match-table-wrap thead {
+            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+        }
+        body.hall-view #view-app .hall-demo-match-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 12px;
+            margin: 0;
+            font-family: var(--font-body);
+            height: 100%;
+        }
+        body.hall-view #view-app .hall-demo-match-table col.col-no { width: 36px; }
+        body.hall-view #view-app .hall-demo-match-table col.col-group { width: 48px; }
+        body.hall-view #view-app .hall-demo-match-table col.col-time { width: 52px; }
+        body.hall-view #view-app .hall-demo-match-table col.col-teams { width: auto; }
+        body.hall-view #view-app .hall-demo-match-table thead {
+            background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%);
+        }
+        body.hall-view #view-app .hall-demo-match-table thead tr { height: 24px; }
+        body.hall-view #view-app .hall-demo-match-table th {
+            font-family: var(--font-display);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.92);
+            padding: 3px 5px;
+            text-align: center;
+            border: none;
+            white-space: nowrap;
+            line-height: 1.1;
+        }
+        body.hall-view #view-app .hall-demo-match-table th.col-teams {
+            text-align: left;
+            padding-left: 8px;
+        }
+        body.hall-view #view-app .hall-demo-match-table tbody tr {
+            height: calc((100% - 24px) / 3);
+        }
+        body.hall-view #view-app .hall-demo-match-table td {
+            padding: 2px 5px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e8ecf1;
+            border-right: 1px solid #e8ecf1;
+            text-align: center;
+            line-height: 1.15;
+            overflow: hidden;
+        }
+        body.hall-view #view-app .hall-demo-match-table td:last-child { border-right: none; }
+        body.hall-view #view-app .hall-demo-match-table tbody tr:last-child td { border-bottom: none; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-row { border-left: 3px solid #cbd5e1; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-row:nth-child(even) { background: #f8fafc; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-row--played { border-left-color: #00875a; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-row--played:nth-child(even) {
+            background: linear-gradient(90deg, #f6fffb 0%, #f8fafc 40%);
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-match-row--pending { border-left-color: #ff8b00; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-no {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 13px;
+            color: #42526e;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-group-badge {
+            display: inline-block;
+            min-width: 24px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #0747a6;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 10px;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+            box-sizing: border-box;
+            border: 1px solid transparent;
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-group-badge--po {
+            background: #fff7ed;
+            color: #b45309;
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-time {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: #64748b;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-match-teams {
+            text-align: left;
+            font-weight: 700;
+            font-size: 13px;
+            color: #172b4d;
+            line-height: 1.2;
+            padding-left: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        body.hall-view #view-app .hall-demo-match-table .live-match-teams .live-team-name { display: inline; color: #172b4d; }
+        body.hall-view #view-app .hall-demo-match-table .live-match-teams .live-teams-sep {
+            display: inline;
+            color: #64748b;
+            font-weight: 700;
+            padding: 0 3px;
+            white-space: pre;
+        }
+        body.hall-view #view-app .hall-demo-slot-empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px dashed #e2e8f0;
+            padding: 8px;
+            min-height: 0;
+        }
+        @media (max-width: 900px) {
+            body.hall-view #view-app #hall-screen { height: auto; max-height: none; overflow-y: auto; }
+            body.hall-view #view-app .hall-grid.hall-grid--sixteen {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: minmax(220px, auto) minmax(100px, auto) minmax(180px, auto) minmax(180px, auto);
+                grid-template-areas:
+                    "live live"
+                    "qr clock"
+                    "next next"
+                    "done done";
+                height: auto;
+            }
+        }
+
         /* --- Drawer edycji kolejności tabeli --- */
         #view-app .table-order-drawer { display: none; position: fixed; inset: 0; z-index: 2500; }
         #view-app .table-order-drawer.is-open { display: block; }
@@ -461,13 +782,21 @@
         #view-app #assistant-screen .filter-bar { padding: 5px 7px; margin-bottom: 8px; }
         #view-app .assistant-banner { background: #eef2ff; border: 1px solid #c7d2fe; color: #1e3a8a; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
         #view-app #assistant-screen .live-match-table { font-size: 12px; }
+        #view-app #assistant-screen .live-match-table col.col-teams { width: 32%; }
+        #view-app #assistant-screen .live-match-table col.col-score { width: 112px; }
+        #view-app #assistant-screen .live-match-table col.col-scorers { width: 108px; }
+        #view-app #assistant-screen .live-match-table col.col-status { width: 36px; }
         #view-app #assistant-screen .live-match-table th { padding: 4px 5px; font-size: 8px; }
-        #view-app #assistant-screen .live-match-table td { padding: 3px 5px; }
-        #view-app #assistant-screen .live-match-teams { font-size: 12px; max-width: 240px; }
-        #view-app #assistant-screen .live-score-inputs input { width: 34px; padding: 3px 3px; font-size: 13px; }
-        #view-app #assistant-screen .live-score-save { padding: 4px 8px; font-size: 11px; min-height: 28px; }
-        #view-app #assistant-screen .assistant-scorers-btn { padding: 4px 8px; font-size: 10px; min-height: 28px; }
+        #view-app #assistant-screen .live-match-table td { padding: 4px 5px; }
+        #view-app #assistant-screen .live-match-teams { font-size: 12px; max-width: none; }
+        #view-app #assistant-screen .live-score-inputs { gap: 5px; }
+        #view-app #assistant-screen .live-score-inputs input { width: 40px; min-width: 40px; min-height: 32px; padding: 5px 2px; font-size: 14px; }
+        #view-app #assistant-screen .live-score-save { padding: 5px 8px; font-size: 11px; min-height: 32px; }
+        #view-app #assistant-screen .assistant-scorers-btn { padding: 6px 10px; font-size: 11px; min-height: 32px; }
+        #view-app #assistant-screen .live-status-dot { width: 11px; height: 11px; }
         #view-app #assistant-screen .match-section-head { font-size: 12px; margin: 4px 0 6px; }
+        #view-app #assistant-screen .filter-bar { flex-wrap: wrap; gap: 5px; }
+        #view-app #assistant-screen .filter-btn { min-height: 32px; padding: 6px 10px; font-size: 12px; }
         /* Legacy karty asystenta (gdyby coś jeszcze renderowało) — niskie, subtelne */
         #view-app .assistant-match-card {
             background: #fff;
@@ -508,25 +837,15 @@
             margin: 2vh auto;
             max-height: 96vh;
             overflow-y: auto;
-            width: min(96vw, 450px);
         }
-        body.assistant-view #matchModal .match-modal-scorers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        body.assistant-view #matchModal .match-modal-score-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            text-align: center;
-        }
-        body.assistant-view #matchModal .match-modal-score-row b { flex: 1 1 100%; font-size: 13px; }
         @media (max-width: 480px) {
-            body.assistant-view #matchModal .match-modal-scorers-grid { grid-template-columns: 1fr; }
-            body.assistant-view #matchModal .goal-btn-container { grid-template-columns: 1fr; }
-            body.assistant-view #matchModal .match-modal-score-row b { flex: 1 1 40%; max-width: 48%; }
-            #view-app #assistant-screen .live-match-teams { max-width: 120px; font-size: 11px; }
+            #view-app #assistant-screen .live-match-table col.col-teams { width: 28%; }
+            #view-app #assistant-screen .live-match-table col.col-score { width: 100px; }
+            #view-app #assistant-screen .live-match-table col.col-scorers { width: 96px; }
+            #view-app #assistant-screen .live-match-teams { font-size: 11px; }
             #view-app #assistant-screen .live-match-table th { font-size: 7px; padding: 3px 3px; }
-            #view-app #assistant-screen .live-match-table td { padding: 2px 3px; font-size: 11px; }
+            #view-app #assistant-screen .live-match-table td { padding: 3px 3px; font-size: 11px; }
+            #view-app #assistant-screen .live-score-inputs input { width: 36px; min-width: 36px; min-height: 30px; font-size: 13px; }
         }
         #view-app .podium-main { border: 3px solid #ffcc00; border-radius: 15px; padding: 25px; text-align: center; background: white; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(255,204,0,0.2); }
         #view-app .podium-winner { font-size: 30px; font-weight: 800; color: #102a43; }
@@ -540,16 +859,125 @@
         #view-app .award-box b { font-size: 16px; display: block; margin-top: 6px; line-height: 1.45; font-weight: normal; }
         #view-app .award-box .podium-award-player { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.02em; }
         #view-app .award-box .podium-award-team { font-size: 13px; color: #c7d2fe; font-weight: 700; }
-        #view-app .podium-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; background: #fff; padding: 14px; border-radius: 8px; border: 1px solid #c1c7d0; text-align: left; }
-        #view-app .podium-top-col-title { color: #0052cc; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; font-size: 12px; }
-        #view-app .podium-top-row { font-size: 12px; line-height: 1.55; margin-bottom: 5px; }
+        #view-app .podium-top-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 15px;
+            background: transparent;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            text-align: left;
+        }
+        #view-app .podium-top-grid > div {
+            background: #fff;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #c1c7d0;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            min-width: 0;
+        }
+        #view-app .podium-top-col-title {
+            color: #0052cc;
+            font-weight: 800;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+            font-size: 12px;
+            font-family: var(--font-display);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        #view-app .podium-top-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px 12px;
+            align-items: baseline;
+            font-size: 12px;
+            line-height: 1.45;
+            margin-bottom: 6px;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        #view-app .podium-top-player { min-width: 0; }
         #view-app .podium-top-rank { font-weight: 800; color: #0052cc; margin-right: 4px; }
         #view-app .podium-top-team { color: #0b1f33; font-weight: 700; opacity: 0.78; }
-        #view-app .podium-top-stat { color: #172b4d; }
+        #view-app .podium-top-stat-cell {
+            font-weight: 800;
+            color: #172b4d;
+            text-align: right;
+            white-space: nowrap;
+            border: 0;
+            background: transparent;
+            font-variant-numeric: tabular-nums;
+        }
         #view-app .podium-top-empty { color: #97a0af; }
+        #view-app .podium-top-empty .podium-top-stat-cell { color: #97a0af; font-weight: 600; }
+        #view-app .podium-top-empty-msg {
+            color: #97a0af;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            padding: 18px 10px;
+            line-height: 1.4;
+        }
         #view-app .time-setting { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
         #view-app .time-setting input { width: 100px !important; text-align: center; font-weight: bold; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         #view-app .time-setting select { width: auto !important; min-width: 190px; text-align: center; font-weight: bold; padding: 6px 24px 6px 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; cursor: pointer; }
+        /* Start turnieju: zawsze 24h (HH:MM) + ikona zegara — bez AM/PM z locale systemu */
+        #view-app .time-24h {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            overflow: hidden;
+            width: auto !important;
+            box-sizing: border-box;
+        }
+        #view-app .time-24h-text {
+            width: 64px !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 6px 4px 6px 8px !important;
+            text-align: center;
+            font-weight: bold;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.02em;
+            background: transparent;
+            box-sizing: border-box;
+        }
+        #view-app .time-24h-text:focus { outline: none; }
+        #view-app .time-24h:focus-within { border-color: var(--color-accent, #0052cc); box-shadow: 0 0 0 2px rgba(0,82,204,0.15); }
+        #view-app .time-24h-clock {
+            flex: 0 0 auto;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        #view-app .time-24h-clock:hover { color: #172b4d; background: #f8fafc; }
+        #view-app .time-24h-clock svg { width: 16px; height: 16px; display: block; }
+        #view-app .time-24h-picker {
+            position: absolute;
+            width: 1px !important;
+            height: 1px !important;
+            opacity: 0;
+            pointer-events: none;
+            border: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
         
         /* --- KARTY MECZOWE: UKŁAD GRID DLA IDEALNEJ SYMETRII --- */
         #view-app .match-card { background: #fff; border: 1px solid #c1c7d0; border-radius: 8px; padding: 22px 40px 15px 40px; margin-bottom: 10px; cursor: pointer; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
@@ -939,12 +1367,245 @@
         #view-app .table-team-cell > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         #view-app .table-arrow-wrapper { display: flex; gap: 2px; align-items: center; justify-content: flex-end; flex-shrink: 0; width: var(--standings-arrow-col); min-width: var(--standings-arrow-col); }
 
-        #view-app .goal-btn-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        #view-app .btn-goal { background: #0052cc; color: white; border: none; border-radius: 8px; height: 55px; font-weight: bold; font-size: 11px; cursor: pointer; padding: 5px; line-height: 1.2; }
+        #view-app .goal-btn-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 8px; }
+        #view-app .btn-goal { background: #0052cc; color: white; border: none; border-radius: 8px; min-height: 48px; font-weight: bold; font-size: 11px; cursor: pointer; padding: 8px 10px; line-height: 1.25; }
         #view-app .btn-main { background: #0052cc; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,82,204,0.2); }
         #view-app .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         #view-app .modal-content { background: white; margin: 5% auto; padding: 20px; width: 90%; max-width: 450px; border-radius: 12px; position: relative; }
         #view-app .penalty-box { display: none; text-align: center; margin-top: 15px; padding: 15px; background: #fff9c4; border-radius: 8px; border: 2px dashed #ff8b00; }
+
+        /* --- Modal Strzelcy: sędzia + asystent (1 kol. telefon / 2 kol. tablet+) --- */
+        #view-app #matchModal .match-modal-content {
+            width: min(96vw, 420px);
+            max-width: 420px;
+            margin: 4vh auto;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 18px 16px 16px;
+            box-sizing: border-box;
+        }
+        #view-app #matchModal .match-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            color: #64748b;
+            z-index: 2;
+        }
+        #view-app #matchModal .match-modal-title {
+            margin: 0 28px 14px 0;
+            text-align: center;
+            font-size: 15px;
+            color: #172b4d;
+        }
+        #view-app #matchModal .match-modal-score-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+            align-items: center;
+            justify-items: center;
+            column-gap: 8px;
+            row-gap: 6px;
+            width: 100%;
+            margin: 0 auto 12px;
+            text-align: center;
+        }
+        #view-app #matchModal .match-modal-team {
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.25;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        #view-app #matchModal .match-modal-team--home {
+            justify-self: end;
+            text-align: right;
+            color: #047857;
+        }
+        #view-app #matchModal .match-modal-team--away {
+            justify-self: start;
+            text-align: left;
+            color: #b91c1c;
+        }
+        #view-app #matchModal .match-modal-score-sep {
+            font-weight: 800;
+            font-size: 18px;
+            color: #475569;
+            line-height: 1;
+        }
+        #view-app #matchModal .match-modal-score {
+            width: 56px;
+            text-align: center;
+            padding: 8px 4px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        #view-app #matchModal .match-modal-score--home {
+            border: 1.5px solid #34d399;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22), 0 0 14px rgba(16, 185, 129, 0.38);
+            color: #065f46;
+        }
+        #view-app #matchModal .match-modal-score--away {
+            border: 1.5px solid #f87171;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.22), 0 0 14px rgba(239, 68, 68, 0.38);
+            color: #991b1b;
+        }
+        #view-app #matchModal .match-modal-score:focus {
+            outline: none;
+        }
+        #view-app #matchModal .match-modal-scorers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 10px auto 0;
+            width: 100%;
+            max-width: 340px;
+        }
+        #view-app #matchModal .match-modal-scorers-col {
+            border-radius: 10px;
+            padding: 10px;
+            min-height: 44px;
+            box-sizing: border-box;
+        }
+        #view-app #matchModal .match-modal-scorers-col--home {
+            background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
+            border: 1px solid #6ee7b7;
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.12), 0 0 18px rgba(16, 185, 129, 0.28);
+        }
+        #view-app #matchModal .match-modal-scorers-col--away {
+            background: linear-gradient(180deg, #fef2f2 0%, #fff1f2 100%);
+            border: 1px solid #fca5a5;
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.12), 0 0 18px rgba(239, 68, 68, 0.28);
+        }
+        #view-app #matchModal .match-modal-scorer-head {
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin: 0 0 8px;
+            line-height: 1.3;
+        }
+        #view-app #matchModal .match-modal-scorer-head--home { color: #047857; }
+        #view-app #matchModal .match-modal-scorer-head--away { color: #b91c1c; }
+        #view-app #matchModal .match-modal-scorer-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        #view-app #matchModal .match-modal-scorer-input {
+            flex: 1;
+            min-width: 0;
+            font-size: 13px;
+            padding: 8px 8px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        #view-app #matchModal .match-modal-scorer-input--home {
+            border: 1.5px solid #34d399;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.18), 0 0 10px rgba(16, 185, 129, 0.28);
+        }
+        #view-app #matchModal .match-modal-scorer-input--away {
+            border: 1.5px solid #f87171;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18), 0 0 10px rgba(239, 68, 68, 0.28);
+        }
+        #view-app #matchModal .match-modal-scorer-input:focus { outline: none; }
+        #view-app #matchModal .match-modal-scorer-remove {
+            color: #de350b;
+            border: none;
+            background: none;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 4px;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+        #view-app #matchModal .match-modal-scorer-empty {
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+            padding: 6px 4px;
+        }
+        #view-app #matchModal .btn-goal--home {
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+        }
+        #view-app #matchModal .btn-goal--away {
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+        }
+        #view-app #matchModal .goal-btn-container {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        /* Telefon: 1 kolumna wycentrowana (pola piłkarzy pod całym meczem) */
+        @media (max-width: 639px) {
+            #view-app #matchModal .match-modal-score-row {
+                column-gap: 6px;
+                max-width: 100%;
+            }
+            #view-app #matchModal .match-modal-team { font-size: 12px; }
+            #view-app #matchModal .match-modal-score { width: 48px; font-size: 15px; }
+            #view-app #matchModal .match-modal-scorers-grid {
+                grid-template-columns: 1fr;
+                max-width: 340px;
+            }
+            #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr; }
+        }
+        /* Tablet+: 2 kolumny — pola piłkarzy pod każdą drużyną */
+        @media (min-width: 640px) {
+            #view-app #matchModal .match-modal-content {
+                width: min(94vw, 560px);
+                max-width: 560px;
+                padding: 22px 20px 18px;
+            }
+            #view-app #matchModal .match-modal-scorers-grid {
+                grid-template-columns: 1fr 1fr;
+                max-width: none;
+                gap: 14px;
+            }
+            #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr 1fr; gap: 12px; }
+            #view-app #matchModal .match-modal-team { font-size: 14px; }
+        }
+        /* Laptop */
+        @media (min-width: 1024px) {
+            #view-app #matchModal .match-modal-content {
+                width: min(90vw, 640px);
+                max-width: 640px;
+            }
+            #view-app #matchModal .match-modal-score { width: 64px; font-size: 18px; padding: 10px 4px; }
+        }
+        /* Duży laptop / monitor */
+        @media (min-width: 1280px) {
+            #view-app #matchModal .match-modal-content {
+                width: min(88vw, 700px);
+                max-width: 700px;
+            }
+        }
+        @media (min-width: 1920px) {
+            #view-app #matchModal .match-modal-content {
+                width: min(70vw, 760px);
+                max-width: 760px;
+            }
+        }
+        /* Niski landscape (telefon poziomo): zostaw 1 kolumnę scorers dla czytelności */
+        @media (max-height: 500px) and (orientation: landscape) {
+            #view-app #matchModal .match-modal-content { margin: 2vh auto; max-height: 96vh; }
+            #view-app #matchModal .match-modal-scorers-grid {
+                grid-template-columns: 1fr 1fr;
+                max-width: none;
+            }
+            #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr 1fr; }
+        }
         #view-app .footer-sig { position: fixed; bottom: 0; left: 0; width: 100%; background: #172b4d; color: #fff; text-align: center; padding: 10px 0; font-size: 12px; z-index: 1000; letter-spacing: 0.3px; }
         #view-app .archive-item { position: relative; border-left: 4px solid #0052cc; padding: 15px; background: #fff; margin-bottom: 10px; border-radius: 4px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         #view-app .archive-item:hover { background: #f4f8ff; }
@@ -1008,20 +1669,23 @@
             background: #fff;
             border-radius: var(--radius-lg, 14px);
             margin: 14px 0;
-            max-height: min(62vh, 640px);
+            max-height: min(72vh, 720px);
             padding: 0;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.14);
             box-shadow: 0 0 0 1px rgba(0, 82, 204, 0.06), 0 16px 40px rgba(11, 31, 51, 0.22);
         }
         #view-demo-story .demo-hall-embed-host #hall-screen {
-            display: block !important;
-            padding: 10px 12px 14px;
+            display: flex !important;
+            flex-direction: column;
+            padding: 10px 12px 12px;
             background: #fff;
             color: var(--color-app-text);
             font-family: var(--font-body);
-            max-height: min(62vh, 640px);
-            overflow-y: auto;
+            max-height: min(72vh, 720px);
+            overflow: hidden;
+            height: min(72vh, 720px);
+            box-sizing: border-box;
         }
         #view-demo-story .demo-hall-embed-host .hall-fs-btn { display: none !important; }
         #view-demo-story .demo-hall-embed-host .brand-picture--hall { margin: 0; flex-shrink: 0; line-height: 0; }
@@ -1038,7 +1702,7 @@
         #view-demo-story .demo-hall-embed-host .hall-header {
             display: flex; justify-content: space-between; align-items: center; gap: 10px 12px;
             flex-wrap: wrap; border-bottom: 2px solid var(--color-app-border);
-            padding-bottom: 8px; margin-bottom: 10px;
+            padding-bottom: 8px; margin-bottom: 10px; flex-shrink: 0;
         }
         #view-demo-story .demo-hall-embed-host .hall-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
         #view-demo-story .demo-hall-embed-host .hall-header-main { min-width: 0; }
@@ -1047,8 +1711,258 @@
             font-size: clamp(16px, 2.2vw, 22px); color: var(--color-app-text); line-height: 1.15;
         }
         #view-demo-story .demo-hall-embed-host .hall-meta { font-size: 11px; color: var(--color-app-text-muted); margin-top: 2px; }
-        #view-demo-story .demo-hall-embed-host .hall-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start;
+        /* Siatka 16 części (4×4) — tylko demo hali */
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-rows: repeat(4, minmax(0, 1fr));
+            grid-template-areas:
+                "live live live qr"
+                "live live live qr"
+                "live live live clock"
+                "next next done done";
+            gap: 8px;
+            flex: 1;
+            min-height: 0;
+            align-items: stretch;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-col-main {
+            grid-area: live;
+            min-width: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-played-panel,
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-col-side {
+            display: none !important;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-live-panel {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen #hall-live-body {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-qr-cell {
+            grid-area: qr;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            min-width: 0;
+            min-height: 0;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-qr {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-qr img {
+            width: min(100%, 145px);
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: contain;
+            display: block;
+            border-radius: 6px;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-clock-cell {
+            grid-area: clock;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            min-width: 0;
+            min-height: 0;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-clock {
+            font-family: var(--font-display);
+            font-size: clamp(30px, 5.8vw, 50px);
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.08em;
+            color: #0f172a;
+            line-height: 1;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot {
+            display: flex !important;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            padding: 6px 8px;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot > .hall-next-label {
+            flex-shrink: 0;
+            margin-bottom: 0;
+            line-height: 1.1;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot--next { grid-area: next; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot--done { grid-area: done; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot-list {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table-wrap {
+            border: 1px solid var(--color-app-border);
+            border-radius: var(--radius-md, 10px);
+            overflow: hidden;
+            box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+            background: #fff;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table-wrap--playoff thead,
+        #view-demo-story .demo-hall-embed-host .live-match-table-wrap--playoff thead {
+            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 10px;
+            margin: 0;
+            font-family: var(--font-body);
+            height: 100%;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-no { width: 26px; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-group { width: 36px; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-time { width: 40px; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-teams { width: auto; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table thead {
+            background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%);
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table thead tr {
+            height: 20px;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table th {
+            font-family: var(--font-display);
+            font-size: 7px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.92);
+            padding: 2px 3px;
+            text-align: center;
+            border: none;
+            white-space: nowrap;
+            line-height: 1.1;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table th.col-teams {
+            text-align: left;
+            padding-left: 6px;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table tbody tr {
+            height: calc((100% - 20px) / 3);
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table td {
+            padding: 1px 3px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e8ecf1;
+            border-right: 1px solid #e8ecf1;
+            text-align: center;
+            line-height: 1.15;
+            overflow: hidden;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table td:last-child { border-right: none; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table tbody tr:last-child td { border-bottom: none; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-row {
+            border-left: 3px solid #cbd5e1;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-row:nth-child(even) { background: #f8fafc; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-row--played { border-left-color: #00875a; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-row--played:nth-child(even) {
+            background: linear-gradient(90deg, #f6fffb 0%, #f8fafc 40%);
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-row--pending { border-left-color: #ff8b00; }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-no {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 10px;
+            color: #42526e;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-group-badge {
+            display: inline-block;
+            min-width: 20px;
+            padding: 1px 4px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #0747a6;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 8px;
+            letter-spacing: 0.02em;
+            line-height: 1.15;
+            box-sizing: border-box;
+            border: 1px solid transparent;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-group-badge--po {
+            background: #fff7ed;
+            color: #b45309;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-time {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: #64748b;
+            font-size: 9px;
+            white-space: nowrap;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-teams {
+            text-align: left;
+            font-weight: 700;
+            font-size: 10px;
+            color: #172b4d;
+            line-height: 1.15;
+            padding-left: 4px;
+            max-width: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-teams .live-team-name {
+            display: inline;
+            color: #172b4d;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-match-table .live-match-teams .live-teams-sep {
+            display: inline;
+            color: #64748b;
+            font-weight: 700;
+            padding: 0 2px;
+            white-space: pre;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot-empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px dashed #e2e8f0;
+            padding: 6px;
+            min-height: 0;
         }
         #view-demo-story .demo-hall-embed-host .hall-panel {
             background: #fff; border: 1px solid var(--color-app-border); border-radius: 10px;
@@ -1064,35 +1978,35 @@
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-live .hall-live-badge { display: inline-block; }
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-live { border-color: #fca5a5; box-shadow: 0 0 0 1px rgba(222, 53, 11, 0.12), 0 8px 32px rgba(222, 53, 11, 0.08); }
         #view-demo-story .demo-hall-embed-host .hall-next-meta {
-            font-size: clamp(12px, 1.5vw, 16px); font-weight: 800; color: #0747a6;
+            font-size: clamp(13px, 1.8vw, 18px); font-weight: 800; color: #0747a6;
             font-family: var(--font-display); margin-bottom: 8px; letter-spacing: 0.02em;
         }
         #view-demo-story .demo-hall-embed-host .hall-next-meta.hall-next-meta--po { color: #b45309; }
         #view-demo-story .demo-hall-embed-host .hall-live-board {
             display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-            align-items: center; gap: 8px 10px; margin: 6px 0 8px;
+            align-items: center; gap: 8px 12px; margin: 6px 0 8px;
         }
         #view-demo-story .demo-hall-embed-host .hall-live-team--home { text-align: right; }
         #view-demo-story .demo-hall-embed-host .hall-live-team--away { text-align: left; }
         #view-demo-story .demo-hall-embed-host .hall-live-team-name {
-            font-size: clamp(11px, 1.4vw, 15px); font-weight: 800; line-height: 1.15;
+            font-size: clamp(16px, 2.5vw, 25px); font-weight: 800; line-height: 1.15;
             word-break: break-word; color: #172b4d; font-family: var(--font-display);
         }
         #view-demo-story .demo-hall-embed-host .hall-live-team-name.is-leading { color: #00875a; }
         #view-demo-story .demo-hall-embed-host .hall-live-score-wrap {
-            display: flex; align-items: center; justify-content: center; gap: 6px 8px;
-            padding: 6px 10px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-            border-radius: 12px; box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 8px 20px rgba(15, 23, 42, 0.22);
+            display: flex; align-items: center; justify-content: center; gap: 6px 10px;
+            padding: 8px 12px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 14px; box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 8px 20px rgba(15, 23, 42, 0.22);
         }
         #view-demo-story .demo-hall-embed-host .hall-live-digit {
-            font-family: var(--font-display); font-size: clamp(28px, 5.5vw, 44px); font-weight: 800;
+            font-family: var(--font-display); font-size: clamp(45px, 8.75vw, 80px); font-weight: 800;
             font-variant-numeric: tabular-nums; line-height: 0.95; color: #f8fafc; letter-spacing: 0.02em;
         }
         #view-demo-story .demo-hall-embed-host .hall-live-colon {
-            font-family: var(--font-display); font-size: clamp(18px, 3.5vw, 28px); font-weight: 800;
+            font-family: var(--font-display); font-size: clamp(27px, 5vw, 45px); font-weight: 800;
             color: #64748b; line-height: 1; margin-top: -0.06em;
         }
-        #view-demo-story .demo-hall-embed-host .hall-live-time { font-size: 11px; font-weight: 700; color: #64748b; }
+        #view-demo-story .demo-hall-embed-host .hall-live-time { font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.04em; }
         #view-demo-story .demo-hall-embed-host .hall-live-empty { font-size: 14px; font-weight: 700; color: #94a3b8; text-align: center; padding: 20px 10px; }
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-complete { border-color: #fcd34d; background: linear-gradient(180deg, #fffef7 0%, #ffffff 100%); }
         #view-demo-story .demo-hall-embed-host .hall-complete-badge { display: none; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #172b4d; background: linear-gradient(180deg, #ffcc00 0%, #f59e0b 100%); padding: 3px 10px; border-radius: 999px; }
@@ -1142,7 +2056,17 @@
         }
         #view-demo-story .demo-hall-embed-host .rules-box strong { color: var(--color-app-text); }
         @media (max-width: 720px) {
-            #view-demo-story .demo-hall-embed-host .hall-grid { grid-template-columns: 1fr; }
+            #view-demo-story .demo-hall-embed-host #hall-screen { height: auto; max-height: none; overflow-y: auto; }
+            #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: minmax(200px, auto) minmax(90px, auto) minmax(160px, auto) minmax(160px, auto);
+                grid-template-areas:
+                    "live live"
+                    "qr clock"
+                    "next next"
+                    "done done";
+                height: auto;
+            }
         }
         #view-demo-story .demo-embed-app #match-filter-bar { display: none; margin-bottom: 0; }
         #view-demo-story .demo-embed-app #match-filter-bar.fan-filters-visible { display: flex !important; }
@@ -1174,6 +2098,87 @@
         }
         #view-demo-story .demo-phase-pending { color: #ffcc00; font-weight: 700; }
         #view-demo-story .demo-phase-sep { color: #486581; font-weight: bold; }
+        #view-demo-story .demo-final-live-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 0 18px;
+            padding: 18px 16px 20px;
+            text-align: center;
+            border-radius: 12px;
+            background: #19354f;
+            border: 1px solid rgba(255, 204, 0, 0.55);
+            box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.45);
+            animation: demo-final-breathe 2.4s ease-in-out infinite;
+        }
+        #view-demo-story .demo-final-live-title-row {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        #view-demo-story .demo-phase-final-pulse {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+            background: #ffcc00;
+            box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7);
+            animation: demo-final-dot 1.6s ease-out infinite;
+        }
+        #view-demo-story .demo-phase-final-label {
+            font-family: var(--font-display);
+            font-size: clamp(18px, 5vw, 24px);
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            line-height: 1.2;
+            color: #ffe566;
+            text-shadow: 0 0 18px rgba(255, 204, 0, 0.35);
+            animation: demo-final-shimmer 3.2s ease-in-out infinite;
+        }
+        #view-demo-story .demo-final-live-matchup {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px 10px;
+            max-width: 100%;
+        }
+        #view-demo-story .demo-final-live-team {
+            font-family: var(--font-display);
+            font-size: clamp(14px, 3.8vw, 17px);
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+        #view-demo-story .demo-final-live-vs {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #ffcc00;
+            opacity: 0.9;
+        }
+        @keyframes demo-final-breathe {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.15); border-color: rgba(255, 204, 0, 0.45); transform: scale(1); }
+            50% { box-shadow: 0 0 22px 2px rgba(255, 204, 0, 0.28); border-color: rgba(255, 230, 102, 0.85); transform: scale(1.01); }
+        }
+        @keyframes demo-final-dot {
+            0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.75); transform: scale(1); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); transform: scale(1); }
+        }
+        @keyframes demo-final-shimmer {
+            0%, 100% { color: #ffe566; filter: brightness(1); }
+            40% { color: #fff3a8; filter: brightness(1.12); }
+            70% { color: #ffcc00; filter: brightness(1.05); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #view-demo-story .demo-final-live-card,
+            #view-demo-story .demo-phase-final-pulse,
+            #view-demo-story .demo-phase-final-label { animation: none; }
+        }
         #view-demo-story .demo-final-teams { text-align: center; margin: 20px 0; font-size: 16px; font-weight: bold; }
         #view-demo-story .demo-final-vs { color: #bcccdc; font-size: 13px; margin: 8px 0; }
         #view-demo-story .demo-cta-zone { margin-top: 28px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
@@ -1347,17 +2352,17 @@
             background: #fff;
             margin-bottom: 10px;
         }
-        #view-demo-story .demo-embed-app .live-match-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 0; font-family: var(--font-body); }
+        #view-demo-story .demo-embed-app .live-match-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; margin: 0; font-family: var(--font-body); }
+        #view-demo-story .demo-embed-app .live-match-table col.col-no { width: 34px; }
+        #view-demo-story .demo-embed-app .live-match-table col.col-group { width: 42px; }
+        #view-demo-story .demo-embed-app .live-match-table col.col-time { width: 48px; }
+        #view-demo-story .demo-embed-app .live-match-table col.col-teams { width: auto; }
+        #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 112px; }
+        #view-demo-story .demo-embed-app .live-match-table col.col-status { width: 26px; }
         #view-demo-story .demo-embed-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
-        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff {
-            border-color: #fdba74;
-            box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.08), var(--shadow-card);
-        }
         #view-demo-story .demo-embed-app .live-match-table-wrap--playoff thead {
             background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
         }
-        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff .live-match-row--played { border-left-color: #00875a; }
-        #view-demo-story .demo-embed-app .live-match-table-wrap--playoff .live-match-row--pending { border-left-color: #ea580c; }
         #view-demo-story .demo-embed-app .live-match-table th {
             font-family: var(--font-display); font-size: 9px; font-weight: 800;
             letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92);
@@ -1381,7 +2386,9 @@
             display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px;
             background: #eef2ff; color: #0747a6; font-family: var(--font-display);
             font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2;
+            box-sizing: border-box; border: 1px solid transparent;
         }
+        #view-demo-story .demo-embed-app .live-group-badge--po { background: #fff7ed; color: #b45309; }
         #view-demo-story .demo-embed-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
         #view-demo-story .demo-embed-app .live-match-teams {
             text-align: left; font-weight: 700; font-size: 12px; color: #172b4d;
@@ -1440,13 +2447,61 @@
         #view-demo-story .demo-embed-app .award-box b { font-size: 14px; display: block; margin-top: 5px; line-height: 1.45; font-weight: normal; }
         #view-demo-story .demo-embed-app .award-box .podium-award-player { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.02em; font-family: var(--font-display); }
         #view-demo-story .demo-embed-app .award-box .podium-award-team { font-size: 12px; color: #c7d2fe; font-weight: 700; }
-        #view-demo-story .demo-embed-app .podium-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; background: #fff; padding: 12px; border-radius: 8px; border: 1px solid var(--color-app-border); text-align: left; box-shadow: var(--shadow-card); }
+        #view-demo-story .demo-embed-app .podium-top-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+            background: transparent;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            text-align: left;
+            box-shadow: none;
+        }
+        #view-demo-story .demo-embed-app .podium-top-grid > div {
+            background: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--color-app-border);
+            box-shadow: var(--shadow-card);
+            min-width: 0;
+        }
         #view-demo-story .demo-embed-app .podium-top-col-title { color: #0052cc; font-weight: 800; margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 3px; font-size: 11px; font-family: var(--font-display); }
-        #view-demo-story .demo-embed-app .podium-top-row { font-size: 11px; line-height: 1.5; margin-bottom: 4px; }
+        #view-demo-story .demo-embed-app .podium-top-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 8px 10px;
+            align-items: baseline;
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 5px;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        #view-demo-story .demo-embed-app .podium-top-player { min-width: 0; }
         #view-demo-story .demo-embed-app .podium-top-rank { font-weight: 800; color: #0052cc; margin-right: 3px; }
         #view-demo-story .demo-embed-app .podium-top-team { color: #0b1f33; font-weight: 700; opacity: 0.78; }
-        #view-demo-story .demo-embed-app .podium-top-stat { color: #172b4d; }
+        #view-demo-story .demo-embed-app .podium-top-stat-cell {
+            font-weight: 800;
+            color: #172b4d;
+            text-align: right;
+            white-space: nowrap;
+            border: 0;
+            background: transparent;
+            font-variant-numeric: tabular-nums;
+        }
         #view-demo-story .demo-embed-app .podium-top-empty { color: #97a0af; }
+        #view-demo-story .demo-embed-app .podium-top-empty .podium-top-stat-cell { color: #97a0af; font-weight: 600; }
+        #view-demo-story .demo-embed-app .podium-top-empty-msg {
+            color: #97a0af;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            padding: 18px 10px;
+            line-height: 1.4;
+        }
         #view-demo-story .demo-embed-app .tournament-dashboard-card { background: #fff; border-radius: 10px; padding: 14px; border: 1px solid var(--color-app-border); box-shadow: var(--shadow-card); }
         #view-demo-story .demo-embed-app .tournament-dashboard-title { margin: 0 0 10px; font-size: 13px; color: #0747a6; font-weight: 800; font-family: var(--font-display); }
         #view-demo-story .demo-embed-app .tournament-dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -1557,7 +2612,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=20260716r2">
+    <link rel="stylesheet" href="css/responsive.css?v=20260717podium6">
 </head>
 <body>
 
@@ -1795,8 +2850,8 @@
             </div>
             <button type="button" class="hall-fs-btn" onclick="requestHallFullscreen()">⛶ Pełny ekran</button>
         </div>
-        <div class="hall-grid">
-            <div>
+        <div class="hall-grid" id="hall-grid">
+            <div class="hall-col-main">
                 <div class="hall-panel hall-live-panel" id="hall-live-panel">
                     <div class="hall-live-head">
                         <span class="hall-live-badge">● LIVE</span>
@@ -1821,9 +2876,23 @@
                     <div class="hall-played-grid" id="hall-played-grid"></div>
                 </div>
             </div>
-            <div class="hall-panel">
+            <div class="hall-panel hall-col-side">
                 <div id="hall-tables"></div>
                 <div class="rules-box" style="display:block; margin-top:14px;" id="hall-rules"></div>
+            </div>
+            <div class="hall-panel hall-demo-qr-cell" id="hall-demo-qr-cell" aria-hidden="true">
+                <div id="hall-demo-qr" class="hall-demo-qr"></div>
+            </div>
+            <div class="hall-panel hall-demo-clock-cell" id="hall-demo-clock-cell" aria-hidden="true">
+                <div id="hall-demo-clock" class="hall-demo-clock" aria-live="polite">--:--</div>
+            </div>
+            <div class="hall-panel hall-demo-slot hall-demo-slot--next" id="hall-demo-next-panel" data-slot="next" aria-hidden="true">
+                <div class="hall-next-label">Mecze następne</div>
+                <div class="hall-demo-slot-list" id="hall-demo-next-list"></div>
+            </div>
+            <div class="hall-panel hall-demo-slot hall-demo-slot--done" id="hall-demo-done-panel" data-slot="done" aria-hidden="true">
+                <div class="hall-next-label">Mecze zakończone</div>
+                <div class="hall-demo-slot-list" id="hall-demo-done-list"></div>
             </div>
         </div>
     </div>
@@ -1896,7 +2965,15 @@
             <div id="groups-list-display"></div>
             <div class="card">
                 <h4>Harmonogram i Czas</h4>
-                <div class="time-setting"><span>Start Turnieju:</span> <input type="time" id="t-start" value="09:00"></div>
+                <div class="time-setting"><span>Start Turnieju:</span>
+                    <div class="time-24h">
+                        <input type="text" id="t-start" class="time-24h-text" value="09:00" maxlength="5" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Godzina startu (24h)" placeholder="09:00" oninput="normalizeStartTimeInput(this)" onblur="commitStartTimeInput(this)" onchange="syncStartTimePicker()">
+                        <button type="button" class="time-24h-clock" id="t-start-clock" title="Wybierz godzinę" aria-label="Wybierz godzinę" onclick="openStartTimePicker()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                        </button>
+                        <input type="time" id="t-start-picker" class="time-24h-picker" value="09:00" step="60" tabindex="-1" aria-hidden="true" onchange="applyStartTimeFromPicker()">
+                    </div>
+                </div>
                 
                 <div style="margin-top:15px; margin-bottom:5px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Czas trwania (min):</div>
                 <div class="time-setting"><span>Mecz grupowy:</span> <input type="number" id="t-g-dur" value="0"></div>
@@ -1947,7 +3024,10 @@
         </div>
         
         <div id="tabele" class="tab-content"><div id="tables-container" class="tables-render-target"></div><button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button></div>
-        <div id="playoff" class="tab-content"><div id="playoff-container"></div></div>
+        <div id="playoff" class="tab-content">
+            <div class="filter-bar match-filter-bar" id="playoff-match-filter-bar"></div>
+            <div id="playoff-container"></div>
+        </div>
 
         <div id="podium" class="tab-content">
             <div id="podium-view"></div>
@@ -1970,29 +3050,32 @@
     </div>
 
     <div id="matchModal" class="modal">
-        <div class="modal-content">
-            <span onclick="closeModal('matchModal')" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-            <h4 id="mTitle"></h4>
+        <div class="modal-content match-modal-content">
+            <span class="match-modal-close" onclick="closeModal('matchModal')" aria-label="Zamknij">&times;</span>
+            <h4 id="mTitle" class="match-modal-title"></h4>
             <div class="match-modal-score-row">
-                <b id="mT1"></b>
-                <input type="number" id="mG1" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;">
-                <span style="font-weight:800;">:</span>
-                <input type="number" id="mG2" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px;">
-                <b id="mT2"></b>
+                <b id="mT1" class="match-modal-team match-modal-team--home"></b>
+                <input type="number" id="mG1" class="match-modal-score match-modal-score--home" min="0" inputmode="numeric" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()">
+                <span class="match-modal-score-sep">:</span>
+                <input type="number" id="mG2" class="match-modal-score match-modal-score--away" min="0" inputmode="numeric" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()">
+                <b id="mT2" class="match-modal-team match-modal-team--away"></b>
             </div>
             <div class="match-modal-scorers-grid">
-                <div id="sc1"></div><div id="sc2"></div>
+                <div id="sc1" class="match-modal-scorers-col match-modal-scorers-col--home"></div>
+                <div id="sc2" class="match-modal-scorers-col match-modal-scorers-col--away"></div>
             </div>
             
             <div id="penalty-section" class="penalty-box">
                 <b style="color:#d97706;">🥅 Rozstrzygnięcie (Rzuty Karne)</b><br>
                 <span style="font-size:11px; color:#666;">Mecz pucharowy zakończył się remisem. Wpisz <b>końcowy</b> wynik serii karnych (seria trwa do rozstrzygnięcia — np. 5:4, nie 4:4):</span><br><br>
-                <input type="number" id="mPen1" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px; font-weight:bold;"> : <input type="number" id="mPen2" style="width:60px; text-align:center; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-size:16px; font-weight:bold;">
+                <input type="number" id="mPen1" class="match-modal-score match-modal-score--home" min="0" inputmode="numeric">
+                <span class="match-modal-score-sep">:</span>
+                <input type="number" id="mPen2" class="match-modal-score match-modal-score--away" min="0" inputmode="numeric">
             </div>
 
             <div class="goal-btn-container">
-                <button id="btn-sc1" onclick="addSc(1)" class="btn-goal"></button>
-                <button id="btn-sc2" onclick="addSc(2)" class="btn-goal"></button>
+                <button id="btn-sc1" type="button" onclick="addSc(1)" class="btn-goal btn-goal--home"></button>
+                <button id="btn-sc2" type="button" onclick="addSc(2)" class="btn-goal btn-goal--away"></button>
             </div>
             <button class="btn-main" onclick="saveMatch()">ZAPISZ WYNIK MECZU</button>
         </div>
@@ -3046,6 +4129,18 @@
         return m.n || 'Play-off';
     };
 
+    /** Krótki badge jak litera grupy (ta sama geometria komórki) */
+    window.getPlayoffRoundBadge = function (m) {
+        const n = (m.n || '').toUpperCase();
+        const num = (String(m.n || '').match(/\d+/) || [])[0] || '';
+        if (n.includes('1/8')) return num ? ('1/8·' + num) : '1/8';
+        if (n.includes('ĆWIERĆ')) return num ? ('ĆF' + num) : 'ĆF';
+        if (n.includes('PÓŁFINAŁ')) return num ? ('PF' + num) : 'PF';
+        if (n.includes('3. MIEJSCE')) return '3M';
+        if (n.includes('WIELKI FINAŁ') || (n.includes('FINAŁ') && !n.includes('ĆWIERĆ') && !n.includes('1/8'))) return 'F';
+        return 'PO';
+    };
+
     window.sortPlayoffMatchesByRound = function (arr) {
         const rank = (m) => {
             const n = (m.n || '').toUpperCase();
@@ -3073,6 +4168,70 @@
     window._hallTablesHtml = '';
     window._hallRulesHtml = '';
     window._hallHeaderSig = '';
+    window._hallDemoListsSig = '';
+    window._hallClockTimer = null;
+
+    function formatHallClockTime(d) {
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        return hh + ':' + mm;
+    }
+
+    window.stopHallSixteenClock = function () {
+        if (window._hallClockTimer) {
+            clearInterval(window._hallClockTimer);
+            window._hallClockTimer = null;
+        }
+    };
+
+    window.startHallSixteenClock = function () {
+        const el = document.getElementById('hall-demo-clock');
+        if (!el) return;
+        window.stopHallSixteenClock();
+        const tick = function () { el.textContent = formatHallClockTime(new Date()); };
+        tick();
+        window._hallClockTimer = setInterval(tick, 1000);
+    };
+
+    window.setupHallSixteenLayout = function (opts) {
+        opts = opts || {};
+        const grid = document.getElementById('hall-grid');
+        if (!grid) return;
+        grid.classList.add('hall-grid--sixteen');
+
+        const qrCell = document.getElementById('hall-demo-qr-cell');
+        const clockCell = document.getElementById('hall-demo-clock-cell');
+        const nextPanel = document.getElementById('hall-demo-next-panel');
+        const donePanel = document.getElementById('hall-demo-done-panel');
+        if (qrCell) qrCell.setAttribute('aria-hidden', 'false');
+        if (clockCell) clockCell.setAttribute('aria-hidden', 'false');
+        if (nextPanel) nextPanel.setAttribute('aria-hidden', 'false');
+        if (donePanel) donePanel.setAttribute('aria-hidden', 'false');
+
+        let qrUrl = opts.qrUrl;
+        if (!qrUrl && typeof window.buildShareUrl === 'function') {
+            qrUrl = window.buildShareUrl('fan');
+        }
+        if (!qrUrl) {
+            const base = window.location.href.split('?')[0];
+            qrUrl = activeKey ? (base + '?view=fan&id=' + encodeURIComponent(activeKey)) : base;
+        }
+        if (typeof window.renderShareQr === 'function') {
+            window.renderShareQr('hall-demo-qr', qrUrl);
+        } else {
+            const qr = document.getElementById('hall-demo-qr');
+            if (qr) {
+                qr.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' +
+                    encodeURIComponent(qrUrl) + '" alt="QR kibic" style="display:inline-block;">';
+            }
+        }
+
+        window.startHallSixteenClock();
+        window._hallDemoListsSig = '';
+        if (typeof window.renderHallDemoSixteenLists === 'function') {
+            window.renderHallDemoSixteenLists();
+        }
+    };
 
     function hallMatchBrief(m) {
         if (!m) return '';
@@ -3445,6 +4604,84 @@
         return null;
     }
 
+    function renderHallDemoPairRow(m) {
+        const isPo = !!m.isPo;
+        const matchNo = window.getGlobalMatchNo(m, isPo);
+        const groupBadge = isPo
+            ? '<span class="live-group-badge live-group-badge--po" title="' + escAttr(window.getPlayoffRoundLabel(m)) + '">' + esc(window.getPlayoffRoundBadge(m)) + '</span>'
+            : (m.group
+                ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
+                : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
+        const t1 = (m.t1 && m.t1.name) ? m.t1.name : '—';
+        const t2 = (m.t2 && m.t2.name) ? m.t2.name : '—';
+        const teamsHTML = '<span class="live-team-name">' + esc(t1) + '</span>' +
+            '<span class="live-teams-sep"> - </span>' +
+            '<span class="live-team-name">' + esc(t2) + '</span>';
+        const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
+        return '<tr class="' + rowCls + '">' +
+            '<td><span class="live-match-no">' + matchNo + '</span></td>' +
+            '<td>' + groupBadge + '</td>' +
+            '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
+            '<td class="live-match-teams" title="' + escAttr(t1 + ' - ' + t2) + '">' + teamsHTML + '</td>' +
+            '</tr>';
+    }
+
+    function renderHallDemoMatchTable(matches, emptyLabel) {
+        if (!matches || !matches.length) {
+            return '<div class="hall-demo-slot-empty">' + esc(emptyLabel || 'Brak meczów') + '</div>';
+        }
+        const hasPo = matches.some(function (m) { return !!m.isPo; });
+        const wrapCls = 'live-match-table-wrap hall-demo-match-table-wrap' + (hasPo ? ' hall-demo-match-table-wrap--playoff live-match-table-wrap--playoff' : '');
+        return '<div class="' + wrapCls + '"><table class="live-match-table hall-demo-match-table">' +
+            '<colgroup>' +
+            '<col class="col-no"><col class="col-group"><col class="col-time"><col class="col-teams">' +
+            '</colgroup>' +
+            '<thead><tr>' +
+            '<th>#</th><th>Grupa</th><th>Godz.</th><th class="col-teams">Mecz</th>' +
+            '</tr></thead><tbody>' +
+            matches.map(renderHallDemoPairRow).join('') +
+            '</tbody></table></div>';
+    }
+
+    function getHallDemoNextMatches(limit) {
+        const current = window.getHallCurrentMatch();
+        const all = getHallAllMatches();
+        const pending = all.filter(function (m) {
+            return !m.played && m.t1 && m.t1.id !== -99 && m.t2 && m.t2.id !== -99;
+        }).sort(function (a, b) {
+            return String(a.time || '').localeCompare(String(b.time || ''));
+        });
+        const withoutCurrent = current
+            ? pending.filter(function (m) { return !(m.id === current.id && !!m.isPo === !!current.isPo); })
+            : pending;
+        return withoutCurrent.slice(0, limit || 3);
+    }
+
+    function getHallDemoDoneMatches(limit) {
+        return getHallAllMatches()
+            .filter(function (m) { return !!m.played; })
+            .sort(function (a, b) {
+                return String(b.time || '').localeCompare(String(a.time || '')) || ((b.id || 0) - (a.id || 0));
+            })
+            .slice(0, limit || 3);
+    }
+
+    window.renderHallDemoSixteenLists = function () {
+        const nextEl = document.getElementById('hall-demo-next-list');
+        const doneEl = document.getElementById('hall-demo-done-list');
+        if (!nextEl || !doneEl) return;
+        if (!window._demoStoryOrganizerEmbed && !isHallMode) return;
+
+        const next = getHallDemoNextMatches(3);
+        const done = getHallDemoDoneMatches(3);
+        const sig = 'n:' + next.map(hallMatchBrief).join(',') + '|d:' + done.map(hallMatchBrief).join(',');
+        if (sig === window._hallDemoListsSig) return;
+        window._hallDemoListsSig = sig;
+
+        nextEl.innerHTML = renderHallDemoMatchTable(next, 'Brak kolejnych meczów');
+        doneEl.innerHTML = renderHallDemoMatchTable(done, 'Brak zakończonych meczów');
+    };
+
     function renderHallPlayedFeatured(m) {
         const win = hallMatchWinnerSide(m);
         const poCls = m.isPo ? ' hall-played-featured--po' : '';
@@ -3736,7 +4973,7 @@
         const isPo = opts.isPo === true;
         const matchNo = window.getGlobalMatchNo(m, isPo);
         const groupBadge = isPo
-            ? '<span class="live-group-badge" style="background:#fff7ed;color:#b45309;border:1px solid #fdba74;">' + esc(window.getPlayoffRoundLabel(m)) + '</span>'
+            ? '<span class="live-group-badge live-group-badge--po" title="' + escAttr(window.getPlayoffRoundLabel(m)) + '">' + esc(window.getPlayoffRoundBadge(m)) + '</span>'
             : (m.group
                 ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
                 : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
@@ -3763,19 +5000,25 @@
             '<td>' + groupBadge + '</td>' +
             '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
             '<td class="live-match-teams" title="' + escAttr(m.t1.name + ' vs ' + m.t2.name) + '">' + teamsHTML + '</td>' +
-            '<td>' + scoreHTML + '</td>' +
-            (opts.showScorers ? '<td>' + scorersHTML + '</td>' : '') +
-            '<td>' + statusHTML + '</td>' +
+            '<td class="col-score">' + scoreHTML + '</td>' +
+            (opts.showScorers ? '<td class="col-scorers">' + scorersHTML + '</td>' : '') +
+            '<td class="col-status">' + statusHTML + '</td>' +
             '</tr>';
     }
 
     function renderMatchesTableHTML(filtered, opts) {
         opts = opts || {};
         const scorersCol = opts.showScorers ? '<th>Strzelcy</th>' : '';
-        const groupCol = opts.isPo ? 'Faza' : 'Grupa';
+        const scorersColTag = opts.showScorers ? '<col class="col-scorers">' : '';
+        // Ta sama geometria dla grup i play-off — różni się tylko kolor thead (--playoff)
+        const groupCol = 'Grupa';
         const wrapCls = 'live-match-table-wrap' + (opts.isPo ? ' live-match-table-wrap--playoff' : '');
         const rows = filtered.map(m => renderMatchTableRow(m, opts)).join('');
         return '<div class="' + wrapCls + '"><table class="live-match-table">' +
+            '<colgroup>' +
+            '<col class="col-no"><col class="col-group"><col class="col-time"><col class="col-teams"><col class="col-score">' +
+            scorersColTag + '<col class="col-status">' +
+            '</colgroup>' +
             '<thead><tr>' +
             '<th>#</th><th>' + groupCol + '</th><th>Godz.</th><th class="col-teams">Mecz</th><th>Wynik</th>' +
             scorersCol + '<th></th>' +
@@ -3787,7 +5030,7 @@
         const isPo = opts.isPo === true;
         const matchNo = window.getGlobalMatchNo(m, isPo);
         const groupBadge = isPo
-            ? '<span class="live-group-badge" style="background:#fff7ed;color:#b45309;border:1px solid #fdba74;">' + esc(window.getPlayoffRoundLabel(m)) + '</span>'
+            ? '<span class="live-group-badge live-group-badge--po" title="' + escAttr(window.getPlayoffRoundLabel(m)) + '">' + esc(window.getPlayoffRoundBadge(m)) + '</span>'
             : (m.group
                 ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
                 : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
@@ -4143,8 +5386,65 @@
             window.renderGroupsList(); window.save(); window.renderDashboard(); switchTab('grupy');
         };
 
+        window.formatTime24h = (raw) => {
+            const s = String(raw || '').trim();
+            const m = s.match(/^(\d{1,2}):(\d{1,2})$/);
+            if (!m) return null;
+            const h = parseInt(m[1], 10);
+            const min = parseInt(m[2], 10);
+            if (isNaN(h) || isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return null;
+            return String(h).padStart(2, '0') + ':' + String(min).padStart(2, '0');
+        };
+
+        window.normalizeStartTimeInput = (el) => {
+            if (!el) return;
+            let v = String(el.value || '').replace(/[^\d:]/g, '');
+            if (v.length === 3 && /^\d{3}$/.test(v)) v = v.slice(0, 2) + ':' + v.slice(2);
+            if (v.length === 4 && /^\d{4}$/.test(v)) v = v.slice(0, 2) + ':' + v.slice(2);
+            if (v.length > 5) v = v.slice(0, 5);
+            el.value = v;
+        };
+
+        window.commitStartTimeInput = (el) => {
+            if (!el) return;
+            const formatted = window.formatTime24h(el.value);
+            el.value = formatted || '09:00';
+            window.syncStartTimePicker();
+        };
+
+        window.syncStartTimePicker = () => {
+            const text = document.getElementById('t-start');
+            const picker = document.getElementById('t-start-picker');
+            if (!text || !picker) return;
+            const formatted = window.formatTime24h(text.value) || '09:00';
+            text.value = formatted;
+            picker.value = formatted;
+        };
+
+        window.applyStartTimeFromPicker = () => {
+            const text = document.getElementById('t-start');
+            const picker = document.getElementById('t-start-picker');
+            if (!text || !picker) return;
+            const formatted = window.formatTime24h(picker.value) || '09:00';
+            text.value = formatted;
+            picker.value = formatted;
+        };
+
+        window.openStartTimePicker = () => {
+            window.syncStartTimePicker();
+            const picker = document.getElementById('t-start-picker');
+            if (!picker) return;
+            try {
+                if (typeof picker.showPicker === 'function') picker.showPicker();
+                else { picker.focus(); picker.click(); }
+            } catch (e) {
+                picker.focus();
+            }
+        };
+
         window.generujTerminarz = function() {
             if(!state.groups || Object.keys(state.groups).length === 0) { alert("Najpierw wylosuj grupy!"); return; }
+            window.commitStartTimeInput(document.getElementById('t-start'));
             const gDur = parseInt(document.getElementById('t-g-dur').value) || 0;
             const gBreak = parseInt(document.getElementById('t-g-break').value) || 0;
             const afterG = parseInt(document.getElementById('t-after-g').value) || 0;
@@ -4433,6 +5733,9 @@
             const played = allMatches.filter(m => m.played);
             renderHallLivePanel(window.getHallCurrentMatch());
             renderHallPlayedSection(played);
+            if ((window._demoStoryOrganizerEmbed || isHallMode) && typeof window.renderHallDemoSixteenLists === 'function') {
+                window.renderHallDemoSixteenLists();
+            }
             const hallTables = document.getElementById('hall-tables');
             if (hallTables) {
                 let tablesHtml;
@@ -4474,7 +5777,9 @@
                 return;
             }
             const hideGroupFilters = (window._demoStoryFanEmbed && window._demoStoryFanTab === 'playoff')
-                || (isAssistantMode && window.isPlayoffPhase());
+                || !!(document.getElementById('playoff') && document.getElementById('playoff').classList.contains('active'));
+            const hasPlayoffs = (state.playoffs || []).length > 0;
+            if (currentGroupFilter === 'PO' && !hasPlayoffs) currentGroupFilter = 'all';
             let html = `
                 <button class="filter-btn ${currentStatusFilter==='all'?'active':''}" onclick="setStatusFilter('all')">Wszystkie</button>
                 <button class="filter-btn ${currentStatusFilter==='pending'?'active':''}" onclick="setStatusFilter('pending')">Oczekujące</button>
@@ -4483,7 +5788,18 @@
             if (!hideGroupFilters) {
                 html += `<div class="filter-separator"></div>
                 <button class="filter-btn ${currentGroupFilter==='all'?'active':''}" onclick="setGroupFilter('all')">Całość</button>`;
-                if(state.groups) { Object.keys(state.groups).forEach(gn => { html += `<button class="filter-btn ${currentGroupFilter===gn?'active':''}" onclick="setGroupFilter('${gn}')">Gr. ${gn}</button>`; }); }
+                if (state.groups) {
+                    Object.keys(state.groups).forEach(gn => {
+                        html += `<button class="filter-btn ${currentGroupFilter===gn?'active':''}" onclick="setGroupFilter('${gn}')">Gr. ${gn}</button>`;
+                    });
+                }
+                if (hasPlayoffs) {
+                    html += `<button class="filter-btn ${currentGroupFilter==='PO'?'active':''}" onclick="setGroupFilter('PO')">Play-Off</button>`;
+                }
+            } else if (hasPlayoffs && !(window._demoStoryFanEmbed && window._demoStoryFanTab === 'playoff')) {
+                // Zakładka Play-Off sędziego: status + oznaczenie fazy pucharowej (jak filtr Play-Off u asystenta)
+                html += `<div class="filter-separator"></div>
+                <button class="filter-btn active" type="button" disabled style="opacity:1; cursor:default;">Play-Off</button>`;
             }
             bars.forEach(bar => {
                 bar.innerHTML = html;
@@ -4507,18 +5823,28 @@
             }
             if (!state.matches) return;
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            const assistantPlayoffTable = isAssistantMode && window.isPlayoffPhase();
+            const hasPlayoffs = (state.playoffs || []).length > 0;
+            if (currentGroupFilter === 'PO' && !hasPlayoffs) currentGroupFilter = 'all';
+            const filterIsPo = currentGroupFilter === 'PO';
             const assistantBanner = document.getElementById('assistant-banner');
             if (assistantBanner && isAssistantMode) {
-                assistantBanner.innerHTML = assistantPlayoffTable
+                assistantBanner.innerHTML = filterIsPo
                     ? '🧑‍⚖️ <b>Asystent — faza pucharowa</b> — wpisuj wyniki meczów play-off (ćwierćfinał, półfinał, finał, 3. miejsce).'
                     : '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.';
             }
-            let filtered = assistantPlayoffTable ? [...(state.playoffs || [])] : [...state.matches];
-            let tableIsPo = assistantPlayoffTable;
-            if(currentStatusFilter === 'pending') filtered = filtered.filter(m => !m.played);
-            if(currentStatusFilter === 'played') filtered = filtered.filter(m => m.played);
-            if(!assistantPlayoffTable && currentGroupFilter !== 'all') { if(currentGroupFilter === 'PO') filtered = []; else filtered = filtered.filter(m => m.group === currentGroupFilter); }
+
+            let filtered;
+            let tableIsPo = false;
+            if (filterIsPo) {
+                filtered = [...(state.playoffs || [])];
+                tableIsPo = true;
+            } else if (currentGroupFilter !== 'all') {
+                filtered = (state.matches || []).filter(m => m.group === currentGroupFilter);
+            } else {
+                filtered = [...(state.matches || [])];
+            }
+            if (currentStatusFilter === 'pending') filtered = filtered.filter(m => !m.played);
+            if (currentStatusFilter === 'played') filtered = filtered.filter(m => m.played);
 
             const renderPoCard = (m, extraStyle = '', extraAlert = '') => {
                 return renderPoMatchCardHTML(m, {
@@ -4527,36 +5853,35 @@
                 });
             };
 
-            const isHighlightPlayoff = (m) => {
-                const n = (m.n || '').toUpperCase();
-                if (n.includes('PÓŁFINAŁ')) return true;
-                if (n.includes('3. MIEJSCE')) return true;
-                if (n.includes('WIELKI FINAŁ')) return true;
-                if (n.includes('FINAŁ') && !n.includes('ĆWIERĆ') && !n.includes('1/8')) return true;
-                return false;
+            const tableOpts = {
+                readonly: fanRo,
+                showScorers: !fanRo,
+                isPo: tableIsPo,
             };
 
             let playoffShortcutHTML = '';
             const hasGroupBlock = filtered.length > 0;
-            if (!assistantPlayoffTable && (state.playoffs || []).length > 0) {
-                let highlights = (state.playoffs || []).filter(isHighlightPlayoff);
-                if (currentStatusFilter === 'pending') highlights = highlights.filter(m => !m.played);
-                if (currentStatusFilter === 'played') highlights = highlights.filter(m => m.played);
-                if (highlights.length > 0) {
+            // „Całość”: pełna lista play-off (nie tylko półfinał/finał), ze statusem Wszystkie/Oczekujące/Zakończone
+            if (!filterIsPo && currentGroupFilter === 'all' && hasPlayoffs) {
+                let poList = [...(state.playoffs || [])];
+                if (currentStatusFilter === 'pending') poList = poList.filter(m => !m.played);
+                if (currentStatusFilter === 'played') poList = poList.filter(m => m.played);
+                if (poList.length > 0) {
                     if (hasGroupBlock) playoffShortcutHTML += '<div class="match-section-divider"></div>';
                     playoffShortcutHTML += renderMatchSectionHead('🏆', 'Play-off', hasGroupBlock ? 'match-section-head--playoff' : '');
-                    // Widok rodzica / demo fan: ta sama tabela co faza grupowa (filtry: wszystkie / oczekujące / zakończone)
-                    if (fanRo) {
-                        const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
-                            ? window.sortPlayoffMatchesByRound(highlights)
-                            : highlights;
+                    const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
+                        ? window.sortPlayoffMatchesByRound(poList)
+                        : poList;
+                    // Tabela dla kibica / asystenta / sędziego; karty tylko w demo organizatora
+                    const poAsTable = fanRo || isAssistantMode || !isDemoMode || window._demoStoryOrganizerEmbed === true || window._demoStoryFanEmbed === true;
+                    if (poAsTable) {
                         playoffShortcutHTML += renderMatchesTableHTML(poSorted, {
-                            readonly: true,
-                            showScorers: false,
+                            readonly: fanRo || window._demoStoryOrganizerEmbed === true,
+                            showScorers: tableOpts.showScorers && !window._demoStoryOrganizerEmbed,
                             isPo: true,
                         });
                     } else {
-                        playoffShortcutHTML += highlights.map(m => {
+                        playoffShortcutHTML += poSorted.map(m => {
                             const extraStyle = !m.played ? 'style="border: 2px dashed #ff8b00; background: #fffcf0;"' : '';
                             const extraAlert = !m.played ? ' <span style="color:#ff8b00; font-size:10px; font-weight:bold; display:block; margin-top:2px;">◀ KLIKNIJ I ROZSTRZYGNIJ!</span>' : '';
                             return renderPoCard(m, extraStyle, extraAlert);
@@ -4565,15 +5890,9 @@
                 }
             }
 
-            let groupSectionHTML = assistantPlayoffTable
-                ? (hasGroupBlock ? renderMatchSectionHead('🏆', 'Faza pucharowa') : '')
+            let groupSectionHTML = filterIsPo
+                ? (hasGroupBlock ? renderMatchSectionHead('🏆', 'Play-off') : '')
                 : (hasGroupBlock ? renderMatchSectionHead('⚽', 'Faza grupowa') : '');
-
-            const tableOpts = {
-                readonly: fanRo,
-                showScorers: !fanRo,
-                isPo: tableIsPo,
-            };
 
             const matchesTableHTML = renderMatchesTableHTML(filtered, tableOpts);
 
@@ -4604,9 +5923,31 @@
                     const focusedId = document.activeElement && document.activeElement.id && String(document.activeElement.id).startsWith('live-g')
                         ? document.activeElement.id : null;
                     const matchesHTML = renderMatchesTableHTML(filtered, panelTableOpts);
-                    cont.innerHTML = (filtered.length === 0 && !playoffShortcutHTML)
+                    let panelPoHTML = playoffShortcutHTML;
+                    // Na żywo / Asystent / Mecze: play-off w „Całość” z inputami wyniku
+                    if (panelPoHTML && (isLivePanel || isAssistantPanel || isMatchesPanel) && !fanRo && currentGroupFilter === 'all' && hasPlayoffs) {
+                        let poList = [...(state.playoffs || [])];
+                        if (currentStatusFilter === 'pending') poList = poList.filter(m => !m.played);
+                        if (currentStatusFilter === 'played') poList = poList.filter(m => m.played);
+                        if (poList.length > 0) {
+                            const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
+                                ? window.sortPlayoffMatchesByRound(poList)
+                                : poList;
+                            panelPoHTML = (hasGroupBlock ? '<div class="match-section-divider"></div>' : '') +
+                                renderMatchSectionHead('🏆', 'Play-off', hasGroupBlock ? 'match-section-head--playoff' : '') +
+                                renderMatchesTableHTML(poSorted, {
+                                    readonly: false,
+                                    showScorers: true,
+                                    isPo: true,
+                                    idSuffix: getMatchInputIdSuffix(cont.id),
+                                });
+                        } else {
+                            panelPoHTML = '';
+                        }
+                    }
+                    cont.innerHTML = (filtered.length === 0 && !panelPoHTML)
                         ? emptyMatchesHTML
-                        : (groupSectionHTML + matchesHTML + (playoffShortcutHTML ? ((isLivePanel || isAssistantPanel) ? '<div style="margin-top:12px;">' + playoffShortcutHTML + '</div>' : playoffShortcutHTML) : ''));
+                        : (groupSectionHTML + matchesHTML + (panelPoHTML ? ((isLivePanel || isAssistantPanel || isMatchesPanel) ? '<div style="margin-top:12px;">' + panelPoHTML + '</div>' : panelPoHTML) : ''));
                     if (focusedId) {
                         const el = document.getElementById(focusedId);
                         if (el) {
@@ -5196,7 +6537,7 @@
             if(t==='grupy') window.renderGroupsList();
             if(t==='podium') window.renderPodium();
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); } 
-            if(t==='playoff') window.renderPlayoffTree();
+            if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
             if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); } 
         };
 
@@ -5248,12 +6589,24 @@
 
         window.renderSc = () => {
             if (!state.active) return;
-            const d = n => (state.active['s'+n]||[]).map((s,i)=>`
-                <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center;">
-                    <input type="text" value="${escAttr(s.name)}" onchange="state.active.s${n}[${i}].name=this.value" style="font-size:12px; flex:1; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;">
-                    <button onclick="removeSc(${n}, ${i})" style="color:#de350b; border:none; background:none; font-size:20px; cursor:pointer; font-weight:bold; padding:0 5px;">&times;</button>
-                </div>`).join('');
-            document.getElementById('sc1').innerHTML=d(1); document.getElementById('sc2').innerHTML=d(2);
+            const t1 = (state.active.t1 && state.active.t1.name) ? state.active.t1.name : 'Drużyna 1';
+            const t2 = (state.active.t2 && state.active.t2.name) ? state.active.t2.name : 'Drużyna 2';
+            const renderCol = (n, teamName, side) => {
+                const list = state.active['s' + n] || [];
+                const head = '<div class="match-modal-scorer-head match-modal-scorer-head--' + side + '">' + esc(teamName) + '</div>';
+                if (!list.length) {
+                    return head + '<div class="match-modal-scorer-empty">Brak wpisanych strzelców</div>';
+                }
+                const rows = list.map((s, i) =>
+                    '<div class="match-modal-scorer-row">' +
+                    '<input type="text" class="match-modal-scorer-input match-modal-scorer-input--' + side + '" value="' + escAttr(s.name) + '" placeholder="Imię / nazwisko" onchange="state.active.s' + n + '[' + i + '].name=this.value" oninput="state.active.s' + n + '[' + i + '].name=this.value">' +
+                    '<button type="button" class="match-modal-scorer-remove" onclick="removeSc(' + n + ', ' + i + ')" aria-label="Usuń strzelca">&times;</button>' +
+                    '</div>'
+                ).join('');
+                return head + rows;
+            };
+            document.getElementById('sc1').innerHTML = renderCol(1, t1, 'home');
+            document.getElementById('sc2').innerHTML = renderCol(2, t2, 'away');
         };
 
         window.closeModal = (id) => { document.getElementById(id).style.display = 'none'; };
@@ -5447,27 +6800,71 @@
 
         window.formatGkStatLabel = function(gk) {
             if (!gk) return '';
-            if (gk.ck > 0) return gk.ck + '🧤';
-            return gk.lost + ' strac.';
+            const ck = parseInt(gk.ck, 10) || 0;
+            const lost = parseInt(gk.lost, 10) || 0;
+            const ckLabel = ck === 1 ? '1 czyste konto' : (ck + ' czyste konta');
+            const lostLabel = lost === 1 ? '1 stracony' : (lost + ' straconych');
+            return ckLabel + ' · ' + lostLabel;
+        };
+
+        window.formatPodiumPersonName = function(name) {
+            if (!name || name === '—') return '—';
+            return String(name)
+                .toLocaleLowerCase('pl-PL')
+                .replace(/(^|[\s\-'])\S/g, function (ch) { return ch.toLocaleUpperCase('pl-PL'); });
         };
 
         window.buildPodiumTopListsHTML = function(stats) {
-            const topSc = window.padTopN(stats.topSc, 3);
-            const topScHTML = topSc.map(function(x, i) {
-                if (!x) return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>';
-                const p = window.parseScorerEntry(x);
-                return '<div class="podium-top-row"><span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(p.name) + (p.team ? ' <span class="podium-top-team">(' + esc(p.team) + ')</span>' : '') + ' <b class="podium-top-stat">(' + window.formatPolishGoals(x[1]) + ')</b></div>';
-            }).join('');
-            const gkRows = window.buildGoalkeepersTopRanked(stats.allGk || stats.topGk || [], 3);
-            const topGkHTML = gkRows.length === 0
-                ? [1, 2, 3].map(function(i) {
-                    return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + i + '.</span> —</div>';
-                }).join('')
-                : gkRows.map(function(row) {
-                    const label = window.formatGkRankLabel(row.rank, row.ex);
-                    return '<div class="podium-top-row"><span class="podium-top-rank">' + label + '</span> ' + esc(row.gk.n) + ' <span class="podium-top-team">(' + esc(row.gk.t) + ')</span> <b class="podium-top-stat">(' + window.formatGkStatLabel(row.gk) + ')</b></div>';
+            const rawTopSc = (stats && stats.topSc) ? stats.topSc.filter(Boolean) : [];
+            let topScHTML;
+            if (!rawTopSc.length) {
+                topScHTML = '<div class="podium-top-empty-msg">Brak wpisów</div>';
+            } else {
+                const topSc = window.padTopN(rawTopSc, 3);
+                topScHTML = topSc.map(function(x, i) {
+                    if (!x) {
+                        return '<div class="podium-top-row podium-top-empty">' +
+                            '<div class="podium-top-player"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>' +
+                            '<div class="podium-top-stat-cell">—</div></div>';
+                    }
+                    const p = window.parseScorerEntry(x);
+                    const person = window.formatPodiumPersonName(p && p.name ? p.name : '—');
+                    const team = p && p.team ? p.team : '';
+                    const playerLine = '<span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(person) +
+                        (team ? ' <span class="podium-top-team">(' + esc(team) + ')</span>' : '');
+                    return '<div class="podium-top-row">' +
+                        '<div class="podium-top-player">' + playerLine + '</div>' +
+                        '<div class="podium-top-stat-cell">' + esc(window.formatPolishGoals(x[1])) + '</div>' +
+                        '</div>';
                 }).join('');
-            return '<div class="podium-top-grid"><div><div class="podium-top-col-title">TOP 3 STRZELCÓW</div>' + topScHTML + '</div><div><div class="podium-top-col-title">TOP 3 BRAMKARZY</div>' + topGkHTML + '</div></div>';
+            }
+
+            let gkRows = window.buildGoalkeepersTopRanked(stats.allGk || stats.topGk || [], 3).slice(0, 3);
+            const hasGk = gkRows.some(function(row) { return row && row.gk; });
+            let topGkHTML;
+            if (!hasGk) {
+                topGkHTML = '<div class="podium-top-empty-msg">Brak wpisów</div>';
+            } else {
+                gkRows = window.padTopN(gkRows, 3);
+                topGkHTML = gkRows.map(function(row, i) {
+                    if (!row || !row.gk) {
+                        return '<div class="podium-top-row podium-top-empty">' +
+                            '<div class="podium-top-player"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>' +
+                            '<div class="podium-top-stat-cell">—</div></div>';
+                    }
+                    const label = window.formatGkRankLabel(row.rank, row.ex);
+                    const person = window.formatPodiumPersonName(row.gk.n);
+                    const playerLine = '<span class="podium-top-rank">' + label + '</span> ' + esc(person) +
+                        ' <span class="podium-top-team">(' + esc(row.gk.t) + ')</span>';
+                    return '<div class="podium-top-row">' +
+                        '<div class="podium-top-player">' + playerLine + '</div>' +
+                        '<div class="podium-top-stat-cell">' + esc(window.formatGkStatLabel(row.gk)) + '</div>' +
+                        '</div>';
+                }).join('');
+            }
+
+            return '<div class="podium-top-grid"><div><div class="podium-top-col-title">TOP 3 STRZELCÓW</div>' + topScHTML +
+                '</div><div><div class="podium-top-col-title">TOP 3 BRAMKARZY</div>' + topGkHTML + '</div></div>';
         };
 
         window.parseScorerEntry = function(entry) {
@@ -5479,7 +6876,9 @@
 
         window.formatPlayerAwardHTML = function(name, team) {
             if (!name) return '—';
-            const displayName = String(name).trim().toUpperCase();
+            const displayName = (typeof window.formatPodiumPersonName === 'function')
+                ? window.formatPodiumPersonName(name)
+                : String(name).trim();
             if (!team) return '<span class="podium-award-player">' + esc(displayName) + '</span>';
             return '<span class="podium-award-player">' + esc(displayName) + '</span> <span class="podium-award-team">(' + esc(team) + ')</span>';
         };
@@ -5628,21 +7027,30 @@
                 return;
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            // Widok rodzica (fan + demo fan): ta sama konstrukcja tabeli co faza grupowa
-            if (fanRo) {
-                po = typeof window.sortPlayoffMatchesByRound === 'function'
-                    ? window.sortPlayoffMatchesByRound(po)
-                    : po;
-                displayCont.innerHTML = renderMatchSectionHead('🏆', 'Faza pucharowa') +
-                    renderMatchesTableHTML(po, { readonly: true, showScorers: false, isPo: true });
-                return;
+            po = typeof window.sortPlayoffMatchesByRound === 'function'
+                ? window.sortPlayoffMatchesByRound(po)
+                : po;
+            // Sędzia = asystent: ta sama tabela (wynik / Strzelcy / status). Fan: readonly.
+            window.captureInlineScoreDrafts();
+            const focusedId = document.activeElement && document.activeElement.id && String(document.activeElement.id).startsWith('live-g')
+                ? document.activeElement.id : null;
+            displayCont.innerHTML = renderMatchSectionHead('🏆', 'Play-off') +
+                renderMatchesTableHTML(po, {
+                    readonly: fanRo,
+                    showScorers: !fanRo,
+                    isPo: true,
+                    idSuffix: fanRo ? '' : '-playoff'
+                });
+            if (focusedId) {
+                const el = document.getElementById(focusedId);
+                if (el) {
+                    el.focus();
+                    if (typeof el.setSelectionRange === 'function' && el.value) {
+                        const len = String(el.value).length;
+                        el.setSelectionRange(len, len);
+                    }
+                }
             }
-            const bracketHTML = window.renderPlayoffBracketHTML(po, fanRo);
-            if (bracketHTML) {
-                displayCont.innerHTML = bracketHTML;
-                return;
-            }
-            displayCont.innerHTML = po.map(m => renderPoMatchCardHTML(m, { badge: fanRo ? (m.n || m.time) : m.time })).join('');
         };
 
         window.renderPodium = () => {
@@ -5687,6 +7095,9 @@
             document.getElementById('license-countdown').style.display = 'none';
             document.getElementById('btn-qr').style.display = 'none';
             document.querySelectorAll('.header-organizer-actions button').forEach(btn => { btn.style.display = 'none'; });
+            if (typeof window.setupHallSixteenLayout === 'function') {
+                window.setupHallSixteenLayout();
+            }
             window.renderHallView();
         } else if (isAssistantMode) {
             if (!activeKey || !assistantTokenParam) {
@@ -5766,6 +7177,16 @@
             if (isAssistantMode && assistantTokenParam) {
                 window.renderFilterBar();
                 window.refreshAssistantMatchesView(false);
+            }
+            if (!window._tpTabFromUrlDone && !isHallMode && !isAssistantMode) {
+                const tabFromUrl = (urlParams.get('tab') || '').trim();
+                const allowedTabs = ['start', 'sklady', 'grupy', 'nazywo', 'mecze', 'tabele', 'playoff', 'podium', 'archiwum'];
+                if (tabFromUrl && allowedTabs.indexOf(tabFromUrl) >= 0) {
+                    window._tpTabFromUrlDone = true;
+                    setTimeout(function () {
+                        if (typeof window.switchTab === 'function') window.switchTab(tabFromUrl);
+                    }, 80);
+                }
             }
             window.renderLogs();
             window.renderDashboard();
