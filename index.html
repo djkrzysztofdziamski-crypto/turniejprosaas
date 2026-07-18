@@ -7,15 +7,15 @@
     
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260717podium6">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260717archive1">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=20260717podium6"></script>
-    <script src="demo-story.js?v=20260717podium6"></script>
+    <script src="demo-story-scenario.bundle.js?v=20260717archive1"></script>
+    <script src="demo-story.js?v=20260717archive1"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -1607,8 +1607,12 @@
             #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr 1fr; }
         }
         #view-app .footer-sig { position: fixed; bottom: 0; left: 0; width: 100%; background: #172b4d; color: #fff; text-align: center; padding: 10px 0; font-size: 12px; z-index: 1000; letter-spacing: 0.3px; }
-        #view-app .archive-item { position: relative; border-left: 4px solid #0052cc; padding: 15px; background: #fff; margin-bottom: 10px; border-radius: 4px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        #view-app .archive-item { position: relative; border-left: 4px solid #0052cc; padding: 15px; padding-right: 160px; background: #fff; margin-bottom: 10px; border-radius: 4px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         #view-app .archive-item:hover { background: #f4f8ff; }
+        #view-app .archive-item-actions { position: absolute; right: 10px; top: 10px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; z-index: 10; }
+        #view-app .archive-item-actions .del-archive-btn { position: static; }
+        #view-app .archive-restore-btn { background: #e3fcef; color: #00875a; border: 1px solid #57d9a3; border-radius: 4px; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; }
+        #view-app .archive-restore-btn:hover { background: #00875a; color: #fff; }
         #view-app .archive-close-panel { margin-bottom: 16px; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--color-app-border); background: linear-gradient(145deg, #f0fdf4 0%, #fff 55%); }
         #view-app .archive-close-panel.is-pending { background: #f8fafc; border-color: #e2e8f0; }
         #view-app .archive-close-panel h4 { margin: 0 0 6px; font-size: 14px; color: #102a43; }
@@ -2612,7 +2616,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=20260717podium6">
+    <link rel="stylesheet" href="css/responsive.css?v=20260717archive1">
 </head>
 <body>
 
@@ -6690,12 +6694,18 @@
                 _license_owner: activeKey,
             };
             window.logAction('Zarchiwizowano turniej: ' + archiveName);
-            db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').push(archivePayload);
-            db.ref('archiwum').push(archivePayload).then(() => {
+            db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').push(archivePayload).then((ref) => {
+                if (ref && ref.key) archiveDatabase[ref.key] = archivePayload;
+                window.renderArchiveAndFrozen();
+                window.renderArchiveClosePanel();
+                if (typeof window.switchTab === 'function') window.switchTab('archiwum');
+                return db.ref('archiwum').push(archivePayload);
+            }).then(() => {
                 alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!');
                 window.renderArchiveClosePanel();
             }).catch(() => {
                 alert('❌ Nie udało się zapisać w centralnym archiwum. Lokalna kopia mogła zostać utworzona — sprawdź listę poniżej.');
+                window.renderArchiveAndFrozen();
             });
         };
 
@@ -6724,21 +6734,41 @@
             }
         };
 
+        window.restoreArchiveToActive = (key) => {
+            if (isFanMode || isAssistantMode || !activeKey || !key) return;
+            const arch = archiveDatabase[key];
+            if (!arch) {
+                alert('Nie znaleziono wpisu w archiwum. Odśwież stronę i spróbuj ponownie.');
+                return;
+            }
+            if (state.teams && state.teams.length > 0) {
+                if (!confirm('Aktywny turniej ma już drużyny. Nadpisać go danymi z archiwum?\nWpis w archiwum zostanie zachowany.')) return;
+            } else if (!confirm('Przywrócić ten turniej z archiwum do aktywnej sesji?\nWpis w archiwum zostanie zachowany.')) {
+                return;
+            }
+            db.ref('turnieje_uzytkownikow/' + activeKey).update({
+                teams: arch.teams || [],
+                groups: arch.groups || {},
+                matches: arch.matches || [],
+                playoffs: arch.playoffs || [],
+                settings: arch.settings || {},
+                logs: arch.logs || [],
+                meta: arch.meta || {},
+                _meta_name: null,
+                _meta_date: null
+            }).then(() => location.reload());
+        };
+
         window.deleteFromArchive = (key, type) => {
             event.stopPropagation(); let subNode = type === 'frozen' ? 'wstrzymane' : 'archiwum';
             if(confirm("⚠️ Usunąć bezpowrotnie turniej z Twojej listy?")) { db.ref('turnieje_uzytkownikow/' + activeKey + '/' + subNode).child(key).remove(); }
         };
 
         window.openArchive = (key) => {
-            let archState = archiveDatabase[key]; if(!archState) return; isFanMode = true;
-            history.replaceState(null, '', `?id=${encodeURIComponent(activeKey)}&view=archive&localArchiveId=${encodeURIComponent(key)}`);
-            document.head.insertAdjacentHTML('beforeend', '<style id="arch-style">' + readonlyCSS + 'button[onclick*="start"], button[onclick*="sklady"], button[onclick*="grupy"], button[onclick*="archiwum"], .del-archive-btn { display: none !important; }</style>');
-            document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM: ${esc(archState._meta_name)}</span>`;
-            document.getElementById('btn-qr').style.display = 'none'; let headerEl = document.querySelector('header'); let exitBtn = document.createElement('button');
-            exitBtn.innerText = "✖ ZAMKNIJ ARCHIWUM"; exitBtn.style.cssText = "display: block !important; background:#fff; color:#de350b; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; pointer-events:auto;";
-            exitBtn.onclick = () => location.reload(); headerEl.appendChild(exitBtn); state = archState; window.renderGroupsList(); window.calcTables(); window.renderPodium();
-            window.switchTab('podium');
-            initArchiveViewer(archState);
+            if (!activeKey || !key || !archiveDatabase[key]) return;
+            window.location.search =
+                '?id=' + encodeURIComponent(activeKey) +
+                '&view=archive&localArchiveId=' + encodeURIComponent(key);
         };
 
         window.renderArchiveAndFrozen = () => {
@@ -6749,7 +6779,17 @@
             }
             html += '<h4 style="color:#00875a; border-bottom:2px solid #00875a; padding-bottom:5px; margin-top:25px;">💾 MOJE ZAKOŃCZONE TURNIEJE</h4>';
             if(Object.keys(archiveDatabase).length === 0) { html += '<p style="font-size:12px; color:#666;">Brak zarchiwizowanych turniejów.</p>'; } else {
-                html += Object.keys(archiveDatabase).reverse().map(key => { let t = archiveDatabase[key]; return `<div class="archive-item" onclick="openArchive('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'archive')">✖ USUŃ</button><b style="font-size:14px;">${esc(t._meta_name)}</b><br><small style="color:#666;">🗓 Zakończono: ${esc(t._meta_date)}</small></div>`; }).join('');
+                html += Object.keys(archiveDatabase).reverse().map(key => {
+                    let t = archiveDatabase[key];
+                    return `<div class="archive-item" onclick="openArchive('${key}')">` +
+                        `<div class="archive-item-actions">` +
+                        `<button type="button" class="archive-restore-btn" onclick="event.stopPropagation(); restoreArchiveToActive('${key}')">↺ ODTWÓRZ</button>` +
+                        `<button type="button" class="del-archive-btn" onclick="deleteFromArchive('${key}', 'archive')">✖ USUŃ</button>` +
+                        `</div>` +
+                        `<b style="font-size:14px;">${esc(t._meta_name)}</b><br>` +
+                        `<small style="color:#666;">🗓 Zakończono: ${esc(t._meta_date)} · klik = podgląd</small>` +
+                        `</div>`;
+                }).join('');
             }
             cont.innerHTML = html;
             window.renderArchiveClosePanel();
