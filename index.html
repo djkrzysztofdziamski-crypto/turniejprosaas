@@ -405,6 +405,7 @@
         #view-app .live-split-schedule,
         #view-app .live-split-standings { min-width: 0; max-width: 100%; }
         #view-app .live-panel-head { font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display); }
+        #view-app .live-panel-head-meta { display: none; font-weight: 600; color: var(--color-app-text-muted, #64748b); }
         #view-app .live-split-schedule.card,
         #view-app .live-split-standings.card { padding: 8px 10px; margin-bottom: 8px; }
         #view-app .live-split-standings .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
@@ -520,20 +521,130 @@
             body.print-live #tournament-dashboard,
             body.print-live .live-toolbar,
             body.print-live .live-po-actions,
+            body.print-live .header-organizer-actions,
             body.print-live .table-order-btn,
             body.print-live .table-save-btn,
             body.print-live .table-reset-btn,
-            body.print-live .filter-bar { display: none !important; }
+            body.print-live .filter-bar,
+            body.print-live #firebase-status,
+            body.print-live #last-save-info,
+            body.print-live #header-status-badges,
+            body.print-live #status-badges-home { display: none !important; }
+            /* Chrome UI niewidoczny w każdym wydruku z aplikacji */
+            #view-app header,
+            #view-app .nav-tabs,
+            #view-app .header-organizer-actions,
+            #view-app #tournament-dashboard,
+            #view-app .live-toolbar,
+            #view-app .filter-bar,
+            #firebase-status,
+            #last-save-info,
+            #header-status-badges,
+            #status-badges-home { display: none !important; }
             body.print-live #view-app,
-            body.print-live #view-app .card { background: #fff !important; box-shadow: none !important; }
-            body.print-live #nazywo { display: block !important; }
+            body.print-live #view-app .card { background: #fff !important; box-shadow: none !important; overflow: visible !important; }
+            body.print-live #nazywo { display: block !important; overflow: visible !important; }
             body.print-live .live-split { display: block !important; max-height: none !important; overflow: visible !important; }
+            /* NIE unikaj łamania całego harmonogramu — tylko pojedynczych meczów (inaczej Chrome tnie w środku karty) */
             body.print-live .live-split-schedule,
-            body.print-live .live-split-standings { max-height: none !important; overflow: visible !important; page-break-inside: avoid; }
+            body.print-live .live-split-standings {
+                max-height: none !important;
+                overflow: visible !important;
+                page-break-inside: auto;
+                break-inside: auto;
+            }
             body.print-live .live-split-standings { page-break-before: always; }
             body.print-live table { font-size: 9pt; border: 1px solid #000; }
             body.print-live th, body.print-live td { border: 1px solid #000; color: #000; }
-            body.print-live .live-panel-head { font-size: 11pt; border-color: #000; }
+            body.print-live .live-panel-head { font-size: 11pt; border-color: #000; display: block; }
+            body.print-live .live-panel-head-meta {
+                display: inline !important;
+                font-size: 10pt;
+                font-weight: 600;
+                color: #334155;
+                letter-spacing: 0;
+                text-transform: none;
+                font-family: var(--font-body), 'Segoe UI', sans-serif;
+            }
+            /* Wydruk: bez Strzelcy / inputów / kropek statusu */
+            body.print-live .assistant-scorers-btn,
+            body.print-live .live-score-save,
+            body.print-live .live-score-inputs,
+            body.print-live .live-status-dot,
+            body.print-live .col-scorers,
+            body.print-live .live-match-table col.col-scorers,
+            body.print-live .live-po-actions { display: none !important; }
+            /* Karty: jedna linia jako block+inline — flex psuje break-inside w Chrome */
+            body.print-live .assistant-match-cards {
+                display: block !important;
+                overflow: visible !important;
+            }
+            body.print-live .assistant-match-card {
+                display: block !important;
+                padding: 4px 8px !important;
+                margin: 0 0 4px !important;
+                border: 1px solid #64748b !important;
+                border-radius: 4px !important;
+                background: #fff !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid-page !important;
+                -webkit-column-break-inside: avoid !important;
+            }
+            body.print-live .assistant-match-card-head {
+                display: inline !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            body.print-live .assistant-match-card-head > *:not(.assistant-scorers-btn):not(.live-score-inputs):not(.live-score-save):not(.live-status-dot) {
+                display: inline !important;
+                vertical-align: middle;
+                margin-right: 6px !important;
+            }
+            body.print-live .assistant-match-card .assistant-scorers-btn,
+            body.print-live .assistant-match-card .live-score-save,
+            body.print-live .assistant-match-card .live-score-inputs,
+            body.print-live .assistant-match-card .live-status-dot {
+                display: none !important;
+            }
+            body.print-live .assistant-match-card-teams {
+                display: inline !important;
+                margin: 0 !important;
+                font-size: 9pt !important;
+                font-weight: 700 !important;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+            body.print-live .assistant-match-card .live-match-no,
+            body.print-live .assistant-match-card .live-time,
+            body.print-live .assistant-match-card .live-score-display,
+            body.print-live .assistant-match-card .live-score-cell {
+                font-size: 9pt !important;
+                white-space: nowrap;
+                display: inline !important;
+            }
+            body.print-live .assistant-match-card .live-group-badge {
+                font-size: 8pt !important;
+                padding: 1px 5px !important;
+                display: inline !important;
+            }
+            body.print-live .live-match-table-wrap {
+                overflow: visible !important;
+                page-break-inside: auto;
+                break-inside: auto;
+            }
+            body.print-live .live-match-row,
+            body.print-live .live-match-table tbody tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid-page !important;
+            }
+            body.print-live .match-section-head,
+            body.print-live .match-section-divider {
+                page-break-after: avoid;
+                break-after: avoid-page;
+                margin-top: 10px;
+            }
             @page { margin: 12mm; size: A4 portrait; }
         }
         /* --- Tryb hali (projektor) --- */
@@ -3023,16 +3134,16 @@
             flex-shrink: 0;
             max-width: min(100%, 420px);
         }
-        /* Asystent: badge zapisu + status serwera na prawej stronie belki */
-        body.assistant-view #view-app header {
+        /* Sędzia + asystent: badge’e w belce (wzorzec asystenta — bez fixed overlap) */
+        body:not(.fan-view):not(.hall-view) #view-app header {
             gap: 10px 14px;
             flex-wrap: wrap;
         }
-        body.assistant-view #view-app .header-status-badges {
+        body:not(.fan-view):not(.hall-view) #view-app .header-status-badges {
             display: flex !important;
         }
-        body.assistant-view #view-app .header-status-badges #firebase-status,
-        body.assistant-view #view-app .header-status-badges #last-save-info {
+        body:not(.fan-view):not(.hall-view) #view-app .header-status-badges #firebase-status,
+        body:not(.fan-view):not(.hall-view) #view-app .header-status-badges #last-save-info {
             position: static !important;
             inset: auto !important;
             bottom: auto !important;
@@ -3045,11 +3156,11 @@
             max-width: 100%;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
-        body.assistant-view #view-app .header-status-badges #last-save-info {
+        body:not(.fan-view):not(.hall-view) #view-app .header-status-badges #last-save-info {
             font-size: 10px;
             padding: 5px 10px;
         }
-        body.assistant-view #view-app .header-status-badges #firebase-status {
+        body:not(.fan-view):not(.hall-view) #view-app .header-status-badges #firebase-status {
             font-size: 10px;
             padding: 5px 10px;
         }
@@ -3370,7 +3481,7 @@
         <button class="nav-btn active" onclick="switchTab('start')">Start</button>
         <button class="nav-btn" onclick="switchTab('sklady')">Składy</button>
         <button class="nav-btn" onclick="switchTab('grupy')">Grupy</button>
-        <button class="nav-btn nav-desktop-only nav-tab-live" onclick="switchTab('nazywo')">Na żywo</button>
+        <button class="nav-btn nav-tab-live" onclick="switchTab('nazywo')">Na żywo</button>
         <button class="nav-btn nav-desktop-only" onclick="switchTab('mecze')">Mecze</button>
         <button class="nav-btn nav-mobile-only" onclick="switchTab('mecze')">Mecze</button>
         <button class="nav-btn nav-mobile-only" onclick="switchTab('tabele')">Tabele</button>
@@ -3471,7 +3582,7 @@
                 </div>
                 <div class="live-split">
                     <div class="live-split-schedule card">
-                        <h4 class="live-panel-head">Harmonogram meczów</h4>
+                        <h4 class="live-panel-head">Harmonogram meczów<span class="live-panel-head-meta" id="live-schedule-print-meta" hidden></span></h4>
                         <div id="live-matches-container" class="matches-render-target"></div>
                     </div>
                     <div class="live-split-standings card">
@@ -4019,24 +4130,28 @@
         if (typeof window.syncAssistantHeaderBadges === 'function') window.syncAssistantHeaderBadges();
     }
 
-    /** Asystent: badge zapisu + status Firebase na prawej stronie belki header */
+    /** Badge zapisu + Firebase w belce header (sędzia i asystent; wzorzec bez overlap) */
     window.syncAssistantHeaderBadges = function () {
         const home = document.getElementById('status-badges-home');
         const headerHost = document.getElementById('header-status-badges');
         const fb = document.getElementById('firebase-status');
         const save = document.getElementById('last-save-info');
         if (!home || !headerHost || !fb || !save) return;
-        const assistant = document.body.classList.contains('assistant-view');
-        const target = assistant ? headerHost : home;
+        const fanOrHall = document.body.classList.contains('fan-view')
+            || document.body.classList.contains('hall-view');
+        const viewApp = document.getElementById('view-app');
+        const viewAppActive = !!(viewApp && viewApp.classList.contains('active'));
+        const useHeader = !fanOrHall && viewAppActive && !!activeKey;
+        const target = useHeader ? headerHost : home;
         /* kolejność: status połączenia, potem badge zapisu */
         if (fb.parentElement !== target) target.appendChild(fb);
         if (save.parentElement !== target) target.appendChild(save);
-        else if (assistant && save.previousElementSibling !== fb) {
+        else if (useHeader && save.previousElementSibling !== fb) {
             target.appendChild(fb);
             target.appendChild(save);
         }
-        headerHost.hidden = !assistant;
-        headerHost.setAttribute('aria-hidden', assistant ? 'false' : 'true');
+        headerHost.hidden = !useHeader;
+        headerHost.setAttribute('aria-hidden', useHeader ? 'false' : 'true');
     };
 
     setInterval(updateLastSaveInfo, 1000);
@@ -4598,6 +4713,16 @@
     // --- MODUŁ C: LOGIKA KONSOLI SĘDZIEGO ---
     // ==========================================
     let state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [] };
+    /* QA / Playwright: odczyt stanu bez ekspozycji mutacji z zewnątrz */
+    Object.defineProperty(window, 'state', {
+        get() { return state; },
+        configurable: true,
+    });
+    window.__TP_DEBUG__ = {
+        getState: () => state,
+        getActiveKey: () => activeKey || null,
+        getGroupSizeInfo: () => (typeof window.getGroupSizeInfo === 'function' ? window.getGroupSizeInfo() : null),
+    };
 
     /** Demo Story — synchronizacja scenariusza z closure `state` używanym przez renderery embedów */
     window.applyDemoScenarioState = function (data) {
@@ -5548,7 +5673,7 @@
 
     function renderMatchesTableHTML(filtered, opts) {
         opts = opts || {};
-        const scorersCol = opts.showScorers ? '<th>Strzelcy</th>' : '';
+        const scorersCol = opts.showScorers ? '<th class="col-scorers">Strzelcy</th>' : '';
         const scorersColTag = opts.showScorers ? '<col class="col-scorers">' : '';
         // Ta sama geometria dla grup i play-off — różni się tylko kolor thead (--playoff)
         const groupCol = 'Grupa';
@@ -5770,6 +5895,9 @@
             alert('❌ Licencja nieważna lub zawieszona — zapis wyłączony.');
             return;
         }
+        const savedAt = Date.now();
+        if (!state.meta) state.meta = {};
+        state.meta.lastSavedAt = savedAt;
         const { active, archiwum, wstrzymane, ...payload } = state;
         const savePath = 'turnieje_uzytkownikow/' + activeKey;
         setFirebaseStatus('saving');
@@ -5781,9 +5909,10 @@
             ]).catch(() => patchRtdbRest(savePath, payload));
         savePromise
             .then(() => {
-                lastSaveTimestamp = Date.now();
+                lastSaveTimestamp = savedAt;
                 setFirebaseStatus('saved');
                 window.renderDashboard();
+                if (typeof updateLastSaveInfo === 'function') updateLastSaveInfo();
             })
             .catch(err => {
                 console.error('Save failed:', err);
@@ -5865,9 +5994,29 @@
                 </div>`;
         };
 
+        window.getGroupSizeInfo = () => {
+            if (!state.groups) return { sizes: {}, label: '', uneven: false };
+            const keys = Object.keys(state.groups);
+            const sizes = {};
+            keys.forEach(gn => { sizes[gn] = (state.groups[gn] || []).length; });
+            const counts = Object.values(sizes);
+            const uneven = counts.length > 1 && Math.min(...counts) !== Math.max(...counts);
+            const label = keys.map(gn => `${gn}:${sizes[gn]}`).join(', ');
+            return { sizes, label, uneven };
+        };
+
+        window.formatUnevenGroupsMessage = (info) => {
+            const i = info || window.getGroupSizeInfo();
+            return `Grupy mają różną liczbę drużyn (${i.label}). Tabela i awans mogą być mniej sprawiedliwe.`;
+        };
+
         window.renderGroupsList = () => {
             const cont = document.getElementById('groups-list-display'); if(!cont || !state.groups) return;
-            cont.innerHTML = Object.keys(state.groups).map(gn => `<div class="card"><h4>Grupa ${gn}</h4><ul>${state.groups[gn].map(t=>`<li>${esc(t.name)}</li>`).join('')}</ul></div>`).join('');
+            const info = window.getGroupSizeInfo();
+            const banner = info.uneven
+                ? `<div class="uneven-groups-banner" style="background:#fff7e6; border:1px solid #ffd591; color:#ad6800; padding:10px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; line-height:1.4;">⚠ ${esc(window.formatUnevenGroupsMessage(info))}</div>`
+                : '';
+            cont.innerHTML = banner + Object.keys(state.groups).map(gn => `<div class="card"><h4>Grupa ${gn}</h4><ul>${state.groups[gn].map(t=>`<li>${esc(t.name)}</li>`).join('')}</ul></div>`).join('');
         };
 
         window.syncTeamData = (index, field, value) => {
@@ -5926,6 +6075,8 @@
             if(state.settings) { delete state.settings.customTableOrder; delete state.settings.confirmedTableOrder; }
             tempLocalOrders = {}; window.logAction("Rozlosowano drużyny do grup automatycznie.");
             window.renderGroupsList(); window.save(); window.renderDashboard(); switchTab('grupy');
+            const sizeInfo = window.getGroupSizeInfo();
+            if (sizeInfo.uneven) alert('⚠ ' + window.formatUnevenGroupsMessage(sizeInfo));
         };
 
         window.formatTime24h = (raw) => {
@@ -6047,9 +6198,24 @@
         };
 
         window.printLiveView = () => {
+            const metaEl = document.getElementById('live-schedule-print-meta');
+            const formName = (document.getElementById('tournament-name')?.value || '').trim();
+            const metaName = (state.meta && state.meta.tournamentName) ? String(state.meta.tournamentName).trim() : '';
+            const title = metaName || formName || activeKey || 'Turniej';
+            const dateStr = new Date().toLocaleDateString('pl-PL');
+            if (metaEl) {
+                metaEl.textContent = ' · ' + title + ' · ' + dateStr;
+                metaEl.hidden = false;
+            }
             document.body.classList.add('print-live');
             window.print();
-            setTimeout(() => document.body.classList.remove('print-live'), 500);
+            setTimeout(() => {
+                document.body.classList.remove('print-live');
+                if (metaEl) {
+                    metaEl.textContent = '';
+                    metaEl.hidden = true;
+                }
+            }, 500);
         };
 
         window.requestHallFullscreen = () => {
@@ -6216,7 +6382,9 @@
                             state.active = null;
                         }
                     }
+                    lastSaveTimestamp = Date.now();
                     if (typeof window.applyTournamentState === 'function') window.applyTournamentState(data);
+                    if (typeof updateLastSaveInfo === 'function') updateLastSaveInfo();
                 })
                 .catch(err => {
                     const msg = (err && err.message) ? err.message : 'Zapis nie powiódł się';
@@ -6258,7 +6426,10 @@
                 window.syncDemoStoryState();
             }
             const dsMeta = state._demoStory || {};
-            const title = (state.meta && state.meta.tournamentName) || dsMeta.name || 'Turniej';
+            const metaName = state.meta && state.meta.tournamentName ? String(state.meta.tournamentName).trim() : '';
+            const formNameEl = document.getElementById('tournament-name');
+            const formName = formNameEl && formNameEl.value ? String(formNameEl.value).trim() : '';
+            const title = metaName || formName || dsMeta.name || activeKey || 'Turniej';
             const inPlayoff = window.isPlayoffPhase();
             const phase = window.getHallTournamentPodium()
                 ? 'Turniej zakończony'
@@ -6816,6 +6987,10 @@
 
         window.generujPlayoff = function() {
             if(state.playoffs && state.playoffs.length > 0) { if(!confirm("UWAGA! Drabinka już istnieje. Kontynuować?")) return; }
+            const sizeInfo = window.getGroupSizeInfo();
+            if (sizeInfo.uneven) {
+                if (!confirm('⚠ ' + window.formatUnevenGroupsMessage(sizeInfo) + '\n\nCzy na pewno chcesz wygenerować play-off?')) return;
+            }
             saveLastSnapshot();
             const pool = window.getAdvancingTeamsFull();
             let bSize = state.settings.bracketSize || 8;
@@ -7096,11 +7271,14 @@
                 });
         };
 
-        window.switchTab = (t) => { 
-            document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active')); 
-            document.getElementById(t).classList.add('active'); 
-            document.querySelector(`[onclick="switchTab('${t}')"]`).classList.add('active'); 
-            
+        window.switchTab = (t) => {
+            const panel = document.getElementById(t);
+            if (!panel) return;
+            document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active'));
+            panel.classList.add('active');
+            const navBtn = document.querySelector(`.nav-tabs [onclick="switchTab('${t}')"]`);
+            if (navBtn) navBtn.classList.add('active');
+
             const guideContainer = document.getElementById('demo-guide-container');
             if (guideContainer) {
                 if (isDemoMode && DEMO_GUIDES[t]) {
@@ -7115,9 +7293,9 @@
             if(t==='nazywo') { window.renderFilterBar(); window.filterAndRenderMatches(); window.calcTables(); }
             if(t==='grupy') window.renderGroupsList();
             if(t==='podium') window.renderPodium();
-            if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); } 
+            if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
-            if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); } 
+            if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
         };
 
         window.openMatch = (id, isPo=false) => {
@@ -7785,6 +7963,15 @@
             if (localActiveSnapshot) {
                 state.active = localActiveSnapshot;
             }
+            const metaSavedAt = state.meta && state.meta.lastSavedAt ? Number(state.meta.lastSavedAt) : 0;
+            if (metaSavedAt > 0) {
+                lastSaveTimestamp = Math.max(lastSaveTimestamp || 0, metaSavedAt);
+            } else if (d) {
+                const hasPlayed = [...(state.matches || []), ...(state.playoffs || [])].some(m => m && m.played);
+                const hasData = (state.teams && state.teams.length > 0) || hasPlayed;
+                if (hasData && !lastSaveTimestamp) lastSaveTimestamp = Date.now();
+            }
+            if (typeof updateLastSaveInfo === 'function') updateLastSaveInfo();
             document.body.classList.remove('theme-dedicated');
             const activeTab = document.querySelector('.tab-content.active');
             if (activeTab && (activeTab.id === 'tabele' || activeTab.id === 'nazywo')) window.calcTables();
