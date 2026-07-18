@@ -136,7 +136,7 @@
 
             h1: 'Twój turniej może wyglądać tak samo',
 
-            sub: '16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na boisku',
+            sub: 'Dowolna ilość drużyn, wyniki LIVE dla kibiców i rodziców, podium po finale w 3 sekundy, bez chaosu na boisku, orliku czy hali',
 
             bullets: [
 
@@ -792,9 +792,107 @@
 
 
 
+    /** Kroki Demo wymagające landscape na telefonie (Chrome: 2, 3, 5) */
+
+    var DEMO_LANDSCAPE_STEP_IDS = { 2: true, 3: true, 5: true };
+
+    var demoOrientationMq = null;
+
+
+
+    function isDemoPhoneViewport() {
+
+        return !!(global.matchMedia && global.matchMedia('(max-width: 900px)').matches);
+
+    }
+
+
+
+    function isDemoPortrait() {
+
+        return !!(global.matchMedia && global.matchMedia('(orientation: portrait)').matches);
+
+    }
+
+
+
+    function syncDemoOrientationGate(stepId) {
+
+        const root = document.getElementById('view-demo-story');
+
+        const gate = document.getElementById('demo-rotate-gate');
+
+        if (!root || !gate) return;
+
+        const need = !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport() && isDemoPortrait());
+
+        root.classList.toggle('demo-need-landscape', need);
+
+        root.classList.toggle('demo-force-landscape', !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport()));
+
+        if (need) gate.removeAttribute('hidden');
+
+        else gate.setAttribute('hidden', '');
+
+        document.body.classList.toggle('demo-force-landscape', !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport()));
+
+    }
+
+
+
+    function clearDemoOrientationGate() {
+
+        const root = document.getElementById('view-demo-story');
+
+        const gate = document.getElementById('demo-rotate-gate');
+
+        if (root) {
+
+            root.classList.remove('demo-need-landscape', 'demo-force-landscape');
+
+        }
+
+        if (gate) gate.setAttribute('hidden', '');
+
+        document.body.classList.remove('demo-force-landscape');
+
+    }
+
+
+
+    function bindDemoOrientationGate() {
+
+        if (demoOrientationMq) return;
+
+        if (!global.matchMedia) return;
+
+        demoOrientationMq = global.matchMedia('(orientation: portrait)');
+
+        const onChange = function () {
+
+            if (!isDemoStoryMode) return;
+
+            syncDemoOrientationGate(demoStoryStep);
+
+        };
+
+        if (typeof demoOrientationMq.addEventListener === 'function') demoOrientationMq.addEventListener('change', onChange);
+
+        else if (typeof demoOrientationMq.addListener === 'function') demoOrientationMq.addListener(onChange);
+
+        global.addEventListener('orientationchange', onChange);
+
+        global.addEventListener('resize', onChange);
+
+    }
+
+
+
     function showViewLogin() {
 
         teardownActiveEmbed();
+
+        clearDemoOrientationGate();
 
         document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
 
@@ -1004,6 +1102,8 @@
 
         activeEmbedKind = null;
 
+        global._demoStoryPreferCards = false;
+
     }
 
 
@@ -1042,7 +1142,9 @@
 
 
 
-    function renderStaticScreen(stepDef, copy, bodyExtra) {
+    function renderStaticScreen(stepDef, copy, bodyExtra, opts) {
+
+        opts = opts || {};
 
         const meta = demoScenarioState && demoScenarioState._demoStory;
 
@@ -1062,7 +1164,7 @@
 
             metaLine +
 
-            buildCtaZone(copy, stepDef) +
+            (opts.omitCta ? '' : buildCtaZone(copy, stepDef)) +
 
             '</div>';
 
@@ -1150,11 +1252,14 @@
 
         html += '<p class="demo-micro" style="margin-top:18px;">Na żywo — harmonogram i tabele obok siebie (desktop organizatora):</p>';
 
-        html += '<div id="demo-live-embed-host" class="demo-embed-app"></div>';
+        html += '<div id="demo-live-embed-host" class="demo-embed-app demo-live-embed-host"></div>';
 
         html += '<p class="demo-micro" style="margin-top:14px;">Tryb Hala — duży ekran / projektor na obiekcie:</p>';
 
         html += '<div id="demo-hall-embed-host" class="demo-hall-embed-host"></div>';
+
+        /* CTA statycznie zaraz pod Halą — nie „pływa” względem długiego scrolla */
+        html += '<div class="demo-hall-follow-cta">' + buildCtaZone(SCREEN_COPY.organizer, { key: 'organizer' }) + '</div>';
 
         return html;
 
@@ -1298,7 +1403,7 @@
 
         return '<div class="demo-screen-inner demo-conversion">' +
 
-            '<h1 class="demo-h1">' + copy.h1 + '</h1>' +
+            '<h1 class="demo-h1 demo-h1--wow">' + copy.h1 + '</h1>' +
 
             '<p class="demo-sub">' + copy.sub + '</p>' +
 
@@ -1407,6 +1512,8 @@
         if (global.resetDemoMatchFilters) global.resetDemoMatchFilters();
 
         global._demoStoryFanEmbed = true;
+
+        global._demoStoryPreferCards = true;
 
         activeEmbedKind = 'fan';
 
@@ -1546,7 +1653,10 @@
 
         const grid = document.getElementById('hall-grid');
 
-        if (grid) grid.classList.remove('hall-grid--sixteen');
+        if (grid) {
+            grid.classList.remove('hall-grid--sixteen');
+            grid.classList.remove('hall-grid--demo-compact');
+        }
 
         const qrCell = document.getElementById('hall-demo-qr-cell');
 
@@ -1586,7 +1696,11 @@
 
         if (typeof global.setupHallSixteenLayout === 'function') {
 
-            global.setupHallSixteenLayout({ qrUrl: buildDemoFanDeepLink() });
+            global.setupHallSixteenLayout({
+                qrUrl: buildDemoFanDeepLink(),
+                skipMatchLists: true,
+                qrSize: 120
+            });
 
             return;
 
@@ -1597,6 +1711,7 @@
         if (!grid) return;
 
         grid.classList.add('hall-grid--sixteen');
+        grid.classList.add('hall-grid--demo-compact');
 
         const qrCell = document.getElementById('hall-demo-qr-cell');
 
@@ -1610,9 +1725,10 @@
 
         if (clockCell) clockCell.setAttribute('aria-hidden', 'false');
 
-        if (nextPanel) nextPanel.setAttribute('aria-hidden', 'false');
+        /* Demo Story: bez list „następne” / „zakończone” — tylko mecz + QR + zegar */
+        if (nextPanel) nextPanel.setAttribute('aria-hidden', 'true');
 
-        if (donePanel) donePanel.setAttribute('aria-hidden', 'false');
+        if (donePanel) donePanel.setAttribute('aria-hidden', 'true');
 
         const fanUrl = buildDemoFanDeepLink();
 
@@ -1626,7 +1742,7 @@
 
             if (qr) {
 
-                qr.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' +
+                qr.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' +
 
                     encodeURIComponent(fanUrl) + '" alt="QR kibic" style="display:inline-block;">';
 
@@ -1636,13 +1752,7 @@
 
         startHallDemoClock();
 
-        if (typeof global.renderHallDemoSixteenLists === 'function') {
-
-            global._hallDemoListsSig = '';
-
-            global.renderHallDemoSixteenLists();
-
-        }
+        /* nie wywołuj renderHallDemoSixteenLists — listy ukryte w Demo */
 
     }
 
@@ -1688,6 +1798,8 @@
 
         global._demoStoryOrganizerEmbed = true;
 
+        global._demoStoryPreferCards = true;
+
         activeEmbedKind = 'organizer';
 
         mountNodes(EMBED_NODES.organizer, hostEl);
@@ -1695,6 +1807,8 @@
         const liveHost = document.getElementById('demo-live-embed-host');
 
         if (liveHost) {
+
+            liveHost.classList.add('demo-live-embed-host', 'demo-embed-app');
 
             mountNodes(EMBED_NODES.live, liveHost);
 
@@ -1833,6 +1947,7 @@
             const step = parseInt(screen.getAttribute('data-step'), 10);
 
             screen.classList.toggle('active', step === demoStoryStep);
+            screen.classList.toggle('demo-screen--podium', stepDef && stepDef.key === 'podium' && step === demoStoryStep);
 
             if (step !== demoStoryStep) return;
 
@@ -1850,7 +1965,7 @@
 
             } else if (stepDef.key === 'organizer') {
 
-                html = renderStaticScreen(stepDef, copy, renderOrganizerBody());
+                html = renderStaticScreen(stepDef, copy, renderOrganizerBody(), { omitCta: true });
 
             } else if (stepDef.key === 'final') {
 
@@ -1921,6 +2036,10 @@
 
 
         updateChrome(stepDef);
+
+        bindDemoOrientationGate();
+
+        syncDemoOrientationGate(demoStoryStep);
 
         track('demo_story_step_viewed', { step_id: demoStoryStep, step_name: stepDef.key });
 
@@ -2287,6 +2406,8 @@
             }
 
             teardownActiveEmbed();
+
+            clearDemoOrientationGate();
 
             isDemoStoryMode = false;
 

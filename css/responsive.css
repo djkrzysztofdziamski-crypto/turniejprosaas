@@ -1,35 +1,143 @@
 /**
- * Turniejomat — responsywność (telefon / tablet / laptop / monitor)
- * Skala zsynchronizowana z :root w brand-tokens.css (--bp-*).
+ * Turniejomat — responsywność (kanoniczna skala)
+ * Sync: css/brand-tokens.css · window.TP_BREAKPOINTS · docs/UX_RESPONSIVE_AUDIT.md
  *
- * Media queries (literały px — wymagane przez CSS):
- *   phone ………… max-width: 479px
- *   phone-lg ……… max-width: 639px
- *   tablet ……… min 640 / max 767
- *   tablet-md …… min 768 / max 899
- *   tablet-lg …… min 900 / max 1023
- *   desktop ……… min 1024
- *   laptop ……… min 1280
- *   desktop-lg …… min 1536
- *   monitor ……… min 1920
- *   short ……… max-height: 500px (+ orientation: landscape)
+ *   MP  …… max-width: 479px
+ *   LMP …… max-width: 767px
+ *   TL  …… min-width: 768px  (do 1365)
+ *   D   …… min-width: 1366px
+ *   LD  …… min-width: 1920px
+ *   short …… max-height: 500px + landscape
  */
 
-/* --- Baza: bezpieczne obszary (notch / home indicator) --- */
 html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 body {
     padding-left: var(--safe-left);
     padding-right: var(--safe-right);
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 #view-app header {
     padding-top: calc(12px + var(--safe-top));
     padding-left: calc(20px + var(--safe-left));
     padding-right: calc(20px + var(--safe-right));
+}
+
+/* R7/R8 — modale, footer, nav: safe-area + brak poziomego scrolla */
+#view-app .modal {
+    inset: 0;
+    width: auto;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
+#view-app .modal-content {
+    box-sizing: border-box;
+    width: calc(100% - 16px);
+    max-width: min(450px, calc(100% - 16px));
+    margin: 4vh auto;
+    max-height: min(92dvh, calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px));
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#view-app #matchModal .match-modal-close,
+#view-app #shareModal .match-modal-close {
+    top: max(8px, env(safe-area-inset-top, 0px));
+    right: max(10px, env(safe-area-inset-right, 0px));
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    box-sizing: border-box;
+    float: none;
+    position: absolute;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    color: #64748b;
+    z-index: 2;
+}
+
+#view-app #shareModal .share-modal-content {
+    max-width: min(480px, calc(100% - 16px));
+    position: relative;
+}
+
+#view-app .footer-sig {
+    padding-bottom: calc(10px + var(--safe-bottom));
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+    box-sizing: border-box;
+}
+
+#view-app .nav-tabs {
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+    -webkit-overflow-scrolling: touch;
+}
+
+#view-app .table-order-drawer-panel {
+    padding-top: calc(18px + var(--safe-top));
+    padding-bottom: calc(18px + var(--safe-bottom));
+    padding-right: calc(16px + var(--safe-right));
+    box-sizing: border-box;
+}
+
+/* R5 — długie nazwy / live-split nie rozszerzają strony */
+#view-app .live-split,
+#view-app .container.container--live,
+#view-app .matches-render-target,
+#view-app #assistant-matches-container,
+#view-app #matches-container,
+#view-app #live-matches-container {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+#view-app .live-match-teams {
+    min-width: 0;
+}
+
+#view-app .live-match-teams .live-team-name,
+#view-app .assistant-match-card-teams .live-team-name {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+#view-demo-story {
+    overflow-x: clip;
+}
+
+#view-demo-story #demo-story-chrome {
+    padding-top: calc(12px + var(--safe-top));
+    padding-left: calc(20px + var(--safe-left));
+    padding-right: calc(20px + var(--safe-right));
+}
+
+#last-save-info {
+    bottom: calc(52px + var(--safe-bottom, 0px));
+    right: max(16px, var(--safe-right, 0px));
+}
+
+body:has(#view-demo-story.active) #last-save-info,
+body:has(#view-demo-story.active) #firebase-status {
+    display: none !important;
+    visibility: hidden !important;
 }
 
 #view-app .container {
@@ -51,8 +159,18 @@ body {
     box-sizing: border-box;
 }
 
+#view-app .assistant-match-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#view-app .nav-tabs {
+    top: var(--header-h, 52px);
+}
+
 /* =========================================================
-   TELEFON 6–7" — portret (szerokość CSS ~360–430px)
+   MP — Mobile Portrait (≤479)
    ========================================================= */
 @media (max-width: 479px) {
     :root {
@@ -92,8 +210,17 @@ body {
     }
 
     #view-app .awards-banner,
-    #view-app .podium-top-grid {
+    #view-app .podium-top-grid,
+    #view-demo-story .demo-embed-app .awards-banner,
+    #view-demo-story .demo-embed-app .podium-top-grid {
         grid-template-columns: 1fr;
+    }
+
+    #view-demo-story .demo-embed-app .step.gold,
+    #view-demo-story .demo-embed-app .step.silver,
+    #view-demo-story .demo-embed-app .step.bronze {
+        height: auto;
+        min-height: 52px;
     }
 
     #view-login .login-card {
@@ -101,17 +228,35 @@ body {
         max-width: none;
         padding: 24px 18px;
     }
+
+    #view-demo-story .demo-screen[data-step="0"] .demo-h1 {
+        white-space: normal;
+        font-size: clamp(16px, 5.5vw, 22px);
+    }
+
+    #view-app .archive-item {
+        padding-right: 15px;
+    }
+
+    #view-app .archive-item-actions {
+        position: static;
+        margin-top: 8px;
+        justify-content: flex-start;
+    }
 }
 
-/* Telefon 6–7" + wąski tablet — do 639px */
-@media (max-width: 639px) {
+/* =========================================================
+   LMP — Large Mobile + phone (≤767): karty, bracket stack
+   ========================================================= */
+@media (max-width: 767px) {
     #view-app .live-match-table-wrap {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
 
+    /* Bez wymuszania 580px — karty JS albo wąska tabela */
     #view-app .live-match-table {
-        min-width: 580px;
+        min-width: 0;
     }
 
     #view-app .live-toolbar {
@@ -127,12 +272,138 @@ body {
         flex: 1 1 auto;
         text-align: center;
     }
+
+    #view-app .awards-banner,
+    #view-app .podium-top-grid,
+    #view-demo-story .demo-embed-app .awards-banner,
+    #view-demo-story .demo-embed-app .podium-top-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #view-app #playoff-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: visible;
+    }
+
+    #view-app .playoff-bracket {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        grid-template-columns: none;
+        grid-template-rows: none;
+        overflow: visible;
+        padding-bottom: 8px;
+    }
+
+    #view-app .bracket-head,
+    #view-app .bracket-slot {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        align-self: stretch !important;
+        width: 100%;
+    }
+
+    #view-app .bracket-head {
+        text-align: left;
+        padding: 8px 4px 0;
+        white-space: normal;
+    }
+
+    #view-app .bracket-slot::before,
+    #view-app .bracket-slot::after {
+        display: none !important;
+    }
+
+    #view-app .bracket-match .match-po-team {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    #view-app .archive-item {
+        padding-right: 15px;
+    }
+
+    #view-app .archive-item-actions {
+        position: static;
+        margin-top: 8px;
+        justify-content: flex-start;
+    }
+
+    #view-admin .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #view-admin,
+    #view-admin .container,
+    #view-admin .card {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    #view-admin .admin-table-wrap {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    #view-demo-story .demo-screen {
+        padding: 16px 12px 40px;
+    }
+
+    #view-demo-story .demo-h1 {
+        font-size: clamp(20px, 6vw, 26px);
+    }
+
+    #view-demo-story .demo-conversion .demo-h1--wow {
+        white-space: nowrap;
+        font-size: clamp(12px, 4.4vw, 24px);
+    }
+
+    #view-demo-story .demo-embed-app,
+    #view-demo-story .demo-hall-embed-host {
+        max-height: min(78dvh, 720px);
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Hala w Demo Story: wysokość = treść, bez sztucznego „pchania” CTA */
+    #view-demo-story .demo-hall-embed-host {
+        max-height: none;
+        height: auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #view-demo-story .demo-screen[data-step="5"] .demo-embed-app,
+    #view-demo-story .demo-screen--podium .demo-embed-app {
+        max-height: none;
+        min-height: min(70dvh, 640px);
+    }
+
+    #view-demo-story .demo-fan-tab {
+        min-width: 0;
+        flex: 1 1 30%;
+        font-size: 10px;
+        padding: 10px 6px;
+    }
+
+    #view-demo-story .demo-btn-primary,
+    #view-demo-story .demo-btn-landing,
+    #view-demo-story .demo-btn-secondary {
+        min-height: 48px;
+    }
+
+    #view-demo-story .demo-final-live-matchup {
+        flex-direction: column;
+    }
 }
 
 /* =========================================================
-   TABLET 8–11" — portret (640–1023)
+   TL — Tablet Landscape / szeroki (768–1365)
    ========================================================= */
-@media (min-width: 640px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1365px) {
     :root {
         --page-pad-x: 14px;
     }
@@ -147,37 +418,74 @@ body {
     }
 }
 
-/* Tablet 10–11" portret — jeden układ kolumn hali / demo */
-@media (max-width: 899px) {
+@media (max-width: 767px) {
     #view-app .hall-grid,
     #view-demo-story .demo-hall-embed-host .hall-grid {
         grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 719px) {
+    /* Demo Hala: zostaw 2 kolumny (mecz | QR+zegar) mimo reguły powyżej */
+    #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
     #view-app .hall-podium-wrap {
         grid-template-columns: 1fr;
     }
+
+    /* iOS: font ≥16px na polach wyniku — bez auto-zoom przy focus */
+    #view-app .live-score-inputs input,
+    #view-app #assistant-screen .live-score-inputs input,
+    #view-app .assistant-match-card-actions .live-score-inputs input,
+    #view-app #matchModal .match-modal-score,
+    #view-app #matchModal .match-modal-scorer-input {
+        font-size: 16px;
+    }
+
+    #view-app #matchModal .match-modal-content {
+        width: min(96vw, 100%);
+        max-width: 100%;
+        margin: 2vh auto;
+        max-height: min(94dvh, calc(100dvh - var(--safe-top) - var(--safe-bottom) - 16px));
+        padding: 16px 12px 14px;
+    }
+
+    #view-app #shareModal .modal-content {
+        width: calc(100% - 16px);
+        max-width: 100%;
+        padding: 16px 14px;
+    }
+
+    #view-app .share-tabs {
+        flex-wrap: wrap;
+    }
+
+    #view-app .share-tab {
+        min-height: 44px;
+    }
+}
+
+/* Live split od 768 (TL) */
+@media (min-width: 768px) {
+    #view-app .live-split {
+        display: grid;
+        grid-template-columns: 1.55fr 1fr;
+        gap: 10px;
+        align-items: start;
+    }
+
+    #view-app .live-split-schedule,
+    #view-app .live-split-standings {
+        max-height: calc(100dvh - 210px);
+        overflow-y: auto;
+        padding-right: 4px;
+    }
 }
 
 /* =========================================================
-   TABLET landscape + LAPTOP mały (od 1024)
+   D — Desktop (od 1366)
    ========================================================= */
-@media (min-width: 1024px) {
-    :root {
-        --page-pad-x: 16px;
-    }
-
-    #view-app .container {
-        max-width: var(--max-content-app, 1200px);
-    }
-}
-
-/* =========================================================
-   LAPTOP (od 1280)
-   ========================================================= */
-@media (min-width: 1280px) {
+@media (min-width: 1366px) {
     :root {
         --page-pad-x: 20px;
     }
@@ -193,9 +501,6 @@ body {
     }
 }
 
-/* =========================================================
-   DUŻY LAPTOP / MAŁY MONITOR (od 1536)
-   ========================================================= */
 @media (min-width: 1536px) {
     #view-app .container,
     #view-app .container.container--live {
@@ -209,7 +514,7 @@ body {
 }
 
 /* =========================================================
-   MONITOR STACJONARNY ~24" FHD+ (od 1920)
+   LD — Large Desktop (od 1920)
    ========================================================= */
 @media (min-width: 1920px) {
     :root {
@@ -234,8 +539,7 @@ body {
 }
 
 /* =========================================================
-   ORIENTACJA — telefon i tablet w poziomie
-   (niski viewport: nie gubić treści, zmniejszyć sticky chrome)
+   ORIENTACJA — niski viewport
    ========================================================= */
 @media (orientation: landscape) and (max-height: 500px) {
     #view-app header {
@@ -244,195 +548,49 @@ body {
     }
 
     #view-app .nav-tabs {
-        top: 40px;
+        top: var(--header-h, 40px);
     }
 
     #view-app .nav-tabs button {
         padding: 8px 6px;
-        font-size: 11px;
-    }
-
-    #view-app {
-        padding-bottom: calc(48px + var(--safe-bottom));
+        min-height: 40px;
     }
 
     #view-app .live-split-schedule,
     #view-app .live-split-standings {
+        max-height: calc(100dvh - 140px);
+    }
+
+    #view-demo-story .demo-embed-app,
+    #view-demo-story .demo-hall-embed-host {
+        max-height: min(85dvh, 520px);
+    }
+
+    #view-demo-story .demo-hall-embed-host {
         max-height: none;
-        overflow: visible;
-    }
-
-    #view-login .login-card {
-        max-height: calc(100dvh - 24px);
-        overflow-y: auto;
+        height: auto;
     }
 }
 
-/* Telefon / tablet landscape: treść czytelna, bez przycinania */
-@media (orientation: landscape) and (max-width: 1023px) {
-    #view-app .hall-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    #view-app .container {
-        padding-left: max(12px, var(--safe-left));
-        padding-right: max(12px, var(--safe-right));
-    }
-
-    #view-app .awards-banner,
-    #view-app .podium-top-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-/* Tablet landscape szeroki (≥900, nadal < desktop split intent) */
-@media (orientation: landscape) and (min-width: 900px) and (max-width: 1023px) {
+/* Hall: 2-col dopiero od 768 (nie phone landscape) */
+@media (orientation: landscape) and (min-width: 768px) and (max-width: 1365px) {
     #view-app .live-split {
         display: grid;
         grid-template-columns: 1.4fr 1fr;
         gap: 10px;
-        align-items: start;
     }
 }
 
-/* Preferuj mniejszy ruch na urządzeniach z reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-    #view-app .live-match-row,
-    #view-app .dashboard-stat {
-        transition: none;
+    #view-app *,
+    #view-demo-story * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
-/* =========================================================
-   ADMIN (admin.turniejomat.pl) — telefon / tablet / monitor
-   ========================================================= */
-#view-admin {
-    padding-left: max(12px, var(--safe-left));
-    padding-right: max(12px, var(--safe-right));
-    padding-bottom: max(20px, var(--safe-bottom));
-    min-height: 100dvh;
-    box-sizing: border-box;
-}
-
-#view-admin .container {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#view-admin .admin-table-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    max-width: 100%;
-}
-
-@media (max-width: 639px) {
-    #view-admin {
-        padding: calc(12px + var(--safe-top)) max(10px, var(--safe-left)) calc(16px + var(--safe-bottom)) max(10px, var(--safe-right));
-    }
-
-    #view-admin .container {
-        max-width: 100%;
-    }
-
-    #view-admin .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    #view-admin .card {
-        padding: 14px 12px;
-    }
-
-    #view-admin .admin-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
-
-    #view-admin .admin-kpi-value {
-        font-size: 20px;
-    }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-    #view-admin .form-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    #view-admin .form-grid > :first-child {
-        grid-column: 1 / -1;
-    }
-}
-
-@media (min-width: 1280px) {
-    #view-admin .container {
-        max-width: min(1440px, calc(100vw - 48px));
-    }
-}
-
-@media (min-width: 1920px) {
-    #view-admin .container {
-        max-width: min(1600px, calc(100vw - 64px));
-    }
-}
-
-@media (orientation: landscape) and (max-height: 500px) {
-    #view-admin {
-        padding-top: calc(8px + var(--safe-top));
-    }
-
-    #view-admin .card {
-        padding: 12px;
-        margin-bottom: 12px;
-    }
-}
-
-/* =========================================================
-   DEMO STORY — czytelność na telefonie / tablecie (portret + poziom)
-   ========================================================= */
-@media (max-width: 639px) {
-    #view-demo-story .demo-screen {
-        padding: 16px 12px 40px;
-    }
-
-    #view-demo-story .demo-h1 {
-        font-size: clamp(20px, 6vw, 26px);
-    }
-
-    #view-demo-story .demo-embed-app,
-    #view-demo-story .demo-hall-embed-host {
-        max-height: min(70vh, 640px);
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    #view-demo-story .demo-fan-tab {
-        min-width: 0;
-        flex: 1 1 30%;
-        font-size: 10px;
-        padding: 10px 6px;
-    }
-
-    #view-demo-story .demo-btn-primary,
-    #view-demo-story .demo-btn-landing,
-    #view-demo-story .demo-btn-secondary {
-        min-height: 48px;
-    }
-}
-
-@media (orientation: landscape) and (max-width: 1023px) {
-    #view-demo-story .demo-embed-app,
-    #view-demo-story .demo-hall-embed-host {
-        max-height: min(78vh, 520px);
-    }
-
-    #view-demo-story .demo-screen[data-step="2"],
-    #view-demo-story .demo-screen[data-step="3"],
-    #view-demo-story .demo-screen[data-step="5"] {
-        max-width: min(960px, 100%);
-    }
-}
-
-/* Touch targets — telefon / tablet */
-@media (max-width: 1023px) {
+/* Touch targets — telefon / tablet do D */
+@media (max-width: 1365px) {
     #view-app .nav-tabs button,
     #view-app .filter-btn,
     #view-login .btn-submit,
