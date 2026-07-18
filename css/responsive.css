@@ -140,6 +140,16 @@ body:has(#view-demo-story.active) #firebase-status {
     visibility: hidden !important;
 }
 
+body.assistant-view #view-app .header-status-badges {
+    display: flex !important;
+}
+
+body.assistant-view #view-app .header-status-badges #firebase-status,
+body.assistant-view #view-app .header-status-badges #last-save-info {
+    position: static !important;
+    inset: auto !important;
+}
+
 #view-app .container {
     max-width: var(--max-content-app, 1200px);
     padding-left: max(var(--page-pad-x, 10px), var(--safe-left));
@@ -346,6 +356,17 @@ body:has(#view-demo-story.active) #firebase-status {
         width: 100%;
         max-width: 100%;
         min-width: 0;
+    }
+
+    #view-admin table.licenses-table {
+        min-width: 0 !important;
+        width: 100%;
+    }
+
+    #view-admin .lic-actions .action-btn {
+        flex: 1 1 calc(50% - 5px);
+        min-width: 0;
+        white-space: normal;
     }
 
     #view-demo-story .demo-screen {

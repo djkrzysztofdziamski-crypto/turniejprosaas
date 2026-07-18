@@ -1,25 +1,23 @@
 /**
- * Turniejomat landing (turniejomat.pl) — responsywność
- * Skala zsynchronizowana z :root w brand-tokens.css (--bp-*).
+ * Turniejomat landing — responsywność (kanoniczna skala)
+ * Sync: landing/css/brand-tokens.css · docs/UX_RESPONSIVE_AUDIT.md
  *
- *   phone ……… max-width: 479px   (6–7" portret)
- *   phone-lg …… max-width: 639px
- *   tablet ……… 640–1023           (8–11" portret / phone landscape)
- *   desktop …… min 1024
- *   laptop ……… min 1280
- *   monitor …… min 1920           (~24" FHD+)
- *   short ……… max-height: 500px + landscape
+ *   MP ≤479 · LMP ≤767 · TL 768–1365 · D ≥1366 · LD ≥1920
  */
 
 html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 body {
     padding-left: var(--safe-left, 0px);
     padding-right: var(--safe-right, 0px);
     min-height: 100dvh;
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 .wrap {
@@ -32,10 +30,23 @@ body {
     padding-top: calc(48px + var(--safe-top, 0px));
 }
 
+.pricing-toggle {
+    flex-wrap: wrap;
+    max-width: 100%;
+    justify-content: center;
+}
+
+.autopay-methods__img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* =========================================================
-   TELEFON 6–7" — portret
+   MP + LMP — phone polish do 767
    ========================================================= */
-@media (max-width: 479px) {
+@media (max-width: 767px) {
     .wrap {
         padding-left: max(12px, var(--safe-left, 0px));
         padding-right: max(12px, var(--safe-right, 0px));
@@ -104,8 +115,13 @@ body {
         padding: 20px 16px;
     }
 
-    .outcome p {
-        font-size: 15px !important;
+    .outcome-h1 {
+        font-size: clamp(16px, 4.6vw, 24px);
+    }
+
+    .outcome-sub,
+    .outcome-micro {
+        font-size: 14px !important;
     }
 
     .checkout-email-wrap,
@@ -115,24 +131,36 @@ body {
 
     .checkout-consent {
         align-items: flex-start;
-    }
-}
-
-@media (max-width: 639px) {
-    .pricing-grid {
-        grid-template-columns: 1fr;
+        gap: 10px;
+        font-size: 13px;
+        line-height: 1.45;
     }
 
     .footer-links {
         gap: 12px 14px;
         font-size: 12px;
     }
+
+    .autopay-methods {
+        overflow-x: visible;
+    }
+
+    .autopay-methods__img {
+        min-width: 0 !important;
+        width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+    .hero-logo {
+        max-width: 200px;
+    }
 }
 
 /* =========================================================
-   TABLET 8–11" / phone landscape szeroki
+   TL — 768–1365
    ========================================================= */
-@media (min-width: 640px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1365px) {
     .wrap {
         max-width: var(--max-content-tablet, 960px);
     }
@@ -163,9 +191,9 @@ body {
 }
 
 /* =========================================================
-   LAPTOP + MONITOR ~24"
+   D + LD
    ========================================================= */
-@media (min-width: 1280px) {
+@media (min-width: 1366px) {
     .wrap {
         max-width: var(--max-content, 1080px);
     }
@@ -194,7 +222,7 @@ body {
 }
 
 /* =========================================================
-   ORIENTACJA — telefon / tablet w poziomie
+   Short landscape — bez 2-col pricing na telefonie
    ========================================================= */
 @media (orientation: landscape) and (max-height: 500px) {
     .hero {
@@ -222,11 +250,12 @@ body {
 
     .btn {
         width: auto;
-        min-width: 200px;
+        min-width: 160px;
     }
 }
 
-@media (orientation: landscape) and (max-width: 1023px) {
+/* 2-col w landscape dopiero od tabletu 768 */
+@media (orientation: landscape) and (min-width: 768px) and (max-width: 1365px) {
     .grid-3,
     .steps,
     .pricing-grid {

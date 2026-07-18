@@ -124,12 +124,11 @@
             border-top: 1px solid rgba(72, 101, 129, 0.4);
         }
         footer a { margin: 0 8px; }
-        @media (max-width: 479px) {
+        @media (max-width: 767px) {
             .autopay-methods {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: visible;
             }
-            .autopay-methods__img { min-width: 420px; }
+            .autopay-methods__img { min-width: 0; width: 100%; height: auto; }
             .cta-row { flex-direction: column; }
             .btn { width: 100%; }
         }

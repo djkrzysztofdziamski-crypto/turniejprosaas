@@ -103,13 +103,13 @@
   height: auto;
   max-width: 100%;
 }
-@media (max-width: 479px) {
+@media (max-width: 767px) {
   .autopay-methods {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: visible;
   }
   .autopay-methods__img {
-    min-width: 420px;
+    min-width: 0;
+    width: 100%;
   }
 }
 

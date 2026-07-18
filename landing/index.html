@@ -6,7 +6,7 @@
     <title>Turniejomat.pl — Spokój organizatora w dniu turnieju</title>
     <meta name="description" content="Turniejomat — wyniki live dla rodziców, tabele i podium po finałe. Pakiet weekendowy 79 zł lub pakiet miesięczny 149 zł. Demo bez rejestracji.">
     <link rel="icon" type="image/webp" href="icon.webp">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260716r2">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260718ux10">
     <style>
         :root {
             --bg-deep: var(--color-bg-deep);
@@ -100,17 +100,64 @@
         .card-icon { font-size: 28px; margin-bottom: 12px; }
         .card p { margin: 0; color: var(--text-muted); font-size: 15px; }
 
-        /* OUTCOME BANNER */
+        /* OUTCOME BANNER — forma jak Demo Story 6/6 */
         .outcome {
             background: var(--bg-card);
             border: 2px solid var(--gold);
             border-radius: 14px;
             padding: 28px 24px;
             text-align: center;
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
         }
-        .outcome strong { color: #fff; }
+        .outcome .eyebrow {
+            margin-bottom: 14px;
+        }
+        .outcome-h1 {
+            font-family: var(--font-display);
+            font-size: clamp(18px, 4.2vw, 30px);
+            font-weight: 800;
+            line-height: 1.25;
+            margin: 0 0 14px;
+            color: #ffe566;
+            text-shadow: 0 0 18px rgba(255, 204, 0, 0.4), 0 2px 0 rgba(11, 31, 51, 0.35);
+            animation: landing-outcome-wow 2.8s ease-in-out infinite;
+        }
+        .outcome-sub,
+        .outcome-micro {
+            margin: 0 0 12px;
+            font-size: clamp(14px, 2.4vw, 17px);
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+        .outcome-micro {
+            margin-bottom: 0;
+            color: var(--text-soft);
+            font-size: clamp(13px, 2.2vw, 15px);
+        }
+        @keyframes landing-outcome-wow {
+            0%, 100% {
+                color: #ffe566;
+                filter: brightness(1);
+                text-shadow: 0 0 14px rgba(255, 204, 0, 0.35), 0 2px 0 rgba(11, 31, 51, 0.3);
+                transform: scale(1);
+            }
+            40% {
+                color: #fff3a8;
+                filter: brightness(1.14);
+                text-shadow: 0 0 28px rgba(255, 230, 102, 0.65), 0 0 48px rgba(255, 204, 0, 0.35);
+                transform: scale(1.02);
+            }
+            70% {
+                color: #ffcc00;
+                filter: brightness(1.06);
+                text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+                transform: scale(1.01);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .outcome-h1 { animation: none; }
+        }
 
         /* STEPS */
         .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 36px; }
@@ -130,6 +177,9 @@
         #cennik { scroll-margin-top: 24px; }
         .pricing-toggle {
             display: inline-flex;
+            flex-wrap: wrap;
+            max-width: 100%;
+            justify-content: center;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -270,14 +320,15 @@
             padding: 8px 10px;
             background: rgba(255,255,255,0.95);
         }
-        @media (max-width: 479px) {
+        @media (max-width: 767px) {
             .autopay-methods {
                 padding: 10px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: visible;
             }
             .autopay-methods__img {
-                min-width: 420px;
+                min-width: 0;
+                width: 100%;
+                height: auto;
             }
         }
 
@@ -305,7 +356,7 @@
         footer a:hover { color: #57d9a3; }
         .footer-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 12px; }
     </style>
-    <link rel="stylesheet" href="css/responsive.css?v=20260716r2">
+    <link rel="stylesheet" href="css/responsive.css?v=20260718ux10">
 </head>
 <body>
 
@@ -324,7 +375,7 @@ SEKCJA 1 — HERO
     <div class="wrap">
         <img class="hero-logo" src="logo.webp" alt="Turniejomat">
         <p class="eyebrow">Dla koordynatorów turniejów piłkarskich</p>
-        <h1>Koniec z chaosem w dniu turnieju.<br>Spokój przy każdym boisku.</h1>
+        <h1>Koniec z chaosem w dniu turnieju. Spokój przy każdym boisku.</h1>
         <p class="lead">
             Turniejomat to system na dzień zawodów: wpisujesz wyniki po meczach,
             <strong style="color:#fff;">rodzice sprawdzają live na telefonie</strong>,
@@ -371,11 +422,10 @@ SEKCJA 3 — OUTCOME (North Star)
 <section class="section section--tight">
     <div class="wrap">
         <div class="outcome">
-            <p class="eyebrow" style="margin-bottom:8px;">Obietnica Turniejomat</p>
-            <p style="font-size:18px; margin:0; color:var(--text-muted);">
-                <strong>16 drużyn · wyniki live dla rodziców · podium po finałe — bez chaosu na boisku.</strong><br>
-                Mniej niż wpisowe jednej drużyny, a cały turniej pod kontrolą.
-            </p>
+            <p class="eyebrow">Obietnica Turniejomat</p>
+            <h2 class="outcome-h1">Twój turniej może wyglądać tak samo</h2>
+            <p class="outcome-sub">Dowolna ilość drużyn, wyniki LIVE dla kibiców i rodziców, podium po finale w 3 sekundy, bez chaosu na boisku, orliku czy hali</p>
+            <p class="outcome-micro">Mniej niż wpisowe jednej drużyny, a cały turniej spokój i wszystko pod kontrolą</p>
         </div>
     </div>
 </section>
