@@ -7159,11 +7159,36 @@
 
         window.saveMatch = () => {
             if (!state.active) return;
-            state.active.g1 = parseInt(document.getElementById('mG1').value)||0; state.active.g2 = parseInt(document.getElementById('mG2').value)||0;
-            if (state.active.isPo && state.active.g1 === state.active.g2) {
-                state.active.pen1 = parseInt(document.getElementById('mPen1').value); state.active.pen2 = parseInt(document.getElementById('mPen2').value);
-                if (isNaN(state.active.pen1) || isNaN(state.active.pen2) || state.active.pen1 === state.active.pen2) { alert("Seria karnych musi mieć zwycięzcę — wpisz końcowy wynik z przewagą (np. 5:4, nie 4:4 ani 3:3)."); return; }
-            } else { state.active.pen1 = null; state.active.pen2 = null; }
+            const newG1 = parseInt(document.getElementById('mG1').value)||0;
+            const newG2 = parseInt(document.getElementById('mG2').value)||0;
+            let newPen1 = null;
+            let newPen2 = null;
+            if (state.active.isPo && newG1 === newG2) {
+                newPen1 = parseInt(document.getElementById('mPen1').value);
+                newPen2 = parseInt(document.getElementById('mPen2').value);
+                if (isNaN(newPen1) || isNaN(newPen2) || newPen1 === newPen2) { alert("Seria karnych musi mieć zwycięzcę — wpisz końcowy wynik z przewagą (np. 5:4, nie 4:4 ani 3:3)."); return; }
+            }
+
+            const snap = state.active._scoreSnapshot;
+            if (state.active.played && snap) {
+                const scoreChanged = snap.g1 !== newG1 || snap.g2 !== newG2 ||
+                    (snap.pen1 == null ? null : snap.pen1) !== newPen1 ||
+                    (snap.pen2 == null ? null : snap.pen2) !== newPen2;
+                if (scoreChanged) {
+                    if (!confirm('UWAGA: Zmiana zapisanego wyniku meczu wpłynie na tabelę i statystyki. Czy na pewno chcesz zmienić wynik?')) return;
+                    if (!confirm('Potwierdź ponownie: naprawdę zmieniasz wynik tego meczu w harmonogramie? Tej operacji nie cofniesz jednym kliknięciem.')) return;
+                }
+            }
+
+            const s1Len = (state.active.s1 || []).length;
+            const s2Len = (state.active.s2 || []).length;
+            if (s1Len > newG1 || s2Len > newG2) {
+                alert('Liczba strzelców nie może przekraczać liczby bramek (' + newG1 + ':' + newG2 + '). Usuń zbędnych strzelców albo popraw wynik.');
+                return;
+            }
+
+            state.active.g1 = newG1; state.active.g2 = newG2;
+            state.active.pen1 = newPen1; state.active.pen2 = newPen2;
 
             (state.active.s1 || []).forEach(s => {
                 if (s.name) s.name = s.name.trim().toUpperCase();
@@ -7173,6 +7198,7 @@
                 if (s.name) s.name = s.name.trim().toUpperCase();
             });
 
+            delete state.active._scoreSnapshot;
             state.active.played = true; const arr = state.active.isPo ? state.playoffs : state.matches;
             arr[arr.findIndex(x => x.id === state.active.id)] = state.active;
 
@@ -7414,14 +7440,30 @@
             document.getElementById('btn-sc1').innerText = "+ GOL " + m.t1.name; document.getElementById('btn-sc2').innerText = "+ GOL " + m.t2.name;
             document.getElementById('mPen1').value = m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : '';
             document.getElementById('mPen2').value = m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : '';
+            state.active._scoreSnapshot = {
+                g1: state.active.g1,
+                g2: state.active.g2,
+                pen1: m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : null,
+                pen2: m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : null
+            };
             window.checkPenaltyVisibility(); window.renderSc(); document.getElementById('matchModal').style.display='block';
         };
 
         window.addSc = (n) => {
             if (!state.active) return;
             if (!state.active['s' + n]) state.active['s' + n] = [];
+            const goals = parseInt(state.active['g' + n], 10) || 0;
+            if (state.active.played) {
+                if (state.active['s' + n].length >= goals) {
+                    alert('Drużyna strzeliła tylko ' + goals + ' ' + (goals === 1 ? 'bramkę' : (goals >= 2 && goals <= 4 ? 'bramki' : 'bramek')) + ' — nie można dodać kolejnego strzelca.');
+                    return;
+                }
+                state.active['s' + n].push({ name: '' });
+                window.renderSc();
+                return;
+            }
             state.active['s' + n].push({ name: '' });
-            state.active['g' + n] = (parseInt(state.active['g' + n], 10) || 0) + 1;
+            state.active['g' + n] = goals + 1;
             document.getElementById('mG' + n).value = state.active['g' + n];
             window.checkPenaltyVisibility();
             window.renderSc();
@@ -7432,12 +7474,7 @@
         window.removeSc = (n, i) => {
             if (!state.active || !state.active['s' + n]) return;
             state.active['s' + n].splice(i, 1);
-            state.active['g' + n] = Math.max(0, (parseInt(state.active['g' + n], 10) || 0) - 1);
-            document.getElementById('mG' + n).value = state.active['g' + n];
-            window.checkPenaltyVisibility();
             window.renderSc();
-            window.pushLiveMatchFromActive();
-            if (isHallMode) window.renderHallView();
         };
 
         window.renderSc = () => {
