@@ -486,15 +486,8 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
     }
 }
 
-/* Live split od 768 (TL) */
+/* Live Na żywo: jeden panel (Mecze | Tabele) — bez grida 2-col */
 @media (min-width: 768px) {
-    #view-app .live-split {
-        display: grid;
-        grid-template-columns: 1.55fr 1fr;
-        gap: 10px;
-        align-items: start;
-    }
-
     #view-app .live-split-schedule,
     #view-app .live-split-standings {
         max-height: calc(100dvh - 210px);
@@ -527,11 +520,6 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
     #view-app .container.container--live {
         max-width: var(--max-content-monitor, 1600px);
     }
-
-    #view-app .live-split {
-        grid-template-columns: 1.6fr 1fr;
-        gap: 14px;
-    }
 }
 
 /* =========================================================
@@ -551,11 +539,6 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
 
     #view-app .card {
         padding: 14px 16px;
-    }
-
-    #view-app .live-split {
-        grid-template-columns: 1.65fr 1fr;
-        gap: 16px;
     }
 }
 
@@ -593,14 +576,7 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
     }
 }
 
-/* Hall: 2-col dopiero od 768 (nie phone landscape) */
-@media (orientation: landscape) and (min-width: 768px) and (max-width: 1365px) {
-    #view-app .live-split {
-        display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 10px;
-    }
-}
+/* Hall: 2-col dopiero od 768 (nie phone landscape) — bez live-split grid */
 
 @media (prefers-reduced-motion: reduce) {
     #view-app *,

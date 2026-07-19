@@ -48,7 +48,7 @@
 
     const EMBED_NODES = {
 
-        fan: ['match-filter-bar', 'matches-container', 'tables-container', 'playoff-container'],
+        fan: ['fan-matches-toolbar', 'match-filter-bar', 'matches-container', 'fan-tables-toolbar', 'tables-container', 'playoff-container'],
 
         organizer: ['tournament-dashboard'],
 
@@ -954,6 +954,72 @@
 
 
 
+    function ensureFanSubnavInHost(hostEl) {
+
+        if (!hostEl) return;
+
+        let matchesBar = document.getElementById('fan-matches-toolbar');
+
+        if (!matchesBar) {
+
+            hostEl.insertAdjacentHTML('afterbegin',
+
+                '<div id="fan-matches-toolbar" class="fan-subnav">' +
+
+                '<button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>' +
+
+                '</div>');
+
+            matchesBar = document.getElementById('fan-matches-toolbar');
+
+        } else if (!hostEl.contains(matchesBar)) {
+
+            hostEl.insertBefore(matchesBar, hostEl.firstChild);
+
+        }
+
+        let tablesBar = document.getElementById('fan-tables-toolbar');
+
+        if (!tablesBar) {
+
+            const tables = document.getElementById('tables-container');
+
+            tablesBar = document.createElement('div');
+
+            tablesBar.id = 'fan-tables-toolbar';
+
+            tablesBar.className = 'fan-subnav';
+
+            tablesBar.innerHTML = '<button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>';
+
+            if (tables && hostEl.contains(tables)) {
+
+                hostEl.insertBefore(tablesBar, tables);
+
+            } else if (tables && tables.parentNode) {
+
+                tables.parentNode.insertBefore(tablesBar, tables);
+
+            } else {
+
+                hostEl.appendChild(tablesBar);
+
+            }
+
+        } else if (!hostEl.contains(tablesBar)) {
+
+            const tables = document.getElementById('tables-container');
+
+            if (tables && hostEl.contains(tables)) hostEl.insertBefore(tablesBar, tables);
+
+            else hostEl.appendChild(tablesBar);
+
+        }
+
+    }
+
+
+
     function mountNodes(nodeIds, hostEl) {
 
         nodeIds.forEach(function (id) {
@@ -1005,6 +1071,8 @@
         };
 
         EMBED_NODES.fan.forEach(function (id) {
+
+            if (id.indexOf('fan-') === 0) return;
 
             const el = document.getElementById(id);
 
@@ -1065,6 +1133,8 @@
         track('demo_story_fan_tab_switched', { tab_name: tab });
 
         saveDemoStorySession();
+
+        if (global.syncFanSubnav) global.syncFanSubnav();
 
     }
 
@@ -1519,6 +1589,13 @@
 
         mountNodes(EMBED_NODES.fan, hostEl);
 
+        ['fan-matches-toolbar', 'fan-tables-toolbar'].forEach(function (id) {
+            const el = document.getElementById(id);
+            if (el && hostEl && !hostEl.contains(el)) hostEl.appendChild(el);
+        });
+
+        ensureFanSubnavInHost(hostEl);
+
         renderFanTabContent(demoFanTab);
 
         track('demo_story_fan_view_viewed', { default_tab: demoFanTab });
@@ -1822,6 +1899,8 @@
 
             if (global.calcTables) global.calcTables();
 
+            if (global.syncLivePane) global.syncLivePane();
+
         }
 
         const hallHost = document.getElementById('demo-hall-embed-host');
@@ -1927,6 +2006,19 @@
     }
 
 
+
+    function scrollDemoStoryToTop() {
+        try {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            const view = document.getElementById('view-demo-story');
+            if (view) view.scrollTop = 0;
+            document.querySelectorAll(
+                '#view-demo-story .demo-screen.active, #view-demo-story .demo-embed-app, #view-demo-story .demo-hall-embed-host'
+            ).forEach(function (el) { el.scrollTop = 0; });
+        } catch (_) { /* ignore */ }
+    }
 
     function renderCurrentStep() {
 
@@ -2044,6 +2136,8 @@
         track('demo_story_step_viewed', { step_id: demoStoryStep, step_name: stepDef.key });
 
         saveDemoStorySession();
+
+        scrollDemoStoryToTop();
 
     }
 

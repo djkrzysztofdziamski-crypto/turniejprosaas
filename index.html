@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="demo-story-scenario.bundle.js?v=20260718ux9"></script>
-    <script src="demo-story.js?v=20260718ux9"></script>
+    <script src="demo-story.js?v=20260719livepane"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -396,12 +396,35 @@
         #view-app th { background: var(--color-table-head-bg, #eef2ff); color: var(--color-table-head-text, #334155); padding: 5px 7px; border: 1px solid var(--color-app-border-strong, #cbd5e1); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
         #view-app td { padding: 4px 7px; border: 1px solid var(--color-app-border); text-align: center; min-height: var(--row-height-table, 30px); box-sizing: border-box; line-height: 1.25; font-size: var(--font-size-table, 12px); }
         #view-app tr:nth-child(even) { background-color: var(--color-app-surface-muted, #f1f5f9); }
-        /* --- Na żywo: split harmonogram + tabele --- */
+        /* --- Na żywo: panele Mecze | Tabele (przełączanie, bez splitu) --- */
         #view-app .live-toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
         #view-app .live-toolbar-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
         #view-app .live-btn-secondary { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
         #view-app .live-btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
-        #view-app .live-split { display: block; max-width: 100%; overflow-x: hidden; }
+        #view-app .live-pane-toggle {
+            background: var(--color-accent, #0052cc);
+            border-color: var(--color-accent, #0052cc);
+            color: #fff;
+        }
+        #view-app .live-pane-toggle:hover { background: #0747a6; border-color: #0747a6; color: #fff; }
+        #view-app .live-split,
+        #view-demo-story .demo-embed-app .live-split {
+            display: block !important;
+            max-width: 100%;
+            overflow-x: hidden;
+            grid-template-columns: none !important;
+        }
+        #view-app .live-split.live-pane--matches .live-split-standings,
+        #view-demo-story .live-split.live-pane--matches .live-split-standings { display: none !important; }
+        #view-app .live-split.live-pane--tables .live-split-schedule,
+        #view-demo-story .live-split.live-pane--tables .live-split-schedule { display: none !important; }
+        #view-app .live-pane--tables #live-match-filter-bar,
+        #view-demo-story .live-pane--tables #live-match-filter-bar { display: none !important; }
+        body.print-live .live-split.live-pane--matches .live-split-standings,
+        body.print-live .live-split.live-pane--tables .live-split-schedule,
+        body.print-live .live-pane--tables #live-match-filter-bar {
+            display: block !important;
+        }
         #view-app .live-split-schedule,
         #view-app .live-split-standings { min-width: 0; max-width: 100%; }
         #view-app .live-panel-head { font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display); }
@@ -498,7 +521,6 @@
             vertical-align: middle;
         }
         @media (min-width: 768px) {
-            #view-app .live-split { display: grid; grid-template-columns: 1.55fr 1fr; gap: 10px; align-items: start; }
             #view-app .live-split-schedule,
             #view-app .live-split-standings { max-height: calc(100dvh - 210px); overflow-y: auto; padding-right: 4px; }
         }
@@ -1682,6 +1704,48 @@
         body.fan-view #view-app .match-card { pointer-events: none; }
         body.fan-view #view-app .nav-tabs button.active { background: #e8f0fe; }
 
+        /* Kibic / Demo Story — skrót Tabele ↔ Mecze przy liście meczów */
+        .fan-subnav {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            margin: 0 0 8px;
+            background: #fff;
+            border: 1px solid var(--color-app-border-strong, #c1c7d0);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            position: sticky;
+            top: var(--header-h, 56px);
+            z-index: 12;
+        }
+        body.fan-view #view-app .fan-subnav,
+        #view-demo-story .demo-fan-embed-host .fan-subnav {
+            top: calc(var(--header-h, 56px) + 4px);
+        }
+        .fan-subnav-btn {
+            background: #fff;
+            border: 1px solid var(--color-app-border-strong, #c1c7d0);
+            color: var(--color-app-text, #172b4d);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--font-body);
+            min-height: 44px;
+        }
+        .fan-subnav-btn:hover { border-color: var(--color-accent, #0052cc); color: var(--color-accent, #0052cc); }
+        .fan-subnav-btn--primary {
+            background: var(--color-accent, #0052cc);
+            border-color: var(--color-accent, #0052cc);
+            color: #fff;
+            flex: 1;
+            text-align: center;
+        }
+        .fan-subnav-btn--primary:hover { background: #0747a6; border-color: #0747a6; color: #fff; }
+        .fan-subnav.fan-subnav--visible { display: flex; }
+
         /* --- PAKIET PREMIUM 5+: PODIUM --- */
         #view-app .podium-scene { background: linear-gradient(180deg, #0b1f33 0%, #132f4c 45%, #f0f4f8 45%); border-radius: var(--radius-lg, 14px); padding: 20px 12px 16px; margin-bottom: 12px; }
         #view-app .podium-scene .podium-main { border: none; box-shadow: 0 8px 32px rgba(255,204,0,0.35); margin-bottom: 16px; }
@@ -2058,6 +2122,10 @@
         #view-demo-story .demo-screen[data-step="2"],
         #view-demo-story .demo-screen[data-step="3"],
         #view-demo-story .demo-screen[data-step="5"] { max-width: 960px; }
+        #view-demo-story .demo-screen[data-step="3"] .demo-h1,
+        #view-demo-story .demo-screen[data-step="3"] .demo-sub {
+            text-align: center;
+        }
         #view-demo-story .demo-embed-app #btn-start-po { display: none !important; }
         #view-demo-story .demo-live-embed-host #nazywo { display: block !important; }
         /* Udostępnij / Drukuj — widoczne i spójne z .live-btn-secondary */
@@ -2078,6 +2146,11 @@
             cursor: pointer;
             font-family: var(--font-body, sans-serif);
             min-height: 36px;
+        }
+        #view-demo-story .demo-live-embed-host .live-pane-toggle {
+            background: var(--color-accent, #0052cc) !important;
+            border-color: var(--color-accent, #0052cc) !important;
+            color: #fff !important;
         }
         #view-demo-story .demo-hall-embed-host {
             background: #fff;
@@ -2785,9 +2858,6 @@
         #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] th { padding: 1px 3px; font-size: 7px; }
         #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] td { padding: 1px 3px; font-size: 10px; line-height: 1.15; }
         @media (min-width: 768px) {
-            #view-demo-story .demo-embed-app .live-split {
-                display: grid; grid-template-columns: 1.55fr 1fr; gap: 10px; align-items: start;
-            }
             #view-demo-story .demo-embed-app .live-split-schedule,
             #view-demo-story .demo-embed-app .live-split-standings {
                 max-height: 420px; overflow-y: auto; padding-right: 4px; min-width: 0;
@@ -3176,7 +3246,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=20260718ux12">
+    <link rel="stylesheet" href="css/responsive.css?v=20260719livepane">
 </head>
 <body>
 
@@ -3568,6 +3638,9 @@
 
         <div id="mecze" class="tab-content">
             <div class="filter-bar match-filter-bar" id="match-filter-bar"></div>
+            <div id="fan-matches-toolbar" class="fan-subnav">
+                <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>
+            </div>
             <div id="matches-container" class="matches-render-target"></div>
         </div>
 
@@ -3576,6 +3649,7 @@
                 <div class="live-toolbar">
                     <div class="filter-bar match-filter-bar" id="live-match-filter-bar" style="flex:1; margin:0;"></div>
                     <div class="live-toolbar-actions">
+                        <button type="button" id="live-pane-toggle" class="live-btn-secondary live-pane-toggle" onclick="toggleLivePane()">Tabele</button>
                         <button type="button" class="live-btn-secondary" onclick="showShareModal('fan')">Udostępnij</button>
                         <button type="button" class="live-btn-secondary" onclick="window.printLiveView()">Drukuj</button>
                     </div>
@@ -3597,7 +3671,13 @@
             </div>
         </div>
         
-        <div id="tabele" class="tab-content"><div id="tables-container" class="tables-render-target"></div><button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button></div>
+        <div id="tabele" class="tab-content">
+            <div id="fan-tables-toolbar" class="fan-subnav">
+                <button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>
+            </div>
+            <div id="tables-container" class="tables-render-target"></div>
+            <button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button>
+        </div>
         <div id="playoff" class="tab-content">
             <div class="filter-bar match-filter-bar" id="playoff-match-filter-bar"></div>
             <div id="playoff-container"></div>
@@ -3757,6 +3837,15 @@
         }
         window.addEventListener('resize', apply);
         window.addEventListener('orientationchange', apply);
+        let fanSubnavResizeTimer;
+        function scheduleFanSubnavSync() {
+            clearTimeout(fanSubnavResizeTimer);
+            fanSubnavResizeTimer = setTimeout(function () {
+                if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+            }, 120);
+        }
+        window.addEventListener('resize', scheduleFanSubnavSync);
+        window.addEventListener('orientationchange', scheduleFanSubnavSync);
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
         else apply();
         setTimeout(apply, 300);
@@ -6215,6 +6304,7 @@
                     metaEl.textContent = '';
                     metaEl.hidden = true;
                 }
+                if (typeof window.syncLivePane === 'function') window.syncLivePane();
             }, 500);
         };
 
@@ -7290,12 +7380,18 @@
             }
 
             if(t==='tabele') window.calcTables();
-            if(t==='nazywo') { window.renderFilterBar(); window.filterAndRenderMatches(); window.calcTables(); }
+            if(t==='nazywo') {
+                window.renderFilterBar();
+                window.filterAndRenderMatches();
+                window.calcTables();
+                if (typeof window.syncLivePane === 'function') window.syncLivePane();
+            }
             if(t==='grupy') window.renderGroupsList();
             if(t==='podium') window.renderPodium();
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
             if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
+            if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
         };
 
         window.openMatch = (id, isPo=false) => {
@@ -7912,7 +8008,10 @@
             document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color: #ffcc00; background: rgba(0,0,0,0.3); padding: 3px 10px; border-radius: 12px; font-size: 11px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px;">🔴 WYNIKI LIVE (KIBIC)</span>`;
             document.getElementById('license-countdown').style.display = 'none';
             window.renderFanRulesBox();
-            setTimeout(() => switchTab('mecze'), 50);
+            setTimeout(function () {
+                switchTab('mecze');
+                if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+            }, 50);
             if (archiveId || localArchiveId) {
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
             }
@@ -8062,6 +8161,94 @@
     }
 
     // --- 7. START CAŁEGO SYSTEMU ---
+    window._livePane = 'matches';
+
+    window.syncLivePane = () => {
+        const split = document.querySelector('#nazywo .live-split');
+        const toggle = document.getElementById('live-pane-toggle');
+        const pane = window._livePane === 'tables' ? 'tables' : 'matches';
+        window._livePane = pane;
+        if (split) {
+            split.classList.toggle('live-pane--matches', pane === 'matches');
+            split.classList.toggle('live-pane--tables', pane === 'tables');
+        }
+        const nazywo = document.getElementById('nazywo');
+        if (nazywo) {
+            nazywo.classList.toggle('live-pane--matches', pane === 'matches');
+            nazywo.classList.toggle('live-pane--tables', pane === 'tables');
+        }
+        if (toggle) {
+            toggle.textContent = pane === 'tables' ? '← Mecze' : 'Tabele';
+        }
+        if (pane === 'tables' && typeof window.calcTables === 'function') {
+            window.calcTables();
+        }
+    };
+
+    window.openLiveTablesPane = () => {
+        window._livePane = 'tables';
+        window.syncLivePane();
+    };
+
+    window.openLiveMatchesPane = () => {
+        window._livePane = 'matches';
+        window.syncLivePane();
+        if (typeof window.renderFilterBar === 'function') window.renderFilterBar();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+    };
+
+    window.toggleLivePane = () => {
+        if (window._livePane === 'tables') window.openLiveMatchesPane();
+        else window.openLiveTablesPane();
+    };
+
+    window.syncFanSubnav = () => {
+        const matchesBar = document.getElementById('fan-matches-toolbar');
+        const tablesBar = document.getElementById('fan-tables-toolbar');
+        if (!matchesBar || !tablesBar) return;
+        matchesBar.style.display = '';
+        tablesBar.style.display = '';
+        const inFanCtx = isFanMode || window._demoStoryFanEmbed === true;
+        if (!inFanCtx) {
+            matchesBar.classList.remove('fan-subnav--visible');
+            tablesBar.classList.remove('fan-subnav--visible');
+            return;
+        }
+        let activePane = '';
+        if (window._demoStoryFanEmbed) {
+            activePane = window._demoStoryFanTab || 'mecze';
+        } else {
+            const activeTab = document.querySelector('.tab-content.active');
+            activePane = activeTab ? activeTab.id : '';
+        }
+        const showOnViewport = (isFanMode && !window._demoStoryFanEmbed)
+            || window.tpMqMax(window.TP_BREAKPOINTS.desktop - 1).matches;
+        matchesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'mecze');
+        tablesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'tabele');
+    };
+
+    window.openFanTablesView = () => {
+        if (window._demoStoryFanEmbed) {
+            const btn = document.querySelector('#view-demo-story [data-demo-fan-tab="tabele"]');
+            if (btn) btn.click();
+            window.scrollTo(0, 0);
+            return;
+        }
+        if (typeof window.switchTab === 'function') window.switchTab('tabele');
+        window.scrollTo(0, 0);
+    };
+
+    window.openFanMatchesView = () => {
+        if (window._demoStoryFanEmbed) {
+            const btn = document.querySelector('#view-demo-story [data-demo-fan-tab="mecze"]');
+            if (btn) btn.click();
+            window.scrollTo(0, 0);
+            return;
+        }
+        if (typeof window.switchTab === 'function') window.switchTab('mecze');
+        window.scrollTo(0, 0);
+    };
+
     executeRouter();
     window.initAppModuleBridge = function () { initAppModule({ bridgeOnly: true }); };
 </script>
