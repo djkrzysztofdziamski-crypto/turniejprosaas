@@ -672,6 +672,8 @@
 
                 advCount: advCount,
 
+                pitchCount: 4,
+
                 customTableOrder: customTableOrder,
 
                 qualifiedTeamIds: qualifiedTeamIds,
