@@ -2113,6 +2113,48 @@
             color: #94a3b8;
             line-height: 1.45;
         }
+        /* Bramka landscape: kibic + Mecze/Tabele/Play-Off/Podium (viewport < 1366) */
+        #app-rotate-gate {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            box-sizing: border-box;
+            background: rgba(16, 42, 67, 0.94);
+            text-align: center;
+        }
+        body.app-need-landscape #app-rotate-gate:not([hidden]) {
+            display: flex;
+        }
+        #app-rotate-gate .app-rotate-gate-card {
+            max-width: 320px;
+            padding: 28px 22px;
+            border-radius: 14px;
+            background: #19354f;
+            border: 1px solid #486581;
+            color: #fff;
+        }
+        #app-rotate-gate .app-rotate-gate-icon {
+            font-size: 42px;
+            line-height: 1;
+            margin-bottom: 12px;
+            color: #57d9a3;
+        }
+        #app-rotate-gate .app-rotate-gate-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: var(--font-display, sans-serif);
+        }
+        #app-rotate-gate .app-rotate-gate-sub {
+            margin: 0;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.45;
+        }
         #demo-story-badge { background: #137333; color: #fff; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px; }
         #demo-story-progress { font-size: 12px; color: #bcccdc; font-weight: bold; }
         #view-demo-story .brand-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #0b1f33; color: #94a3b8; padding: 10px 12px; font-size: 11px; z-index: 90; border-top: 1px solid #486581; }
@@ -3446,6 +3488,13 @@
 </div>
 
 <div id="view-app" class="view">
+    <div id="app-rotate-gate" class="app-rotate-gate" hidden aria-live="polite">
+        <div class="app-rotate-gate-card">
+            <div class="app-rotate-gate-icon" aria-hidden="true">↻</div>
+            <p class="app-rotate-gate-title">Obróć urządzenie poziomo</p>
+            <p class="app-rotate-gate-sub">Wyniki live i karty turnieju (Mecze, Tabele, Play-Off, Podium) są czytelne w orientacji poziomej.</p>
+        </div>
+    </div>
     <div id="license-blocked-screen">
         <h1 id="license-blocked-title" style="color:#de350b; font-size: 42px; margin-bottom: 10px;">⚠️ LICENCJA WYGASŁA LUB ZOSTAŁA ZABLOKOWANA</h1>
         <p id="license-blocked-msg" style="font-size: 18px; color: #bcccdc; max-width: 500px; line-height: 1.5;">Czas trwania tego turnieju dobiegł końca lub klucz został zawieszony przez administratora. Wyniki live dla kibiców są nadal dostępne.</p>
@@ -3827,6 +3876,42 @@
             '(max-height: ' + window.TP_BREAKPOINTS.shortHeight + 'px) and (orientation: landscape)'
         ).matches;
     };
+
+    window.APP_LANDSCAPE_TAB_IDS = Object.freeze({ mecze: true, tabele: true, playoff: true, podium: true });
+    window.tpNeedsAppLandscapeGate = () => {
+        if (!window.matchMedia) return false;
+        if (window.tpIsDesktopLayout()) return false;
+        if (!window.matchMedia('(orientation: portrait)').matches) return false;
+        const body = document.body;
+        if (body.classList.contains('hall-view') || body.classList.contains('assistant-view')) return false;
+        if (body.classList.contains('fan-view')) return true;
+        const active = document.querySelector('#view-app .tab-content.active');
+        return !!(active && window.APP_LANDSCAPE_TAB_IDS[active.id]);
+    };
+    window.syncAppLandscapeGate = () => {
+        const gate = document.getElementById('app-rotate-gate');
+        if (!gate) return;
+        const need = window.tpNeedsAppLandscapeGate();
+        document.body.classList.toggle('app-need-landscape', need);
+        if (need) gate.removeAttribute('hidden');
+        else gate.setAttribute('hidden', '');
+    };
+    (function bindAppLandscapeGate() {
+        if (!window.matchMedia) return;
+        const onChange = () => {
+            if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
+        };
+        const mqPortrait = window.matchMedia('(orientation: portrait)');
+        if (typeof mqPortrait.addEventListener === 'function') mqPortrait.addEventListener('change', onChange);
+        else if (typeof mqPortrait.addListener === 'function') mqPortrait.addListener(onChange);
+        const mqDesktop = window.matchMedia('(min-width: ' + window.TP_BREAKPOINTS.desktop + 'px)');
+        if (typeof mqDesktop.addEventListener === 'function') mqDesktop.addEventListener('change', onChange);
+        else if (typeof mqDesktop.addListener === 'function') mqDesktop.addListener(onChange);
+        window.addEventListener('orientationchange', onChange);
+        window.addEventListener('resize', onChange);
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onChange);
+        else onChange();
+    })();
 
     (function syncHeaderHeightVar() {
         function apply() {
@@ -7418,6 +7503,7 @@
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
             if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
             if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+            if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
         };
 
         window.openMatch = (id, isPo=false) => {
@@ -8045,6 +8131,7 @@
             document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color: #ffcc00; background: rgba(0,0,0,0.3); padding: 3px 10px; border-radius: 12px; font-size: 11px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.5px;">🔴 WYNIKI LIVE (KIBIC)</span>`;
             document.getElementById('license-countdown').style.display = 'none';
             window.renderFanRulesBox();
+            if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
             setTimeout(function () {
                 switchTab('mecze');
                 if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
