@@ -466,12 +466,13 @@
         #view-app .live-match-table col.col-score { width: 112px; }
         #view-app .live-match-table col.col-scorers { width: 78px; }
         #view-app .live-match-table col.col-status { width: 26px; }
-        #view-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
-        /* Play-off: identyczna ramka/geometria — tylko kolor nagłówka */
+        #view-app .live-match-table thead { background: #e8eef5; border-bottom: 1px solid #c1c7d0; }
+        /* Play-off: jasny nagłówek — czytelny z granatową czcionką */
         #view-app .live-match-table-wrap--playoff thead {
-            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+            background: #fff4e8;
+            border-bottom: 1px solid #f0c78a;
         }
-        #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92); padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
+        #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #172b4d; padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
         #view-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
         #view-app .live-match-table td { padding: 3px 6px; vertical-align: middle; border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2; }
         #view-app .live-match-table tbody tr:last-child td { border-bottom: none; }
@@ -484,6 +485,15 @@
         #view-app .live-match-no { font-family: var(--font-display); font-weight: 800; font-size: 12px; color: #42526e; font-variant-numeric: tabular-nums; line-height: 1; }
         #view-app .live-group-badge { display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #0747a6; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2; box-sizing: border-box; border: 1px solid transparent; }
         #view-app .live-group-badge--po { background: #fff7ed; color: #b45309; }
+        #view-app .live-pitch-badge { display: inline-block; min-width: 22px; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; color: #067647; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; border: 1px solid #abefc6; white-space: nowrap; }
+        #view-app .live-pitch-select { max-width: 88px; font-size: 11px; font-weight: 700; padding: 4px 6px; border-radius: 6px; border: 1px solid #c1c7d0; background: #fff; color: #172b4d; }
+        #view-app .pitch-section { margin-bottom: 16px; }
+        #view-app .pitch-section-head { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-family: var(--font-display); font-size: 15px; font-weight: 800; color: #172b4d; }
+        #view-app .pitch-section-empty { padding: 12px 14px; border: 1px dashed #c1c7d0; border-radius: 8px; color: #6b778c; font-size: 13px; background: #fafbfc; }
+        #view-app .assistant-match-card-head .live-pitch-badge { margin-left: 2px; }
+        #view-app col.col-pitch { width: 72px; }
+        #view-app .live-match-table th.col-pitch,
+        #view-app .live-match-table td.col-pitch { text-align: center; }
         #view-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
         #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; max-width: 220px; min-width: 0; }
         #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
@@ -959,7 +969,8 @@
         }
         body.hall-view #view-app .hall-demo-match-table-wrap--playoff thead,
         body.hall-view #view-app .live-match-table-wrap--playoff.hall-demo-match-table-wrap thead {
-            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+            background: #fff4e8;
+            border-bottom: 1px solid #f0c78a;
         }
         body.hall-view #view-app .hall-demo-match-table {
             width: 100%;
@@ -975,7 +986,8 @@
         body.hall-view #view-app .hall-demo-match-table col.col-time { width: 52px; }
         body.hall-view #view-app .hall-demo-match-table col.col-teams { width: auto; }
         body.hall-view #view-app .hall-demo-match-table thead {
-            background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%);
+            background: #e8eef5;
+            border-bottom: 1px solid #c1c7d0;
         }
         body.hall-view #view-app .hall-demo-match-table thead tr { height: 24px; }
         body.hall-view #view-app .hall-demo-match-table th {
@@ -984,7 +996,7 @@
             font-weight: 800;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.92);
+            color: #172b4d;
             padding: 3px 5px;
             text-align: center;
             border: none;
@@ -2418,7 +2430,8 @@
         }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table-wrap--playoff thead,
         #view-demo-story .demo-hall-embed-host .live-match-table-wrap--playoff thead {
-            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+            background: #fff4e8;
+            border-bottom: 1px solid #f0c78a;
         }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table {
             width: 100%;
@@ -2434,7 +2447,8 @@
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-time { width: 40px; }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table col.col-teams { width: auto; }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table thead {
-            background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%);
+            background: #e8eef5;
+            border-bottom: 1px solid #c1c7d0;
         }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table thead tr {
             height: 20px;
@@ -2445,7 +2459,7 @@
             font-weight: 800;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.92);
+            color: #172b4d;
             padding: 2px 3px;
             text-align: center;
             border: none;
@@ -2952,13 +2966,14 @@
         #view-demo-story .demo-embed-app .live-match-table col.col-teams { width: auto; }
         #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 112px; }
         #view-demo-story .demo-embed-app .live-match-table col.col-status { width: 26px; }
-        #view-demo-story .demo-embed-app .live-match-table thead { background: linear-gradient(180deg, #172b4d 0%, #1e3a5f 100%); }
+        #view-demo-story .demo-embed-app .live-match-table thead { background: #e8eef5; border-bottom: 1px solid #c1c7d0; }
         #view-demo-story .demo-embed-app .live-match-table-wrap--playoff thead {
-            background: linear-gradient(180deg, #7c2d12 0%, #9a3412 55%, #b45309 100%);
+            background: #fff4e8;
+            border-bottom: 1px solid #f0c78a;
         }
         #view-demo-story .demo-embed-app .live-match-table th {
             font-family: var(--font-display); font-size: 9px; font-weight: 800;
-            letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.92);
+            letter-spacing: 0.06em; text-transform: uppercase; color: #172b4d;
             padding: 6px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2;
             background: transparent;
         }
@@ -3604,10 +3619,15 @@
         </div>
     </div>
 
-    <div id="assistant-screen" aria-hidden="true">
+        <div id="assistant-screen" aria-hidden="true">
         <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.</div>
+        <div id="assistant-pitches-toolbar" class="fan-subnav" style="display:none; margin: 0 0 8px;">
+            <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" id="assistant-tab-matches" onclick="openAssistantMatchesView()">Mecze</button>
+            <button type="button" class="fan-subnav-btn" id="assistant-tab-pitches" onclick="openAssistantPitchesView()">Boiska</button>
+        </div>
         <div class="filter-bar match-filter-bar" id="assistant-match-filter-bar"></div>
         <div id="assistant-matches-container" class="matches-render-target"></div>
+        <div id="assistant-pitches-container" class="pitches-render-target" style="display:none;"></div>
     </div>
 
     <div class="nav-tabs">
@@ -3618,6 +3638,7 @@
         <button class="nav-btn nav-desktop-only" onclick="switchTab('mecze')">Mecze</button>
         <button class="nav-btn nav-mobile-only" onclick="switchTab('mecze')">Mecze</button>
         <button class="nav-btn nav-mobile-only" onclick="switchTab('tabele')">Tabele</button>
+        <button class="nav-btn nav-pitch-tab" onclick="switchTab('boiska')" style="display:none;">Boiska</button>
         <button class="nav-btn" onclick="switchTab('playoff')">Play-Off</button>
         <button class="nav-btn" onclick="switchTab('podium')">Podium</button>
         <button class="nav-btn" onclick="switchTab('archiwum')" style="color:#00875a;">Archiwum</button>
@@ -3651,6 +3672,7 @@
                         </select>
                     </div>
                     <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
+                    <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–10):</span> <input type="number" id="pitch-count" min="0" max="10" value="0" title="0 = wyłączone; max 10" onchange="syncPitchCountFromForm()"></div>
                     
                     <button class="btn-main" onclick="generateInputs()" style="margin-top:15px;">UTWÓRZ DRUŻYNY</button>
                 </div>
@@ -3702,9 +3724,18 @@
         <div id="mecze" class="tab-content">
             <div class="filter-bar match-filter-bar" id="match-filter-bar"></div>
             <div id="fan-matches-toolbar" class="fan-subnav">
+                <button type="button" class="fan-subnav-btn" onclick="openFanPitchesView()">Boiska</button>
                 <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>
             </div>
             <div id="matches-container" class="matches-render-target"></div>
+        </div>
+
+        <div id="boiska" class="tab-content">
+            <div id="fan-pitches-toolbar" class="fan-subnav">
+                <button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>
+                <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>
+            </div>
+            <div id="pitches-container" class="pitches-render-target"></div>
         </div>
 
         <div id="nazywo" class="tab-content">
@@ -3770,6 +3801,10 @@
         <div class="modal-content match-modal-content">
             <span class="match-modal-close" onclick="closeModal('matchModal')" aria-label="Zamknij">&times;</span>
             <h4 id="mTitle" class="match-modal-title"></h4>
+            <div id="mPitchRow" class="time-setting" style="display:none; margin: 0 0 12px; justify-content:center;">
+                <span style="font-weight:700;">Boisko:</span>
+                <span id="mPitchControl"></span>
+            </div>
             <div class="match-modal-score-row">
                 <b id="mT1" class="match-modal-team match-modal-team--home"></b>
                 <input type="number" id="mG1" class="match-modal-score match-modal-score--home" min="0" inputmode="numeric" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()">
@@ -5000,7 +5035,170 @@
         const po = !!isPo;
         const no = window.getGlobalMatchNo(m, po);
         const label = po ? window.getPlayoffRoundLabel(m) : (m.group ? ('Grupa ' + m.group) : '');
-        return label ? ('Mecz #' + no + ' · ' + label) : ('Mecz #' + no);
+        const pitch = window.formatPitchLabel(m);
+        let base = label ? ('Mecz #' + no + ' · ' + label) : ('Mecz #' + no);
+        if (pitch) base += ' · ' + pitch;
+        return base;
+    };
+
+    window.getPitchCount = function () {
+        const n = parseInt(state.settings && state.settings.pitchCount, 10);
+        if (!Number.isFinite(n) || n < 1) return 0;
+        return Math.min(10, n);
+    };
+
+    window.formatPitchLabel = function (m) {
+        const p = m && m.pitch != null ? parseInt(m.pitch, 10) : NaN;
+        if (!Number.isFinite(p) || p < 1) return '';
+        return 'Boisko ' + p;
+    };
+
+    window.formatPitchBadgeHTML = function (m) {
+        const label = window.formatPitchLabel(m);
+        if (!label) return '';
+        return '<span class="live-pitch-badge" title="' + escAttr(label) + '">' + esc(label) + '</span>';
+    };
+
+    window.canAssignPitch = function () {
+        return !isFanMode && !isHallMode && !isAssistantMode && window.getPitchCount() > 0;
+    };
+
+    window.clearMatchPitchOnFinish = function (m) {
+        if (!m) return;
+        m.pitch = null;
+    };
+
+    window.syncPitchCountFromForm = function () {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        if (!state.settings) state.settings = {};
+        const el = document.getElementById('pitch-count');
+        let n = el ? parseInt(el.value, 10) : 0;
+        if (!Number.isFinite(n) || n < 0) n = 0;
+        if (n > 10) n = 10;
+        if (el) el.value = String(n);
+        state.settings.pitchCount = n;
+        window.save();
+        if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+    };
+
+    window.syncPitchCountToForm = function () {
+        const el = document.getElementById('pitch-count');
+        if (!el) return;
+        el.value = String(window.getPitchCount() || (state.settings && state.settings.pitchCount) || 0);
+    };
+
+    window.setMatchPitch = function (matchId, isPo, pitchRaw) {
+        if (!window.canAssignPitch()) return;
+        const arr = isPo ? (state.playoffs || []) : (state.matches || []);
+        const m = arr.find(x => x.id === matchId);
+        if (!m || m.played) return;
+        let pitch = parseInt(pitchRaw, 10);
+        if (!Number.isFinite(pitch) || pitch < 1) pitch = null;
+        else {
+            const max = window.getPitchCount();
+            if (pitch > max) pitch = null;
+        }
+        if (pitch != null) {
+            const conflicts = [];
+            const collect = (list, asPo) => {
+                (list || []).forEach(other => {
+                    if (!other || other.played) return;
+                    if (other.id === matchId && !!asPo === !!isPo) return;
+                    if (parseInt(other.pitch, 10) === pitch) {
+                        conflicts.push({ m: other, isPo: !!asPo });
+                    }
+                });
+            };
+            collect(state.matches, false);
+            collect(state.playoffs, true);
+            if (conflicts.length) {
+                const lines = conflicts.map(c => {
+                    const no = window.getGlobalMatchNo(c.m, c.isPo);
+                    const t1 = (c.m.t1 && c.m.t1.name) ? c.m.t1.name : '?';
+                    const t2 = (c.m.t2 && c.m.t2.name) ? c.m.t2.name : '?';
+                    const round = c.isPo
+                        ? (typeof window.getPlayoffRoundLabel === 'function' ? window.getPlayoffRoundLabel(c.m) : 'Play-off')
+                        : (c.m.group ? ('Grupa ' + c.m.group) : '');
+                    return '• Mecz #' + no + (round ? ' (' + round + ')' : '') + ': ' + t1 + ' vs ' + t2;
+                }).join('\n');
+                const ok = confirm(
+                    'Boisko ' + pitch + ' jest już przydzielone:\n\n' + lines +
+                    '\n\nPrzypisać je do tego meczu? Poprzedni przydział zostanie usunięty.'
+                );
+                if (!ok) {
+                    window._pitchSelectUiLock = false;
+                    if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+                    if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+                    const pitchCtrl = document.getElementById('mPitchControl');
+                    const modal = document.getElementById('matchModal');
+                    if (pitchCtrl && modal && modal.style.display === 'block' && state.active && state.active.id === matchId) {
+                        pitchCtrl.innerHTML = window.renderPitchAssignControl(m, isPo) || '—';
+                    }
+                    return;
+                }
+            }
+            const clearFrom = (list, asPo) => {
+                (list || []).forEach(other => {
+                    if (!other || other.played) return;
+                    if (other.id === matchId && !!asPo === !!isPo) return;
+                    if (parseInt(other.pitch, 10) === pitch) other.pitch = null;
+                });
+            };
+            clearFrom(state.matches, false);
+            clearFrom(state.playoffs, true);
+        }
+        m.pitch = pitch;
+        window._pitchSelectUiLock = false;
+        if (state.active && state.active.id === matchId && !!state.active.isPo === !!isPo) {
+            state.active.pitch = pitch;
+            const pitchCtrl = document.getElementById('mPitchControl');
+            if (pitchCtrl) pitchCtrl.innerHTML = window.renderPitchAssignControl(m, isPo) || '—';
+        }
+        window.logAction(pitch
+            ? ('Przydzielono mecz #' + window.getGlobalMatchNo(m, !!isPo) + ' → Boisko ' + pitch)
+            : ('Usunięto przydział boiska z meczu #' + window.getGlobalMatchNo(m, !!isPo)));
+        window.save();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+        if (typeof window.renderHallView === 'function' && isHallMode) window.renderHallView();
+        if (typeof window.refreshAssistantMatchesView === 'function' && isAssistantMode) window.refreshAssistantMatchesView(true);
+    };
+
+    window.getOccupiedPitches = function (exceptMatchId, exceptIsPo) {
+        const occupied = new Set();
+        const scan = (list, asPo) => {
+            (list || []).forEach(other => {
+                if (!other || other.played) return;
+                if (exceptMatchId != null && other.id === exceptMatchId && !!asPo === !!exceptIsPo) return;
+                const p = parseInt(other.pitch, 10);
+                if (Number.isFinite(p) && p >= 1) occupied.add(p);
+            });
+        };
+        scan(state.matches, false);
+        scan(state.playoffs, true);
+        return occupied;
+    };
+
+    window.renderPitchAssignControl = function (m, isPo) {
+        const max = window.getPitchCount();
+        if (max < 1) return '';
+        if (m.played) return window.formatPitchBadgeHTML(m);
+        if (!window.canAssignPitch()) return window.formatPitchBadgeHTML(m);
+        const cur = m.pitch != null ? parseInt(m.pitch, 10) : NaN;
+        const occupied = window.getOccupiedPitches(m.id, !!isPo);
+        let opts = '<option value="">—</option>';
+        for (let i = 1; i <= max; i++) {
+            if (occupied.has(i) && i !== cur) continue;
+            opts += '<option value="' + i + '"' + (cur === i ? ' selected' : '') + '>' + i + '</option>';
+        }
+        return '<select class="live-pitch-select" title="Przydziel boisko (tylko wolne)" aria-label="Boisko" ' +
+            'onfocus="window._pitchSelectUiLock=true" ' +
+            'onblur="setTimeout(function(){window._pitchSelectUiLock=false;},250)" ' +
+            'onmousedown="window._pitchSelectUiLock=true" ' +
+            'onchange="setMatchPitch(' + m.id + ', ' + (!!isPo) + ', this.value)">' + opts + '</select>';
     };
 
     window._hallLiveScoreKey = '';
@@ -5088,7 +5286,7 @@
 
     function hallMatchBrief(m) {
         if (!m) return '';
-        return [m.id, m.isPo ? 1 : 0, m.played ? 1 : 0, m.g1, m.g2, m.pen1, m.pen2, (m.s1 || []).length, (m.s2 || []).length].join(':');
+        return [m.id, m.isPo ? 1 : 0, m.played ? 1 : 0, m.g1, m.g2, m.pen1, m.pen2, m.pitch || 0, (m.s1 || []).length, (m.s2 || []).length].join(':');
     }
 
     function getHallAllMatches() {
@@ -5465,6 +5663,10 @@
             : (m.group
                 ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
                 : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
+        const pitchBadge = window.formatPitchBadgeHTML(m);
+        const pitchCell = (window.getPitchCount() > 0)
+            ? ('<td class="col-pitch">' + (pitchBadge || '—') + '</td>')
+            : '';
         const t1 = (m.t1 && m.t1.name) ? m.t1.name : '—';
         const t2 = (m.t2 && m.t2.name) ? m.t2.name : '—';
         const teamsHTML = '<span class="live-team-name">' + esc(t1) + '</span>' +
@@ -5474,6 +5676,7 @@
         return '<tr class="' + rowCls + '">' +
             '<td><span class="live-match-no">' + matchNo + '</span></td>' +
             '<td>' + groupBadge + '</td>' +
+            pitchCell +
             '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
             '<td class="live-match-teams" title="' + escAttr(t1 + ' - ' + t2) + '">' + teamsHTML + '</td>' +
             '</tr>';
@@ -5484,13 +5687,14 @@
             return '<div class="hall-demo-slot-empty">' + esc(emptyLabel || 'Brak meczów') + '</div>';
         }
         const hasPo = matches.some(function (m) { return !!m.isPo; });
+        const showPitch = window.getPitchCount() > 0;
         const wrapCls = 'live-match-table-wrap hall-demo-match-table-wrap' + (hasPo ? ' hall-demo-match-table-wrap--playoff live-match-table-wrap--playoff' : '');
         return '<div class="' + wrapCls + '"><table class="live-match-table hall-demo-match-table">' +
             '<colgroup>' +
-            '<col class="col-no"><col class="col-group"><col class="col-time"><col class="col-teams">' +
+            '<col class="col-no"><col class="col-group">' + (showPitch ? '<col class="col-pitch">' : '') + '<col class="col-time"><col class="col-teams">' +
             '</colgroup>' +
             '<thead><tr>' +
-            '<th>#</th><th>Grupa</th><th>Godz.</th><th class="col-teams">Mecz</th>' +
+            '<th>#</th><th>Grupa</th>' + (showPitch ? '<th class="col-pitch">Boisko</th>' : '') + '<th>Godz.</th><th class="col-teams">Mecz</th>' +
             '</tr></thead><tbody>' +
             matches.map(renderHallDemoPairRow).join('') +
             '</tbody></table></div>';
@@ -5703,9 +5907,11 @@
         const statusCls = m.played ? 'match-card--played' : 'match-card--pending';
         const highlightCls = opts.extraStyle ? ' match-card--highlight' : '';
         const badge = opts.badge != null ? opts.badge : m.n;
+        const pitchBadge = window.formatPitchBadgeHTML(m);
         return '<div class="match-card match-card--po match-card--po-inline ' + statusCls + highlightCls + '"' +
             (opts.extraStyle ? ' ' + opts.extraStyle : '') + ' onclick="openMatch(' + m.id + ', true)">' +
             '<span class="match-time-badge" style="background:#ff8b00;">' + esc(badge) + '</span>' +
+            (pitchBadge ? ('<span style="margin:0 6px 0 0; vertical-align:middle;">' + pitchBadge + '</span>') : '') +
             renderPoMatchInlineBody(m, { scoreStyle: opts.scoreStyle || 'background:#00875a;', extraAlert: opts.extraAlert || '' }) +
             '</div>';
     }
@@ -5714,11 +5920,13 @@
         opts = opts || {};
         const no = window.getGlobalMatchNo(m, opts.isPo === true);
         const groupLabel = window.getMatchGroupLabel(m, opts.isPo === true);
+        const pitchLabel = window.formatPitchLabel(m);
         const scoreStyle = opts.scoreStyle ? ' style="' + opts.scoreStyle + '"' : '';
         const extra = opts.extraAlert || '';
         return '<div class="match-score-col"><span class="match-seq-no">Mecz # ' + no + '</span>' +
             '<span class="match-score"' + scoreStyle + '>' + scoreText + '</span>' +
             (groupLabel ? '<span class="match-seq-group">' + esc(groupLabel) + '</span>' : '') +
+            (pitchLabel ? '<span class="match-seq-group">' + esc(pitchLabel) + '</span>' : '') +
             '</div>' + extra;
     }
 
@@ -5830,6 +6038,9 @@
             : (m.group
                 ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
                 : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
+        const pitchHTML = (window.getPitchCount() > 0)
+            ? window.renderPitchAssignControl(m, isPo)
+            : '';
         const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-vs">vs</span>' +
             '<span class="live-team-name">' + esc(m.t2.name) + '</span>';
@@ -5848,9 +6059,13 @@
             ? renderScorersBtn(m.id, isPo, !m.played)
             : '';
         const statusHTML = '<span class="live-status-dot ' + (m.played ? 'is-played' : '') + '"></span>';
+        const pitchCell = (window.getPitchCount() > 0)
+            ? ('<td class="col-pitch">' + (pitchHTML || '—') + '</td>')
+            : '';
         return '<tr class="' + rowCls + '">' +
             '<td><span class="live-match-no">' + matchNo + '</span></td>' +
             '<td>' + groupBadge + '</td>' +
+            pitchCell +
             '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
             '<td class="live-match-teams" title="' + escAttr(m.t1.name + ' vs ' + m.t2.name) + '">' + teamsHTML + '</td>' +
             '<td class="col-score">' + scoreHTML + '</td>' +
@@ -5863,17 +6078,19 @@
         opts = opts || {};
         const scorersCol = opts.showScorers ? '<th class="col-scorers">Strzelcy</th>' : '';
         const scorersColTag = opts.showScorers ? '<col class="col-scorers">' : '';
-        // Ta sama geometria dla grup i play-off — różni się tylko kolor thead (--playoff)
+        const showPitch = window.getPitchCount() > 0;
+        const pitchHead = showPitch ? '<th class="col-pitch">Boisko</th>' : '';
+        const pitchCol = showPitch ? '<col class="col-pitch">' : '';
         const groupCol = 'Grupa';
         const wrapCls = 'live-match-table-wrap' + (opts.isPo ? ' live-match-table-wrap--playoff' : '');
         const rows = filtered.map(m => renderMatchTableRow(m, opts)).join('');
         return '<div class="' + wrapCls + '"><table class="live-match-table">' +
             '<colgroup>' +
-            '<col class="col-no"><col class="col-group"><col class="col-time"><col class="col-teams"><col class="col-score">' +
+            '<col class="col-no"><col class="col-group">' + pitchCol + '<col class="col-time"><col class="col-teams"><col class="col-score">' +
             scorersColTag + '<col class="col-status">' +
             '</colgroup>' +
             '<thead><tr>' +
-            '<th>#</th><th>' + groupCol + '</th><th>Godz.</th><th class="col-teams">Mecz</th><th>Wynik</th>' +
+            '<th>#</th><th>' + groupCol + '</th>' + pitchHead + '<th>Godz.</th><th class="col-teams">Mecz</th><th>Wynik</th>' +
             scorersCol + '<th></th>' +
             '</tr></thead><tbody>' + rows + '</tbody></table></div>';
     }
@@ -5887,6 +6104,10 @@
             : (m.group
                 ? '<span class="live-group-badge">' + esc(m.group) + '</span>'
                 : '<span class="live-group-badge" style="opacity:0.45;">—</span>');
+        const pitchBadge = window.formatPitchBadgeHTML(m);
+        const pitchCtrl = (opts.allowPitchAssign && window.canAssignPitch() && !m.played)
+            ? window.renderPitchAssignControl(m, isPo)
+            : pitchBadge;
         const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-sep"> - </span>' +
             '<span class="live-team-name">' + esc(m.t2.name) + '</span>';
@@ -5914,6 +6135,7 @@
             '<div class="assistant-match-card-head">' +
             '<span class="live-match-no">#' + matchNo + '</span>' +
             groupBadge +
+            (pitchCtrl || '') +
             '<span class="live-time">' + esc(m.time || '—') + '</span>' +
             headScore +
             '</div>' +
@@ -5922,6 +6144,10 @@
     }
 
     function renderAssistantMatchCardsHTML(filtered, opts) {
+        opts = opts || {};
+        if (opts.allowPitchAssign == null && typeof window.canAssignPitch === 'function' && window.canAssignPitch()) {
+            opts = Object.assign({}, opts, { allowPitchAssign: true });
+        }
         return filtered.map(m => renderAssistantMatchCard(m, opts)).join('');
     }
 
@@ -6339,6 +6565,13 @@
             saveLastSnapshot();
             const mode = document.getElementById('schedule-mode').value;
             Object.assign(state.settings, { start: document.getElementById('t-start').value, gDur, gBreak, afterG, poDur, finDur });
+            const pitchEl = document.getElementById('pitch-count');
+            if (pitchEl) {
+                let pc = parseInt(pitchEl.value, 10);
+                if (!Number.isFinite(pc) || pc < 0) pc = 0;
+                if (pc > 10) pc = 10;
+                state.settings.pitchCount = pc;
+            }
 
             let pool = [];
             Object.keys(state.groups).forEach(gn => {
@@ -6372,6 +6605,8 @@
         window.syncTournamentMetaToForm = () => {
             const nameEl = document.getElementById('tournament-name');
             if (nameEl && state.meta && state.meta.tournamentName) nameEl.value = state.meta.tournamentName;
+            if (typeof window.syncPitchCountToForm === 'function') window.syncPitchCountToForm();
+            if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
         };
 
         window.renderFanRulesBox = () => {
@@ -6546,6 +6781,7 @@
             }
             m.g1 = g1; m.g2 = g2; m.played = true;
             m.pen1 = null; m.pen2 = null;
+            window.clearMatchPitchOnFinish(m);
             window.clearInlineScoreDraft(matchId);
             window.logAction(`Wynik meczu #${m.id}: ${m.t1.name} ${g1}:${g2} ${m.t2.name}`);
             window.save();
@@ -6718,7 +6954,15 @@
         window.setStatusFilter = (status) => { currentStatusFilter = status; window.renderFilterBar(); window.filterAndRenderMatches(); window.renderPlayoffTree(); };
         window.setGroupFilter = (group) => { currentGroupFilter = group; window.renderFilterBar(); window.filterAndRenderMatches(); window.renderPlayoffTree(); };
 
+        window.isPitchAssignUiBusy = () => {
+            const ae = document.activeElement;
+            if (ae && ae.classList && ae.classList.contains('live-pitch-select')) return true;
+            if (window._pitchSelectUiLock) return true;
+            return false;
+        };
+
         window.filterAndRenderMatches = () => {
+            if (window.isPitchAssignUiBusy()) return;
             window.captureInlineScoreDrafts();
             const containers = [...document.querySelectorAll('.matches-render-target')];
             if (!containers.length) return;
@@ -7231,6 +7475,7 @@
             state.playoffs.forEach(m => {
                 if(m.t1.id === -99 || m.t2.id === -99) {
                     m.played = true; if(m.t1.id === -99) { m.g1 = 0; m.g2 = 3; } else { m.g1 = 3; m.g2 = 0; }
+                    window.clearMatchPitchOnFinish(m);
                     let getW = (x) => x.g1 > x.g2 ? x.t1 : x.t2; let getL = (x) => x.g1 > x.g2 ? x.t2 : x.t1;
                     let w = getW(m); let l = getL(m);
                     if(m.next) { let nm = state.playoffs.find(x => x.id === m.next); if(nm) nm[m.slot] = w; }
@@ -7298,7 +7543,9 @@
             });
 
             delete state.active._scoreSnapshot;
-            state.active.played = true; const arr = state.active.isPo ? state.playoffs : state.matches;
+            state.active.played = true;
+            window.clearMatchPitchOnFinish(state.active);
+            const arr = state.active.isPo ? state.playoffs : state.matches;
             arr[arr.findIndex(x => x.id === state.active.id)] = state.active;
 
             if(state.active.isPo) {
@@ -7514,9 +7761,11 @@
             if(t==='grupy') window.renderGroupsList();
             if(t==='podium') window.renderPodium();
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
+            if(t==='boiska') { window.renderPitchesView(); }
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
             if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
             if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+            if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
             if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
         };
 
@@ -7534,6 +7783,17 @@
             if (state.active.g1 == null || isNaN(state.active.g1)) state.active.g1 = 0;
             if (state.active.g2 == null || isNaN(state.active.g2)) state.active.g2 = 0;
             document.getElementById('mTitle').innerText = m.n || ('Mecz # ' + window.getGlobalMatchNo(m, isPo) + (m.group && !isPo ? ' · Grupa ' + m.group : ''));
+            const pitchRow = document.getElementById('mPitchRow');
+            const pitchCtrl = document.getElementById('mPitchControl');
+            if (pitchRow && pitchCtrl) {
+                if (window.getPitchCount() > 0) {
+                    pitchRow.style.display = 'flex';
+                    pitchCtrl.innerHTML = window.renderPitchAssignControl(m, isPo) || (window.formatPitchBadgeHTML(m) || '—');
+                } else {
+                    pitchRow.style.display = 'none';
+                    pitchCtrl.innerHTML = '';
+                }
+            }
             document.getElementById('mT1').innerText = m.t1.name; document.getElementById('mT2').innerText = m.t2.name;
             document.getElementById('mG1').value = state.active.g1;
             document.getElementById('mG2').value = state.active.g2;
@@ -8136,7 +8396,11 @@
                 document.getElementById('license-countdown').style.display = 'none';
                 document.getElementById('btn-qr').style.display = 'none';
                 document.querySelectorAll('.header-organizer-actions button').forEach(btn => { btn.style.display = 'none'; });
-                setTimeout(() => { window.renderFilterBar(); window.refreshAssistantMatchesView(true); }, 50);
+                setTimeout(() => {
+                    window.renderFilterBar();
+                    window.refreshAssistantMatchesView(true);
+                    if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
+                }, 50);
             }
             if (typeof window.syncAssistantHeaderBadges === 'function') window.syncAssistantHeaderBadges();
         } else if (isFanMode) {
@@ -8149,6 +8413,7 @@
             setTimeout(function () {
                 switchTab('mecze');
                 if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+                if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
             }, 50);
             if (archiveId || localArchiveId) {
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
@@ -8193,6 +8458,14 @@
                     window.renderGroupsList();
                     if (!isAssistantMode) window.filterAndRenderMatches();
                     window.renderPlayoffTree();
+                }
+                if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
+                const activePitchTab = document.querySelector('.tab-content.active');
+                if (activePitchTab && activePitchTab.id === 'boiska' && typeof window.renderPitchesView === 'function') {
+                    window.renderPitchesView();
+                }
+                if (isAssistantMode && window._assistantPitchView && typeof window.renderPitchesView === 'function') {
+                    window.renderPitchesView();
                 }
             } else {
                 state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], meta: {} };
@@ -8340,16 +8613,142 @@
         else window.openLiveTablesPane();
     };
 
+    window.syncPitchNavVisibility = () => {
+        const on = window.getPitchCount() > 0;
+        document.querySelectorAll('.nav-pitch-tab').forEach(btn => {
+            btn.style.display = on ? '' : 'none';
+        });
+        const asTool = document.getElementById('assistant-pitches-toolbar');
+        if (asTool) {
+            if (isAssistantMode && on) {
+                asTool.style.display = 'flex';
+                asTool.classList.add('fan-subnav--visible');
+            } else {
+                asTool.style.display = 'none';
+                asTool.classList.remove('fan-subnav--visible');
+            }
+        }
+        if (!on) {
+            const pitchesPane = document.getElementById('boiska');
+            if (pitchesPane && pitchesPane.classList.contains('active') && typeof window.switchTab === 'function') {
+                window.switchTab(isFanMode ? 'mecze' : (window.tpIsDesktopLayout && window.tpIsDesktopLayout() ? 'nazywo' : 'mecze'));
+            }
+            if (isAssistantMode && window._assistantPitchView) {
+                window.openAssistantMatchesView();
+            }
+        }
+    };
+
+    window.renderPitchesView = () => {
+        if (typeof window.isPitchAssignUiBusy === 'function' && window.isPitchAssignUiBusy()) return;
+        const count = window.getPitchCount();
+        const targets = [];
+        const main = document.getElementById('pitches-container');
+        if (main) targets.push(main);
+        const asCont = document.getElementById('assistant-pitches-container');
+        if (asCont && isAssistantMode) targets.push(asCont);
+        if (!targets.length) return;
+
+        if (count < 1) {
+            targets.forEach(el => {
+                el.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Boiska wyłączone — ustaw liczbę boisk (1–10) na karcie Start.</div>';
+            });
+            return;
+        }
+
+        const preferCards = (typeof window.tpPreferMatchCards === 'function' && window.tpPreferMatchCards())
+            || isFanMode || isAssistantMode;
+        const fanRo = isFanMode || isAssistantMode || window._demoStoryFanEmbed === true;
+
+        let html = '';
+        for (let n = 1; n <= count; n++) {
+            const groupMs = (state.matches || []).filter(m => !m.played && parseInt(m.pitch, 10) === n);
+            const poMs = (state.playoffs || []).filter(m => !m.played && parseInt(m.pitch, 10) === n);
+            html += '<div class="pitch-section card">';
+            html += '<div class="pitch-section-head"><span class="live-pitch-badge">Boisko ' + n + '</span></div>';
+            if (!groupMs.length && !poMs.length) {
+                html += '<div class="pitch-section-empty">Brak przypisanego meczu</div>';
+            } else {
+                const renderList = (list, isPo) => {
+                    const opts = { readonly: fanRo, showScorers: !fanRo, isPo: !!isPo, allowPitchAssign: !fanRo && window.canAssignPitch() };
+                    if (preferCards) {
+                        return '<div class="assistant-match-cards">' + renderAssistantMatchCardsHTML(list, opts) + '</div>';
+                    }
+                    return renderMatchesTableHTML(list, opts);
+                };
+                if (groupMs.length) {
+                    html += renderMatchSectionHead('⚽', 'Faza grupowa');
+                    html += renderList(groupMs, false);
+                }
+                if (poMs.length) {
+                    if (groupMs.length) html += '<div class="match-section-divider"></div>';
+                    html += renderMatchSectionHead('🏆', 'Play-off', 'match-section-head--playoff');
+                    const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
+                        ? window.sortPlayoffMatchesByRound(poMs)
+                        : poMs;
+                    html += renderList(poSorted, true);
+                }
+            }
+            html += '</div>';
+        }
+
+        targets.forEach(el => { el.innerHTML = html; });
+    };
+
+    window.openAssistantMatchesView = () => {
+        window._assistantPitchView = false;
+        const m = document.getElementById('assistant-matches-container');
+        const p = document.getElementById('assistant-pitches-container');
+        const bar = document.getElementById('assistant-match-filter-bar');
+        if (m) m.style.display = '';
+        if (p) p.style.display = 'none';
+        if (bar) bar.style.display = '';
+        const btnM = document.getElementById('assistant-tab-matches');
+        const btnP = document.getElementById('assistant-tab-pitches');
+        if (btnM) { btnM.classList.add('fan-subnav-btn--primary'); }
+        if (btnP) { btnP.classList.remove('fan-subnav-btn--primary'); }
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+    };
+
+    window.openAssistantPitchesView = () => {
+        if (window.getPitchCount() < 1) return;
+        window._assistantPitchView = true;
+        const m = document.getElementById('assistant-matches-container');
+        const p = document.getElementById('assistant-pitches-container');
+        const bar = document.getElementById('assistant-match-filter-bar');
+        if (m) m.style.display = 'none';
+        if (p) p.style.display = '';
+        if (bar) bar.style.display = 'none';
+        const btnM = document.getElementById('assistant-tab-matches');
+        const btnP = document.getElementById('assistant-tab-pitches');
+        if (btnM) { btnM.classList.remove('fan-subnav-btn--primary'); }
+        if (btnP) { btnP.classList.add('fan-subnav-btn--primary'); }
+        window.renderPitchesView();
+    };
+
+    window.openFanPitchesView = () => {
+        if (window.getPitchCount() < 1) return;
+        if (typeof window.switchTab === 'function') window.switchTab('boiska');
+        window.scrollTo(0, 0);
+    };
+
     window.syncFanSubnav = () => {
         const matchesBar = document.getElementById('fan-matches-toolbar');
         const tablesBar = document.getElementById('fan-tables-toolbar');
+        const pitchesBar = document.getElementById('fan-pitches-toolbar');
         if (!matchesBar || !tablesBar) return;
         matchesBar.style.display = '';
         tablesBar.style.display = '';
+        if (pitchesBar) pitchesBar.style.display = '';
         const inFanCtx = isFanMode || window._demoStoryFanEmbed === true;
+        const pitchesOn = window.getPitchCount() > 0;
+        matchesBar.querySelectorAll('[onclick="openFanPitchesView()"]').forEach(btn => {
+            btn.style.display = pitchesOn ? '' : 'none';
+        });
         if (!inFanCtx) {
             matchesBar.classList.remove('fan-subnav--visible');
             tablesBar.classList.remove('fan-subnav--visible');
+            if (pitchesBar) pitchesBar.classList.remove('fan-subnav--visible');
             return;
         }
         let activePane = '';
@@ -8363,6 +8762,9 @@
             || window.tpMqMax(window.TP_BREAKPOINTS.desktop - 1).matches;
         matchesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'mecze');
         tablesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'tabele');
+        if (pitchesBar) {
+            pitchesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'boiska' && pitchesOn);
+        }
     };
 
     window.openFanTablesView = () => {

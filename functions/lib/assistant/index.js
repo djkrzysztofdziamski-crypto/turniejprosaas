@@ -129,6 +129,7 @@ async function assistantSaveMatch(db, payload) {
   match.g1 = g1;
   match.g2 = g2;
   match.played = !isLiveUpdate;
+  if (!isLiveUpdate) match.pitch = null;
 
   if (Array.isArray(payload?.s1)) {
     match.s1 = payload.s1.map((s) => ({ name: String(s.name || '').trim().toUpperCase() })).filter((s) => s.name);
