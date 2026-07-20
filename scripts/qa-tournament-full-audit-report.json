@@ -1,0 +1,1587 @@
+{
+  "startedAt": "2026-07-18T16:43:25.772Z",
+  "finishedAt": "2026-07-18T16:46:47.689Z",
+  "app": "https://app.turniejomat.pl",
+  "license": "TP-QDJL-CTW5",
+  "orgUrl": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
+  "viewports": [
+    {
+      "id": "galaxy-a56",
+      "label": "Samsung Galaxy A56",
+      "width": 412,
+      "height": 915
+    },
+    {
+      "id": "tablet-11",
+      "label": "Tablet 11\"",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "laptop-14",
+      "label": "Laptop 14\"",
+      "width": 1366,
+      "height": 768
+    }
+  ],
+  "totals": {
+    "all": 150,
+    "pass": 141,
+    "fail": 9,
+    "criticalFail": 3,
+    "highFail": 3,
+    "warningFail": 3
+  },
+  "findings": [
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Turniej załadowany (state.matches)",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Brak H-overflow (start)",
+      "ok": true,
+      "detail": "scrollW=412 vw=412",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Header sędziego (nie fan/hall)",
+      "ok": true,
+      "detail": "(none)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Badge zapisu widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":92,\"right\":400,\"bottom\":118,\"left\":250,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Status Firebase widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":92,\"right\":242,\"bottom\":118,\"left\":152,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Badges",
+      "label": "Organizer: badge’e nie nachodzą na siebie",
+      "ok": true,
+      "detail": "overlap=false area=0 gapPx=0 placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":92,\"right\":242,\"bottom\":118,\"left\":152,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":92,\"right\":400,\"bottom\":118,\"left\":250,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Badges",
+      "label": "Organizer: badge’e w belce header (wzorzec asystenta)",
+      "ok": true,
+      "detail": "placement=header (oczekiwany wzorzec: header; obecnie fixed bottom-right)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Nav „Na żywo” widoczne",
+      "ok": true,
+      "detail": "[{\"t\":\"Na żywo\",\"onclick\":\"switchTab('nazywo')\",\"classes\":\"nav-btn nav-tab-live\",\"visible\":true}]",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Critical",
+      "label": "switchTab(ustawienia) bez crasha",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Math",
+      "label": "Grupy równe (lub 1 grupa)",
+      "ok": false,
+      "detail": "{\"A\":5,\"B\":4}",
+      "severity": "high"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Math",
+      "label": "Drużyny i mecze obecne",
+      "ok": true,
+      "detail": "{\"teams\":9,\"groups\":2,\"matchesTotal\":16,\"matchesPlayed\":16,\"matchesPending\":0,\"playoffsTotal\":8,\"playoffsPlayed\":8,\"playoffsPending\":0}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Math",
+      "label": "Tabele spójne (pkt / M)",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Math",
+      "label": "Play-off bez nierozstrzygniętych remisów",
+      "ok": true,
+      "detail": "PO pending=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka nazywo",
+      "ok": true,
+      "detail": "active=true, text=1644, tables=2, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka mecze",
+      "ok": false,
+      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'mecze\\'\"], .nav-tabs button[onclick*=\"mecze\"]').first()\n    - locator resolved to <button onclick=\"switchTab('mecze')\" class=\"nav-btn nav-desktop-only\">Mecze</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
+      "severity": "warning"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka tabele",
+      "ok": true,
+      "detail": "active=true, text=475, tables=2, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka playoff",
+      "ok": true,
+      "detail": "active=true, text=491, tables=1, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka podium",
+      "ok": true,
+      "detail": "active=true, text=435, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka sklady",
+      "ok": true,
+      "detail": "active=true, text=105, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka ustawienia",
+      "ok": false,
+      "detail": "active=null, text=0, tables=0, overflowX=false",
+      "severity": "critical"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Zakładka archiwum",
+      "ok": true,
+      "detail": "active=true, text=3067, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Przycisk Drukuj obecny",
+      "ok": true,
+      "detail": "printLiveView OK",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Reguły @media print",
+      "ok": true,
+      "detail": "rules=24",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Na żywo ma harmonogram do druku",
+      "ok": true,
+      "detail": "textLen=1644",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Na żywo ma tabele do druku",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Print media: treść #nazywo niepusta",
+      "ok": true,
+      "detail": "textLen=1557 tables=2 rows=11",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Print",
+      "label": "Print media: wygląda na harmonogram/tabele",
+      "ok": true,
+      "detail": "Harmonogram meczów ⚽ FAZA GRUPOWA #1 A 08:00 1:2 ⚽ Strzelcy Drużyna 5 - Drużyna 8 #2 A 08:12 1:0 ⚽ Strzelcy Drużyna 3 - ",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Dashboard turnieju",
+      "ok": true,
+      "detail": "📊 Dashboard turnieju\n👥 Drużyny\n9\n⚽ Mecze\n24 / 24\n🏁 Faza\nPlay-Off\n🏆 Play-Off\nwygenerowany\n💾 Osta",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Share",
+      "label": "URL kibica",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Share",
+      "label": "URL hali",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Share",
+      "label": "URL asystenta (token)",
+      "ok": true,
+      "detail": "brak tokenu",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Organizer",
+      "label": "Brak pageerror JS",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Fan",
+      "label": "Widok kibica załadowany",
+      "ok": true,
+      "detail": "Turniejomat 🔴 WYNIKI LIVE (KIBIC)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Fan",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=412 vw=412",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Fan",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Fan",
+      "label": "Lista meczów widoczna",
+      "ok": true,
+      "detail": "rows=8 tables=7",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Fan",
+      "label": "Brak kontrolek zapisu wyniku (readonly)",
+      "ok": true,
+      "detail": "visibleWrite=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Hall",
+      "label": "Tryb hall-view",
+      "ok": true,
+      "detail": "TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Hall",
+      "label": "Panel LIVE widoczny",
+      "ok": true,
+      "detail": "Drużyna 5\n1\n:\n0\nDrużyna 7\n🥇\nZWYCIĘZCA TURNIEJU\nDrużyna 5\n🥈\n2. MIEJSCE\nDrużyna 7\n🥉\n3. MIEJSCE\nDrużyna 1\n⚽ KRÓL STRZELC",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Hall",
+      "label": "Tytuł ≠ generyczny „Turniej”",
+      "ok": true,
+      "detail": "title=\"TP-QDJL-CTW5\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Hall",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Hall",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=412",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
+      "ok": true,
+      "detail": "cards/rows=24 inputs=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"✅ Zapisano przed chwilą\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Turniej załadowany (state.matches)",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Brak H-overflow (start)",
+      "ok": true,
+      "detail": "scrollW=834 vw=834",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Header sędziego (nie fan/hall)",
+      "ok": true,
+      "detail": "(none)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Badge zapisu widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":92,\"right\":414,\"bottom\":118,\"left\":264,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Status Firebase widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":92,\"right\":256,\"bottom\":118,\"left\":166,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Badges",
+      "label": "Organizer: badge’e nie nachodzą na siebie",
+      "ok": true,
+      "detail": "overlap=false area=0 gapPx=0 placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":92,\"right\":256,\"bottom\":118,\"left\":166,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":92,\"right\":414,\"bottom\":118,\"left\":264,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Badges",
+      "label": "Organizer: badge’e w belce header (wzorzec asystenta)",
+      "ok": true,
+      "detail": "placement=header (oczekiwany wzorzec: header; obecnie fixed bottom-right)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Nav „Na żywo” widoczne",
+      "ok": true,
+      "detail": "[{\"t\":\"Na żywo\",\"onclick\":\"switchTab('nazywo')\",\"classes\":\"nav-btn nav-tab-live\",\"visible\":true}]",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Critical",
+      "label": "switchTab(ustawienia) bez crasha",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Math",
+      "label": "Grupy równe (lub 1 grupa)",
+      "ok": false,
+      "detail": "{\"A\":5,\"B\":4}",
+      "severity": "high"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Math",
+      "label": "Drużyny i mecze obecne",
+      "ok": true,
+      "detail": "{\"teams\":9,\"groups\":2,\"matchesTotal\":16,\"matchesPlayed\":16,\"matchesPending\":0,\"playoffsTotal\":8,\"playoffsPlayed\":8,\"playoffsPending\":0}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Math",
+      "label": "Tabele spójne (pkt / M)",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Math",
+      "label": "Play-off bez nierozstrzygniętych remisów",
+      "ok": true,
+      "detail": "PO pending=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka nazywo",
+      "ok": true,
+      "detail": "active=true, text=1690, tables=4, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka mecze",
+      "ok": false,
+      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'mecze\\'\"], .nav-tabs button[onclick*=\"mecze\"]').first()\n    - locator resolved to <button onclick=\"switchTab('mecze')\" class=\"nav-btn nav-desktop-only\">Mecze</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    6 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
+      "severity": "warning"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka tabele",
+      "ok": true,
+      "detail": "active=true, text=475, tables=2, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka playoff",
+      "ok": true,
+      "detail": "active=true, text=491, tables=1, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka podium",
+      "ok": true,
+      "detail": "active=true, text=435, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka sklady",
+      "ok": true,
+      "detail": "active=true, text=105, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka ustawienia",
+      "ok": false,
+      "detail": "active=null, text=0, tables=0, overflowX=false",
+      "severity": "critical"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Zakładka archiwum",
+      "ok": true,
+      "detail": "active=true, text=3067, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Przycisk Drukuj obecny",
+      "ok": true,
+      "detail": "printLiveView OK",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Reguły @media print",
+      "ok": true,
+      "detail": "rules=24",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Na żywo ma harmonogram do druku",
+      "ok": true,
+      "detail": "textLen=1690",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Na żywo ma tabele do druku",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Print media: treść #nazywo niepusta",
+      "ok": true,
+      "detail": "textLen=1577 tables=4 rows=35",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Print",
+      "label": "Print media: wygląda na harmonogram/tabele",
+      "ok": true,
+      "detail": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Dashboard turnieju",
+      "ok": true,
+      "detail": "📊 Dashboard turnieju\n👥 Drużyny\n9\n⚽ Mecze\n24 / 24\n🏁 Faza\nPlay-Off\n🏆 Play-Off\nwygenerowany\n💾 Osta",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Share",
+      "label": "URL kibica",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Share",
+      "label": "URL hali",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Share",
+      "label": "URL asystenta (token)",
+      "ok": true,
+      "detail": "brak tokenu",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Organizer",
+      "label": "Brak pageerror JS",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Fan",
+      "label": "Widok kibica załadowany",
+      "ok": true,
+      "detail": "Turniejomat 🔴 WYNIKI LIVE (KIBIC)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Fan",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=834 vw=834",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Fan",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Fan",
+      "label": "Lista meczów widoczna",
+      "ok": true,
+      "detail": "rows=32 tables=9",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Fan",
+      "label": "Brak kontrolek zapisu wyniku (readonly)",
+      "ok": true,
+      "detail": "visibleWrite=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Hall",
+      "label": "Tryb hall-view",
+      "ok": true,
+      "detail": "TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Hall",
+      "label": "Panel LIVE widoczny",
+      "ok": true,
+      "detail": "Drużyna 5\n1\n:\n0\nDrużyna 7\n🥇\nZWYCIĘZCA TURNIEJU\nDrużyna 5\n🥈\n2. MIEJSCE\nDrużyna 7\n🥉\n3. MIEJSCE\nDrużyna 1\n⚽ KRÓL STRZELC",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Hall",
+      "label": "Tytuł ≠ generyczny „Turniej”",
+      "ok": true,
+      "detail": "title=\"TP-QDJL-CTW5\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Hall",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Hall",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=834",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
+      "ok": true,
+      "detail": "cards/rows=24 inputs=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"✅ Zapisano przed chwilą\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Turniej załadowany (state.matches)",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Brak H-overflow (start)",
+      "ok": true,
+      "detail": "scrollW=1366 vw=1366",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Header sędziego (nie fan/hall)",
+      "ok": true,
+      "detail": "(none)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Badge zapisu widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":796,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Status Firebase widoczny",
+      "ok": true,
+      "detail": "{\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":788,\"bottom\":42,\"left\":698,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Badges",
+      "label": "Organizer: badge’e nie nachodzą na siebie",
+      "ok": true,
+      "detail": "overlap=false area=0 gapPx=0 placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":788,\"bottom\":42,\"left\":698,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano przed chwilą\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":796,\"width\":150,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Badges",
+      "label": "Organizer: badge’e w belce header (wzorzec asystenta)",
+      "ok": true,
+      "detail": "placement=header (oczekiwany wzorzec: header; obecnie fixed bottom-right)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Nav „Na żywo” widoczne",
+      "ok": true,
+      "detail": "[{\"t\":\"Na żywo\",\"onclick\":\"switchTab('nazywo')\",\"classes\":\"nav-btn nav-tab-live\",\"visible\":true}]",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Critical",
+      "label": "switchTab(ustawienia) bez crasha",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Math",
+      "label": "Grupy równe (lub 1 grupa)",
+      "ok": false,
+      "detail": "{\"A\":5,\"B\":4}",
+      "severity": "high"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Math",
+      "label": "Drużyny i mecze obecne",
+      "ok": true,
+      "detail": "{\"teams\":9,\"groups\":2,\"matchesTotal\":16,\"matchesPlayed\":16,\"matchesPending\":0,\"playoffsTotal\":8,\"playoffsPlayed\":8,\"playoffsPending\":0}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Math",
+      "label": "Tabele spójne (pkt / M)",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Math",
+      "label": "Play-off bez nierozstrzygniętych remisów",
+      "ok": true,
+      "detail": "PO pending=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka nazywo",
+      "ok": true,
+      "detail": "active=true, text=1690, tables=4, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka mecze",
+      "ok": true,
+      "detail": "active=true, text=1319, tables=2, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka tabele",
+      "ok": false,
+      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'tabele\\'\"], .nav-tabs button[onclick*=\"tabele\"]').first()\n    - locator resolved to <button onclick=\"switchTab('tabele')\" class=\"nav-btn nav-mobile-only\">Tabele</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
+      "severity": "warning"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka playoff",
+      "ok": true,
+      "detail": "active=true, text=491, tables=1, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka podium",
+      "ok": true,
+      "detail": "active=true, text=435, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka sklady",
+      "ok": true,
+      "detail": "active=true, text=105, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka ustawienia",
+      "ok": false,
+      "detail": "active=null, text=0, tables=0, overflowX=false",
+      "severity": "critical"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Zakładka archiwum",
+      "ok": true,
+      "detail": "active=true, text=3067, tables=0, overflowX=false",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Przycisk Drukuj obecny",
+      "ok": true,
+      "detail": "printLiveView OK",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Reguły @media print",
+      "ok": true,
+      "detail": "rules=24",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Na żywo ma harmonogram do druku",
+      "ok": true,
+      "detail": "textLen=1690",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Na żywo ma tabele do druku",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Print media: treść #nazywo niepusta",
+      "ok": true,
+      "detail": "textLen=1577 tables=4 rows=35",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Print",
+      "label": "Print media: wygląda na harmonogram/tabele",
+      "ok": true,
+      "detail": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Dashboard turnieju",
+      "ok": true,
+      "detail": "📊 Dashboard turnieju\n👥 Drużyny\n9\n⚽ Mecze\n24 / 24\n🏁 Faza\nPlay-Off\n🏆 Play-Off\nwygenerowany\n💾 Osta",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Share",
+      "label": "URL kibica",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Share",
+      "label": "URL hali",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Share",
+      "label": "URL asystenta (token)",
+      "ok": true,
+      "detail": "brak tokenu",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Organizer",
+      "label": "Brak pageerror JS",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Fan",
+      "label": "Widok kibica załadowany",
+      "ok": true,
+      "detail": "Turniejomat 🔴 WYNIKI LIVE (KIBIC)",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Fan",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=1366 vw=1366",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Fan",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Fan",
+      "label": "Lista meczów widoczna",
+      "ok": true,
+      "detail": "rows=32 tables=5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Fan",
+      "label": "Brak kontrolek zapisu wyniku (readonly)",
+      "ok": true,
+      "detail": "visibleWrite=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Hall",
+      "label": "Tryb hall-view",
+      "ok": true,
+      "detail": "TP-QDJL-CTW5",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Hall",
+      "label": "Panel LIVE widoczny",
+      "ok": true,
+      "detail": "Drużyna 5\n1\n:\n0\nDrużyna 7\n🥇\nZWYCIĘZCA TURNIEJU\nDrużyna 5\n🥈\n2. MIEJSCE\nDrużyna 7\n🥉\n3. MIEJSCE\nDrużyna 1\n⚽ KRÓL STRZELC",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Hall",
+      "label": "Tytuł ≠ generyczny „Turniej”",
+      "ok": true,
+      "detail": "title=\"TP-QDJL-CTW5\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Hall",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Hall",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=1366",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
+      "ok": true,
+      "detail": "cards/rows=24 inputs=0",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"✅ Zapisano przed chwilą\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    }
+  ],
+  "perViewport": {
+    "galaxy-a56": {
+      "share": {
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-QDJL-CTW5&token=c93c1eb14ca516f45db3c3ff8fde7feb",
+        "errors": [],
+        "assistantToken": false
+      },
+      "mathStats": {
+        "teams": 9,
+        "groups": 2,
+        "matchesTotal": 16,
+        "matchesPlayed": 16,
+        "matchesPending": 0,
+        "playoffsTotal": 8,
+        "playoffsPlayed": 8,
+        "playoffsPending": 0
+      },
+      "mathIssues": [],
+      "standingsSample": [
+        {
+          "group": "A",
+          "rank": 1,
+          "team": "Drużyna 4",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 0
+        },
+        {
+          "group": "A",
+          "rank": 2,
+          "team": "Drużyna 8",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 2
+        },
+        {
+          "group": "A",
+          "rank": 3,
+          "team": "Drużyna 3",
+          "m": 4,
+          "w": 1,
+          "r": 3,
+          "p": 0,
+          "pkt": 6,
+          "bz": 2,
+          "bs": 1
+        }
+      ],
+      "settings": {
+        "advCount": 8
+      },
+      "print": {
+        "before": false,
+        "printRules": 24,
+        "styleSheets": 3,
+        "hasSchedule": true,
+        "hasStandings": true,
+        "printBtnFound": true,
+        "hasPrintFn": true,
+        "liveTextLen": 1644,
+        "sample": "Wszystkie Oczekujące Zakończone Całość Gr. A Gr. B Play-Off Udostępnij Drukuj Harmonogram meczów ⚽ FAZA GRUPOWA #1 A 08:00 1:2 ⚽ Strzelcy Drużyna 5 - Drużyna 8 #2 A 08:12 1:0 ⚽ Strzelcy Drużyna 3 - Drużyna 9 #3 A 08:24 0:0 ⚽ Strzelcy Drużyna 4 - Drużyna 8 #4 B 08:36 0:1 ⚽ Strzelc",
+        "printMedia": {
+          "hidden": [
+            {
+              "sel": "#app-header",
+              "exists": false
+            },
+            {
+              "sel": "header",
+              "exists": true,
+              "display": "flex",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".nav-tabs",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#firebase-status",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#last-save-info",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".header-organizer-actions",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            }
+          ],
+          "textLen": 1557,
+          "tables": 2,
+          "matchRows": 11,
+          "sample": "Harmonogram meczów ⚽ FAZA GRUPOWA #1 A 08:00 1:2 ⚽ Strzelcy Drużyna 5 - Drużyna 8 #2 A 08:12 1:0 ⚽ Strzelcy Drużyna 3 - Drużyna 9 #3 A 08:24 0:0 ⚽ Strzelcy Drużyna 4 - Drużyna 8 #4 B 08:36 0:1 ⚽ Strzelcy Drużyna 6 - Drużyna 2 #5 A 08:48 0:3 ⚽ Strzelcy Drużyna 9 - Drużyna 8 #6 A 09:00 1:0 ⚽ Strzelcy Drużyna 4 - Drużyna 9 #7 B 09:12 0:0 ⚽ Strzelcy Drużyna 1 - Drużyna 2 #8 B 09:24 0:0 ⚽ Strzelcy Druż",
+          "hasGroupWord": false,
+          "hasScoreLike": true
+        }
+      }
+    },
+    "tablet-11": {
+      "share": {
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-QDJL-CTW5&token=d7b53c33c14aef7349eef9a60fcc05c3",
+        "errors": [],
+        "assistantToken": false
+      },
+      "mathStats": {
+        "teams": 9,
+        "groups": 2,
+        "matchesTotal": 16,
+        "matchesPlayed": 16,
+        "matchesPending": 0,
+        "playoffsTotal": 8,
+        "playoffsPlayed": 8,
+        "playoffsPending": 0
+      },
+      "mathIssues": [],
+      "standingsSample": [
+        {
+          "group": "A",
+          "rank": 1,
+          "team": "Drużyna 4",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 0
+        },
+        {
+          "group": "A",
+          "rank": 2,
+          "team": "Drużyna 8",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 2
+        },
+        {
+          "group": "A",
+          "rank": 3,
+          "team": "Drużyna 3",
+          "m": 4,
+          "w": 1,
+          "r": 3,
+          "p": 0,
+          "pkt": 6,
+          "bz": 2,
+          "bs": 1
+        }
+      ],
+      "settings": {
+        "advCount": 8
+      },
+      "print": {
+        "before": false,
+        "printRules": 24,
+        "styleSheets": 3,
+        "hasSchedule": true,
+        "hasStandings": true,
+        "printBtnFound": true,
+        "hasPrintFn": true,
+        "liveTextLen": 1690,
+        "sample": "Wszystkie Oczekujące Zakończone Całość Gr. A Gr. B Play-Off Udostępnij Drukuj Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08:12 Drużyna 3VSDrużyna 9 1:0 ⚽ Strzelcy 3 A 08:24 Drużyna 4VSDrużyna 8 0:0 ⚽ Strze",
+        "printMedia": {
+          "hidden": [
+            {
+              "sel": "#app-header",
+              "exists": false
+            },
+            {
+              "sel": "header",
+              "exists": true,
+              "display": "flex",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".nav-tabs",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#firebase-status",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#last-save-info",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".header-organizer-actions",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            }
+          ],
+          "textLen": 1577,
+          "tables": 4,
+          "matchRows": 35,
+          "sample": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08:12 Drużyna 3VSDrużyna 9 1:0 ⚽ Strzelcy 3 A 08:24 Drużyna 4VSDrużyna 8 0:0 ⚽ Strzelcy 4 B 08:36 Drużyna 6VSDrużyna 2 0:1 ⚽ Strzelcy 5 A 08:48 Drużyna 9VSDrużyna 8 0:3 ⚽ Strzelcy 6 A 09:00 Drużyna 4VSDrużyna 9 1:0 ⚽ Strzelcy 7 B 09:12 Drużyna 1VSDrużyna 2 0:0 ⚽ Strzelcy 8 B 09:24 ",
+          "hasGroupWord": true,
+          "hasScoreLike": true
+        }
+      }
+    },
+    "laptop-14": {
+      "share": {
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-QDJL-CTW5&token=c8fbf1d45d46cb37164249750bb1c842",
+        "errors": [],
+        "assistantToken": false
+      },
+      "mathStats": {
+        "teams": 9,
+        "groups": 2,
+        "matchesTotal": 16,
+        "matchesPlayed": 16,
+        "matchesPending": 0,
+        "playoffsTotal": 8,
+        "playoffsPlayed": 8,
+        "playoffsPending": 0
+      },
+      "mathIssues": [],
+      "standingsSample": [
+        {
+          "group": "A",
+          "rank": 1,
+          "team": "Drużyna 4",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 0
+        },
+        {
+          "group": "A",
+          "rank": 2,
+          "team": "Drużyna 8",
+          "m": 4,
+          "w": 2,
+          "r": 2,
+          "p": 0,
+          "pkt": 8,
+          "bz": 6,
+          "bs": 2
+        },
+        {
+          "group": "A",
+          "rank": 3,
+          "team": "Drużyna 3",
+          "m": 4,
+          "w": 1,
+          "r": 3,
+          "p": 0,
+          "pkt": 6,
+          "bz": 2,
+          "bs": 1
+        }
+      ],
+      "settings": {
+        "advCount": 8
+      },
+      "print": {
+        "before": false,
+        "printRules": 24,
+        "styleSheets": 3,
+        "hasSchedule": true,
+        "hasStandings": true,
+        "printBtnFound": true,
+        "hasPrintFn": true,
+        "liveTextLen": 1690,
+        "sample": "Wszystkie Oczekujące Zakończone Całość Gr. A Gr. B Play-Off Udostępnij Drukuj Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08:12 Drużyna 3VSDrużyna 9 1:0 ⚽ Strzelcy 3 A 08:24 Drużyna 4VSDrużyna 8 0:0 ⚽ Strze",
+        "printMedia": {
+          "hidden": [
+            {
+              "sel": "#app-header",
+              "exists": false
+            },
+            {
+              "sel": "header",
+              "exists": true,
+              "display": "flex",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".nav-tabs",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#firebase-status",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": "#last-save-info",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            },
+            {
+              "sel": ".header-organizer-actions",
+              "exists": true,
+              "display": "none",
+              "visibility": "visible"
+            }
+          ],
+          "textLen": 1577,
+          "tables": 4,
+          "matchRows": 35,
+          "sample": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA GODZ. MECZ WYNIK STRZELCY 1 A 08:00 Drużyna 5VSDrużyna 8 1:2 ⚽ Strzelcy 2 A 08:12 Drużyna 3VSDrużyna 9 1:0 ⚽ Strzelcy 3 A 08:24 Drużyna 4VSDrużyna 8 0:0 ⚽ Strzelcy 4 B 08:36 Drużyna 6VSDrużyna 2 0:1 ⚽ Strzelcy 5 A 08:48 Drużyna 9VSDrużyna 8 0:3 ⚽ Strzelcy 6 A 09:00 Drużyna 4VSDrużyna 9 1:0 ⚽ Strzelcy 7 B 09:12 Drużyna 1VSDrużyna 2 0:0 ⚽ Strzelcy 8 B 09:24 ",
+          "hasGroupWord": true,
+          "hasScoreLike": true
+        }
+      }
+    }
+  }
+}

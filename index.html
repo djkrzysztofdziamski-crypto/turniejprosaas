@@ -707,13 +707,29 @@
             @page { margin: 12mm; size: A4 portrait; }
         }
         /* --- Tryb hali (projektor) --- */
+        body.hall-view {
+            height: 100dvh;
+            max-height: 100dvh;
+            overflow: hidden;
+            margin: 0;
+        }
+        body.hall-view #view-app .footer-sig { display: none !important; }
         body.hall-view #view-app header,
         body.hall-view #view-app .header-organizer-actions,
         body.hall-view #view-app #tournament-dashboard,
         body.hall-view #view-app .nav-tabs,
         body.hall-view #view-app .container { display: none !important; }
-        body.hall-view #view-app #hall-screen { display: block; }
-        body.hall-view #view-app { background: #fff; min-height: 100dvh; }
+        body.hall-view #view-app {
+            background: #fff;
+            padding: 0;
+            min-height: 0;
+            height: 100dvh;
+            max-height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
         #view-app #hall-screen { display: none; padding: 12px 16px 16px; }
         #view-app .hall-header { display: flex; justify-content: space-between; align-items: center; gap: 12px 16px; flex-wrap: wrap; border-bottom: 2px solid var(--color-app-border); padding-bottom: 8px; margin-bottom: 10px; }
         #view-app .hall-header-left { display: flex; align-items: center; gap: 12px 16px; min-width: 0; flex: 1; }
@@ -847,13 +863,19 @@
         body.hall-view #view-app #hall-screen {
             display: flex !important;
             flex-direction: column;
-            height: 100dvh;
-            max-height: 100dvh;
+            flex: 1;
+            min-height: 0;
+            height: auto;
+            max-height: none;
             box-sizing: border-box;
-            padding: 12px 16px 14px;
+            padding: clamp(8px, 1.5vh, 12px) clamp(10px, 1.5vw, 16px) clamp(8px, 1.2vh, 14px);
             overflow: hidden;
         }
-        body.hall-view #view-app .hall-header { flex-shrink: 0; }
+        body.hall-view #view-app .hall-header {
+            flex-shrink: 0;
+            margin-bottom: clamp(4px, 1vh, 10px);
+            padding-bottom: clamp(4px, 0.8vh, 8px);
+        }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -863,9 +885,10 @@
                 "live live live qr"
                 "live live live clock"
                 "next next done done";
-            gap: 10px;
+            gap: clamp(6px, 1.2vh, 10px);
             flex: 1;
             min-height: 0;
+            overflow: hidden;
             align-items: stretch;
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-col-main {
@@ -896,13 +919,13 @@
             justify-content: center;
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-team-name {
-            font-size: clamp(20px, 3.2vw, 40px);
+            font-size: clamp(16px, min(3.2vw, 4.5vh), 40px);
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-digit {
-            font-size: clamp(56px, 11vw, 100px);
+            font-size: clamp(40px, min(11vw, 14vh), 100px);
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-colon {
-            font-size: clamp(34px, 6.5vw, 56px);
+            font-size: clamp(26px, min(6.5vw, 8vh), 56px);
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr-cell {
             grid-area: qr;
@@ -921,7 +944,7 @@
             height: 100%;
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr img {
-            width: min(100%, 180px);
+            width: min(100%, min(180px, 22vh));
             height: auto;
             aspect-ratio: 1;
             object-fit: contain;
@@ -933,13 +956,14 @@
             display: flex !important;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: clamp(4px, 1vh, 8px);
             min-width: 0;
             min-height: 0;
+            overflow: hidden;
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-clock {
             font-family: var(--font-display);
-            font-size: clamp(36px, 6.5vw, 64px);
+            font-size: clamp(28px, min(6.5vw, 8vh), 64px);
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             letter-spacing: 0.08em;
@@ -1101,7 +1125,7 @@
             justify-content: center;
             text-align: center;
             color: #94a3b8;
-            font-size: 13px;
+            font-size: clamp(11px, 1.6vh, 13px);
             font-weight: 600;
             background: #f8fafc;
             border-radius: 8px;
@@ -1109,17 +1133,65 @@
             padding: 8px;
             min-height: 0;
         }
-        @media (max-width: 767px) {
-            body.hall-view #view-app #hall-screen { height: auto; max-height: none; overflow-y: auto; }
-            body.hall-view #view-app .hall-grid.hall-grid--sixteen {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: minmax(220px, auto) minmax(100px, auto) minmax(180px, auto) minmax(180px, auto);
-                grid-template-areas:
-                    "live live"
-                    "qr clock"
-                    "next next"
-                    "done done";
+
+        /* Blokada hali na telefonach / małych tabletach (< ~8") */
+        #view-app #hall-too-small {
+            display: none;
+            flex: 1;
+            min-height: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 28px 22px;
+            box-sizing: border-box;
+            background: linear-gradient(165deg, #f0f9ff 0%, #fff 42%, #fefce8 100%);
+            border-radius: 16px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+        }
+        #view-app #hall-too-small .hall-too-small-emoji {
+            font-size: 48px;
+            line-height: 1;
+            margin-bottom: 14px;
+        }
+        #view-app #hall-too-small h2 {
+            font-family: var(--font-display);
+            font-size: clamp(22px, 5vw, 28px);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px;
+            line-height: 1.25;
+        }
+        #view-app #hall-too-small p {
+            font-size: 15px;
+            line-height: 1.55;
+            color: #475569;
+            margin: 0 auto 10px;
+            max-width: 28em;
+        }
+        #view-app #hall-too-small p:last-child { margin-bottom: 0; }
+        body.hall-view.hall-view--too-small #view-app .hall-header,
+        body.hall-view.hall-view--too-small #view-app .hall-grid {
+            display: none !important;
+        }
+        body.hall-view.hall-view--too-small #view-app #hall-too-small {
+            display: flex !important;
+        }
+        @media (max-width: 900px) {
+            body.hall-view #view-app .hall-header,
+            body.hall-view #view-app .hall-grid {
+                display: none !important;
+            }
+            body.hall-view #view-app #hall-too-small {
+                display: flex !important;
+            }
+            body.hall-view #view-app #hall-screen {
+                flex: 1;
+                min-height: 0;
                 height: auto;
+                max-height: none;
+                overflow: hidden;
             }
         }
 
@@ -3601,6 +3673,12 @@
     <div id="tournament-dashboard"></div>
 
     <div id="hall-screen" aria-hidden="true">
+        <div id="hall-too-small" class="hall-too-small" hidden>
+            <div class="hall-too-small-emoji" aria-hidden="true">🏟️</div>
+            <h2>Ten widok lubi duży ekran</h2>
+            <p>Ten widok jest pod TV, projektor albo tablet od ok. 8″ w poziomie — żeby wynik i kolejne mecze były czytelne z trybun.</p>
+            <p>Otwórz link hali na większym urządzeniu albo podłącz wyświetlacz. Na telefonie wygodniej zajrzyj w widok kibica.</p>
+        </div>
         <div class="hall-header">
             <div class="hall-header-left">
                 <picture class="brand-picture brand-picture--hall">
@@ -3768,6 +3846,7 @@
                         <option value="random">Mieszany</option>
                     </select>
                 </div>
+                <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach mecze grupowe układane równolegle (grupa → preferowane boisko). Play-off: najwcześniejsze wolne boisko.</p>
                 <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
             </div>
         </div>
@@ -4409,7 +4488,8 @@
         if (!el) return;
         const demoStoryOn = !!(document.getElementById('view-demo-story')?.classList.contains('active')
             || (window.DemoStoryController && window.DemoStoryController.isActive && window.DemoStoryController.isActive()));
-        if (!activeKey || isDemoMode || isFanMode || viewMode === 'admin' || demoStoryOn) {
+        const hallOn = document.body.classList.contains('hall-view');
+        if (!activeKey || isDemoMode || isFanMode || hallOn || viewMode === 'admin' || demoStoryOn) {
             el.style.display = 'none';
             if (typeof window.syncAssistantHeaderBadges === 'function') window.syncAssistantHeaderBadges();
             return;
@@ -5122,6 +5202,178 @@
         return Math.min(99, n);
     };
 
+    /** Minuty od 00:00 dla "HH:MM". */
+    window.timeToMinutes = function (t) {
+        if (!t || typeof t !== 'string') return 0;
+        const parts = String(t).split(':').map(Number);
+        const h = Number.isFinite(parts[0]) ? parts[0] : 0;
+        const m = Number.isFinite(parts[1]) ? parts[1] : 0;
+        return h * 60 + m;
+    };
+
+    window.maxTimeStr = function (a, b) {
+        if (!a) return b || '00:00';
+        if (!b) return a;
+        return window.timeToMinutes(a) >= window.timeToMinutes(b) ? a : b;
+    };
+
+    window.getLatestMatchTime = function (matches) {
+        let best = null;
+        (matches || []).forEach(m => {
+            if (!m || !m.time) return;
+            if (!best || window.timeToMinutes(m.time) > window.timeToMinutes(best)) best = m.time;
+        });
+        return best;
+    };
+
+    window.timesOverlap = function (t1, t2, durationMin) {
+        if (!t1 || !t2) return false;
+        const d = Math.max(1, parseInt(durationMin, 10) || 15);
+        const a0 = window.timeToMinutes(t1);
+        const b0 = window.timeToMinutes(t2);
+        return a0 < (b0 + d) && b0 < (a0 + d);
+    };
+
+    window.preferredPitchForGroup = function (groupName, pitchCount) {
+        const n = parseInt(pitchCount, 10) || 0;
+        if (n < 1) return 1;
+        const groups = Object.keys(state.groups || {}).sort();
+        let idx = groups.indexOf(groupName);
+        if (idx < 0) idx = 0;
+        return (idx % n) + 1;
+    };
+
+    /** Sort grupowy: rosnąco po godzinie, remis → id (stabilnie). */
+    window.sortMatchesByScheduleTime = function (matches) {
+        return (matches || []).slice().sort((a, b) => {
+            const dt = window.timeToMinutes(a && a.time) - window.timeToMinutes(b && b.time);
+            if (dt !== 0) return dt;
+            return ((a && a.id) || 0) - ((b && b.id) || 0);
+        });
+    };
+
+    /** Po nadaniu time/pitch: kolejność tablicy + id = #1…N według zegara. */
+    window.finalizeGroupMatchOrder = function (matches) {
+        const sorted = window.sortMatchesByScheduleTime(matches || []);
+        sorted.forEach((m, idx) => {
+            if (m) m.id = idx + 1;
+        });
+        return sorted;
+    };
+
+    /**
+     * Równoległy terminarz grupowy: group-sticky + tory nextFree + blokada drużyn na slot (gDur+gBreak).
+     */
+    window.assignGroupPitchesAndTimes = function (matches, settings, pitchCount) {
+        const list = matches || [];
+        const pc = parseInt(pitchCount, 10) || 0;
+        if (pc < 2 || !list.length) return;
+        const start = (settings && settings.start) ? String(settings.start) : '09:00';
+        const gDur = parseInt(settings && settings.gDur, 10) || 0;
+        const gBreak = parseInt(settings && settings.gBreak, 10) || 0;
+        const slotLen = Math.max(1, gDur + gBreak);
+        const nextFree = {};
+        for (let p = 1; p <= pc; p++) nextFree[p] = start;
+        const teamBusy = {};
+
+        list.forEach(m => {
+            if (!m) return;
+            const pref = window.preferredPitchForGroup(m.group, pc);
+            const t1id = m.t1 && m.t1.id != null && m.t1.id >= 0 ? m.t1.id : null;
+            const t2id = m.t2 && m.t2.id != null && m.t2.id >= 0 ? m.t2.id : null;
+            const order = [pref];
+            for (let p = 1; p <= pc; p++) {
+                if (p !== pref) order.push(p);
+            }
+            let bestPitch = pref;
+            let bestSlot = null;
+            order.forEach(p => {
+                let slotStart = nextFree[p];
+                if (t1id != null && teamBusy[t1id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t1id]);
+                if (t2id != null && teamBusy[t2id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t2id]);
+                if (bestSlot == null || window.timeToMinutes(slotStart) < window.timeToMinutes(bestSlot)) {
+                    bestSlot = slotStart;
+                    bestPitch = p;
+                } else if (window.timeToMinutes(slotStart) === window.timeToMinutes(bestSlot)) {
+                    if (p === pref) bestPitch = p;
+                    else if (bestPitch !== pref && p < bestPitch) bestPitch = p;
+                }
+            });
+            m.pitch = bestPitch;
+            m.time = bestSlot;
+            const end = window.addMin(bestSlot, slotLen);
+            nextFree[bestPitch] = end;
+            if (t1id != null) teamBusy[t1id] = end;
+            if (t2id != null) teamBusy[t2id] = end;
+        });
+    };
+
+    /**
+     * Przydział boisk do play-off (czasy już ustawione): najwcześniejszy wolny tor; przy braku — przesuń time.
+     */
+    window.assignPlayoffPitchesAndTimes = function (playoffs, startTime, settings, pitchCount) {
+        const list = playoffs || [];
+        const pc = parseInt(pitchCount, 10) || 0;
+        if (pc < 2 || !list.length) return;
+        const poDur = parseInt(settings && settings.poDur, 10) || 15;
+        const finDur = parseInt(settings && settings.finDur, 10) || poDur;
+        const nextFree = {};
+        for (let p = 1; p <= pc; p++) nextFree[p] = startTime || '09:00';
+        const teamBusy = {};
+        const sorted = list.slice().sort((a, b) => {
+            const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
+            if (dt !== 0) return dt;
+            return (a.id || 0) - (b.id || 0);
+        });
+        sorted.forEach(m => {
+            if (!m) return;
+            const isBye = m.played && m.t1 && m.t2 && (m.t1.id === -99 || m.t2.id === -99);
+            if (isBye) { m.pitch = null; return; }
+            const t1id = m.t1 && m.t1.id != null && m.t1.id >= 0 ? m.t1.id : null;
+            const t2id = m.t2 && m.t2.id != null && m.t2.id >= 0 ? m.t2.id : null;
+            const scheduled = m.time || startTime;
+            let bestPitch = 1;
+            let bestSlot = null;
+            for (let p = 1; p <= pc; p++) {
+                let slotStart = window.maxTimeStr(nextFree[p], scheduled);
+                if (window.timeToMinutes(nextFree[p]) <= window.timeToMinutes(scheduled)) {
+                    slotStart = scheduled;
+                } else {
+                    slotStart = nextFree[p];
+                }
+                if (t1id != null && teamBusy[t1id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t1id]);
+                if (t2id != null && teamBusy[t2id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t2id]);
+                if (bestSlot == null || window.timeToMinutes(slotStart) < window.timeToMinutes(bestSlot) ||
+                    (window.timeToMinutes(slotStart) === window.timeToMinutes(bestSlot) && p < bestPitch)) {
+                    bestSlot = slotStart;
+                    bestPitch = p;
+                }
+            }
+            m.pitch = bestPitch;
+            m.time = bestSlot;
+            const name = String(m.n || '').toUpperCase();
+            const isFinal = name.indexOf('FINAŁ') >= 0 || name.indexOf('FINAL') >= 0;
+            const isThird = name.indexOf('3. MIEJSCE') >= 0 || name.indexOf('3 MIEJSCE') >= 0;
+            const slotLen = (isFinal || isThird) ? (finDur + 5) : (poDur + 2);
+            const end = window.addMin(bestSlot, Math.max(1, slotLen));
+            nextFree[bestPitch] = end;
+            if (t1id != null) teamBusy[t1id] = end;
+            if (t2id != null) teamBusy[t2id] = end;
+        });
+    };
+
+    window.getMatchDurationMinutes = function (m, isPo) {
+        const s = state.settings || {};
+        if (isPo) {
+            const name = String(m && m.n || '').toUpperCase();
+            if (name.indexOf('WIELKI FINAŁ') >= 0 || name.indexOf('FINAŁ') >= 0 && name.indexOf('1/') < 0 && name.indexOf('ĆWIERĆ') < 0 && name.indexOf('PÓŁ') < 0) {
+                return parseInt(s.finDur, 10) || parseInt(s.poDur, 10) || 15;
+            }
+            return parseInt(s.poDur, 10) || 15;
+        }
+        return parseInt(s.gDur, 10) || 15;
+    };
+
     window.formatPitchLabel = function (m) {
         const p = m && m.pitch != null ? parseInt(m.pitch, 10) : NaN;
         if (!Number.isFinite(p) || p < 1) return '';
@@ -5604,13 +5856,29 @@
             if (pitch > max) pitch = null;
         }
         if (pitch != null) {
+            const dur = window.getMatchDurationMinutes(m, !!isPo);
             const conflicts = [];
+            const teamIds = [];
+            if (m.t1 && m.t1.id != null && m.t1.id >= 0) teamIds.push(m.t1.id);
+            if (m.t2 && m.t2.id != null && m.t2.id >= 0) teamIds.push(m.t2.id);
             const collect = (list, asPo) => {
                 (list || []).forEach(other => {
                     if (!other || other.played) return;
                     if (other.id === matchId && !!asPo === !!isPo) return;
-                    if (parseInt(other.pitch, 10) === pitch) {
-                        conflicts.push({ m: other, isPo: !!asPo });
+                    const samePitch = parseInt(other.pitch, 10) === pitch;
+                    const otherDur = window.getMatchDurationMinutes(other, !!asPo);
+                    const overlap = m.time && other.time && window.timesOverlap(m.time, other.time, Math.max(dur, otherDur));
+                    if (samePitch && overlap) {
+                        conflicts.push({ m: other, isPo: !!asPo, reason: 'czas na tym boisku' });
+                        return;
+                    }
+                    if (overlap && teamIds.length) {
+                        const oids = [];
+                        if (other.t1 && other.t1.id != null && other.t1.id >= 0) oids.push(other.t1.id);
+                        if (other.t2 && other.t2.id != null && other.t2.id >= 0) oids.push(other.t2.id);
+                        if (oids.some(id => teamIds.indexOf(id) >= 0)) {
+                            conflicts.push({ m: other, isPo: !!asPo, reason: 'drużyna w tym samym czasie' });
+                        }
                     }
                 });
             };
@@ -5624,11 +5892,12 @@
                     const round = c.isPo
                         ? (typeof window.getPlayoffRoundLabel === 'function' ? window.getPlayoffRoundLabel(c.m) : 'Play-off')
                         : (c.m.group ? ('Grupa ' + c.m.group) : '');
-                    return '• Mecz #' + no + (round ? ' (' + round + ')' : '') + ': ' + t1 + ' vs ' + t2;
+                    const tm = c.m.time ? (' @ ' + c.m.time) : '';
+                    return '• Mecz #' + no + (round ? ' (' + round + ')' : '') + tm + ': ' + t1 + ' vs ' + t2 + ' — ' + c.reason;
                 }).join('\n');
                 const ok = confirm(
-                    'Boisko ' + pitch + ' jest już przydzielone:\n\n' + lines +
-                    '\n\nPrzypisać je do tego meczu? Poprzedni przydział zostanie usunięty.'
+                    'Kolizja przy boisku ' + pitch + ':\n\n' + lines +
+                    '\n\nPrzypisać mimo to?'
                 );
                 if (!ok) {
                     window._pitchSelectUiLock = false;
@@ -5642,15 +5911,6 @@
                     return;
                 }
             }
-            const clearFrom = (list, asPo) => {
-                (list || []).forEach(other => {
-                    if (!other || other.played) return;
-                    if (other.id === matchId && !!asPo === !!isPo) return;
-                    if (parseInt(other.pitch, 10) === pitch) other.pitch = null;
-                });
-            };
-            clearFrom(state.matches, false);
-            clearFrom(state.playoffs, true);
         }
         m.pitch = pitch;
         window._pitchSelectUiLock = false;
@@ -5670,14 +5930,21 @@
         if (typeof window.refreshAssistantMatchesView === 'function' && isAssistantMode) window.refreshAssistantMatchesView(true);
     };
 
-    window.getOccupiedPitches = function (exceptMatchId, exceptIsPo) {
+    window.getOccupiedPitches = function (exceptMatchId, exceptIsPo, refMatch) {
         const occupied = new Set();
+        if (!refMatch || !refMatch.time) return occupied;
+        const dur = window.getMatchDurationMinutes(refMatch, !!exceptIsPo);
         const scan = (list, asPo) => {
             (list || []).forEach(other => {
                 if (!other || other.played) return;
                 if (exceptMatchId != null && other.id === exceptMatchId && !!asPo === !!exceptIsPo) return;
                 const p = parseInt(other.pitch, 10);
-                if (Number.isFinite(p) && p >= 1) occupied.add(p);
+                if (!Number.isFinite(p) || p < 1) return;
+                if (!other.time) return;
+                const otherDur = window.getMatchDurationMinutes(other, !!asPo);
+                if (window.timesOverlap(refMatch.time, other.time, Math.max(dur, otherDur))) {
+                    occupied.add(p);
+                }
             });
         };
         scan(state.matches, false);
@@ -5691,13 +5958,13 @@
         if (m.played) return window.formatPitchBadgeHTML(m);
         if (!window.canAssignPitch()) return window.formatPitchBadgeHTML(m);
         const cur = m.pitch != null ? parseInt(m.pitch, 10) : NaN;
-        const occupied = window.getOccupiedPitches(m.id, !!isPo);
+        const occupied = window.getOccupiedPitches(m.id, !!isPo, m);
         let opts = '<option value="">—</option>';
         for (let i = 1; i <= max; i++) {
             if (occupied.has(i) && i !== cur) continue;
             opts += '<option value="' + i + '"' + (cur === i ? ' selected' : '') + '>' + i + '</option>';
         }
-        return '<select class="live-pitch-select" title="Przydziel boisko (tylko wolne)" aria-label="Boisko" ' +
+        return '<select class="live-pitch-select" title="Przydziel boisko" aria-label="Boisko" ' +
             'onfocus="window._pitchSelectUiLock=true" ' +
             'onblur="setTimeout(function(){window._pitchSelectUiLock=false;},250)" ' +
             'onmousedown="window._pitchSelectUiLock=true" ' +
@@ -6237,22 +6504,26 @@
         const all = getHallAllMatches();
         const pending = all.filter(function (m) {
             return !m.played && m.t1 && m.t1.id !== -99 && m.t2 && m.t2.id !== -99;
-        }).sort(function (a, b) {
-            return String(a.time || '').localeCompare(String(b.time || ''));
         });
+        const sortedPending = typeof window.sortMatchesByScheduleTime === 'function'
+            ? window.sortMatchesByScheduleTime(pending)
+            : pending.sort(function (a, b) {
+                return String(a.time || '').localeCompare(String(b.time || ''));
+            });
         const withoutCurrent = current
-            ? pending.filter(function (m) { return !(m.id === current.id && !!m.isPo === !!current.isPo); })
-            : pending;
+            ? sortedPending.filter(function (m) { return !(m.id === current.id && !!m.isPo === !!current.isPo); })
+            : sortedPending;
         return withoutCurrent.slice(0, limit || 3);
     }
 
     function getHallDemoDoneMatches(limit) {
-        return getHallAllMatches()
-            .filter(function (m) { return !!m.played; })
-            .sort(function (a, b) {
+        const done = getHallAllMatches().filter(function (m) { return !!m.played; });
+        const sorted = typeof window.sortMatchesByScheduleTime === 'function'
+            ? window.sortMatchesByScheduleTime(done).reverse()
+            : done.sort(function (a, b) {
                 return String(b.time || '').localeCompare(String(a.time || '')) || ((b.id || 0) - (a.id || 0));
-            })
-            .slice(0, limit || 3);
+            });
+        return sorted.slice(0, limit || 3);
     }
 
     window.renderHallDemoSixteenLists = function () {
@@ -7192,10 +7463,22 @@
             });
             if(mode === 'random') pool.sort(() => 0.5 - Math.random());
             state.matches = pool.map((m, idx) => ({ ...m, id: idx + 1 }));
-            let curr = state.settings.start;
-            state.matches.forEach(m => { m.time = curr; curr = window.addMin(curr, parseInt(state.settings.gDur) + parseInt(state.settings.gBreak)); });
+            const pitchN = window.getPitchCount();
+            if (pitchN >= 2) {
+                window.assignGroupPitchesAndTimes(state.matches, state.settings, pitchN);
+            } else {
+                let curr = state.settings.start;
+                state.matches.forEach(m => {
+                    m.time = curr;
+                    m.pitch = null;
+                    curr = window.addMin(curr, parseInt(state.settings.gDur) + parseInt(state.settings.gBreak));
+                });
+            }
+            state.matches = window.finalizeGroupMatchOrder(state.matches);
 
-            window.logAction("Wygenerowano nowy terminarz meczów grupowych.");
+            window.logAction(pitchN >= 2
+                ? ('Wygenerowano terminarz grupowy równolegle na ' + pitchN + ' boiskach.')
+                : 'Wygenerowano nowy terminarz meczów grupowych.');
             window.save(); window.renderDashboard();
             switchTab(window.tpIsDesktopLayout() ? 'nazywo' : 'mecze');
         };
@@ -7465,8 +7748,37 @@
             if (typeof window.renderSuspendedBanner === 'function') window.renderSuspendedBanner();
         };
 
+        window.syncHallViewportGate = function () {
+            if (!isHallMode) {
+                document.body.classList.remove('hall-view--too-small');
+                const gate = document.getElementById('hall-too-small');
+                if (gate) gate.hidden = true;
+                return;
+            }
+            const tooSmall = window.matchMedia('(max-width: 900px)').matches;
+            document.body.classList.toggle('hall-view--too-small', tooSmall);
+            const gate = document.getElementById('hall-too-small');
+            if (gate) gate.hidden = !tooSmall;
+            const screen = document.getElementById('hall-screen');
+            if (screen) screen.setAttribute('aria-hidden', 'false');
+        };
+
+        if (!window._hallViewportGateBound) {
+            window._hallViewportGateBound = true;
+            const onHallVp = () => {
+                if (typeof isHallMode !== 'undefined' && isHallMode && typeof window.syncHallViewportGate === 'function') {
+                    window.syncHallViewportGate();
+                }
+            };
+            window.addEventListener('resize', onHallVp);
+            window.addEventListener('orientationchange', onHallVp);
+        }
+
         window.renderHallView = () => {
             if (!isHallMode && !window._demoStoryOrganizerEmbed) return;
+            if (isHallMode && typeof window.syncHallViewportGate === 'function') {
+                window.syncHallViewportGate();
+            }
             if (window._demoStoryOrganizerEmbed && typeof window.syncDemoStoryState === 'function') {
                 window.syncDemoStoryState();
             }
@@ -7616,6 +7928,9 @@
             }
             if (currentStatusFilter === 'pending') filtered = filtered.filter(m => !m.played);
             if (currentStatusFilter === 'played') filtered = filtered.filter(m => m.played);
+            if (!tableIsPo && typeof window.sortMatchesByScheduleTime === 'function') {
+                filtered = window.sortMatchesByScheduleTime(filtered);
+            }
 
             const renderPoCard = (m, extraStyle = '', extraAlert = '') => {
                 return renderPoMatchCardHTML(m, {
@@ -8080,7 +8395,11 @@
             if (pool.length <= 4) bSize = 4;
             while(pool.length < bSize) pool.push({ id: -99, name: "— WOLNY LOS —", gk: "-", cap: "-" });
 
-            let curr = window.addMin(state.matches[state.matches.length-1].time, state.settings.afterG); state.playoffs = [];
+            let currBase = window.getLatestMatchTime(state.matches);
+            if (!currBase) currBase = (state.settings && state.settings.start) || '09:00';
+            let curr = window.addMin(currBase, state.settings.afterG);
+            const poScheduleStart = curr;
+            state.playoffs = [];
 
             if (bSize === 16) {
                 state.playoffs.push(
@@ -8132,6 +8451,11 @@
                     if(m.loserNext) { let nlm = state.playoffs.find(x => x.id === m.loserNext); if(nlm) nlm[m.loserSlot] = l; }
                 }
             });
+
+            const pitchN = window.getPitchCount();
+            if (pitchN >= 2) {
+                window.assignPlayoffPitchesAndTimes(state.playoffs, poScheduleStart, state.settings, pitchN);
+            }
 
             window.logAction(`Wygenerowano strukturę Play-Off.`);
             window.save(); window.renderDashboard(); window.switchTab('playoff');
@@ -9232,7 +9556,10 @@
             if (typeof window.setupHallSixteenLayout === 'function') {
                 window.setupHallSixteenLayout();
             }
+            if (typeof window.syncHallViewportGate === 'function') window.syncHallViewportGate();
             window.renderHallView();
+            if (typeof updateLastSaveInfo === 'function') updateLastSaveInfo();
+            else if (typeof window.syncAssistantHeaderBadges === 'function') window.syncAssistantHeaderBadges();
         } else if (isAssistantMode) {
             if (!activeKey || !assistantTokenParam) {
                 document.body.classList.add('assistant-view');
@@ -9466,6 +9793,8 @@
         document.querySelectorAll('.nav-pitch-tab').forEach(btn => {
             btn.style.display = on ? '' : 'none';
         });
+        const hint = document.getElementById('pitch-schedule-hint');
+        if (hint) hint.style.display = on ? '' : 'none';
         const asTool = document.getElementById('assistant-pitches-toolbar');
         if (asTool) {
             if (isAssistantMode && on) {
@@ -9499,7 +9828,7 @@
 
         if (count < 1) {
             targets.forEach(el => {
-                el.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Boiska wyłączone — ustaw liczbę boisk (1–10) na karcie Start.</div>';
+                el.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Boiska wyłączone — ustaw liczbę boisk (2–99) na karcie Start.</div>';
             });
             return;
         }
@@ -9507,13 +9836,29 @@
         const preferCards = (typeof window.tpPreferMatchCards === 'function' && window.tpPreferMatchCards())
             || isFanMode || isAssistantMode;
         const fanRo = isFanMode || isAssistantMode || window._demoStoryFanEmbed === true;
+        const sortByTime = (list) => list.slice().sort((a, b) => {
+            const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
+            if (dt !== 0) return dt;
+            return (a.id || 0) - (b.id || 0);
+        });
 
         let html = '';
         for (let n = 1; n <= count; n++) {
-            const groupMs = (state.matches || []).filter(m => !m.played && parseInt(m.pitch, 10) === n);
-            const poMs = (state.playoffs || []).filter(m => !m.played && parseInt(m.pitch, 10) === n);
+            const groupMs = sortByTime((state.matches || []).filter(m => !m.played && parseInt(m.pitch, 10) === n));
+            const poMs = sortByTime((state.playoffs || []).filter(m => !m.played && parseInt(m.pitch, 10) === n));
+            const allOnPitch = groupMs.concat(poMs);
+            const last = allOnPitch.length ? allOnPitch[allOnPitch.length - 1] : null;
+            const lastEnd = last && last.time
+                ? window.addMin(last.time, window.getMatchDurationMinutes(last, poMs.indexOf(last) >= 0))
+                : null;
             html += '<div class="pitch-section card">';
-            html += '<div class="pitch-section-head"><span class="live-pitch-badge">Boisko ' + n + '</span></div>';
+            html += '<div class="pitch-section-head"><span class="live-pitch-badge">Boisko ' + n + '</span>';
+            if (allOnPitch.length) {
+                html += '<span style="font-size:12px; font-weight:600; color:#64748b;">' +
+                    allOnPitch.length + (allOnPitch.length === 1 ? ' mecz' : ' meczów') +
+                    (lastEnd ? ' · ostatni ~' + esc(lastEnd) : '') + '</span>';
+            }
+            html += '</div>';
             if (!groupMs.length && !poMs.length) {
                 html += '<div class="pitch-section-empty">Brak przypisanego meczu</div>';
             } else {
@@ -9525,16 +9870,12 @@
                     return renderMatchesTableHTML(list, opts);
                 };
                 if (groupMs.length) {
-                    html += renderMatchSectionHead('⚽', 'Faza grupowa');
+                    html += '<div style="font-size:11px; font-weight:700; color:#64748b; margin:0 0 6px;">Faza grupowa</div>';
                     html += renderList(groupMs, false);
                 }
                 if (poMs.length) {
-                    if (groupMs.length) html += '<div class="match-section-divider"></div>';
-                    html += renderMatchSectionHead('🏆', 'Play-off', 'match-section-head--playoff');
-                    const poSorted = typeof window.sortPlayoffMatchesByRound === 'function'
-                        ? window.sortPlayoffMatchesByRound(poMs)
-                        : poMs;
-                    html += renderList(poSorted, true);
+                    html += '<div style="font-size:11px; font-weight:700; color:#64748b; margin:12px 0 6px;">Play-off</div>';
+                    html += renderList(poMs, true);
                 }
             }
             html += '</div>';

@@ -1,0 +1,31 @@
+---
+description: Turniejomat — oszczędność tokenów (wąski kontekst, bez pełnych audytów)
+alwaysApply: true
+---
+
+# Turniejomat — token budget
+
+## Domyślne zachowanie
+- Preferuj **wąskie zadania**: 1 bug / 1 feature / 1 plik naraz.
+- Najpierw **Grep / Read z limitem linii** — nigdy nie wczytuj całego `index.html` ani dużych raportów „na zapas”.
+- `index.html` jest monolitem: szukaj po symbolach (`printLiveView`, `switchTab`, `syncAssistantHeaderBadges`, `renderHallView`) i czytaj tylko ±50–150 linii wokół trafienia.
+- Nie odpalaj subagentów / Task / explore, jeśli wystarczy 1–2 wyszukiwania Grep.
+
+## Zakazane bez wyraźnej prośby użytkownika
+- Pełny audyt QA / Playwright na 3 viewporty lub produkcji.
+- Debug mode z instrumentacją + ingest logami.
+- Ponowne skanowanie całej aplikacji, landing + admin + demo „przy okazji”.
+- Commit / push (zwłaszcza na `main`) — tylko gdy użytkownik to napisze.
+- Masowe generowanie docs / canvas / PDF.
+
+## Preferowane źródła kontekstu
+- Istniejące audyty: `docs/AUDIT_*.md`, `scripts/qa-*-report.json` — cytuj je zamiast robić nowy audyt.
+- Lokalne preview (`npx serve`) — użytkownik weryfikuje UI; AI nie odpala przeglądarki bez potrzeby.
+
+## Odpowiedzi
+- Krótko i konkretnie; bez powtarzania całego planu po każdej zmianie.
+- Po fixie: 2–5 zdań + ścieżki plików; bez długich retrospektyw rozmowy.
+- Pytania / „jak zrobić” → wyjaśnienie; kod zmieniaj tylko gdy użytkownik prosi o implementację.
+
+## Gdy zadanie jest za szerokie
+- Zaproponuj podział na 2–3 małe kroki i zacznij od pierwszego, zamiast robić wszystko naraz.

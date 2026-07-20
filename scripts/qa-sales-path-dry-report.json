@@ -1,0 +1,169 @@
+{
+  "generatedAt": "2026-07-16T11:37:40.737Z",
+  "mode": "dry-run (bez płatności Autopay)",
+  "summary": {
+    "ok": 30,
+    "fail": 0,
+    "total": 30
+  },
+  "results": [
+    {
+      "ok": true,
+      "label": "App (bramka) HTTP 200",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "App (bramka): zawiera „Turniejomat”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "App (bramka): zawiera „btn-submit”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "App (bramka): zawiera „demo”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo Story HTTP 200",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo Story: zawiera „demo-story”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo Story: zawiera „demo-story.js”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Admin HTTP 200",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Admin: zawiera „Turniejomat”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Admin: zawiera „admin”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo JS: renderDemoHallEmbed (737ce45+)",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo JS: CTA landing 6/6",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo JS: zawiera „Zobacz finał”",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing HTTP 200",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: startCheckout",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: submitPaymentForm",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: checkout-email",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: checkout-terms",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: checkout-withdrawal",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: football-weekend",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: football-month",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Landing: link regulamin serwisu",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "getProductCatalog",
+      "detail": "2 produktów"
+    },
+    {
+      "ok": true,
+      "label": "Katalog productId",
+      "detail": "football-weekend, football-month"
+    },
+    {
+      "ok": true,
+      "label": "createCheckoutSession → Autopay POST",
+      "detail": "https://pay.autopay.eu"
+    },
+    {
+      "ok": true,
+      "label": "Autopay orderId",
+      "detail": "TPMRNFPYARA8912F21"
+    },
+    {
+      "ok": true,
+      "label": "Autopay ServiceID",
+      "detail": "217795"
+    },
+    {
+      "ok": true,
+      "label": "paymentWebhook ITN (invalid payload)",
+      "detail": "HTTP 400"
+    },
+    {
+      "ok": true,
+      "label": "Demo CTA → app.turniejomat.pl",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "label": "Demo CTA → turniejomat.pl (landing)",
+      "detail": ""
+    }
+  ],
+  "pendingManual": [],
+  "agentSmoke2026-07-18": {
+    "qa-autopay-hash": "PASS",
+    "qa-autopay-itn": "PASS",
+    "functionsDeploy": "skipped",
+    "opsChecklist": "docs/OPS_CHECKLIST_2026-07-18.md",
+    "tor2UserConfirmed": "2026-07-18 — OK"
+  }
+}

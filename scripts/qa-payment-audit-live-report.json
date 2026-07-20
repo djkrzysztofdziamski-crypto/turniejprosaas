@@ -1,0 +1,398 @@
+{
+  "startedAt": "2026-07-16T14:17:39.769Z",
+  "finishedAt": "2026-07-16T14:17:44.712Z",
+  "gatewayLive": "https://pay.autopay.eu/payment",
+  "summary": {
+    "passed": 55,
+    "failed": 0,
+    "criticalFail": 0,
+    "total": 55
+  },
+  "results": [
+    {
+      "area": "Katalog",
+      "label": "HTTP katalogu",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Katalog",
+      "label": "2 produkty aktywne",
+      "ok": true,
+      "detail": "football-weekend, football-month",
+      "severity": "pass"
+    },
+    {
+      "area": "Katalog",
+      "label": "Weekend 79 PLN",
+      "ok": true,
+      "detail": "79",
+      "severity": "pass"
+    },
+    {
+      "area": "Katalog",
+      "label": "Miesiąc 149 PLN",
+      "ok": true,
+      "detail": "149",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-weekend: provider Autopay",
+      "ok": true,
+      "detail": "autopay",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-weekend: URL live /payment",
+      "ok": true,
+      "detail": "https://pay.autopay.eu/payment",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-weekend: method POST",
+      "ok": true,
+      "detail": "POST",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-weekend: pola startu",
+      "ok": true,
+      "detail": "OK",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-weekend: bez checkboxów → odrzucenie",
+      "ok": true,
+      "detail": "{\"message\":\"Wymagana akceptacja regulaminów przed płatnością.\",\"status\":\"FAILED_PRECONDITION\"}",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-month: provider Autopay",
+      "ok": true,
+      "detail": "autopay",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-month: URL live /payment",
+      "ok": true,
+      "detail": "https://pay.autopay.eu/payment",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-month: method POST",
+      "ok": true,
+      "detail": "POST",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-month: pola startu",
+      "ok": true,
+      "detail": "OK",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "football-month: bez checkboxów → odrzucenie",
+      "ok": true,
+      "detail": "{\"message\":\"Wymagana akceptacja regulaminów przed płatnością.\",\"status\":\"FAILED_PRECONDITION\"}",
+      "severity": "pass"
+    },
+    {
+      "area": "Start",
+      "label": "nieznany productId → błąd",
+      "ok": true,
+      "detail": "{\"message\":\"Nieznany lub nieaktywny produkt.\",\"status\":\"INVALID_ARGUMENT\"}",
+      "severity": "pass"
+    },
+    {
+      "area": "Bramka",
+      "label": "POST /payment → start (nie 404)",
+      "ok": true,
+      "detail": "303 https://pay.autopay.eu/web/payment/start/2f7aedcf697646a5bdc997f05f2df51a",
+      "severity": "pass"
+    },
+    {
+      "area": "Bramka",
+      "label": "regresja: POST na host bez /payment → 404",
+      "ok": true,
+      "detail": "https://pay.autopay.eu/web/payment/error/404",
+      "severity": "pass"
+    },
+    {
+      "area": "ITN",
+      "label": "GET webhook → 405",
+      "ok": true,
+      "detail": "405",
+      "severity": "pass"
+    },
+    {
+      "area": "ITN",
+      "label": "puste body → 400",
+      "ok": true,
+      "detail": "400",
+      "severity": "pass"
+    },
+    {
+      "area": "ITN",
+      "label": "śmieciowy XML → 400",
+      "ok": true,
+      "detail": "400",
+      "severity": "pass"
+    },
+    {
+      "area": "ITN",
+      "label": "zły hash → NOTCONFIRMED / odrzucenie",
+      "ok": true,
+      "detail": "HTTP 200",
+      "severity": "pass"
+    },
+    {
+      "area": "ITN",
+      "label": "odpowiedź XML zgodna z docs Autopay",
+      "ok": true,
+      "detail": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><confirmationList><serviceID>217795</serviceID><transactionsConfirmations><transactionConfirmed><orderID>TPFAKEAUDIT0001</orderID><confirmatio",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/ HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/ zawiera „startCheckout”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/ zawiera „checkout-terms”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/ zawiera „checkout-withdrawal”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/ zawiera „football-weekend”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Bezpieczeństwo",
+      "label": "landing nie eksponuje SHARED_KEY",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Bezpieczeństwo",
+      "label": "landing nie eksponuje SMTP_PASS",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/dziekujemy.html HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/dziekujemy.html zawiera „Dziękujemy”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/dziekujemy.html zawiera „Zaloguj się do aplikacji”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/platnosci.html HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/platnosci.html zawiera „Autopay”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/platnosci.html zawiera „Akceptowane metody”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/legal/regulamin-uslug-platnych.html HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/legal/regulamin-uslug-platnych.html zawiera „Autopay”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/legal/regulamin-uslug-platnych.html zawiera „Płatności”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/legal/polityka-prywatnosci.html HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/legal/polityka-prywatnosci.html zawiera „Autopay”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/img/autopay-metody-platnosci.png HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/css/responsive.css?v=20260716r2 HTTP",
+      "ok": true,
+      "detail": "200",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "/css/responsive.css?v=20260716r2 zawiera „max-width: 479px”",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "App",
+      "label": "bramka HTTP 200",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Bezpieczeństwo",
+      "label": "app nie eksponuje SHARED_KEY",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "App",
+      "label": "redirect legacy checkout=success w kodzie",
+      "ok": true,
+      "detail": "dziekujemy",
+      "severity": "pass"
+    },
+    {
+      "area": "Krypto",
+      "label": "hash start = przykład docs",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Krypto",
+      "label": "confirmationList struktura docs",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Krypto",
+      "label": "parse ITN bierze hash z listy",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "TLS",
+      "label": "HTTPS turniejomat.pl",
+      "ok": true,
+      "detail": "https://turniejomat.pl",
+      "severity": "pass"
+    },
+    {
+      "area": "TLS",
+      "label": "HTTPS app.turniejomat.pl",
+      "ok": true,
+      "detail": "https://app.turniejomat.pl",
+      "severity": "pass"
+    },
+    {
+      "area": "TLS",
+      "label": "HTTPS europe-west1-turniejprosaas.cloudfunctions.net",
+      "ok": true,
+      "detail": "https://europe-west1-turniejprosaas.cloudfunctions.net/createCheckoutSession",
+      "severity": "pass"
+    },
+    {
+      "area": "TLS",
+      "label": "HTTPS europe-west1-turniejprosaas.cloudfunctions.net",
+      "ok": true,
+      "detail": "https://europe-west1-turniejprosaas.cloudfunctions.net/paymentWebhook",
+      "severity": "pass"
+    },
+    {
+      "area": "Manual",
+      "label": "Prawdziwa płatność BLIK/przelew (pieniądze) — poza zakresem automatu",
+      "ok": true,
+      "detail": "Wymaga ręcznego kliknięcia; wcześniej live OK + saldo Autopay potwierdzone przez operatora",
+      "severity": "pass"
+    },
+    {
+      "area": "Manual",
+      "label": "Return URL w panelu Autopay = /dziekujemy.html",
+      "ok": true,
+      "detail": "Do potwierdzenia w panelu Autopay (operator)",
+      "severity": "pass"
+    }
+  ]
+}

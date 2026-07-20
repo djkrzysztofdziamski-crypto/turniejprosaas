@@ -1,0 +1,205 @@
+{
+  "license": "TP-5YGF-ZS4S",
+  "startedAt": "2026-07-13T14:34:00.672Z",
+  "steps": [
+    {
+      "step": "1. Aktywacja licencji",
+      "detail": "TP-5YGF-ZS4S | status: aktywny | notatka: ADMIN",
+      "ok": true,
+      "at": "2026-07-13T14:34:02.802Z"
+    },
+    {
+      "step": "2. Konfiguracja",
+      "detail": "27 drużyn, 6 grup (5/5/5/4/4/4), drabinka 8, awans 8",
+      "ok": true,
+      "at": "2026-07-13T14:34:03.004Z"
+    },
+    {
+      "step": "3. Składy",
+      "detail": "27 drużyn z nazwą + bramkarzem + kapitanem",
+      "ok": true,
+      "at": "2026-07-13T14:34:03.004Z"
+    },
+    {
+      "step": "4. Grupy",
+      "detail": "A:5 B:5 C:5 D:4 E:4 F:4",
+      "ok": true,
+      "at": "2026-07-13T14:34:03.005Z"
+    },
+    {
+      "step": "5. Terminarz",
+      "detail": "48 meczów grupowych",
+      "ok": true,
+      "at": "2026-07-13T14:34:03.005Z"
+    },
+    {
+      "step": "6. Faza grupowa",
+      "detail": "Wszystkie wyniki zapisane, 10 remisów grupowych (bez karnych)",
+      "ok": true,
+      "at": "2026-07-13T14:34:03.005Z"
+    },
+    {
+      "step": "7. Remis absolutny Gr.D",
+      "detail": "WARTA KÓRNIK = TORNADO BUK (7 pkt) | blokada: false",
+      "ok": false,
+      "at": "2026-07-13T14:34:04.089Z"
+    },
+    {
+      "step": "8. Rozstrzygnięcie remisu",
+      "detail": "Kolejność Gr.D: WARTA KÓRNIK > VICTORIA MUROWANA",
+      "ok": true,
+      "at": "2026-07-13T14:34:05.224Z"
+    },
+    {
+      "step": "9. Play-off",
+      "detail": "Awansują: FC ORLIK POZNAŃ, GROM LUBOŃ, POGOŃ SWARZĘDZ, LECH MINI STRZAŁKOWO, UNIA MOSINA, WARTA KÓRNIK, STORM KOSTRZYN, ASTRA RAKONIEWICE",
+      "ok": true,
+      "at": "2026-07-13T14:34:05.367Z"
+    },
+    {
+      "step": "10a. Karne 4:4 odrzucone",
+      "detail": "System wymaga zwycięzcy — OK",
+      "ok": true,
+      "at": "2026-07-13T14:34:06.082Z"
+    },
+    {
+      "step": "10b. Play-off",
+      "detail": "8/8 meczów, 3 z karnymi",
+      "ok": true,
+      "at": "2026-07-13T14:34:07.015Z"
+    },
+    {
+      "step": "11. Podium",
+      "detail": "🥇 FC ORLIK POZNAŃ | 🥈 GROM LUBOŃ | 🥉 LECH MINI STRZAŁKOWO | Finał: 2:2 (k. 5:4)",
+      "ok": true,
+      "at": "2026-07-13T14:34:07.893Z"
+    },
+    {
+      "step": "12. Archiwum",
+      "detail": "Zapisano \"TURNIEJ TEST 27 DRUZYN 2026-07-13\" (local: -OxQtZwcGgn5zpNK3i8f)",
+      "ok": true,
+      "at": "2026-07-13T14:34:08.017Z"
+    }
+  ],
+  "groups": {
+    "A": [
+      "FC ORLIK POZNAŃ",
+      "SPARTA KOMORNIKI",
+      "JAGUAR TULCE",
+      "WOLVES SKÓRZEWO",
+      "STORM KOSTRZYN"
+    ],
+    "B": [
+      "GROM LUBOŃ",
+      "AMBER OPALENICA",
+      "EAGLES SWARZĘDZ",
+      "FENIKS STĘSZEW",
+      "ASTRA RAKONIEWICE"
+    ],
+    "C": [
+      "POGOŃ SWARZĘDZ",
+      "KOTWICA POBIEDZISKA",
+      "RAPID PUSZCZYKOWO",
+      "LWY KIEKRZ",
+      "GALAXY PRZEŹMIEROWO"
+    ],
+    "D": [
+      "WARTA KÓRNIK",
+      "VICTORIA MUROWANA",
+      "HURAGAN KRZYŻOWNIKI",
+      "TORNADO BUK"
+    ],
+    "E": [
+      "LECH MINI STRZAŁKOWO",
+      "POLONIA CZERWONAK",
+      "BŁĘKITNI ROGALIN",
+      "SHARKS CZMOŃ"
+    ],
+    "F": [
+      "UNIA MOSINA",
+      "STELLA BARANOWO",
+      "TYTANI DOPIEWO",
+      "THUNDER KLESZCZEWO"
+    ]
+  },
+  "groupMatches": 48,
+  "playoffMatches": [
+    {
+      "n": "Ćwierćfinał 1",
+      "t1": "FC ORLIK POZNAŃ",
+      "t2": "ASTRA RAKONIEWICE",
+      "score": "3:1"
+    },
+    {
+      "n": "Ćwierćfinał 2",
+      "t1": "LECH MINI STRZAŁKOWO",
+      "t2": "UNIA MOSINA",
+      "score": "1:1 (k. 4:3)"
+    },
+    {
+      "n": "Ćwierćfinał 3",
+      "t1": "GROM LUBOŃ",
+      "t2": "STORM KOSTRZYN",
+      "score": "2:0"
+    },
+    {
+      "n": "Ćwierćfinał 4",
+      "t1": "POGOŃ SWARZĘDZ",
+      "t2": "WARTA KÓRNIK",
+      "score": "0:2"
+    },
+    {
+      "n": "Półfinał 1",
+      "t1": "FC ORLIK POZNAŃ",
+      "t2": "LECH MINI STRZAŁKOWO",
+      "score": "2:1"
+    },
+    {
+      "n": "Półfinał 2",
+      "t1": "GROM LUBOŃ",
+      "t2": "WARTA KÓRNIK",
+      "score": "1:1 (k. 5:4)"
+    },
+    {
+      "n": "MECZ O 3. MIEJSCE",
+      "t1": "LECH MINI STRZAŁKOWO",
+      "t2": "WARTA KÓRNIK",
+      "score": "2:0"
+    },
+    {
+      "n": "WIELKI FINAŁ",
+      "t1": "FC ORLIK POZNAŃ",
+      "t2": "GROM LUBOŃ",
+      "score": "2:2 (k. 5:4)"
+    }
+  ],
+  "criticalTests": {
+    "absoluteTieDetected": false,
+    "absoluteTieResolved": true,
+    "penaltyTieRejected": true
+  },
+  "archive": {
+    "localKey": "-OxQtZwcGgn5zpNK3i8f",
+    "centralKey": "-OxQtZwzyeJ_UTsledHc",
+    "name": "TURNIEJ TEST 27 DRUZYN 2026-07-13"
+  },
+  "podium": {
+    "gold": "FC ORLIK POZNAŃ",
+    "silver": "GROM LUBOŃ",
+    "bronze": "LECH MINI STRZAŁKOWO",
+    "finalScore": "2:2 (k. 5:4)"
+  },
+  "pool": [
+    "FC ORLIK POZNAŃ",
+    "GROM LUBOŃ",
+    "POGOŃ SWARZĘDZ",
+    "LECH MINI STRZAŁKOWO",
+    "UNIA MOSINA",
+    "WARTA KÓRNIK",
+    "STORM KOSTRZYN",
+    "ASTRA RAKONIEWICE"
+  ],
+  "errors": [],
+  "finishedAt": "2026-07-13T14:34:08.017Z",
+  "allCriticalPassed": false
+}

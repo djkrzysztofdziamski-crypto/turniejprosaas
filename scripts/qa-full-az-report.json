@@ -1,0 +1,1159 @@
+{
+  "startedAt": "2026-07-17T14:33:40.620Z",
+  "finishedAt": "2026-07-17T14:40:40.383Z",
+  "targets": {
+    "APP": "https://app.turniejomat.pl",
+    "DEMO": "https://demo.turniejomat.pl",
+    "LANDING": "https://turniejomat.pl"
+  },
+  "summary": {
+    "total": 144,
+    "passed": 144,
+    "failed": 0,
+    "criticalFail": 0,
+    "warnFail": 0,
+    "byArea": {
+      "HTTP": {
+        "pass": 5,
+        "fail": 0
+      },
+      "Deploy": {
+        "pass": 7,
+        "fail": 0
+      },
+      "Landing": {
+        "pass": 3,
+        "fail": 0
+      },
+      "Unit": {
+        "pass": 3,
+        "fail": 0
+      },
+      "Payments": {
+        "pass": 1,
+        "fail": 0
+      },
+      "App": {
+        "pass": 2,
+        "fail": 0
+      },
+      "DemoStory": {
+        "pass": 3,
+        "fail": 0
+      },
+      "Viewport:iphone-se": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:iphone-14": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:iphone-14-pro-max": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:android-phone": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:android-phone-wide": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:ipad-mini": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:ipad-pro": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:tablet-10": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:laptop": {
+        "pass": 12,
+        "fail": 0
+      },
+      "Viewport:monitor-24": {
+        "pass": 12,
+        "fail": 0
+      }
+    },
+    "passRate": 100
+  },
+  "viewports": [
+    {
+      "id": "iphone-se",
+      "label": "iPhone SE",
+      "width": 375,
+      "height": 667
+    },
+    {
+      "id": "iphone-14",
+      "label": "iPhone 14",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "id": "iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max",
+      "width": 430,
+      "height": 932
+    },
+    {
+      "id": "android-phone",
+      "label": "Android phone 6–7\"",
+      "width": 360,
+      "height": 800
+    },
+    {
+      "id": "android-phone-wide",
+      "label": "Android phone landscape",
+      "width": 800,
+      "height": 360
+    },
+    {
+      "id": "ipad-mini",
+      "label": "iPad Mini",
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "id": "ipad-pro",
+      "label": "iPad Pro 11\"",
+      "width": 834,
+      "height": 1194
+    },
+    {
+      "id": "tablet-10",
+      "label": "Tablet 10\" landscape",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "id": "laptop",
+      "label": "Laptop 14\"",
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "id": "monitor-24",
+      "label": "Monitor ~24\"",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "results": [
+    {
+      "area": "HTTP",
+      "label": "Landing",
+      "ok": true,
+      "detail": "HTTP 200, 32307 B",
+      "severity": "pass"
+    },
+    {
+      "area": "HTTP",
+      "label": "Landing /dziekujemy",
+      "ok": true,
+      "detail": "HTTP 200, 10200 B",
+      "severity": "pass"
+    },
+    {
+      "area": "HTTP",
+      "label": "Landing /platnosci",
+      "ok": true,
+      "detail": "HTTP 200, 6998 B",
+      "severity": "pass"
+    },
+    {
+      "area": "HTTP",
+      "label": "App",
+      "ok": true,
+      "detail": "HTTP 200, 375374 B",
+      "severity": "pass"
+    },
+    {
+      "area": "HTTP",
+      "label": "Demo",
+      "ok": true,
+      "detail": "HTTP 200, 375374 B",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "App: polling Na żywo (shouldPoll)",
+      "ok": true,
+      "detail": "marker JS",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "App: tabela asystenta",
+      "ok": true,
+      "detail": "marker CSS",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "App: playoff table wrap",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "App: brak sekretów w HTML",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "App: TP_BREAKPOINTS",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "Demo = ten sam build co app (shouldPoll)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Deploy",
+      "label": "Demo: Demo Story controller",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "pakiet miesięczny (copy)",
+      "ok": true,
+      "detail": "szukaj copy cennika",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "checkout / cennik",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Landing",
+      "label": "responsive CSS link",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Unit",
+      "label": "Asystent token + save LIVE (mock)",
+      "ok": true,
+      "detail": "exit 0",
+      "severity": "pass"
+    },
+    {
+      "area": "Unit",
+      "label": "Autopay hash",
+      "ok": true,
+      "detail": "exit 0",
+      "severity": "pass"
+    },
+    {
+      "area": "Unit",
+      "label": "Autopay ITN XML",
+      "ok": true,
+      "detail": "exit 0",
+      "severity": "pass"
+    },
+    {
+      "area": "Payments",
+      "label": "Ostatni audyt Autopay (cache raportu)",
+      "ok": true,
+      "detail": "passed=55/55 @ 2026-07-16T14:17:39.769Z",
+      "severity": "pass"
+    },
+    {
+      "area": "App",
+      "label": "Bramka / shell ładuje się",
+      "ok": true,
+      "detail": "title=Turniejomat — panel organizatora",
+      "severity": "pass"
+    },
+    {
+      "area": "App",
+      "label": "#view-app obecny",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "DemoStory",
+      "label": "Dotarcie do finału (step 4)",
+      "ok": true,
+      "detail": "step=4",
+      "severity": "pass"
+    },
+    {
+      "area": "DemoStory",
+      "label": "Zapis finału → podium (step 5)",
+      "ok": true,
+      "detail": "step=5, saved=true",
+      "severity": "pass"
+    },
+    {
+      "area": "DemoStory",
+      "label": "brak pageerror",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=375",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-se",
+      "label": "iPhone SE: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=390",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14",
+      "label": "iPhone 14: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=430",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:iphone-14-pro-max",
+      "label": "iPhone 14 Pro Max: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=360",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone",
+      "label": "Android phone 6–7\": brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=800",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:android-phone-wide",
+      "label": "Android phone landscape: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=768",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-mini",
+      "label": "iPad Mini: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=834",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:ipad-pro",
+      "label": "iPad Pro 11\": brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=1024",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:tablet-10",
+      "label": "Tablet 10\" landscape: brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=1366",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:laptop",
+      "label": "Laptop 14\": brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": Demo → kibic (step 2)",
+      "ok": true,
+      "detail": "step=2",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": kibic — zakładki Mecze/Tabele/Play-Off",
+      "ok": true,
+      "detail": "Mecze, Tabele, Play-Off",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": kibic — tabela meczów (nie karty PO)",
+      "ok": true,
+      "detail": "rows=24, poCards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": kibic — brak horizontal overflow",
+      "ok": true,
+      "detail": "scrollW vs vw=1920",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": kibic Play-Off — tabela",
+      "ok": true,
+      "detail": "cards=0",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": kibic Tabele — grupy + awans",
+      "ok": true,
+      "detail": "groups=4, advancing=8",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": Demo → organizator (step 3)",
+      "ok": true,
+      "detail": "step=3",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": Na żywo — tabele grup (nie raw hall)",
+      "ok": true,
+      "detail": "standings=8, hallDump=false",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": Na żywo — harmonogram",
+      "ok": true,
+      "detail": "schedule=true",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": organizator — brak H-overflow",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": Hala embed widoczny",
+      "ok": true,
+      "detail": "Memoriał Wiosenny 2026",
+      "severity": "pass"
+    },
+    {
+      "area": "Viewport:monitor-24",
+      "label": "Monitor ~24\": brak pageerror JS",
+      "ok": true,
+      "detail": "ok",
+      "severity": "pass"
+    }
+  ]
+}
