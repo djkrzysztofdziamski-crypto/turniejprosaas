@@ -384,6 +384,10 @@
         /* Nav + live split: desktop od --bp-desktop (1024) — tablet landscape / laptop */
         @media (min-width: 1366px) { #view-app .nav-tabs .nav-mobile-only { display: none; } }
         @media (max-width: 1365px) { #view-app .nav-tabs .nav-desktop-only { display: none; } }
+        /* Sędzia: lista meczów jest w Na żywo — ukryj duplikat Mecze (kibic zostaje) */
+        body:not(.fan-view) #view-app .nav-tabs [onclick="switchTab('mecze')"] {
+            display: none !important;
+        }
         #view-app .container { max-width: 1200px; margin: 15px auto; padding: 0 10px; }
         #view-app .container.container--live { max-width: 100%; padding: 0 12px; }
         #view-app .card { background: var(--color-app-surface); border-radius: var(--radius-panel, var(--radius-md)); padding: 12px 14px; margin-bottom: 10px; border: 1px solid var(--color-app-border); box-shadow: var(--color-glow-panel, var(--shadow-card)); }
@@ -1193,6 +1197,115 @@
                 max-height: none;
                 overflow: hidden;
             }
+        }
+
+        /* Blokada panelu sędziego / logowania kluczem na telefonach (< ~8") */
+        #view-app #organizer-too-small {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 28px 22px;
+            box-sizing: border-box;
+            background: linear-gradient(165deg, #f0f9ff 0%, #fff 42%, #fefce8 100%);
+        }
+        #view-app #organizer-too-small .organizer-too-small-emoji {
+            font-size: 48px;
+            line-height: 1;
+            margin-bottom: 14px;
+        }
+        #view-app #organizer-too-small h2 {
+            font-family: var(--font-display);
+            font-size: clamp(22px, 5vw, 28px);
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 12px;
+            line-height: 1.25;
+        }
+        #view-app #organizer-too-small p {
+            font-size: 15px;
+            line-height: 1.55;
+            color: #475569;
+            margin: 0 auto 10px;
+            max-width: 28em;
+        }
+        #view-app #organizer-too-small .organizer-too-small-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+        #view-app #organizer-too-small .organizer-too-small-actions a {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            text-decoration: none;
+            font-family: var(--font-display);
+        }
+        #view-app #organizer-too-small .organizer-too-small-actions a.primary {
+            background: #00875a;
+            color: #fff;
+        }
+        #view-app #organizer-too-small .organizer-too-small-actions a.secondary {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+        }
+        body.organizer-view--too-small #view-app header,
+        body.organizer-view--too-small #view-app .header-organizer-actions,
+        body.organizer-view--too-small #view-app #tournament-dashboard,
+        body.organizer-view--too-small #view-app .nav-tabs,
+        body.organizer-view--too-small #view-app .container,
+        body.organizer-view--too-small #view-app #hall-screen,
+        body.organizer-view--too-small #view-app #assistant-screen,
+        body.organizer-view--too-small #view-app .footer-sig,
+        body.organizer-view--too-small #app-rotate-gate {
+            display: none !important;
+        }
+        body.organizer-view--too-small #view-app #organizer-too-small {
+            display: flex !important;
+        }
+        #view-login #login-organizer-too-small {
+            display: none;
+            text-align: center;
+            margin: 8px 0 4px;
+        }
+        #view-login #login-organizer-too-small h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            margin: 0 0 10px;
+            line-height: 1.3;
+        }
+        #view-login #login-organizer-too-small p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--color-text-muted);
+            margin: 0 0 10px;
+        }
+        #view-login #login-organizer-too-small .organizer-too-small-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        body.login-organizer--too-small #view-login .input-group,
+        body.login-organizer--too-small #view-login button.btn-submit:not(.btn-demo-story),
+        body.login-organizer--too-small #view-login #msg-box,
+        body.login-organizer--too-small #view-login #btn-demo-story-start,
+        body.login-organizer--too-small #view-login #btn-demo-story-start + p {
+            display: none !important;
+        }
+        body.login-organizer--too-small #view-login #login-organizer-too-small {
+            display: block !important;
         }
 
         /* --- Drawer edycji kolejności tabeli --- */
@@ -3452,6 +3565,16 @@
         <a href="https://demo.turniejomat.pl" class="btn-submit btn-demo-story" id="btn-demo-story-start">ZOBACZ FINAŁ TURNIEJU</a>
         <p style="font-size: 12px; color: #94a3b8; margin: 0 0 20px;">2 minuty · Bez rejestracji · Demo na demo.turniejomat.pl</p>
 
+        <div id="login-organizer-too-small" class="login-organizer-too-small" hidden>
+            <h3>Ten widok lubi duży ekran</h3>
+            <p>Panel sędziego (START, terminarz, wyniki, tabele) jest pod laptop albo tablet od ok. 8″.</p>
+            <p>Na telefonie obejrzyj Demo albo wróć na stronę główną. Wyniki live dla rodziców otworzysz linkiem kibica z większego urządzenia.</p>
+            <div class="organizer-too-small-actions">
+                <a href="https://demo.turniejomat.pl" class="btn-submit btn-demo-story">Otwórz Demo</a>
+                <a href="https://turniejomat.pl" class="gate-marketing-link">← Strona główna Turniejomat</a>
+            </div>
+        </div>
+
         <div class="input-group">
             <label for="license-input">Klucz Licencyjny</label>
             <input type="text" id="license-input" placeholder="TP-XXX-XXX" autocomplete="off">
@@ -3671,6 +3794,17 @@
     </header>
 
     <div id="tournament-dashboard"></div>
+
+    <div id="organizer-too-small" class="organizer-too-small" hidden>
+        <div class="organizer-too-small-emoji" aria-hidden="true">💻</div>
+        <h2>Ten widok lubi duży ekran</h2>
+        <p>Panel sędziego (START, terminarz, wyniki, tabele) jest pod laptop albo tablet od ok. 8″ — żeby wygodnie prowadzić turniej.</p>
+        <p>Na telefonie obejrzyj Demo albo wróć na stronę główną. Wyniki live dla rodziców = link kibica otwarty z większego urządzenia.</p>
+        <div class="organizer-too-small-actions">
+            <a class="primary" href="https://demo.turniejomat.pl">Otwórz Demo</a>
+            <a class="secondary" href="https://turniejomat.pl">Strona główna</a>
+        </div>
+    </div>
 
     <div id="hall-screen" aria-hidden="true">
         <div id="hall-too-small" class="hall-too-small" hidden>
@@ -4373,8 +4507,8 @@
                 setFirebaseStatus(ok ? 'connected' : 'offline');
             }, 2000);
         }
-        if (window.renderDashboard) {
-            window.renderDashboard();
+        if (typeof window.patchDashboardFirebaseStatus === 'function') {
+            window.patchDashboardFirebaseStatus();
         }
         if (typeof window.syncAssistantHeaderBadges === 'function') window.syncAssistantHeaderBadges();
     }
@@ -4409,6 +4543,35 @@
     const isAdminHost = host === 'admin.turniejomat.pl';
     const APP_SITE_URL = 'https://app.turniejomat.pl';
     const LANDING_SITE_URL = 'https://turniejomat.pl';
+
+    window.isAppTooSmallForOrganizer = function () {
+        return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
+    };
+    window.isOrganizerSession = function () {
+        if (isFanMode || isHallMode || isAssistantMode || viewMode === 'admin') return false;
+        const demoStoryOn = !!(document.getElementById('view-demo-story')?.classList.contains('active')
+            || (window.DemoStoryController && window.DemoStoryController.isActive && window.DemoStoryController.isActive()));
+        if (demoStoryOn || isDemoStoryHost) return false;
+        return true;
+    };
+    window.syncOrganizerViewportGate = function () {
+        const tooSmall = typeof window.isAppTooSmallForOrganizer === 'function' && window.isAppTooSmallForOrganizer();
+        const orgOk = typeof window.isOrganizerSession === 'function' && window.isOrganizerSession();
+        const loginView = document.getElementById('view-login');
+        const loginActive = !!(loginView && loginView.classList.contains('active'));
+        const viewApp = document.getElementById('view-app');
+        const appActive = !!(viewApp && viewApp.classList.contains('active'));
+
+        const blockLogin = !!(tooSmall && orgOk && loginActive);
+        document.body.classList.toggle('login-organizer--too-small', blockLogin);
+        const loginGate = document.getElementById('login-organizer-too-small');
+        if (loginGate) loginGate.hidden = !blockLogin;
+
+        const blockApp = !!(tooSmall && orgOk && appActive && !isHallMode && !isAssistantMode && !isFanMode);
+        document.body.classList.toggle('organizer-view--too-small', blockApp);
+        const appGate = document.getElementById('organizer-too-small');
+        if (appGate) appGate.hidden = !blockApp;
+    };
 
     const isAppDeepLink = !!(activeKey || archiveId || localArchiveId || viewMode === 'archive' || viewMode === 'fan' || viewMode === 'hall' || viewMode === 'assistant');
     if (isAdminHost && isAppDeepLink) {
@@ -4571,6 +4734,7 @@
             initLoginModule();
         }
         initFirebaseConnectionMonitor();
+        if (typeof window.syncOrganizerViewportGate === 'function') window.syncOrganizerViewportGate();
     }
 
     // ==========================================
@@ -4608,6 +4772,7 @@
             window.location.replace(thanks.toString());
             return;
         }
+        if (typeof window.syncOrganizerViewportGate === 'function') window.syncOrganizerViewportGate();
     }
 
     function showMsg(txt, type) {
@@ -4616,6 +4781,10 @@
     }
 
     function autoVerify(key) {
+        if (typeof window.isAppTooSmallForOrganizer === 'function' && window.isAppTooSmallForOrganizer()) {
+            if (typeof window.syncOrganizerViewportGate === 'function') window.syncOrganizerViewportGate();
+            return;
+        }
         if (key === 'DEMO-2026') {
             localStorage.removeItem('tp_license_key');
             window.location.href = 'https://demo.turniejomat.pl/';
@@ -4651,6 +4820,11 @@
     }
 
     function verifyLicense() {
+        if (typeof window.isAppTooSmallForOrganizer === 'function' && window.isAppTooSmallForOrganizer()) {
+            if (typeof window.syncOrganizerViewportGate === 'function') window.syncOrganizerViewportGate();
+            showMsg("❌ Panel sędziego otwórz na większym ekranie (laptop / tablet od ok. 8″).", "error");
+            return;
+        }
         const key = normalizeLicenseKey(document.getElementById('license-input').value);
         if (!key) { showMsg("❌ Wpisz klucz licencyjny!", "error"); return; }
         
@@ -5423,7 +5597,7 @@
         if (prevEnabled && n < 2 && typeof window.switchTab === 'function') {
             const pitchesPane = document.getElementById('boiska');
             if (pitchesPane && pitchesPane.classList.contains('active')) {
-                window.switchTab(isFanMode ? 'mecze' : (window.tpIsDesktopLayout && window.tpIsDesktopLayout() ? 'nazywo' : 'mecze'));
+                window.switchTab(isFanMode ? 'mecze' : 'nazywo');
             }
         }
     };
@@ -7174,11 +7348,22 @@
             display.innerHTML = state.logs.map(l => `<div class="log-line">${esc(l)}</div>`).join(''); display.scrollTop = display.scrollHeight;
         };
 
+        window.patchDashboardFirebaseStatus = () => {
+            const cell = document.querySelector('#tournament-dashboard [data-dash="fb"]');
+            if (!cell) return;
+            const fbEl = document.getElementById('firebase-status');
+            const fbOffline = fbEl && fbEl.classList.contains('firebase-status-offline');
+            cell.textContent = fbOffline ? 'Offline' : 'Online';
+            cell.classList.toggle('dash-fb-offline', !!fbOffline);
+            cell.classList.toggle('dash-fb-online', !fbOffline);
+        };
+
         window.renderDashboard = () => {
             const el = document.getElementById('tournament-dashboard');
             if (!el) return;
             if ((isFanMode || archiveId || localArchiveId || viewMode === 'admin') && !window._demoStoryOrganizerEmbed) {
                 el.style.display = 'none';
+                window._dashSig = null;
                 return;
             }
             el.style.display = 'block';
@@ -7211,19 +7396,23 @@
             const fbOffline = fbEl && fbEl.classList.contains('firebase-status-offline');
             const fbStatus = fbOffline ? 'Offline' : 'Online';
             const fbClass = fbOffline ? 'dash-fb-offline' : 'dash-fb-online';
+            const tourName = state.meta && state.meta.tournamentName ? String(state.meta.tournamentName) : '';
+            const sig = [teams.length, playedMatches, totalMatches, phase, poStatus, lastSave, fbOffline ? 1 : 0, tourName].join('|');
+            if (sig === window._dashSig && el.querySelector('[data-dash="fb"]')) return;
 
             el.innerHTML = `
                 <div class="tournament-dashboard-card">
-                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju${state.meta && state.meta.tournamentName ? ' · ' + esc(state.meta.tournamentName) : ''}</h3>
+                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju${tourName ? ' · ' + esc(tourName) : ''}</h3>
                     <div class="tournament-dashboard-grid">
                         <div class="dashboard-stat"><div class="dashboard-stat-label">👥 Drużyny</div><div class="dashboard-stat-value">${teams.length}</div></div>
                         <div class="dashboard-stat"><div class="dashboard-stat-label">⚽ Mecze</div><div class="dashboard-stat-value">${playedMatches} / ${totalMatches}</div></div>
                         <div class="dashboard-stat"><div class="dashboard-stat-label">🏁 Faza</div><div class="dashboard-stat-value dash-phase">${phase}</div></div>
                         <div class="dashboard-stat"><div class="dashboard-stat-label">🏆 Play-Off</div><div class="dashboard-stat-value">${poStatus}</div></div>
                         <div class="dashboard-stat"><div class="dashboard-stat-label">💾 Ostatni zapis</div><div class="dashboard-stat-value">${lastSave}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">🟢 Firebase</div><div class="dashboard-stat-value ${fbClass}">${fbStatus}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">🟢 Firebase</div><div class="dashboard-stat-value ${fbClass}" data-dash="fb">${fbStatus}</div></div>
                     </div>
                 </div>`;
+            window._dashSig = sig;
         };
 
         window.getGroupSizeInfo = () => {
@@ -7480,7 +7669,7 @@
                 ? ('Wygenerowano terminarz grupowy równolegle na ' + pitchN + ' boiskach.')
                 : 'Wygenerowano nowy terminarz meczów grupowych.');
             window.save(); window.renderDashboard();
-            switchTab(window.tpIsDesktopLayout() ? 'nazywo' : 'mecze');
+            switchTab('nazywo');
         };
 
         window.syncTournamentMeta = (field, value) => {
@@ -7768,6 +7957,9 @@
             const onHallVp = () => {
                 if (typeof isHallMode !== 'undefined' && isHallMode && typeof window.syncHallViewportGate === 'function') {
                     window.syncHallViewportGate();
+                }
+                if (typeof window.syncOrganizerViewportGate === 'function') {
+                    window.syncOrganizerViewportGate();
                 }
             };
             window.addEventListener('resize', onHallVp);
@@ -8746,6 +8938,7 @@
         };
 
         window.switchTab = (t) => {
+            if (!isFanMode && t === 'mecze') t = 'nazywo';
             const panel = document.getElementById(t);
             if (!panel) return;
             document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active'));
@@ -9592,6 +9785,8 @@
             if (archiveId || localArchiveId) {
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
             }
+        } else if (typeof window.syncOrganizerViewportGate === 'function') {
+            window.syncOrganizerViewportGate();
         }
 
         if (isDemoMode) {
@@ -9808,7 +10003,7 @@
         if (!on) {
             const pitchesPane = document.getElementById('boiska');
             if (pitchesPane && pitchesPane.classList.contains('active') && typeof window.switchTab === 'function') {
-                window.switchTab(isFanMode ? 'mecze' : (window.tpIsDesktopLayout && window.tpIsDesktopLayout() ? 'nazywo' : 'mecze'));
+                window.switchTab(isFanMode ? 'mecze' : 'nazywo');
             }
             if (isAssistantMode && window._assistantPitchView) {
                 window.openAssistantMatchesView();
