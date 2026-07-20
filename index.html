@@ -3980,7 +3980,7 @@
                         <option value="random">Mieszany</option>
                     </select>
                 </div>
-                <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach mecze grupowe układane równolegle (grupa → preferowane boisko). Play-off: najwcześniejsze wolne boisko.</p>
+                <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach: fale grup (jedna grupa równolegle na boiskach, potem następna). Żadna drużyna nie gra w dwóch kolejnych slotach. Play-off: najwcześniejsze wolne boisko.</p>
                 <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
             </div>
         </div>
@@ -4068,6 +4068,11 @@
             <div id="mPitchRow" class="time-setting" style="display:none; margin: 0 0 12px; justify-content:center;">
                 <span style="font-weight:700;">Boisko:</span>
                 <span id="mPitchControl"></span>
+            </div>
+            <div id="mTimeRow" class="time-setting" style="display:none; margin: 0 0 12px; justify-content:center; gap:10px;">
+                <span style="font-weight:700;">Godzina:</span>
+                <input type="time" id="mTimeInput" step="60" style="width:auto; min-width:110px; font-weight:700; padding:6px 8px;"
+                    onchange="setMatchTimeFromModal(this.value)" onblur="setMatchTimeFromModal(this.value)">
             </div>
             <div class="match-modal-score-row">
                 <b id="mT1" class="match-modal-team match-modal-team--home"></b>
@@ -5436,50 +5441,154 @@
     };
 
     /**
-     * Równoległy terminarz grupowy: group-sticky + tory nextFree + blokada drużyn na slot (gDur+gBreak).
+     * Terminarz grupowy: fale (jedna grupa / slot, do pc meczów równolegle)
+     * + teamNextFree — żadna drużyna w dwóch kolejnych slotach.
+     * Działa też dla pc=1 (serial / 0–1 boisko).
      */
     window.assignGroupPitchesAndTimes = function (matches, settings, pitchCount) {
         const list = matches || [];
-        const pc = parseInt(pitchCount, 10) || 0;
-        if (pc < 2 || !list.length) return;
+        let pc = parseInt(pitchCount, 10) || 0;
+        if (pc < 1) pc = 1;
+        if (!list.length) return;
         const start = (settings && settings.start) ? String(settings.start) : '09:00';
         const gDur = parseInt(settings && settings.gDur, 10) || 0;
         const gBreak = parseInt(settings && settings.gBreak, 10) || 0;
         const slotLen = Math.max(1, gDur + gBreak);
-        const nextFree = {};
-        for (let p = 1; p <= pc; p++) nextFree[p] = start;
-        const teamBusy = {};
+        const startMin = window.timeToMinutes(start);
 
+        const queues = {};
         list.forEach(m => {
             if (!m) return;
-            const pref = window.preferredPitchForGroup(m.group, pc);
-            const t1id = m.t1 && m.t1.id != null && m.t1.id >= 0 ? m.t1.id : null;
-            const t2id = m.t2 && m.t2.id != null && m.t2.id >= 0 ? m.t2.id : null;
-            const order = [pref];
-            for (let p = 1; p <= pc; p++) {
-                if (p !== pref) order.push(p);
-            }
-            let bestPitch = pref;
-            let bestSlot = null;
-            order.forEach(p => {
-                let slotStart = nextFree[p];
-                if (t1id != null && teamBusy[t1id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t1id]);
-                if (t2id != null && teamBusy[t2id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t2id]);
-                if (bestSlot == null || window.timeToMinutes(slotStart) < window.timeToMinutes(bestSlot)) {
-                    bestSlot = slotStart;
-                    bestPitch = p;
-                } else if (window.timeToMinutes(slotStart) === window.timeToMinutes(bestSlot)) {
-                    if (p === pref) bestPitch = p;
-                    else if (bestPitch !== pref && p < bestPitch) bestPitch = p;
-                }
-            });
-            m.pitch = bestPitch;
-            m.time = bestSlot;
-            const end = window.addMin(bestSlot, slotLen);
-            nextFree[bestPitch] = end;
-            if (t1id != null) teamBusy[t1id] = end;
-            if (t2id != null) teamBusy[t2id] = end;
+            const g = m.group || '_';
+            if (!queues[g]) queues[g] = [];
+            queues[g].push(m);
         });
+        Object.keys(queues).forEach(g => {
+            queues[g].sort((a, b) => {
+                const dr = ((a && a.round) || 0) - ((b && b.round) || 0);
+                if (dr !== 0) return dr;
+                return ((a && a.id) || 0) - ((b && b.id) || 0);
+            });
+        });
+        const groupOrder = Object.keys(queues).sort();
+        const teamNextFree = {};
+
+        function teamIdsOf(m) {
+            const ids = [];
+            if (m.t1 && m.t1.id != null && m.t1.id >= 0) ids.push(m.t1.id);
+            if (m.t2 && m.t2.id != null && m.t2.id >= 0) ids.push(m.t2.id);
+            return ids;
+        }
+
+        function teamReadyAt(ids, tStr) {
+            const tMin = window.timeToMinutes(tStr);
+            return ids.every(id => {
+                const free = teamNextFree[id];
+                if (!free) return true;
+                return tMin >= window.timeToMinutes(free);
+            });
+        }
+
+        function pickWave(queue, maxN, tStr) {
+            const wave = [];
+            const used = {};
+            const remain = [];
+            queue.forEach(m => {
+                if (wave.length >= maxN) {
+                    remain.push(m);
+                    return;
+                }
+                const ids = teamIdsOf(m);
+                if (!ids.length || ids.some(id => used[id]) || !teamReadyAt(ids, tStr)) {
+                    remain.push(m);
+                    return;
+                }
+                ids.forEach(id => { used[id] = true; });
+                wave.push(m);
+            });
+            return { wave: wave, remain: remain };
+        }
+
+        function pendingCount() {
+            return groupOrder.reduce((n, g) => n + (queues[g] ? queues[g].length : 0), 0);
+        }
+
+        function earliestLegalKickoff() {
+            let best = null;
+            groupOrder.forEach(g => {
+                (queues[g] || []).forEach(m => {
+                    const ids = teamIdsOf(m);
+                    if (!ids.length) return;
+                    let need = startMin;
+                    ids.forEach(id => {
+                        const free = teamNextFree[id];
+                        if (free) need = Math.max(need, window.timeToMinutes(free));
+                    });
+                    if (best == null || need < best) best = need;
+                });
+            });
+            if (best == null) return null;
+            const h = Math.floor(best / 60) % 24;
+            const min = best % 60;
+            return String(h).padStart(2, '0') + ':' + String(min).padStart(2, '0');
+        }
+
+        let t = start;
+        let groupCursor = 0;
+        let guard = 0;
+        while (pendingCount() > 0 && guard < 10000) {
+            guard++;
+            let scheduledThisPass = false;
+            for (let offset = 0; offset < groupOrder.length; offset++) {
+                const gi = (groupCursor + offset) % groupOrder.length;
+                const g = groupOrder[gi];
+                if (!queues[g] || !queues[g].length) continue;
+                const picked = pickWave(queues[g], pc, t);
+                if (!picked.wave.length) continue;
+                picked.wave.forEach((m, i) => {
+                    m.pitch = i + 1;
+                    m.time = t;
+                    teamIdsOf(m).forEach(id => {
+                        teamNextFree[id] = window.addMin(t, 2 * slotLen);
+                    });
+                });
+                queues[g] = picked.remain;
+                groupCursor = (gi + 1) % groupOrder.length;
+                t = window.addMin(t, slotLen);
+                scheduledThisPass = true;
+                break;
+            }
+            if (scheduledThisPass) continue;
+
+            const nextT = earliestLegalKickoff();
+            if (nextT && window.timeToMinutes(nextT) > window.timeToMinutes(t)) {
+                t = nextT;
+                continue;
+            }
+
+            let forced = null;
+            for (let offset = 0; offset < groupOrder.length; offset++) {
+                const gi = (groupCursor + offset) % groupOrder.length;
+                const g = groupOrder[gi];
+                if (!queues[g] || !queues[g].length) continue;
+                const candidate = queues[g][0];
+                const ids = teamIdsOf(candidate);
+                if (!teamReadyAt(ids, t)) continue;
+                forced = queues[g].shift();
+                groupCursor = (gi + 1) % groupOrder.length;
+                break;
+            }
+            if (!forced) {
+                t = window.addMin(t, slotLen);
+                continue;
+            }
+            forced.pitch = 1;
+            forced.time = t;
+            teamIdsOf(forced).forEach(id => {
+                teamNextFree[id] = window.addMin(t, 2 * slotLen);
+            });
+            t = window.addMin(t, slotLen);
+        }
     };
 
     /**
@@ -6102,6 +6211,47 @@
         if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
         if (typeof window.renderHallView === 'function' && isHallMode) window.renderHallView();
         if (typeof window.refreshAssistantMatchesView === 'function' && isAssistantMode) window.refreshAssistantMatchesView(true);
+    };
+
+    window.normalizeMatchTimeInput = function (raw) {
+        const s = String(raw || '').trim();
+        if (!s) return null;
+        const m = s.match(/^(\d{1,2}):(\d{2})$/);
+        if (!m) return null;
+        let h = parseInt(m[1], 10);
+        let min = parseInt(m[2], 10);
+        if (!Number.isFinite(h) || !Number.isFinite(min) || h < 0 || h > 23 || min < 0 || min > 59) return null;
+        return String(h).padStart(2, '0') + ':' + String(min).padStart(2, '0');
+    };
+
+    window.setMatchTime = function (matchId, isPo, timeRaw) {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        const arr = isPo ? (state.playoffs || []) : (state.matches || []);
+        const m = arr.find(x => x.id === matchId);
+        if (!m) return;
+        const normalized = window.normalizeMatchTimeInput(timeRaw);
+        if (!normalized) {
+            alert('Podaj godzinę w formacie HH:MM (np. 10:15).');
+            return;
+        }
+        if (m.time === normalized) return;
+        m.time = normalized;
+        if (state.active && state.active.id === matchId && !!state.active.isPo === !!isPo) {
+            state.active.time = normalized;
+        }
+        window.logAction('Zmieniono godzinę meczu #' + window.getGlobalMatchNo(m, !!isPo) + ' → ' + normalized);
+        window.save();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+        if (typeof window.renderHallView === 'function' && isHallMode) window.renderHallView();
+    };
+
+    window.setMatchTimeFromModal = function (value) {
+        if (!state.active) return;
+        window.setMatchTime(state.active.id, !!state.active.isPo, value);
+        const inp = document.getElementById('mTimeInput');
+        if (inp && state.active.time) inp.value = state.active.time;
     };
 
     window.getOccupiedPitches = function (exceptMatchId, exceptIsPo, refMatch) {
@@ -7645,7 +7795,9 @@
                 for(let round = 0; round < n - 1; round++) {
                     for(let i = 0; i < n / 2; i++) {
                         let t1 = teams[i], t2 = teams[n - 1 - i];
-                        if(t1.id !== -1 && t2.id !== -1) pool.push({ group: gn, t1, t2, g1: 0, g2: 0, played: false, s1: [], s2: [] });
+                        if(t1.id !== -1 && t2.id !== -1) {
+                            pool.push({ group: gn, round: round, t1, t2, g1: 0, g2: 0, played: false, s1: [], s2: [] });
+                        }
                     }
                     teams.splice(1, 0, teams.pop());
                 }
@@ -7653,21 +7805,16 @@
             if(mode === 'random') pool.sort(() => 0.5 - Math.random());
             state.matches = pool.map((m, idx) => ({ ...m, id: idx + 1 }));
             const pitchN = window.getPitchCount();
-            if (pitchN >= 2) {
-                window.assignGroupPitchesAndTimes(state.matches, state.settings, pitchN);
-            } else {
-                let curr = state.settings.start;
-                state.matches.forEach(m => {
-                    m.time = curr;
-                    m.pitch = null;
-                    curr = window.addMin(curr, parseInt(state.settings.gDur) + parseInt(state.settings.gBreak));
-                });
+            const packPc = pitchN >= 2 ? pitchN : 1;
+            window.assignGroupPitchesAndTimes(state.matches, state.settings, packPc);
+            if (pitchN < 2) {
+                state.matches.forEach(m => { if (m) m.pitch = null; });
             }
             state.matches = window.finalizeGroupMatchOrder(state.matches);
 
             window.logAction(pitchN >= 2
-                ? ('Wygenerowano terminarz grupowy równolegle na ' + pitchN + ' boiskach.')
-                : 'Wygenerowano nowy terminarz meczów grupowych.');
+                ? ('Wygenerowano terminarz grupowy (fale + przerwy drużyn) na ' + pitchN + ' boiskach.')
+                : 'Wygenerowano nowy terminarz meczów grupowych (bez meczów pod rząd).');
             window.save(); window.renderDashboard();
             switchTab('nazywo');
         };
@@ -7835,6 +7982,24 @@
             window.saveInlineScore(matchId, isPo, btn);
         };
 
+        window.advancePlayoffFromMatch = function (m) {
+            if (!m || !state.playoffs || !state.playoffs.length) return;
+            const getW = (x) => x.g1 > x.g2 ? x.t1 : (x.g1 < x.g2 ? x.t2 : (x.pen1 > x.pen2 ? x.t1 : x.t2));
+            const getL = (x) => x.g1 > x.g2 ? x.t2 : (x.g1 < x.g2 ? x.t1 : (x.pen1 > x.pen2 ? x.t2 : x.t1));
+            const w = getW(m);
+            const l = getL(m);
+            if (!w || !l) return;
+            if (m.next) {
+                const nm = state.playoffs.find(x => x.id === m.next);
+                if (nm && m.slot) nm[m.slot] = w;
+            }
+            if (m.loserNext) {
+                const targetSlot = m.loserSlot || m.slotLoser || 't2';
+                const nlm = state.playoffs.find(x => x.id === m.loserNext);
+                if (nlm) nlm[targetSlot] = l;
+            }
+        };
+
         window.saveInlineScore = (matchId, isPo, btnEl) => {
             if (isFanMode || isHallMode) return;
             const resolved = resolveMatchForSave(matchId, isPo);
@@ -7870,6 +8035,9 @@
             m.g1 = g1; m.g2 = g2; m.played = true;
             m.pen1 = null; m.pen2 = null;
             window.clearMatchPitchOnFinish(m);
+            if (isPo && typeof window.advancePlayoffFromMatch === 'function') {
+                window.advancePlayoffFromMatch(m);
+            }
             window.clearInlineScoreDraft(matchId);
             window.logAction(`Wynik meczu #${m.id}: ${m.t1.name} ${g1}:${g2} ${m.t2.name}`);
             window.save();
@@ -8094,6 +8262,26 @@
                 if (!state.matches || !state.matches.length) window.syncDemoStoryState();
             }
             if (!state.matches) return;
+            if ((state.playoffs || []).length && typeof window.advancePlayoffFromMatch === 'function'
+                && !isFanMode && !isHallMode && !isAssistantMode) {
+                let filledPlaceholder = false;
+                (state.playoffs || []).forEach(function (pm) {
+                    if (!pm || !pm.played || !(pm.next || pm.loserNext)) return;
+                    const nextM = pm.next ? state.playoffs.find(function (x) { return x.id === pm.next; }) : null;
+                    const loserM = pm.loserNext ? state.playoffs.find(function (x) { return x.id === pm.loserNext; }) : null;
+                    const beforeNext = nextM && pm.slot ? (nextM[pm.slot] && nextM[pm.slot].name) : null;
+                    const loserSlot = pm.loserSlot || pm.slotLoser || 't2';
+                    const beforeLoser = loserM ? (loserM[loserSlot] && loserM[loserSlot].name) : null;
+                    window.advancePlayoffFromMatch(pm);
+                    if (beforeNext === '?' || beforeLoser === '?') filledPlaceholder = true;
+                });
+                if (filledPlaceholder && typeof window.save === 'function' && !window._playoffAdvanceRepairSaving) {
+                    window._playoffAdvanceRepairSaving = true;
+                    try { window.save(); } finally {
+                        setTimeout(function () { window._playoffAdvanceRepairSaving = false; }, 1500);
+                    }
+                }
+            }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
             /* Demo Story 3/6 „Na żywo”: bez pól wyniku — jak kibic (–:– + szary status) */
             const demoOrgRo = window._demoStoryOrganizerEmbed === true;
@@ -8751,19 +8939,8 @@
             arr[arr.findIndex(x => x.id === state.active.id)] = state.active;
 
             if(wasPo) {
-                let getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
-                let getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
-                let w = getW(state.active); let l = getL(state.active);
-                
-                if(state.active.next) { 
-                    let nm = state.playoffs.find(m => m.id === state.active.next); 
-                    if(nm) nm[state.active.slot] = w; 
-                }
-                if(state.active.loserNext) { 
-            let targetId = state.active.loserNext;
-            let targetSlot = state.active.loserSlot || state.active.slotLoser || 't2';
-            let nlm = state.playoffs.find(m => m.id === targetId); 
-            if(nlm) nlm[targetSlot] = l; 
+                if (typeof window.advancePlayoffFromMatch === 'function') {
+                    window.advancePlayoffFromMatch(state.active);
                 }
             }
 
@@ -8999,6 +9176,18 @@
                 } else {
                     pitchRow.style.display = 'none';
                     pitchCtrl.innerHTML = '';
+                }
+            }
+            const timeRow = document.getElementById('mTimeRow');
+            const timeInp = document.getElementById('mTimeInput');
+            if (timeRow && timeInp) {
+                if (!isFanMode && !isHallMode) {
+                    timeRow.style.display = 'flex';
+                    timeInp.value = m.time || '';
+                    timeInp.disabled = !!isAssistantMode;
+                } else {
+                    timeRow.style.display = 'none';
+                    timeInp.value = '';
                 }
             }
             document.getElementById('mT1').innerText = m.t1.name; document.getElementById('mT2').innerText = m.t2.name;
