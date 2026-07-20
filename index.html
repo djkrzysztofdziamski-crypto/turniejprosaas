@@ -764,6 +764,10 @@
         #view-app .hall-live-team--away { text-align: left; }
         #view-app .hall-live-team-name { font-size: clamp(16px, 2.4vw, 28px); font-weight: 800; line-height: 1.15; word-break: break-word; color: #172b4d; }
         #view-app .hall-live-team-name.is-leading { color: #00875a; }
+        #view-app .hall-live-team-cards { margin-top: 4px; min-height: 0; }
+        #view-app .hall-live-team--home .hall-live-team-cards { text-align: right; }
+        #view-app .hall-live-team--away .hall-live-team-cards { text-align: left; }
+        #view-app .hall-live-team-cards .live-cards-badge { font-size: clamp(12px, 1.5vw, 16px); }
         #view-app .hall-live-score-wrap { display: flex; align-items: center; justify-content: center; gap: clamp(6px, 1.2vw, 14px); padding: 8px 12px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; box-shadow: inset 0 2px 0 rgba(255,255,255,0.08), 0 12px 28px rgba(15, 23, 42, 0.28); }
         #view-app .hall-live-digit { font-family: var(--font-display); font-size: clamp(64px, 12vw, 132px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 0.95; color: #f8fafc; letter-spacing: 0.02em; min-width: 1.1ch; text-align: center; transition: transform 0.18s ease, color 0.18s ease; }
         #view-app .hall-live-digit.score-bump { animation: hall-score-bump 0.45s ease-out; color: #86efac; }
@@ -2294,6 +2298,8 @@
         #view-app .del-archive-btn { position: absolute; right: 10px; top: 10px; background: #ffebe6; color: #de350b; border: 1px solid #ffbdad; border-radius: 4px; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; z-index: 10; }
         #view-app .del-archive-btn:hover { background: #de350b; color: white; }
         #view-app .table-order-btn { background: #ebf2ff; border: 1px solid #0052cc; color: #0052cc; border-radius: 3px; padding: 1px 5px; font-size: 11px; cursor: pointer; font-weight: bold; margin-left: 3px; }
+        #view-app .schedule-shift-btns { display: inline-flex; align-items: center; gap: 2px; margin-left: 4px; vertical-align: middle; }
+        #view-app .schedule-shift-btns .table-order-btn { margin-left: 0; padding: 0 5px; line-height: 1.4; }
         #view-app .table-reset-btn { background: #f4f5f7; border: 1px solid #c1c7d0; color: #42526e; border-radius: 4px; padding: 3px 8px; font-size: 10px; cursor: pointer; font-weight: bold; float: right; margin-top: -2px; margin-left: 4px; }
         #view-app .table-reset-btn:hover { background: #ffebe6; color: #de350b; border-color: #ffbdad; }
         #view-app .table-save-btn { background: #00875a; border: 1px solid #57d9a3; color: white; border-radius: 4px; padding: 3px 8px; font-size: 10px; cursor: pointer; font-weight: bold; float: right; margin-top: -2px; }
@@ -5413,6 +5419,119 @@
         return a0 < (b0 + d) && b0 < (a0 + d);
     };
 
+    window.getGroupSlotLen = function () {
+        const s = state.settings || {};
+        const gDur = parseInt(s.gDur, 10) || 0;
+        const gBreak = parseInt(s.gBreak, 10) || 0;
+        return Math.max(1, gDur + gBreak);
+    };
+
+    /** Konflikty przy proponowanym time/pitch: zajęte boisko, wspólna drużyna w overlap, mecz po meczu. */
+    window.getScheduleMoveConflicts = function (match, proposedTime, proposedPitch, opts) {
+        opts = opts || {};
+        const isPo = !!opts.isPo;
+        const conflicts = [];
+        if (!match || !proposedTime) return conflicts;
+        const matchId = match.id;
+        const slotLen = window.getGroupSlotLen();
+        const minKickoffGap = 2 * slotLen;
+        const proposedMin = window.timeToMinutes(proposedTime);
+        const pitch = proposedPitch != null ? parseInt(proposedPitch, 10) : NaN;
+        const hasPitch = Number.isFinite(pitch) && pitch >= 1;
+        const teamIds = [];
+        if (match.t1 && match.t1.id != null && match.t1.id >= 0) teamIds.push(match.t1.id);
+        if (match.t2 && match.t2.id != null && match.t2.id >= 0) teamIds.push(match.t2.id);
+        const dur = window.getMatchDurationMinutes(Object.assign({}, match, { time: proposedTime }), isPo);
+
+        const scan = (list, asPo) => {
+            (list || []).forEach(other => {
+                if (!other || other.played || !other.time) return;
+                if (other.id === matchId && !!asPo === isPo) return;
+                const otherDur = window.getMatchDurationMinutes(other, !!asPo);
+                const overlap = window.timesOverlap(proposedTime, other.time, Math.max(dur, otherDur));
+                const oids = [];
+                if (other.t1 && other.t1.id != null && other.t1.id >= 0) oids.push(other.t1.id);
+                if (other.t2 && other.t2.id != null && other.t2.id >= 0) oids.push(other.t2.id);
+                const sharedTeam = teamIds.some(id => oids.indexOf(id) >= 0);
+                if (hasPitch && parseInt(other.pitch, 10) === pitch && overlap) {
+                    conflicts.push({ m: other, isPo: !!asPo, reason: 'zajęte boisko w tym czasie' });
+                }
+                if (overlap && sharedTeam) {
+                    conflicts.push({ m: other, isPo: !!asPo, reason: 'drużyna w tym samym czasie' });
+                }
+                if (!isPo && !asPo && sharedTeam) {
+                    const gap = Math.abs(proposedMin - window.timeToMinutes(other.time));
+                    if (gap > 0 && gap < minKickoffGap) {
+                        conflicts.push({ m: other, isPo: false, reason: 'brak przerwy (mecz po meczu)' });
+                    }
+                }
+            });
+        };
+        scan(state.matches, false);
+        scan(state.playoffs, true);
+        return conflicts;
+    };
+
+    window.formatScheduleConflictAlert = function (conflicts, title) {
+        const lines = (conflicts || []).map(c => {
+            const no = window.getGlobalMatchNo(c.m, c.isPo);
+            const t1 = (c.m.t1 && c.m.t1.name) ? c.m.t1.name : '?';
+            const t2 = (c.m.t2 && c.m.t2.name) ? c.m.t2.name : '?';
+            const round = c.isPo
+                ? (typeof window.getPlayoffRoundLabel === 'function' ? window.getPlayoffRoundLabel(c.m) : 'Play-off')
+                : (c.m.group ? ('Grupa ' + c.m.group) : '');
+            const tm = c.m.time ? (' @ ' + c.m.time) : '';
+            return '• Mecz #' + no + (round ? ' (' + round + ')' : '') + tm + ': ' + t1 + ' vs ' + t2 + ' — ' + c.reason;
+        }).join('\n');
+        return (title || 'Konflikt terminarza') + ':\n\n' + lines;
+    };
+
+    window.canShiftMatchSlot = function (m, isPo) {
+        if (isPo || !m || m.played || !m.time) return false;
+        if (isFanMode || isHallMode || isAssistantMode) return false;
+        if (typeof isDemoMode !== 'undefined' && isDemoMode) return false;
+        return true;
+    };
+
+    window.renderScheduleShiftControlsHTML = function (m, isPo) {
+        if (!window.canShiftMatchSlot(m, isPo)) return '';
+        return '<span class="schedule-shift-btns" onclick="event.stopPropagation()">' +
+            '<button type="button" class="table-order-btn" title="Wcześniejszy slot" aria-label="Wcześniejszy slot" onclick="shiftMatchSlot(' + m.id + ', -1)">↑</button>' +
+            '<button type="button" class="table-order-btn" title="Późniejszy slot" aria-label="Późniejszy slot" onclick="shiftMatchSlot(' + m.id + ', 1)">↓</button>' +
+            '</span>';
+    };
+
+    window.refreshAfterScheduleTimeChange = function () {
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+        if (typeof window.renderHallView === 'function' && isHallMode) window.renderHallView();
+    };
+
+    window.shiftMatchSlot = function (matchId, dir) {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        dir = dir < 0 ? -1 : 1;
+        const m = (state.matches || []).find(x => x && x.id === matchId);
+        if (!m || m.played || !m.time) return;
+        const slotLen = window.getGroupSlotLen();
+        const newTime = window.addMin(m.time, dir * slotLen);
+        if (!newTime || newTime === m.time) return;
+        const conflicts = window.getScheduleMoveConflicts(m, newTime, m.pitch, { isPo: false });
+        if (conflicts.length) {
+            alert(window.formatScheduleConflictAlert(conflicts, 'Nie można przesunąć meczu'));
+            return;
+        }
+        const oldTime = m.time;
+        m.time = newTime;
+        state.matches = window.finalizeGroupMatchOrder(state.matches);
+        const moved = (state.matches || []).find(x => x && x.time === newTime && x.t1 && m.t1 && x.t1.id === m.t1.id && x.t2 && m.t2 && x.t2.id === m.t2.id)
+            || (state.matches || []).find(x => x && x.time === newTime);
+        const no = moved ? window.getGlobalMatchNo(moved, false) : '?';
+        window.logAction('Przesunięto mecz #' + no + ' ' + oldTime + ' → ' + newTime + ' (slot ' + (dir < 0 ? '↑' : '↓') + ').');
+        window.save();
+        window.refreshAfterScheduleTimeChange();
+    };
+
     window.preferredPitchForGroup = function (groupName, pitchCount) {
         const n = parseInt(pitchCount, 10) || 0;
         if (n < 1) return 1;
@@ -6235,16 +6354,30 @@
             return;
         }
         if (m.time === normalized) return;
+        if (!isPo) {
+            const conflicts = window.getScheduleMoveConflicts(m, normalized, m.pitch, { isPo: false });
+            if (conflicts.length) {
+                alert(window.formatScheduleConflictAlert(conflicts, 'Nie można zmienić godziny'));
+                const inp = document.getElementById('mTimeInput');
+                if (inp && m.time) inp.value = m.time;
+                return;
+            }
+        }
         m.time = normalized;
-        if (state.active && state.active.id === matchId && !!state.active.isPo === !!isPo) {
+        if (!isPo && typeof window.finalizeGroupMatchOrder === 'function') {
+            state.matches = window.finalizeGroupMatchOrder(state.matches);
+            const remapped = (state.matches || []).find(x => x && x.time === normalized && x.t1 && m.t1 && x.t1.id === m.t1.id && x.t2 && m.t2 && x.t2.id === m.t2.id);
+            if (remapped && state.active && state.active.id === matchId && !state.active.isPo) {
+                state.active.id = remapped.id;
+                state.active.time = normalized;
+            }
+        } else if (state.active && state.active.id === matchId && !!state.active.isPo === !!isPo) {
             state.active.time = normalized;
         }
-        window.logAction('Zmieniono godzinę meczu #' + window.getGlobalMatchNo(m, !!isPo) + ' → ' + normalized);
+        const shown = (!isPo && state.active && !state.active.isPo) ? state.active : m;
+        window.logAction('Zmieniono godzinę meczu #' + window.getGlobalMatchNo(shown, !!isPo) + ' → ' + normalized);
         window.save();
-        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
-        if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
-        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
-        if (typeof window.renderHallView === 'function' && isHallMode) window.renderHallView();
+        window.refreshAfterScheduleTimeChange();
     };
 
     window.setMatchTimeFromModal = function (value) {
@@ -6297,6 +6430,7 @@
 
     window._hallLiveScoreKey = '';
     window._hallLiveRenderSig = '';
+    window._hallLiveStructureSig = '';
     window._hallPlayedSig = '';
     window._hallTablesHtml = '';
     window._hallRulesHtml = '';
@@ -6378,9 +6512,28 @@
         }
     };
 
+    function hallCardsFingerprint(m) {
+        if (!m) return '0y0r:0y0r';
+        if (typeof window.countCardsPublic === 'function') {
+            const a = window.countCardsPublic(m.cards1);
+            const b = window.countCardsPublic(m.cards2);
+            return a.y + 'y' + a.r + 'r:' + b.y + 'y' + b.r + 'r';
+        }
+        return String((m.cards1 || []).length) + ':' + String((m.cards2 || []).length);
+    }
+
     function hallMatchBrief(m) {
         if (!m) return '';
-        return [m.id, m.isPo ? 1 : 0, m.played ? 1 : 0, m.g1, m.g2, m.pen1, m.pen2, m.pitch || 0, (m.s1 || []).length, (m.s2 || []).length].join(':');
+        const n1 = (m.t1 && m.t1.name) ? String(m.t1.name) : '';
+        const n2 = (m.t2 && m.t2.name) ? String(m.t2.name) : '';
+        return [m.id, m.isPo ? 1 : 0, m.played ? 1 : 0, m.g1, m.g2, m.pen1, m.pen2, m.pitch || 0, (m.s1 || []).length, (m.s2 || []).length, n1, n2, hallCardsFingerprint(m)].join(':');
+    }
+
+    function hallLiveStructureKey(m, live) {
+        if (!m) return '';
+        const n1 = (m.t1 && m.t1.name) ? String(m.t1.name) : '';
+        const n2 = (m.t2 && m.t2.name) ? String(m.t2.name) : '';
+        return [m.id, m.isPo ? 1 : 0, n1, n2, hallCardsFingerprint(m), live ? 1 : 0].join('|');
     }
 
     function getHallAllMatches() {
@@ -6434,14 +6587,22 @@
         const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
         const t1Cls = lead === 't1' ? ' is-leading' : '';
         const t2Cls = lead === 't2' ? ' is-leading' : '';
+        const cards1 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards1, 1) : '';
+        const cards2 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards2, 2) : '';
         return '<div class="hall-live-board">' +
-            '<div class="hall-live-team hall-live-team--home"><div class="hall-live-team-name' + t1Cls + '">' + esc(m.t1.name) + '</div></div>' +
+            '<div class="hall-live-team hall-live-team--home">' +
+            '<div class="hall-live-team-name' + t1Cls + '">' + esc(m.t1.name) + '</div>' +
+            '<div class="hall-live-team-cards">' + (cards1 || '') + '</div>' +
+            '</div>' +
             '<div class="hall-live-score-wrap">' +
             '<span class="hall-live-digit" id="hall-live-g1">' + scores.g1 + '</span>' +
             '<span class="hall-live-colon">:</span>' +
             '<span class="hall-live-digit" id="hall-live-g2">' + scores.g2 + '</span>' +
             '</div>' +
-            '<div class="hall-live-team hall-live-team--away"><div class="hall-live-team-name' + t2Cls + '">' + esc(m.t2.name) + '</div></div>' +
+            '<div class="hall-live-team hall-live-team--away">' +
+            '<div class="hall-live-team-name' + t2Cls + '">' + esc(m.t2.name) + '</div>' +
+            '<div class="hall-live-team-cards">' + (cards2 || '') + '</div>' +
+            '</div>' +
             '</div>';
     }
 
@@ -6557,14 +6718,22 @@
         if (podium.pen1 != null && podium.pen2 != null) {
             penNote = '<div class="hall-live-pen-note">Po rzutach karnych: ' + podium.pen1 + ':' + podium.pen2 + '</div>';
         }
+        const cards1 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards1, 1) : '';
+        const cards2 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards2, 2) : '';
         return '<div class="hall-live-board">' +
-            '<div class="hall-live-team hall-live-team--home"><div class="hall-live-team-name' + t1Win + '">' + esc(m.t1.name) + '</div></div>' +
+            '<div class="hall-live-team hall-live-team--home">' +
+            '<div class="hall-live-team-name' + t1Win + '">' + esc(m.t1.name) + '</div>' +
+            '<div class="hall-live-team-cards">' + (cards1 || '') + '</div>' +
+            '</div>' +
             '<div class="hall-live-score-wrap">' +
             '<span class="hall-live-digit" id="hall-live-g1">' + scores.g1 + '</span>' +
             '<span class="hall-live-colon">:</span>' +
             '<span class="hall-live-digit" id="hall-live-g2">' + scores.g2 + '</span>' +
             '</div>' +
-            '<div class="hall-live-team hall-live-team--away"><div class="hall-live-team-name' + t2Win + '">' + esc(m.t2.name) + '</div></div>' +
+            '<div class="hall-live-team hall-live-team--away">' +
+            '<div class="hall-live-team-name' + t2Win + '">' + esc(m.t2.name) + '</div>' +
+            '<div class="hall-live-team-cards">' + (cards2 || '') + '</div>' +
+            '</div>' +
             '</div>' + penNote + renderHallPodiumBanner(podium);
     }
 
@@ -6636,12 +6805,14 @@
         const scores = window.resolveHallLiveScores(current);
         const live = isHallMatchLive(current, scores);
         const scoreKey = current.id + ':' + (current.isPo ? 'po' : 'gr') + ':' + scores.g1 + ':' + scores.g2;
+        const structureKey = hallLiveStructureKey(current, live);
         const renderSig = 'live:' + hallMatchBrief(current) + ':' + scores.g1 + ':' + scores.g2 + ':' + (live ? 1 : 0);
         const prevKey = window._hallLiveScoreKey || '';
         const scoreChanged = prevKey && prevKey !== scoreKey && prevKey.startsWith(String(current.id) + ':');
         const sameMatch = prevKey.startsWith(String(current.id) + ':');
         const g1El = document.getElementById('hall-live-g1');
         const g2El = document.getElementById('hall-live-g2');
+        const structureSame = window._hallLiveStructureSig === structureKey;
 
         if (g1El && g2El && sameMatch && window._hallLiveRenderSig === renderSig) {
             return;
@@ -6656,8 +6827,9 @@
         }
         if (timeEl) timeEl.textContent = current.time ? ('Godzina meczu: ' + current.time) : '';
 
-        if (g1El && g2El && sameMatch) {
+        if (g1El && g2El && sameMatch && structureSame) {
             window._hallLiveRenderSig = renderSig;
+            window._hallLiveStructureSig = structureKey;
             g1El.textContent = String(scores.g1);
             g2El.textContent = String(scores.g2);
             if (scoreChanged) {
@@ -6668,10 +6840,17 @@
             const t1 = bodyEl.querySelector('.hall-live-team--home .hall-live-team-name');
             const t2 = bodyEl.querySelector('.hall-live-team--away .hall-live-team-name');
             const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
-            if (t1) t1.className = 'hall-live-team-name' + (lead === 't1' ? ' is-leading' : '');
-            if (t2) t2.className = 'hall-live-team-name' + (lead === 't2' ? ' is-leading' : '');
+            if (t1) {
+                t1.textContent = current.t1 && current.t1.name ? current.t1.name : '';
+                t1.className = 'hall-live-team-name' + (lead === 't1' ? ' is-leading' : '');
+            }
+            if (t2) {
+                t2.textContent = current.t2 && current.t2.name ? current.t2.name : '';
+                t2.className = 'hall-live-team-name' + (lead === 't2' ? ' is-leading' : '');
+            }
         } else {
             window._hallLiveRenderSig = renderSig;
+            window._hallLiveStructureSig = structureKey;
             bodyEl.innerHTML = renderHallLiveBoardHTML(current, scores);
         }
     }
@@ -6792,9 +6971,13 @@
             : '';
         const t1 = (m.t1 && m.t1.name) ? m.t1.name : '—';
         const t2 = (m.t2 && m.t2.name) ? m.t2.name : '—';
-        const teamsHTML = '<span class="live-team-name">' + esc(t1) + '</span>' +
+        const cards1 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards1, 1) : '';
+        const cards2 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards2, 2) : '';
+        const teamsHTML = (cards1 || '') +
+            '<span class="live-team-name">' + esc(t1) + '</span>' +
             '<span class="live-teams-sep"> - </span>' +
-            '<span class="live-team-name">' + esc(t2) + '</span>';
+            '<span class="live-team-name">' + esc(t2) + '</span>' +
+            (cards2 || '');
         const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
         return '<tr class="' + rowCls + '">' +
             '<td><span class="live-match-no">' + matchNo + '</span></td>' +
@@ -7196,11 +7379,14 @@
         const pitchCell = (window.getPitchCount() > 0)
             ? ('<td class="col-pitch">' + (pitchHTML || '—') + '</td>')
             : '';
+        const shiftHTML = (typeof window.renderScheduleShiftControlsHTML === 'function')
+            ? window.renderScheduleShiftControlsHTML(m, isPo)
+            : '';
         return '<tr class="' + rowCls + '">' +
             '<td><span class="live-match-no">' + matchNo + '</span></td>' +
             '<td>' + groupBadge + '</td>' +
             pitchCell +
-            '<td><span class="live-time">' + esc(m.time || '—') + '</span></td>' +
+            '<td><span class="live-time">' + esc(m.time || '—') + '</span>' + shiftHTML + '</td>' +
             '<td class="live-match-teams" title="' + escAttr(m.t1.name + ' vs ' + m.t2.name) + '">' + teamsHTML + '</td>' +
             '<td class="col-score">' + scoreHTML + '</td>' +
             (opts.showScorers ? '<td class="col-scorers">' + scorersHTML + '</td>' : '') +
@@ -7268,6 +7454,9 @@
         const headScore = (opts.readonly || m.played)
             ? ('<span class="live-score-cell">' + scoreHTML + '</span>' + statusDot + (opts.showScorers && m.played ? scorersHTML : ''))
             : (scoreHTML + statusDot);
+        const shiftHTML = (typeof window.renderScheduleShiftControlsHTML === 'function')
+            ? window.renderScheduleShiftControlsHTML(m, isPo)
+            : '';
         const cardCls = 'assistant-match-card' + (m.played ? ' is-played' : '');
         return '<article class="' + cardCls + '">' +
             '<div class="assistant-match-card-head">' +
@@ -7275,6 +7464,7 @@
             groupBadge +
             (pitchCtrl || '') +
             '<span class="live-time">' + esc(m.time || '—') + '</span>' +
+            shiftHTML +
             headScore +
             '</div>' +
             '<div class="assistant-match-card-teams">' + teamsHTML + '</div>' +
@@ -8474,12 +8664,8 @@
         };
 
         window.moveMatch = (idx, dir) => {
-            if(idx + dir < 0 || idx + dir >= state.matches.length) return;
-            const m1 = state.matches[idx], m2 = state.matches[idx + dir];
-            const tempTime = m1.time; m1.time = m2.time; m2.time = tempTime;
-            state.matches[idx] = m2; state.matches[idx + dir] = m1;
-            window.logAction(`Przestawiono kolejność meczów grupowych: Mecz #${m1.id} <-> Mecz #${m2.id}.`);
-            window.save(); window.filterAndRenderMatches();
+            const m = state.matches && state.matches[idx];
+            if (m) window.shiftMatchSlot(m.id, dir);
         };
 
         window.getSortedGroupStats = (gn) => {
@@ -10218,8 +10404,8 @@
         }
 
         const preferCards = (typeof window.tpPreferMatchCards === 'function' && window.tpPreferMatchCards())
-            || isFanMode || isAssistantMode;
-        const fanRo = isFanMode || isAssistantMode || window._demoStoryFanEmbed === true;
+            || isFanMode;
+        const matchRo = isFanMode || window._demoStoryFanEmbed === true;
         const sortByTime = (list) => list.slice().sort((a, b) => {
             const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
             if (dt !== 0) return dt;
@@ -10247,7 +10433,7 @@
                 html += '<div class="pitch-section-empty">Brak przypisanego meczu</div>';
             } else {
                 const renderList = (list, isPo) => {
-                    const opts = { readonly: fanRo, showScorers: !fanRo, isPo: !!isPo, allowPitchAssign: !fanRo && window.canAssignPitch() };
+                    const opts = { readonly: matchRo, showScorers: !matchRo, isPo: !!isPo, allowPitchAssign: !matchRo && window.canAssignPitch() };
                     if (preferCards) {
                         return '<div class="assistant-match-cards">' + renderAssistantMatchCardsHTML(list, opts) + '</div>';
                     }
