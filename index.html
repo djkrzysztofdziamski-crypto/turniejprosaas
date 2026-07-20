@@ -498,6 +498,19 @@
         #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; max-width: 220px; min-width: 0; }
         #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
         #view-app .live-match-teams .live-team-name { display: inline; overflow-wrap: anywhere; word-break: break-word; }
+        #view-app .live-cards-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+        #view-app .live-cards-badge--home { margin-right: 8px; }
+        #view-app .live-cards-badge--away { margin-left: 8px; }
+        #view-app .live-team-with-cards {
+            display: inline;
+        }
         #view-app .live-score-display { font-family: var(--font-display); font-weight: 800; font-size: 13px; color: #172b4d; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; line-height: 1; }
         #view-app .live-score-inputs { display: inline-flex; align-items: center; justify-content: center; gap: 2px; max-width: 100%; flex-wrap: nowrap; }
         #view-app .live-score-inputs input { width: 28px; min-width: 28px; max-width: 28px; box-sizing: border-box; text-align: center; font-weight: 800; font-family: var(--font-display); padding: 2px 1px; border: 1px solid var(--color-app-border-strong); border-radius: 4px; font-size: 12px; color: #172b4d; line-height: 1.2; }
@@ -1906,13 +1919,31 @@
             gap: 12px;
             margin: 10px auto 0;
             width: 100%;
-            max-width: 340px;
+            max-width: min(340px, 100%);
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        #view-app #matchModal #match-cards-section {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        #view-app #matchModal #card-btn-container {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
         }
         #view-app #matchModal .match-modal-scorers-col {
             border-radius: 10px;
             padding: 10px;
             min-height: 44px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
             box-sizing: border-box;
+            overflow: hidden;
         }
         #view-app #matchModal .match-modal-scorers-col--home {
             background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 100%);
@@ -1932,6 +1963,8 @@
             letter-spacing: 0.04em;
             margin: 0 0 8px;
             line-height: 1.3;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         #view-app #matchModal .match-modal-scorer-head--home { color: #047857; }
         #view-app #matchModal .match-modal-scorer-head--away { color: #b91c1c; }
@@ -1940,6 +1973,15 @@
             gap: 6px;
             margin-bottom: 6px;
             align-items: center;
+            min-width: 0;
+            max-width: 100%;
+        }
+        #view-app #matchModal .match-modal-card-type {
+            flex: 0 1 auto;
+            min-width: 0;
+            font-weight: 800;
+            white-space: nowrap;
+            font-size: 12px;
         }
         #view-app #matchModal .match-modal-scorer-input {
             flex: 1;
@@ -1998,7 +2040,7 @@
             #view-app #matchModal .match-modal-score { width: 48px; font-size: 16px; }
             #view-app #matchModal .match-modal-scorers-grid {
                 grid-template-columns: 1fr;
-                max-width: 340px;
+                max-width: min(340px, 100%);
             }
             #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr; }
         }
@@ -2011,7 +2053,7 @@
             }
             #view-app #matchModal .match-modal-scorers-grid {
                 grid-template-columns: 1fr 1fr;
-                max-width: none;
+                max-width: 100%;
                 gap: 14px;
             }
             #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -2043,7 +2085,7 @@
             #view-app #matchModal .match-modal-content { margin: 2vh auto; max-height: 96vh; }
             #view-app #matchModal .match-modal-scorers-grid {
                 grid-template-columns: 1fr 1fr;
-                max-width: none;
+                max-width: 100%;
             }
             #view-app #matchModal .goal-btn-container { grid-template-columns: 1fr 1fr; }
         }
@@ -3827,7 +3869,7 @@
                 <div id="sc2" class="match-modal-scorers-col match-modal-scorers-col--away"></div>
             </div>
             <div id="match-cards-section" style="display:none; margin-top:12px;">
-                <div style="font-size:12px; font-weight:800; color:#172b4d; margin-bottom:6px;">Kartki (napomnienie / wykluczenie)</div>
+                <div style="font-size:12px; font-weight:800; color:#172b4d; margin-bottom:6px; text-align:center;">Kartki (napomnienie / wykluczenie)</div>
                 <div class="match-modal-scorers-grid">
                     <div id="cd1" class="match-modal-scorers-col match-modal-scorers-col--home"></div>
                     <div id="cd2" class="match-modal-scorers-col match-modal-scorers-col--away"></div>
@@ -5425,6 +5467,23 @@
         return fp;
     };
 
+    window.formatCardsSideBadgeHTML = function (cards, side) {
+        if (!window.isCardsEnabled()) return '';
+        const c = window.countCardsPublic(cards);
+        if (!c.y && !c.r) return '';
+        const home = side === 1 || side === 'home';
+        let s = '';
+        if (home) {
+            if (c.y) s += c.y + '🟨';
+            if (c.r) s += (s ? ' ' : '') + c.r + '🟥';
+        } else {
+            if (c.y) s += '🟨' + c.y;
+            if (c.r) s += (s ? ' ' : '') + '🟥' + c.r;
+        }
+        const sideCls = home ? ' live-cards-badge--home' : ' live-cards-badge--away';
+        return '<span class="live-cards-badge' + sideCls + '" title="Kartki drużyny (bez dublowania 2 żółtych → czerwona)">' + s + '</span>';
+    };
+
     window.formatCardsBadgeHTML = function (m) {
         if (!window.isCardsEnabled() || !m) return '';
         const a = window.countCardsPublic(m.cards1);
@@ -5435,7 +5494,7 @@
         let s = '';
         if (y) s += '🟨' + y;
         if (r) s += (s ? ' ' : '') + '🟥' + r;
-        return '<span class="live-cards-badge" title="Kartki (bez dublowania 2 żółtych → czerwona)" style="font-size:10px; font-weight:700; white-space:nowrap;">' + s + '</span>';
+        return '<span class="live-cards-badge" title="Kartki (bez dublowania 2 żółtych → czerwona)">' + s + '</span>';
     };
 
     window.playerDisciplineKey = function (teamId, name, playerId) {
@@ -6247,14 +6306,15 @@
         let penNote = !pending && m.pen1 != null ? ' · k. ' + m.pen1 + ':' + m.pen2 : '';
         const g1Display = pending ? '—' : m.g1;
         const g2Display = pending ? '—' : m.g2;
-        const cardsBadge = window.formatCardsBadgeHTML(m);
+        const cards1 = window.formatCardsSideBadgeHTML(m.cards1, 1);
+        const cards2 = window.formatCardsSideBadgeHTML(m.cards2, 2);
         return '<div class="hall-played-card' + poCls + compactCls + microCls + pendingCls + '">' +
             '<div class="hall-played-card-top">' +
-            '<div class="hall-played-card-meta">' + esc(window.formatHallMatchMeta(m, isPo)) + penNote + (cardsBadge ? ' · ' + cardsBadge : '') + '</div>' +
+            '<div class="hall-played-card-meta">' + esc(window.formatHallMatchMeta(m, isPo)) + penNote + '</div>' +
             '<div class="hall-played-card-time">' + esc(m.time || '—') + '</div>' +
             '</div>' +
-            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t1Win + '">' + esc(m.t1.name) + '</span><span class="hall-played-card-goals' + g1Cls + '">' + g1Display + '</span></div>' +
-            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t2Win + '">' + esc(m.t2.name) + '</span><span class="hall-played-card-goals' + g2Cls + '">' + g2Display + '</span></div>' +
+            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t1Win + '">' + (cards1 || '') + esc(m.t1.name) + '</span><span class="hall-played-card-goals' + g1Cls + '">' + g1Display + '</span></div>' +
+            '<div class="hall-played-card-row"><span class="hall-played-card-name' + t2Win + '">' + esc(m.t2.name) + (cards2 || '') + '</span><span class="hall-played-card-goals' + g2Cls + '">' + g2Display + '</span></div>' +
             '</div>';
     }
 
@@ -6516,11 +6576,13 @@
         const pitchHTML = (window.getPitchCount() > 0)
             ? window.renderPitchAssignControl(m, isPo)
             : '';
-        const cardsBadge = window.formatCardsBadgeHTML(m);
-        const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
+        const cards1 = window.formatCardsSideBadgeHTML(m.cards1, 1);
+        const cards2 = window.formatCardsSideBadgeHTML(m.cards2, 2);
+        const teamsHTML = (cards1 || '') +
+            '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-vs">vs</span>' +
             '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
-            (cardsBadge ? '<span style="margin-left:6px;">' + cardsBadge + '</span>' : '');
+            (cards2 || '');
         const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
         let scoreHTML;
         if (opts.readonly) {
@@ -6585,11 +6647,13 @@
         const pitchCtrl = (opts.allowPitchAssign && window.canAssignPitch() && !m.played)
             ? window.renderPitchAssignControl(m, isPo)
             : pitchBadge;
-        const cardsBadge = window.formatCardsBadgeHTML(m);
-        const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
+        const cards1 = window.formatCardsSideBadgeHTML(m.cards1, 1);
+        const cards2 = window.formatCardsSideBadgeHTML(m.cards2, 2);
+        const teamsHTML = (cards1 || '') +
+            '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-sep"> - </span>' +
             '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
-            (cardsBadge ? ' ' + cardsBadge : '');
+            (cards2 || '');
         const scorersHTML = opts.showScorers
             ? renderScorersBtn(m.id, isPo, !m.played, true)
             : '';
@@ -8573,7 +8637,7 @@
                         ? (c.viaSecondYellow ? '🟥 2żółta' : '🟥')
                         : '🟨';
                     return '<div class="match-modal-scorer-row">' +
-                        '<span style="font-weight:800; min-width:52px;">' + badge + '</span>' +
+                        '<span class="match-modal-card-type">' + badge + '</span>' +
                         window.renderPlayerNameControl(n, 'cards' + n, i, teamId, c.name, c.playerId) +
                         '<button type="button" class="match-modal-scorer-remove" onclick="removeCard(' + n + ', ' + i + ')" aria-label="Usuń kartkę">&times;</button>' +
                         '</div>';
