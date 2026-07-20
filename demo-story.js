@@ -674,6 +674,10 @@
 
                 pitchCount: 4,
 
+                matchParams: { cardsEnabled: true, cardsRequireName: false },
+
+                teamParams: { players: false, captain: false, gk: false },
+
                 customTableOrder: customTableOrder,
 
                 qualifiedTeamIds: qualifiedTeamIds,

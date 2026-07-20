@@ -464,7 +464,7 @@
         #view-app .live-match-table col.col-teams { width: auto; }
         /* Wynik: dwa inputy + „:” + ✓ — musi się zmieścić bez nachodzenia na Strzelcy/status */
         #view-app .live-match-table col.col-score { width: 112px; }
-        #view-app .live-match-table col.col-scorers { width: 78px; }
+        #view-app .live-match-table col.col-scorers { width: 124px; }
         #view-app .live-match-table col.col-status { width: 26px; }
         #view-app .live-match-table thead { background: #e8eef5; border-bottom: 1px solid #c1c7d0; }
         /* Play-off: jasny nagłówek — czytelny z granatową czcionką */
@@ -517,7 +517,7 @@
         #view-app .live-match-table td.col-scorers { padding-left: 4px; padding-right: 4px; }
         #view-app .live-match-table td.col-status { padding-left: 2px; padding-right: 4px; }
         /* Kompaktowy Strzelcy w Na żywo / Mecze — bez powiększania */
-        #view-app .assistant-scorers-btn { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: var(--font-body); transition: border-color 0.12s, color 0.12s, background 0.12s; line-height: 1.2; max-width: 100%; box-sizing: border-box; }
+        #view-app .assistant-scorers-btn { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: var(--font-body); transition: border-color 0.12s, color 0.12s, background 0.12s; line-height: 1.2; max-width: none; width: 100%; box-sizing: border-box; }
         #view-app .assistant-scorers-btn:hover { border-color: var(--color-accent); color: var(--color-accent); background: #f4f8ff; }
         #view-app .assistant-scorers-btn--lead { background: #eef2ff; border-color: var(--color-accent); color: var(--color-accent); }
         #view-app .live-score-cell { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; justify-content: center; max-width: 100%; }
@@ -525,7 +525,7 @@
         #view-app #mecze .live-match-table col.col-score,
         #view-app #matches-container .live-match-table col.col-score { width: 112px; }
         #view-app #mecze .live-match-table col.col-scorers,
-        #view-app #matches-container .live-match-table col.col-scorers { width: 78px; }
+        #view-app #matches-container .live-match-table col.col-scorers { width: 124px; }
         #view-app #mecze .live-match-table col.col-status,
         #view-app #matches-container .live-match-table col.col-status { width: 26px; }
         #view-app #mecze .live-score-inputs,
@@ -1143,7 +1143,7 @@
         #view-app #assistant-screen .live-match-table { font-size: 12px; }
         #view-app #assistant-screen .live-match-table col.col-teams { width: 32%; }
         #view-app #assistant-screen .live-match-table col.col-score { width: 112px; }
-        #view-app #assistant-screen .live-match-table col.col-scorers { width: 108px; }
+        #view-app #assistant-screen .live-match-table col.col-scorers { width: 130px; }
         #view-app #assistant-screen .live-match-table col.col-status { width: 36px; }
         #view-app #assistant-screen .live-match-table th { padding: 4px 5px; font-size: 8px; }
         #view-app #assistant-screen .live-match-table td { padding: 4px 5px; }
@@ -1233,7 +1233,7 @@
         @media (max-width: 767px) {
             #view-app #assistant-screen .live-match-table col.col-teams { width: 28%; }
             #view-app #assistant-screen .live-match-table col.col-score { width: 100px; }
-            #view-app #assistant-screen .live-match-table col.col-scorers { width: 96px; }
+            #view-app #assistant-screen .live-match-table col.col-scorers { width: 118px; }
             #view-app #assistant-screen .live-match-teams { font-size: 11px; }
             #view-app #assistant-screen .live-match-table th { font-size: 7px; padding: 3px 3px; }
             #view-app #assistant-screen .live-match-table td { padding: 3px 3px; font-size: 11px; }
@@ -3620,7 +3620,7 @@
     </div>
 
         <div id="assistant-screen" aria-hidden="true">
-        <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.</div>
+        <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.</div>
         <div id="assistant-pitches-toolbar" class="fan-subnav" style="display:none; margin: 0 0 8px;">
             <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" id="assistant-tab-matches" onclick="openAssistantMatchesView()">Mecze</button>
             <button type="button" class="fan-subnav-btn" id="assistant-tab-pitches" onclick="openAssistantPitchesView()">Boiska</button>
@@ -3672,7 +3672,16 @@
                         </select>
                     </div>
                     <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
-                    <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–10):</span> <input type="number" id="pitch-count" min="0" max="10" value="0" title="0 = wyłączone; max 10" onchange="syncPitchCountFromForm()"></div>
+                    <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–99):</span> <input type="number" id="pitch-count" min="0" max="99" value="0" title="0 lub 1 = wyłączone; 2–99 = przydział boisk" onchange="syncPitchCountFromForm()"></div>
+
+                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry drużyny</div>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan</span></label>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz</span></label>
+
+                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry meczowe</div>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
+                    <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
                     
                     <button class="btn-main" onclick="generateInputs()" style="margin-top:15px;">UTWÓRZ DRUŻYNY</button>
                 </div>
@@ -3682,7 +3691,7 @@
         <div id="sklady" class="tab-content">
             <div class="card">
                 <h3 style="margin-top:0;">Składy drużyn</h3>
-                <p style="font-size:12px; color:#666;">Wpisz nazwy drużyn, bramkarzy i kapitanów. Zmiany zapisują się automatycznie.</p>
+                <p id="sklady-help" style="font-size:12px; color:#666;">Wpisz nazwy drużyn. Opcje składu, kapitana i bramkarza zależą od ustawień na karcie Start. Zmiany zapisują się automatycznie.</p>
                 <div id="inputs-container">Brak drużyn. Wróć do karty "Start", aby wygenerować formularz.</div>
                 <div id="demo-lock-btn-container">
                     <button class="btn-main" onclick="losujGrupy()" style="margin-top:15px; background:#172b4d;">LOSUJ GRUPY</button>
@@ -3812,9 +3821,17 @@
                 <input type="number" id="mG2" class="match-modal-score match-modal-score--away" min="0" inputmode="numeric" oninput="syncLiveFromModalInputs(); checkPenaltyVisibility()">
                 <b id="mT2" class="match-modal-team match-modal-team--away"></b>
             </div>
+            <div id="mSuspendedBanner" style="display:none; font-size:12px; background:#ffebe6; color:#de350b; padding:8px 10px; border-radius:6px; margin-bottom:10px; border-left:4px solid #de350b;"></div>
             <div class="match-modal-scorers-grid">
                 <div id="sc1" class="match-modal-scorers-col match-modal-scorers-col--home"></div>
                 <div id="sc2" class="match-modal-scorers-col match-modal-scorers-col--away"></div>
+            </div>
+            <div id="match-cards-section" style="display:none; margin-top:12px;">
+                <div style="font-size:12px; font-weight:800; color:#172b4d; margin-bottom:6px;">Kartki (napomnienie / wykluczenie)</div>
+                <div class="match-modal-scorers-grid">
+                    <div id="cd1" class="match-modal-scorers-col match-modal-scorers-col--home"></div>
+                    <div id="cd2" class="match-modal-scorers-col match-modal-scorers-col--away"></div>
+                </div>
             </div>
             
             <div id="penalty-section" class="penalty-box">
@@ -3828,6 +3845,16 @@
             <div class="goal-btn-container">
                 <button id="btn-sc1" type="button" onclick="addSc(1)" class="btn-goal btn-goal--home"></button>
                 <button id="btn-sc2" type="button" onclick="addSc(2)" class="btn-goal btn-goal--away"></button>
+            </div>
+            <div id="card-btn-container" class="goal-btn-container" style="display:none; margin-top:8px;">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <button id="btn-y1" type="button" onclick="addCard(1,'Y')" class="btn-goal btn-goal--home" style="background:#fef9c3; color:#854d0e; border-color:#facc15;">🟨 Żółta</button>
+                    <button id="btn-r1" type="button" onclick="addCard(1,'R')" class="btn-goal btn-goal--home" style="background:#fee2e2; color:#991b1b; border-color:#f87171;">🟥 Czerwona</button>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <button id="btn-y2" type="button" onclick="addCard(2,'Y')" class="btn-goal btn-goal--away" style="background:#fef9c3; color:#854d0e; border-color:#facc15;">🟨 Żółta</button>
+                    <button id="btn-r2" type="button" onclick="addCard(2,'R')" class="btn-goal btn-goal--away" style="background:#fee2e2; color:#991b1b; border-color:#f87171;">🟥 Czerwona</button>
+                </div>
             </div>
             <button class="btn-main" onclick="saveMatch()">ZAPISZ WYNIK MECZU</button>
         </div>
@@ -3881,7 +3908,12 @@
                 <h3 style="margin:0; font-size:16px;" id="table-order-drawer-title">Edytuj kolejność</h3>
                 <button type="button" onclick="closeTableOrderDrawer()" style="border:none; background:none; font-size:22px; cursor:pointer;">&times;</button>
             </div>
-            <p style="font-size:12px; color:#64748b; margin:0 0 12px;">Remis absolutny — ułóż drużyny strzałkami, potem zatwierdź układ.</p>
+            <p style="font-size:12px; color:#64748b; margin:0 0 12px;">Remis absolutny (kryteria 1–7 wyczerpane, w tym Fair Play). Wybierz metodę rozstrzygnięcia poza systemem, potem ułóż kolejność i zatwierdź.</p>
+            <div style="margin-bottom:12px; display:flex; flex-direction:column; gap:6px; font-size:13px;">
+                <span style="font-weight:700; color:#172b4d;">Metoda rozstrzygnięcia</span>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="absolute-remis-method" value="draw" checked> Losowanie</label>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="absolute-remis-method" value="pens"> Krótka seria rzutów karnych</label>
+            </div>
             <div id="table-order-drawer-body"></div>
             <div style="display:flex; gap:8px; margin-top:14px;">
                 <button type="button" class="btn-main" style="flex:1; background:#00875a;" id="table-order-drawer-confirm">✅ Zatwierdź układ</button>
@@ -5043,8 +5075,9 @@
 
     window.getPitchCount = function () {
         const n = parseInt(state.settings && state.settings.pitchCount, 10);
-        if (!Number.isFinite(n) || n < 1) return 0;
-        return Math.min(10, n);
+        // 0 i 1 = funkcja boisk wyłączona; aktywna od 2
+        if (!Number.isFinite(n) || n < 2) return 0;
+        return Math.min(99, n);
     };
 
     window.formatPitchLabel = function (m) {
@@ -5068,25 +5101,436 @@
         m.pitch = null;
     };
 
+    window.clearPendingMatchPitches = function () {
+        const clear = (list) => {
+            (list || []).forEach(m => {
+                if (m && !m.played) m.pitch = null;
+            });
+        };
+        clear(state.matches);
+        clear(state.playoffs);
+    };
+
     window.syncPitchCountFromForm = function () {
         if (isFanMode || isHallMode || isAssistantMode) return;
         if (!state.settings) state.settings = {};
         const el = document.getElementById('pitch-count');
         let n = el ? parseInt(el.value, 10) : 0;
         if (!Number.isFinite(n) || n < 0) n = 0;
-        if (n > 10) n = 10;
+        if (n > 99) n = 99;
         if (el) el.value = String(n);
+        const prevEnabled = window.getPitchCount() > 0;
         state.settings.pitchCount = n;
+        if (n < 2) window.clearPendingMatchPitches();
         window.save();
         if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
         if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
         if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+        if (prevEnabled && n < 2 && typeof window.switchTab === 'function') {
+            const pitchesPane = document.getElementById('boiska');
+            if (pitchesPane && pitchesPane.classList.contains('active')) {
+                window.switchTab(isFanMode ? 'mecze' : (window.tpIsDesktopLayout && window.tpIsDesktopLayout() ? 'nazywo' : 'mecze'));
+            }
+        }
     };
 
     window.syncPitchCountToForm = function () {
         const el = document.getElementById('pitch-count');
         if (!el) return;
-        el.value = String(window.getPitchCount() || (state.settings && state.settings.pitchCount) || 0);
+        const raw = parseInt(state.settings && state.settings.pitchCount, 10);
+        let n = Number.isFinite(raw) && raw >= 0 ? raw : 0;
+        if (n > 99) n = 99;
+        el.value = String(n);
+    };
+
+    window.normalizePlayerName = function (name) {
+        return String(name || '').trim().toUpperCase();
+    };
+
+    window.genPlayerId = function () {
+        return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+    };
+
+    window.getTeamParams = function () {
+        window.ensureTeamAndMatchParams();
+        const tp = (state.settings && state.settings.teamParams) || {};
+        return {
+            players: !!tp.players,
+            captain: !!tp.captain,
+            gk: !!tp.gk
+        };
+    };
+
+    window.getMatchParams = function () {
+        window.ensureTeamAndMatchParams();
+        const mp = (state.settings && state.settings.matchParams) || {};
+        return {
+            cardsEnabled: mp.cardsEnabled !== false,
+            cardsRequireName: !!mp.cardsRequireName
+        };
+    };
+
+    window.isCardsEnabled = function () {
+        return window.getMatchParams().cardsEnabled;
+    };
+
+    window.ensureTeamAndMatchParams = function () {
+        if (!state.settings) state.settings = {};
+        if (!state.settings.matchParams || typeof state.settings.matchParams !== 'object') {
+            state.settings.matchParams = { cardsEnabled: true, cardsRequireName: false };
+        } else {
+            if (state.settings.matchParams.cardsEnabled === undefined) state.settings.matchParams.cardsEnabled = true;
+            if (state.settings.matchParams.cardsRequireName === undefined) state.settings.matchParams.cardsRequireName = false;
+        }
+        if (!state.settings.teamParams || typeof state.settings.teamParams !== 'object') {
+            const teams = state.teams || [];
+            const hasRoster = teams.some(t => Array.isArray(t.players) && t.players.length);
+            const anyGkCap = teams.some(t => {
+                const gk = String(t.gk || '').trim();
+                const cap = String(t.cap || '').trim();
+                const placeholderGk = /^Bramkarz\s+\d+$/i.test(gk);
+                const placeholderCap = /^Kapitan\s+\d+$/i.test(cap);
+                return (gk && !placeholderGk) || (cap && !placeholderCap) || t.gkId || t.capId;
+            });
+            if (hasRoster || anyGkCap) {
+                state.settings.teamParams = { players: true, captain: true, gk: true };
+                teams.forEach(t => {
+                    if (!Array.isArray(t.players)) t.players = [];
+                    const seedRole = (raw, role) => {
+                        const name = window.normalizePlayerName(raw);
+                        if (!name || /^Bramkarz\s+\d+$/i.test(name) || /^Kapitan\s+\d+$/i.test(name)) return;
+                        let p = t.players.find(x => window.normalizePlayerName(x.name) === name);
+                        if (!p) {
+                            p = { id: window.genPlayerId(), name: name };
+                            t.players.push(p);
+                        }
+                        if (role === 'gk') { t.gkId = p.id; t.gk = p.name; }
+                        if (role === 'cap') { t.capId = p.id; t.cap = p.name; }
+                    };
+                    seedRole(t.gk, 'gk');
+                    seedRole(t.cap, 'cap');
+                });
+            } else {
+                state.settings.teamParams = { players: false, captain: false, gk: false };
+            }
+        }
+        if ((state.settings.teamParams.captain || state.settings.teamParams.gk) && !state.settings.teamParams.players) {
+            state.settings.teamParams.players = true;
+        }
+    };
+
+    window.syncTeamParamsFromForm = function () {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        if (!state.settings) state.settings = {};
+        const playersEl = document.getElementById('tp-players');
+        const capEl = document.getElementById('tp-captain');
+        const gkEl = document.getElementById('tp-gk');
+        let players = !!(playersEl && playersEl.checked);
+        let captain = !!(capEl && capEl.checked);
+        let gk = !!(gkEl && gkEl.checked);
+        if ((captain || gk) && !players) {
+            players = true;
+            if (playersEl) playersEl.checked = true;
+        }
+        if (!players) {
+            captain = false;
+            gk = false;
+            if (capEl) capEl.checked = false;
+            if (gkEl) gkEl.checked = false;
+        }
+        state.settings.teamParams = { players: players, captain: captain, gk: gk };
+        window.save();
+        if (typeof window.renderInputs === 'function') window.renderInputs();
+    };
+
+    window.syncMatchParamsFromForm = function () {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        if (!state.settings) state.settings = {};
+        const cardsEl = document.getElementById('mp-cards');
+        const nameEl = document.getElementById('mp-cards-name');
+        const nameRow = document.getElementById('mp-cards-name-row');
+        const cardsEnabled = !!(cardsEl && cardsEl.checked);
+        let cardsRequireName = !!(nameEl && nameEl.checked);
+        if (!cardsEnabled) {
+            cardsRequireName = false;
+            if (nameEl) nameEl.checked = false;
+        }
+        if (nameRow) nameRow.style.display = cardsEnabled ? '' : 'none';
+        state.settings.matchParams = { cardsEnabled: cardsEnabled, cardsRequireName: cardsRequireName };
+        window.save();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderFanRulesBox === 'function') window.renderFanRulesBox();
+    };
+
+    window.syncTeamMatchParamsToForm = function () {
+        window.ensureTeamAndMatchParams();
+        const tp = window.getTeamParams();
+        const mp = window.getMatchParams();
+        const playersEl = document.getElementById('tp-players');
+        const capEl = document.getElementById('tp-captain');
+        const gkEl = document.getElementById('tp-gk');
+        const cardsEl = document.getElementById('mp-cards');
+        const nameEl = document.getElementById('mp-cards-name');
+        const nameRow = document.getElementById('mp-cards-name-row');
+        if (playersEl) playersEl.checked = tp.players;
+        if (capEl) capEl.checked = tp.captain;
+        if (gkEl) gkEl.checked = tp.gk;
+        if (cardsEl) cardsEl.checked = mp.cardsEnabled;
+        if (nameEl) nameEl.checked = mp.cardsRequireName;
+        if (nameRow) nameRow.style.display = mp.cardsEnabled ? '' : 'none';
+    };
+
+    window.findTeamById = function (teamId) {
+        if (teamId == null) return null;
+        const fromTeams = (state.teams || []).find(t => t && t.id === teamId);
+        if (fromTeams) return fromTeams;
+        if (state.groups) {
+            const gns = Object.keys(state.groups);
+            for (let i = 0; i < gns.length; i++) {
+                const hit = (state.groups[gns[i]] || []).find(t => t && t.id === teamId);
+                if (hit) return hit;
+            }
+        }
+        return null;
+    };
+
+    window.getTeamPlayers = function (teamId) {
+        const t = window.findTeamById(teamId);
+        return (t && Array.isArray(t.players)) ? t.players : [];
+    };
+
+    window.syncTeamObjectField = function (teamId, patch) {
+        const apply = (obj) => {
+            if (!obj || obj.id !== teamId) return;
+            Object.keys(patch).forEach(k => { obj[k] = patch[k]; });
+        };
+        (state.teams || []).forEach(apply);
+        if (state.groups) Object.keys(state.groups).forEach(gn => (state.groups[gn] || []).forEach(apply));
+        (state.matches || []).forEach(m => { apply(m.t1); apply(m.t2); });
+        (state.playoffs || []).forEach(m => { apply(m.t1); apply(m.t2); });
+    };
+
+    window.addTeamPlayer = function (teamIndex) {
+        const t = state.teams && state.teams[teamIndex];
+        if (!t) return;
+        const input = document.getElementById('tp-add-player-' + teamIndex);
+        const name = window.normalizePlayerName(input ? input.value : '');
+        if (!name) { alert('Wpisz nazwisko zawodnika.'); return; }
+        if (!Array.isArray(t.players)) t.players = [];
+        if (t.players.some(p => window.normalizePlayerName(p.name) === name)) {
+            alert('Ten zawodnik jest już w składzie.');
+            return;
+        }
+        const player = { id: window.genPlayerId(), name: name };
+        t.players.push(player);
+        window.syncTeamObjectField(t.id, { players: t.players.slice() });
+        if (input) input.value = '';
+        window.renderInputs();
+        window.save();
+    };
+
+    window.removeTeamPlayer = function (teamIndex, playerId) {
+        const t = state.teams && state.teams[teamIndex];
+        if (!t || !Array.isArray(t.players)) return;
+        const p = t.players.find(x => x.id === playerId);
+        if (!p) return;
+        if ((t.gkId === playerId || t.capId === playerId) && !confirm('Zawodnik jest kapitanem lub bramkarzem. Usunąć ze składu?')) return;
+        t.players = t.players.filter(x => x.id !== playerId);
+        const patch = { players: t.players.slice() };
+        if (t.gkId === playerId) { patch.gkId = null; patch.gk = ''; t.gkId = null; t.gk = ''; }
+        if (t.capId === playerId) { patch.capId = null; patch.cap = ''; t.capId = null; t.cap = ''; }
+        window.syncTeamObjectField(t.id, patch);
+        window.renderInputs();
+        window.save();
+    };
+
+    window.setTeamRoleFromSelect = function (teamIndex, role, playerId) {
+        const t = state.teams && state.teams[teamIndex];
+        if (!t) return;
+        const pid = playerId || null;
+        const p = pid && Array.isArray(t.players) ? t.players.find(x => x.id === pid) : null;
+        if (role === 'gk') {
+            t.gkId = p ? p.id : null;
+            t.gk = p ? p.name : '';
+            window.syncTeamObjectField(t.id, { gkId: t.gkId, gk: t.gk });
+        } else if (role === 'cap') {
+            t.capId = p ? p.id : null;
+            t.cap = p ? p.name : '';
+            window.syncTeamObjectField(t.id, { capId: t.capId, cap: t.cap });
+        }
+        window.save();
+    };
+
+    window.cardFairPlayPoints = function (card) {
+        if (!card || !card.type) return 0;
+        if (card.type === 'Y') return 1;
+        if (card.type === 'R') return 3;
+        return 0;
+    };
+
+    window.cardPlayerKey = function (c) {
+        if (!c) return '';
+        if (c.playerId) return 'id:' + String(c.playerId);
+        return window.normalizePlayerName(c.name) || '';
+    };
+
+    /** Publiczne liczenie: każda czerwona z 2. żółtej zużywa do 2 żółtych tego zawodnika. */
+    window.countCardsPublic = function (cards) {
+        const list = Array.isArray(cards) ? cards : [];
+        const yellowQuota = {};
+        list.forEach(c => {
+            if (c && c.type === 'R' && c.viaSecondYellow) {
+                const key = window.cardPlayerKey(c);
+                if (key) yellowQuota[key] = (yellowQuota[key] || 0) + 2;
+            }
+        });
+        let y = 0, r = 0;
+        list.forEach(c => {
+            if (!c) return;
+            if (c.type === 'R') { r++; return; }
+            if (c.type === 'Y') {
+                const key = window.cardPlayerKey(c);
+                if (key && yellowQuota[key] > 0) {
+                    yellowQuota[key]--;
+                    return;
+                }
+                y++;
+            }
+        });
+        return { y: y, r: r };
+    };
+
+    window.teamFairPlayFromCards = function (cards) {
+        const list = Array.isArray(cards) ? cards : [];
+        const yellowQuota = {};
+        list.forEach(c => {
+            if (c && c.type === 'R' && c.viaSecondYellow) {
+                const key = window.cardPlayerKey(c);
+                if (key) yellowQuota[key] = (yellowQuota[key] || 0) + 2;
+            }
+        });
+        let fp = 0;
+        list.forEach(c => {
+            if (!c) return;
+            if (c.type === 'R') { fp += 3; return; }
+            if (c.type === 'Y') {
+                const key = window.cardPlayerKey(c);
+                if (key && yellowQuota[key] > 0) {
+                    yellowQuota[key]--;
+                    return;
+                }
+                fp += 1;
+            }
+        });
+        return fp;
+    };
+
+    window.formatCardsBadgeHTML = function (m) {
+        if (!window.isCardsEnabled() || !m) return '';
+        const a = window.countCardsPublic(m.cards1);
+        const b = window.countCardsPublic(m.cards2);
+        const y = a.y + b.y;
+        const r = a.r + b.r;
+        if (!y && !r) return '';
+        let s = '';
+        if (y) s += '🟨' + y;
+        if (r) s += (s ? ' ' : '') + '🟥' + r;
+        return '<span class="live-cards-badge" title="Kartki (bez dublowania 2 żółtych → czerwona)" style="font-size:10px; font-weight:700; white-space:nowrap;">' + s + '</span>';
+    };
+
+    window.playerDisciplineKey = function (teamId, name, playerId) {
+        if (playerId) return String(teamId) + '|id:' + playerId;
+        const n = window.normalizePlayerName(name);
+        if (!n) return '';
+        return String(teamId) + '|n:' + n;
+    };
+
+    window.getChronologicalMatches = function () {
+        const groups = (state.matches || []).map(m => ({ m: m, isPo: false }));
+        const pos = (state.playoffs || []).map(m => ({ m: m, isPo: true }));
+        return groups.concat(pos);
+    };
+
+    window.getSuspendedPlayersForMatch = function (match, isPo) {
+        if (!window.isCardsEnabled() || !match) return [];
+        const targetId = match.id;
+        const chrono = window.getChronologicalMatches();
+        const targetIdx = chrono.findIndex(x => x.m && x.m.id === targetId && !!x.isPo === !!isPo);
+        if (targetIdx < 0) return [];
+
+        const yellowCount = {};
+        const pendingSuspensions = {};
+        const suspendedNow = [];
+
+        const bumpPending = (key, teamId, name, playerId, reason) => {
+            if (!key) return;
+            if (!pendingSuspensions[key]) pendingSuspensions[key] = [];
+            pendingSuspensions[key].push({ teamId: teamId, name: name || '', playerId: playerId || null, reason: reason });
+        };
+
+        for (let i = 0; i < targetIdx; i++) {
+            const entry = chrono[i];
+            const m = entry.m;
+            if (!m || !m.played) continue;
+
+            [1, 2].forEach(side => {
+                const team = m['t' + side];
+                if (!team || team.id == null || team.id < 0) return;
+                const teamId = team.id;
+                const cards = m['cards' + side] || [];
+                const consumedYellowKeys = {};
+                cards.forEach(c => {
+                    if (c && c.type === 'R' && c.viaSecondYellow) {
+                        const key = window.playerDisciplineKey(teamId, c.name, c.playerId);
+                        if (key) consumedYellowKeys[key] = true;
+                    }
+                });
+                cards.forEach(c => {
+                    if (!c) return;
+                    const key = window.playerDisciplineKey(teamId, c.name, c.playerId);
+                    if (!key) return;
+                    if (c.type === 'R') {
+                        bumpPending(key, teamId, c.name, c.playerId, 'czerwona');
+                        return;
+                    }
+                    if (c.type === 'Y' && !consumedYellowKeys[key]) {
+                        yellowCount[key] = (yellowCount[key] || 0) + 1;
+                        if (yellowCount[key] >= 2) {
+                            yellowCount[key] = 0;
+                            bumpPending(key, teamId, c.name, c.playerId, '2 żółte');
+                        }
+                    }
+                });
+            });
+
+            const teamIdsInMatch = [(m.t1 && m.t1.id), (m.t2 && m.t2.id)].filter(id => id != null && id >= 0);
+            Object.keys(pendingSuspensions).forEach(key => {
+                const queue = pendingSuspensions[key];
+                if (!queue || !queue.length) return;
+                const tid = queue[0].teamId;
+                if (teamIdsInMatch.indexOf(tid) >= 0) {
+                    queue.shift();
+                    if (!queue.length) delete pendingSuspensions[key];
+                }
+            });
+        }
+
+        const teamIds = [(match.t1 && match.t1.id), (match.t2 && match.t2.id)];
+        Object.keys(pendingSuspensions).forEach(key => {
+            const queue = pendingSuspensions[key];
+            if (!queue || !queue.length) return;
+            const item = queue[0];
+            if (teamIds.indexOf(item.teamId) >= 0) {
+                suspendedNow.push(item);
+            }
+        });
+        return suspendedNow;
+    };
+
+    window.isPlayerSuspendedInMatch = function (match, isPo, teamId, name, playerId) {
+        const key = window.playerDisciplineKey(teamId, name, playerId);
+        if (!key) return false;
+        return window.getSuspendedPlayersForMatch(match, isPo).some(s => window.playerDisciplineKey(s.teamId, s.name, s.playerId) === key);
     };
 
     window.setMatchPitch = function (matchId, isPo, pitchRaw) {
@@ -5588,7 +6032,30 @@
         delete state.meta.liveMatchIsPo;
     };
 
-    window.pushLiveMatchScores = function (matchId, isPo, g1, g2, s1, s2) {
+    window.sanitizeCardsForSave = function (arr) {
+        return (arr || []).map(c => {
+            if (!c) return null;
+            const out = { type: c.type === 'R' ? 'R' : 'Y', name: window.normalizePlayerName(c.name) };
+            if (c.playerId) out.playerId = String(c.playerId);
+            if (c.viaSecondYellow) out.viaSecondYellow = true;
+            return out;
+        }).filter(Boolean);
+    };
+
+    window.formatCardsLogSnippet = function (m) {
+        if (!m || !window.isCardsEnabled()) return '';
+        const a = window.countCardsPublic(m.cards1);
+        const b = window.countCardsPublic(m.cards2);
+        const y = a.y + b.y;
+        const r = a.r + b.r;
+        if (!y && !r) return '';
+        let s = '';
+        if (y) s += '🟨' + y;
+        if (r) s += (s ? ' ' : '') + '🟥' + r;
+        return s;
+    };
+
+    window.pushLiveMatchScores = function (matchId, isPo, g1, g2, s1, s2, cards1, cards2) {
         matchId = parseInt(matchId, 10);
         isPo = !!isPo;
         g1 = parseInt(g1, 10) || 0;
@@ -5602,12 +6069,16 @@
         const patch = { g1, g2, played: false };
         if (Array.isArray(s1)) patch.s1 = s1;
         if (Array.isArray(s2)) patch.s2 = s2;
+        if (Array.isArray(cards1)) patch.cards1 = window.sanitizeCardsForSave(cards1);
+        if (Array.isArray(cards2)) patch.cards2 = window.sanitizeCardsForSave(cards2);
         arr[idx] = { ...arr[idx], ...patch };
         if (isAssistantMode) {
             window.persistMatchViaAssistant({
                 matchId, isPo, g1, g2,
                 s1: s1 || arr[idx].s1 || [],
                 s2: s2 || arr[idx].s2 || [],
+                cards1: arr[idx].cards1 || [],
+                cards2: arr[idx].cards2 || [],
                 live: true,
             }).then(() => { if (isHallMode) window.renderHallView(); });
             return;
@@ -5624,7 +6095,9 @@
             state.active.g1,
             state.active.g2,
             state.active.s1 || [],
-            state.active.s2 || []
+            state.active.s2 || [],
+            state.active.cards1 || [],
+            state.active.cards2 || []
         );
     };
 
@@ -5640,7 +6113,7 @@
             const g1 = draft.g1 !== undefined && draft.g1 !== '' ? (parseInt(draft.g1, 10) || 0) : (parseInt(m.g1, 10) || 0);
             const g2 = draft.g2 !== undefined && draft.g2 !== '' ? (parseInt(draft.g2, 10) || 0) : (parseInt(m.g2, 10) || 0);
             if (g1 === 0 && g2 === 0) return;
-            window.pushLiveMatchScores(matchId, !!m.isPo, g1, g2, m.s1 || [], m.s2 || []);
+            window.pushLiveMatchScores(matchId, !!m.isPo, g1, g2, m.s1 || [], m.s2 || [], m.cards1 || [], m.cards2 || []);
         }, 700);
     };
 
@@ -5774,9 +6247,10 @@
         let penNote = !pending && m.pen1 != null ? ' · k. ' + m.pen1 + ':' + m.pen2 : '';
         const g1Display = pending ? '—' : m.g1;
         const g2Display = pending ? '—' : m.g2;
+        const cardsBadge = window.formatCardsBadgeHTML(m);
         return '<div class="hall-played-card' + poCls + compactCls + microCls + pendingCls + '">' +
             '<div class="hall-played-card-top">' +
-            '<div class="hall-played-card-meta">' + esc(window.formatHallMatchMeta(m, isPo)) + penNote + '</div>' +
+            '<div class="hall-played-card-meta">' + esc(window.formatHallMatchMeta(m, isPo)) + penNote + (cardsBadge ? ' · ' + cardsBadge : '') + '</div>' +
             '<div class="hall-played-card-time">' + esc(m.time || '—') + '</div>' +
             '</div>' +
             '<div class="hall-played-card-row"><span class="hall-played-card-name' + t1Win + '">' + esc(m.t1.name) + '</span><span class="hall-played-card-goals' + g1Cls + '">' + g1Display + '</span></div>' +
@@ -6026,7 +6500,8 @@
         const poArg = isPo ? 'true' : 'false';
         const leadCls = lead ? ' assistant-scorers-btn--lead' : '';
         const cardCls = cardLayout ? ' assistant-scorers-btn--card' : '';
-        return '<button type="button" class="assistant-scorers-btn' + leadCls + cardCls + '" onclick="event.stopPropagation();openMatch(' + matchId + ', ' + poArg + ')">⚽ Strzelcy</button>';
+        const label = window.isCardsEnabled() ? '⚽ Strzelcy/Kartki' : '⚽ Strzelcy';
+        return '<button type="button" class="assistant-scorers-btn' + leadCls + cardCls + '" onclick="event.stopPropagation();openMatch(' + matchId + ', ' + poArg + ')">' + label + '</button>';
     }
 
     function renderMatchTableRow(m, opts) {
@@ -6041,9 +6516,11 @@
         const pitchHTML = (window.getPitchCount() > 0)
             ? window.renderPitchAssignControl(m, isPo)
             : '';
+        const cardsBadge = window.formatCardsBadgeHTML(m);
         const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-vs">vs</span>' +
-            '<span class="live-team-name">' + esc(m.t2.name) + '</span>';
+            '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
+            (cardsBadge ? '<span style="margin-left:6px;">' + cardsBadge + '</span>' : '');
         const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
         let scoreHTML;
         if (opts.readonly) {
@@ -6076,7 +6553,7 @@
 
     function renderMatchesTableHTML(filtered, opts) {
         opts = opts || {};
-        const scorersCol = opts.showScorers ? '<th class="col-scorers">Strzelcy</th>' : '';
+        const scorersCol = opts.showScorers ? '<th class="col-scorers">' + (window.isCardsEnabled() ? 'Strzelcy/Kartki' : 'Strzelcy') + '</th>' : '';
         const scorersColTag = opts.showScorers ? '<col class="col-scorers">' : '';
         const showPitch = window.getPitchCount() > 0;
         const pitchHead = showPitch ? '<th class="col-pitch">Boisko</th>' : '';
@@ -6108,9 +6585,11 @@
         const pitchCtrl = (opts.allowPitchAssign && window.canAssignPitch() && !m.played)
             ? window.renderPitchAssignControl(m, isPo)
             : pitchBadge;
+        const cardsBadge = window.formatCardsBadgeHTML(m);
         const teamsHTML = '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
             '<span class="live-teams-sep"> - </span>' +
-            '<span class="live-team-name">' + esc(m.t2.name) + '</span>';
+            '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
+            (cardsBadge ? ' ' + cardsBadge : '');
         const scorersHTML = opts.showScorers
             ? renderScorersBtn(m.id, isPo, !m.played, true)
             : '';
@@ -6203,11 +6682,11 @@
     // SŁOWNIK ZIELONYCH PRZEWODNIKÓW Z ŻARÓWKĄ DLA TRYBU DEMO
     const DEMO_GUIDES = {
         'start': '💡 <b>Witaj w trybie DEMO!</b> Wygenerowaliśmy dla Ciebie kompletny, przykładowy turniej z udziałem 8 drużyn. Zobacz, jak czysto i czytelnie system zbiera parametry konfiguracyjne. Wszystko jest już gotowe do działania – kliknij w zakładkę <b>Mecze</b>, aby podjąć kluczową decyzję sędziowską!',
-        'sklady': '💡 <b>Zarządzanie Kadrami</b> W tym miejscu normalnie wpisujesz nazwy drużyn, nazwiska bramkarzy oraz kapitanów. Zmiany zapisują się w chmurze natychmiast po kliknięciu. Dla Twojej wygody uzupełniliśmy bazę losowymi, popularnymi zespołami regionalnymi.',
+        'sklady': '💡 <b>Zarządzanie Kadrami</b> Nazwy drużyn oraz (opcjonalnie) skład, kapitan i bramkarz — zależnie od Parametrów drużyny na karcie Start. Zmiany zapisują się natychmiast.',
         'grupy': '💡 <b>Rozstawienie i Harmonogram</b> System automatycznie przypisał 8 zespołów do dwóch koszyków (Grupa A i Grupa B). W tym panelu ustalasz również precyzyjny czas trwania meczów, przerw technicznych oraz wybierasz algorytm układania terminarza.',
         'mecze': '💡 <b>Centrum Dowodzenia Live!</b> Wszystkie mecze grupowe zostały już automatycznie rozegrane. Zwróć szczególną uwagę na fazę pucharową na samym dole. <b>Półfinał 2 (wynik -:- ) czeka na Twój krok!</b> Kliknij w niego, wpisz dowolny wynik i zobacz, jak system sam ułoży skład Wielkiego Finału.',
         'nazywo': '💡 <b>Na żywo</b> — harmonogram i tabele obok siebie. Wpisuj wyniki w Meczach lub tutaj obserwuj awans drużyn w czasie rzeczywistym.',
-        'tabele': '💡 <b>Tabele w Czasie Rzeczywistym</b> Zielone wiersze oznaczają strefę awansu. Tabele same przeliczają punkty, bilans bramkowy oraz małą tabelę (bezpośrednie starcia przy remisach). Zmień wynik dowolnego meczu w zakładce "Mecze", a zobaczysz, jak tabela natychmiast przeskoczy automatycznie!',
+        'tabele': '💡 <b>Tabele w Czasie Rzeczywistym</b> Zielone wiersze = awans. Remis: H2H → bilans → Fair Play (kartki) → remis absolutny. Zmień wynik w Meczach, a tabela przeskoczy automatycznie!',
         'playoff': '💡 <b>Drabinka Pucharowa</b> Generowana automatycznie na podstawie zajętych miejsc w grupach. Półfinał 1 został już zasymulowany. Wprowadź wynik w drugim półfinale w karcie "Mecze", aby zobaczyć, jak ta struktura dynamicznie zapełnia się zespołami.',
         'podium': '💡 <b>Automatyczne Podsumowanie i Nagrody</b> Koniec z liczeniem bramek na kolanie! System sam analizuje protokoły meczowe, wyłaniając Króla Strzelców i Złotą Rękawicę (czyste konta bramkarzy). Wpisz strzelców w brakującym półfinale, a zobaczysz, jak statystyki natychmiast się przebudują.',
         'archiwum': '💡 <b>Dziennik Operacji Serwera</b> Na dole widoczny jest pełen Log Systemowy rejestrujący każdą akcję sędziego sekunda po sekundzie. W tym miejscu możesz także zarządzać kopiami zapasowymi turniejów oraz wstrzymywać aktywne sesje (zamrażanie stanu).'
@@ -6217,16 +6696,20 @@
     function generateDemoMockData() {
         return {
             meta: { tournamentName: 'Turniej Demo Turniejomat' },
-            settings: { bracketSize: 4, advCount: 4, pitchCount: 4, start: "10:00", gDur: 10, gBreak: 2, afterG: 10, poDur: 12, finDur: 15 },
+            settings: {
+                bracketSize: 4, advCount: 4, pitchCount: 4, start: "10:00", gDur: 10, gBreak: 2, afterG: 10, poDur: 12, finDur: 15,
+                matchParams: { cardsEnabled: true, cardsRequireName: false },
+                teamParams: { players: true, captain: true, gk: true }
+            },
             teams: [
-                { id: 0, name: "FC Sparta Poznań", gk: "A. Boruc", cap: "M. Żewłakow" },
-                { id: 1, name: "Grom Stella Luboń", gk: "Ł. Fabiański", cap: "J. Błaszczykowski" },
-                { id: 2, name: "Pogoń Opalenica", gk: "W. Szczęsny", cap: "R. Lewandowski" },
-                { id: 3, name: "Amber Swarzędz", gk: "J. Dudek", cap: "T. Hajto" },
-                { id: 4, name: "Warta Poznań", gk: "R. Gikiewicz", cap: "M. Kamiński" },
-                { id: 5, name: "Lech Poznań Klasyk", gk: "M. Kotorowski", cap: "P. Reiss" },
-                { id: 6, name: "Unia Swarzędz", gk: "K. Cotra", cap: "T. Bekas" },
-                { id: 7, name: "Kotwica Kórnik", gk: "J. Miszczuk", cap: "P. Kurbiel" }
+                { id: 0, name: "FC Sparta Poznań", gk: "A. BORUC", cap: "M. ŻEWŁAKOW", gkId: "p_d0_gk", capId: "p_d0_cap", players: [{ id: "p_d0_gk", name: "A. BORUC" }, { id: "p_d0_cap", name: "M. ŻEWŁAKOW" }, { id: "p_d0_1", name: "LEWY" }] },
+                { id: 1, name: "Grom Stella Luboń", gk: "Ł. FABIAŃSKI", cap: "J. BŁASZCZYKOWSKI", gkId: "p_d1_gk", capId: "p_d1_cap", players: [{ id: "p_d1_gk", name: "Ł. FABIAŃSKI" }, { id: "p_d1_cap", name: "J. BŁASZCZYKOWSKI" }] },
+                { id: 2, name: "Pogoń Opalenica", gk: "W. SZCZĘSNY", cap: "R. LEWANDOWSKI", gkId: "p_d2_gk", capId: "p_d2_cap", players: [{ id: "p_d2_gk", name: "W. SZCZĘSNY" }, { id: "p_d2_cap", name: "R. LEWANDOWSKI" }] },
+                { id: 3, name: "Amber Swarzędz", gk: "J. DUDEK", cap: "T. HAJTO", gkId: "p_d3_gk", capId: "p_d3_cap", players: [{ id: "p_d3_gk", name: "J. DUDEK" }, { id: "p_d3_cap", name: "T. HAJTO" }] },
+                { id: 4, name: "Warta Poznań", gk: "R. GIKIEWICZ", cap: "M. KAMIŃSKI", gkId: "p_d4_gk", capId: "p_d4_cap", players: [{ id: "p_d4_gk", name: "R. GIKIEWICZ" }, { id: "p_d4_cap", name: "M. KAMIŃSKI" }] },
+                { id: 5, name: "Lech Poznań Klasyk", gk: "M. KOTOROWSKI", cap: "P. REISS", gkId: "p_d5_gk", capId: "p_d5_cap", players: [{ id: "p_d5_gk", name: "M. KOTOROWSKI" }, { id: "p_d5_cap", name: "P. REISS" }] },
+                { id: 6, name: "Unia Swarzędz", gk: "K. COTRA", cap: "T. BEKAS", gkId: "p_d6_gk", capId: "p_d6_cap", players: [{ id: "p_d6_gk", name: "K. COTRA" }, { id: "p_d6_cap", name: "T. BEKAS" }] },
+                { id: 7, name: "Kotwica Kórnik", gk: "J. MISZCZUK", cap: "P. KURBIEL", gkId: "p_d7_gk", capId: "p_d7_cap", players: [{ id: "p_d7_gk", name: "J. MISZCZUK" }, { id: "p_d7_cap", name: "P. KURBIEL" }] }
             ],
             groups: {
                 "A": [
@@ -6244,7 +6727,7 @@
             },
             matches: [
                 // GRUPA A
-                { id: 1, group: "A", time: "10:00", t1: { id: 0, name: "FC Sparta Poznań" }, t2: { id: 1, name: "Grom Stella Luboń" }, g1: 2, g2: 0, played: true, s1: [{ name: "Lewy" }, { name: "Lewy" }], s2: [] },
+                { id: 1, group: "A", time: "10:00", t1: { id: 0, name: "FC Sparta Poznań" }, t2: { id: 1, name: "Grom Stella Luboń" }, g1: 2, g2: 0, played: true, s1: [{ name: "Lewy" }, { name: "Lewy" }], s2: [], cards1: [{ type: "Y", name: "LEWY" }], cards2: [] },
                 { id: 2, group: "A", time: "10:12", t1: { id: 2, name: "Pogoń Opalenica" }, t2: { id: 3, name: "Amber Swarzędz" }, g1: 1, g2: 1, played: true, s1: [{ name: "Mila" }], s2: [{ name: "Hajto" }] },
                 { id: 3, group: "A", time: "10:24", t1: { id: 0, name: "FC Sparta Poznań" }, t2: { id: 2, name: "Pogoń Opalenica" }, g1: 3, g2: 1, played: true, s1: [{ name: "Lewy" }, { name: "Mila" }, { name: "Mila" }], s2: [{ name: "Frankowski" }] },
                 { id: 4, group: "A", time: "10:36", t1: { id: 1, name: "Grom Stella Luboń" }, t2: { id: 3, name: "Amber Swarzędz" }, g1: 0, g2: 2, played: true, s1: [], s2: [{ name: "Hajto" }, { name: "Smolarek" }] },
@@ -6466,15 +6949,73 @@
             saveLastSnapshot();
             if (!state.settings) state.settings = {};
             state.settings.bracketSize = bSize; state.settings.advCount = advC;
-            state.teams = Array.from({length:c}, (_,i)=>({id:i, name:`Drużyna ${i+1}`, gk:`Bramkarz ${i+1}`, cap:`Kapitan ${i+1}`}));
+            window.syncTeamParamsFromForm();
+            window.syncMatchParamsFromForm();
+            const tp = window.getTeamParams();
+            state.teams = Array.from({ length: c }, (_, i) => {
+                const t = { id: i, name: 'Drużyna ' + (i + 1), players: [] };
+                if (tp.gk) { t.gk = ''; t.gkId = null; }
+                if (tp.captain) { t.cap = ''; t.capId = null; }
+                return t;
+            });
 
             window.logAction(`Utworzono baza ${c} drużyn. Szablon drabinki: ${bSize}, Realny awans: ${advC} zespołów.`);
             window.renderInputs(); window.save(); window.renderDashboard(); switchTab('sklady');
         };
 
+        window.isSkladyInputsFocused = () => {
+            const cont = document.getElementById('inputs-container');
+            const ae = document.activeElement;
+            if (!cont || !ae) return false;
+            return cont.contains(ae) && (ae.tagName === 'INPUT' || ae.tagName === 'SELECT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable);
+        };
+
         window.renderInputs = () => {
+            window.ensureTeamAndMatchParams();
             if (!state.teams || state.teams.length === 0) return;
-            document.getElementById('inputs-container').innerHTML = state.teams.map((t,i)=>`<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" value="${escAttr(t.name)}" onchange="syncTeamData(${i},'name',this.value)" style="flex:1.5; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${escAttr(t.gk)}" onchange="syncTeamData(${i},'gk',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"><input type="text" value="${escAttr(t.cap)}" onchange="syncTeamData(${i},'cap',this.value)" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;"></div>`).join('');
+            const cont = document.getElementById('inputs-container');
+            if (!cont) return;
+            const tp = window.getTeamParams();
+            const help = document.getElementById('sklady-help');
+            if (help) {
+                const bits = ['Wpisz nazwy drużyn'];
+                if (tp.players) bits.push('dodaj zawodników do składu');
+                if (tp.gk) bits.push('wybierz bramkarza');
+                if (tp.captain) bits.push('wybierz kapitana');
+                help.textContent = bits.join(', ') + '. Zmiany zapisują się automatycznie.';
+            }
+            cont.innerHTML = state.teams.map((t, i) => {
+                if (!Array.isArray(t.players)) t.players = [];
+                let html = '<div class="card" style="margin-bottom:10px; padding:10px 12px;">';
+                html += '<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:' + (tp.players ? '8px' : '0') + ';">';
+                html += '<input type="text" value="' + escAttr(t.name) + '" onchange="syncTeamData(' + i + ',\'name\',this.value)" placeholder="Nazwa drużyny" style="flex:1.5; min-width:140px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-weight:700;">';
+                if (tp.gk) {
+                    html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Bramkarz<select onchange="setTeamRoleFromSelect(' + i + ',\'gk\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
+                        t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.gkId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
+                        '</select></label>';
+                }
+                if (tp.captain) {
+                    html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Kapitan<select onchange="setTeamRoleFromSelect(' + i + ',\'cap\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
+                        t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.capId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
+                        '</select></label>';
+                }
+                html += '</div>';
+                if (tp.players) {
+                    html += '<div style="font-size:11px; font-weight:700; color:#172b4d; margin-bottom:4px;">Skład</div>';
+                    if (!t.players.length) {
+                        html += '<div style="font-size:11px; color:#94a3b8; margin-bottom:6px;">Brak zawodników — dodaj poniżej (zapis trwały).</div>';
+                    } else {
+                        html += '<ul style="list-style:none; padding:0; margin:0 0 8px;">' + t.players.map(p =>
+                            '<li style="display:flex; align-items:center; gap:8px; padding:4px 0; border-bottom:1px solid #f1f5f9; font-size:12px;"><span style="flex:1; font-weight:600;">' + esc(p.name) + '</span>' +
+                            '<button type="button" onclick="removeTeamPlayer(' + i + ',\'' + escAttr(p.id) + '\')" style="border:none; background:#ffebe6; color:#de350b; border-radius:4px; padding:2px 8px; cursor:pointer; font-weight:700;">Usuń</button></li>'
+                        ).join('') + '</ul>';
+                    }
+                    html += '<div style="display:flex; gap:6px;"><input type="text" id="tp-add-player-' + i + '" placeholder="Nazwisko zawodnika" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addTeamPlayer(' + i + ');}">' +
+                        '<button type="button" class="btn-main" style="margin:0; padding:8px 12px; width:auto;" onclick="addTeamPlayer(' + i + ')">Dodaj</button></div>';
+                }
+                html += '</div>';
+                return html;
+            }).join('');
         };
 
         window.losujGrupy = () => {
@@ -6569,8 +7110,9 @@
             if (pitchEl) {
                 let pc = parseInt(pitchEl.value, 10);
                 if (!Number.isFinite(pc) || pc < 0) pc = 0;
-                if (pc > 10) pc = 10;
+                if (pc > 99) pc = 99;
                 state.settings.pitchCount = pc;
+                if (pc < 2) window.clearPendingMatchPitches();
             }
 
             let pool = [];
@@ -6604,8 +7146,14 @@
 
         window.syncTournamentMetaToForm = () => {
             const nameEl = document.getElementById('tournament-name');
-            if (nameEl && state.meta && state.meta.tournamentName) nameEl.value = state.meta.tournamentName;
-            if (typeof window.syncPitchCountToForm === 'function') window.syncPitchCountToForm();
+            if (nameEl && state.meta && state.meta.tournamentName && document.activeElement !== nameEl) {
+                nameEl.value = state.meta.tournamentName;
+            }
+            const pitchEl = document.getElementById('pitch-count');
+            if (typeof window.syncPitchCountToForm === 'function' && document.activeElement !== pitchEl) {
+                window.syncPitchCountToForm();
+            }
+            if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
         };
 
@@ -6615,8 +7163,12 @@
             const adv = (state.settings && state.settings.advCount) ? state.settings.advCount : 4;
             const groups = state.groups ? Object.keys(state.groups).length : 0;
             const perGroup = groups > 0 ? Math.floor(adv / groups) : adv;
+            const cardsOn = window.isCardsEnabled();
+            const remisLine = cardsOn
+                ? 'bezpośrednie mecze → bilans bezpośredni → bramki H2H → bilans ogólny → bramki zdobyte → Fair Play → remis absolutny (decyzja sędziego)'
+                : 'bezpośrednie mecze → bilans bezpośredni → bramki H2H → bilans ogólny → bramki zdobyte → remis absolutny (decyzja sędziego)';
             box.innerHTML = `<strong>Punkty:</strong> zwycięstwo 3 · remis 1 · porażka 0<br>
-                <strong>Remis w tabeli:</strong> bezpośrednie mecze → bilans bezpośredni → bramki H2H → bilans ogólny → bramki zdobyte<br>
+                <strong>Remis w tabeli:</strong> ${remisLine}<br>
                 <strong>Awans:</strong> TOP ${perGroup || adv} z każdej grupy (łącznie ${adv} drużyn)`;
         };
 
@@ -6829,6 +7381,8 @@
             state.active.isPo = isPo;
             if (!state.active.s1) state.active.s1 = [];
             if (!state.active.s2) state.active.s2 = [];
+            if (!state.active.cards1) state.active.cards1 = [];
+            if (!state.active.cards2) state.active.cards2 = [];
             if (!modal || modal.style.display !== 'block') return;
             document.getElementById('mTitle').innerText = m.n || ('Mecz # ' + window.getGlobalMatchNo(m, isPo) + (m.group && !isPo ? ' · Grupa ' + m.group : ''));
             document.getElementById('mT1').innerText = m.t1.name;
@@ -6843,6 +7397,8 @@
             if (pen2El && document.activeElement !== pen2El) pen2El.value = m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : '';
             window.checkPenaltyVisibility();
             window.renderSc();
+            if (typeof window.renderCards === 'function') window.renderCards();
+            if (typeof window.renderSuspendedBanner === 'function') window.renderSuspendedBanner();
         };
 
         window.renderHallView = () => {
@@ -6981,7 +7537,7 @@
             if (assistantBanner && isAssistantMode) {
                 assistantBanner.innerHTML = filterIsPo
                     ? '🧑‍⚖️ <b>Asystent — faza pucharowa</b> — wpisuj wyniki meczów play-off (ćwierćfinał, półfinał, finał, 3. miejsce).'
-                    : '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy</b> (+ GOL) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.';
+                    : '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.';
             }
 
             let filtered;
@@ -7168,14 +7724,19 @@
         };
 
         window.getSortedGroupStats = (gn) => {
-            let st = state.groups[gn].map(t => ({t, m:0, w:0, r:0, p:0, pkt:0, bz:0, bs:0}));
+            let st = state.groups[gn].map(t => ({t, m:0, w:0, r:0, p:0, pkt:0, bz:0, bs:0, fairPlay:0}));
             let groupMatches = (state.matches || []).filter(m => m.group === gn && m.played);
+            const cardsOn = window.isCardsEnabled();
 
             groupMatches.forEach(m => {
                 let s1 = st.find(s => s.t.id === m.t1.id); let s2 = st.find(s => s.t.id === m.t2.id);
                 if(s1 && s2) {
                     s1.m++; s2.m++; s1.bz += m.g1; s1.bs += m.g2; s2.bz += m.g2; s2.bs += m.g1;
                     if(m.g1 > m.g2) { s1.pkt += 3; s1.w++; s2.p++; } else if(m.g2 > m.g1) { s2.pkt += 3; s2.w++; s1.p++; } else { s1.pkt++; s2.pkt++; s1.r++; s2.r++; }
+                    if (cardsOn) {
+                        s1.fairPlay += window.teamFairPlayFromCards(m.cards1);
+                        s2.fairPlay += window.teamFairPlayFromCards(m.cards2);
+                    }
                 }
             });
 
@@ -7201,7 +7762,9 @@
                 let a_h2h_gd = a.h2h_bz - a.h2h_bs; let b_h2h_gd = b.h2h_bz - b.h2h_bs; if (b_h2h_gd !== a_h2h_gd) return b_h2h_gd - a_h2h_gd;
                 if (b.h2h_bz !== a.h2h_bz) return b.h2h_bz - a.h2h_bz;
                 let a_gd = a.bz - a.bs; let b_gd = b.bz - b.bs; if (b_gd !== a_gd) return b_gd - a_gd;
-                return b.bz - a.bz;
+                if (b.bz !== a.bz) return b.bz - a.bz;
+                if (cardsOn && (a.fairPlay || 0) !== (b.fairPlay || 0)) return (a.fairPlay || 0) - (b.fairPlay || 0);
+                return 0;
             });
 
             if(tempLocalOrders[gn]) { st.sort((a, b) => tempLocalOrders[gn].indexOf(a.t.id) - tempLocalOrders[gn].indexOf(b.t.id)); }
@@ -7221,7 +7784,7 @@
                 if (typeof window.syncDemoStoryState === 'function') window.syncDemoStoryState();
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            const infoBanner = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie punktowym decydują miedzy sobą bezpośrednie starcia.</div>';
+            const infoBanner = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki →' + (window.isCardsEnabled() ? ' Fair Play →' : '') + ' remis absolutny (decyzja sędziego).</div>';
 
             let advIds = window.getAdvancingTeamsFull().map(t => t.id); let numGroups = Object.keys(state.groups || {}).length;
             let advCount = state.settings.advCount || 4; let anyUnconfirmedAbsoluteRemis = false;
@@ -7249,7 +7812,7 @@
                         } else {
                             isAdvancing = advIds.includes(s.t.id) && (isPewniak || s.m > 0);
                         }
-                        let rowClass = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1)) ? 'class="absolute-remis-row"' : (isAdvancing ? 'class="advancing-row"' : '');
+                        let rowClass = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1)) ? 'class="absolute-remis-row" data-remis-group="' + escAttr(gn) + '"' : (isAdvancing ? 'class="advancing-row"' : '');
 
                         let arrowControlsHTML = hideControls ? '' : `
                             <div class="table-arrow-wrapper">
@@ -7258,12 +7821,15 @@
                             </div>`;
 
                         let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
-                        rowsHTML += `<tr ${rowClass}><td class="table-team-cell">${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
+                        const remisClick = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1) && !hideControls && !fanRo)
+                            ? ' style="cursor:pointer;" onclick="openTableOrderDrawer(\'' + gn + '\')" title="Kliknij, aby rozstrzygnąć remis absolutny"'
+                            : '';
+                        rowsHTML += `<tr ${rowClass}><td class="table-team-cell"${remisClick}>${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
                     });
 
                     let headerBadgeHTML = '';
                     if(!hideControls) {
-                        if (detectRemisAlert) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#ff8b00; background:#fff0b3; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">⚠️ REMIS ABSOLUTNY! Użyj strzałek</span>`;
+                        if (detectRemisAlert) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#ff8b00; background:#fff0b3; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">⚠️ REMIS ABSOLUTNY! Kliknij wiersz lub CTA</span>`;
                         else if (isConfirmed) headerBadgeHTML = `<span style="font-size:11px; font-weight:bold; color:#00875a; background:#e3fcef; padding:2px 6px; border-radius:4px; margin-left:10px; vertical-align:middle;">✍️ Układ zatwierdzony</span>`;
                         if(hasLocalCorrection) headerBadgeHTML += `<button class="table-save-btn" onclick="confirmTableOrder('${gn}')">✅ ZATWIERDŹ UKŁAD</button>`;
                         if(hasDbCorrection || hasLocalCorrection) headerBadgeHTML += `<button class="table-reset-btn" onclick="resetTableOrder('${gn}')">🔄 AUTOMAT</button>`;
@@ -7331,7 +7897,12 @@
             const title = document.getElementById('table-order-drawer-title');
             const body = document.getElementById('table-order-drawer-body');
             if (!drawer || !body) return;
-            if (title) title.textContent = 'Edytuj kolejność — Grupa ' + gn;
+            if (title) title.textContent = 'Remis absolutny — Grupa ' + gn;
+            const meta = state.settings && state.settings.absoluteRemisMeta && state.settings.absoluteRemisMeta[gn];
+            const method = (meta && meta.method) || 'draw';
+            document.querySelectorAll('input[name="absolute-remis-method"]').forEach(el => {
+                el.checked = el.value === method;
+            });
             window.renderTableOrderDrawerBody();
             drawer.classList.add('is-open');
             drawer.setAttribute('aria-hidden', 'false');
@@ -7381,7 +7952,17 @@
             window.renderTableOrderDrawerBody();
         };
 
-        window.isAbsoluteRemis = (a, b) => { return a.pkt === b.pkt && (a.h2h_pkt || 0) === (b.h2h_pkt || 0) && (a.h2h_bz - a.h2h_bs) === (b.h2h_bz - b.h2h_bs) && a.h2h_bz === b.h2h_bz && (a.bz - a.bs) === (b.bz - b.bs) && a.bz === b.bz; };
+        window.isAbsoluteRemis = (a, b) => {
+            if (!a || !b) return false;
+            if (a.pkt !== b.pkt) return false;
+            if ((a.h2h_pkt || 0) !== (b.h2h_pkt || 0)) return false;
+            if ((a.h2h_bz - a.h2h_bs) !== (b.h2h_bz - b.h2h_bs)) return false;
+            if (a.h2h_bz !== b.h2h_bz) return false;
+            if ((a.bz - a.bs) !== (b.bz - b.bs)) return false;
+            if (a.bz !== b.bz) return false;
+            if (window.isCardsEnabled() && (a.fairPlay || 0) !== (b.fairPlay || 0)) return false;
+            return true;
+        };
 
         window.getAdvancingTeamsFull = () => {
             if (!state.groups || Object.keys(state.groups).length === 0) return [];
@@ -7402,7 +7983,12 @@
             if(confirm(`Zatwierdzić ręczny układ dla grupy ${gn}?`)) {
                 if(!state.settings) state.settings = {}; if(!state.settings.customTableOrder) state.settings.customTableOrder = {}; if(!state.settings.confirmedTableOrder) state.settings.confirmedTableOrder = {};
                 state.settings.customTableOrder[gn] = tempLocalOrders[gn]; state.settings.confirmedTableOrder[gn] = true;
-                delete tempLocalOrders[gn]; window.logAction(`Sędzia ręcznie zatwierdził ostateczną kolejność drużyn w grupie ${gn}.`);
+                const methodEl = document.querySelector('input[name="absolute-remis-method"]:checked');
+                const method = methodEl ? methodEl.value : 'draw';
+                if (!state.settings.absoluteRemisMeta) state.settings.absoluteRemisMeta = {};
+                state.settings.absoluteRemisMeta[gn] = { method: method, at: Date.now() };
+                delete tempLocalOrders[gn];
+                window.logAction(`Sędzia zatwierdził kolejność grupy ${gn} po remisie absolutnym (${method === 'pens' ? 'karne' : 'losowanie'}).`);
                 window.save(); window.calcTables();
             }
         };
@@ -7542,13 +8128,49 @@
                 if (s.name) s.name = s.name.trim().toUpperCase();
             });
 
+            if (window.isCardsEnabled()) {
+                if (!state.active.cards1) state.active.cards1 = [];
+                if (!state.active.cards2) state.active.cards2 = [];
+                window.maybeApplySecondYellow(1);
+                window.maybeApplySecondYellow(2);
+                const requireName = window.getMatchParams().cardsRequireName;
+                state.active.cards1 = window.sanitizeCardsForSave(state.active.cards1);
+                state.active.cards2 = window.sanitizeCardsForSave(state.active.cards2);
+                if (requireName) {
+                    const missing = [].concat(state.active.cards1, state.active.cards2).some(c => !c.name && !c.playerId);
+                    if (missing) {
+                        alert('Wymagane nazwisko przy każdej kartce (ustawienie turnieju).');
+                        return;
+                    }
+                }
+                const warnSuspended = [];
+                [1, 2].forEach(side => {
+                    const team = state.active['t' + side];
+                    if (!team) return;
+                    [].concat(state.active['s' + side] || [], state.active['cards' + side] || []).forEach(row => {
+                        if (!row) return;
+                        if (window.isPlayerSuspendedInMatch(state.active, !!state.active.isPo, team.id, row.name, row.playerId)) {
+                            warnSuspended.push(row.name || '?');
+                        }
+                    });
+                });
+                if (warnSuspended.length) {
+                    if (!confirm('Uwaga: wpis dotyczy zawieszonego zawodnika (' + warnSuspended.join(', ') + '). Zapisać mimo to?')) return;
+                }
+            } else {
+                state.active.cards1 = [];
+                state.active.cards2 = [];
+            }
+
+            const wasPo = !!state.active.isPo;
             delete state.active._scoreSnapshot;
+            delete state.active.isPo;
             state.active.played = true;
             window.clearMatchPitchOnFinish(state.active);
-            const arr = state.active.isPo ? state.playoffs : state.matches;
+            const arr = wasPo ? state.playoffs : state.matches;
             arr[arr.findIndex(x => x.id === state.active.id)] = state.active;
 
-            if(state.active.isPo) {
+            if(wasPo) {
                 let getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
                 let getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
                 let w = getW(state.active); let l = getL(state.active);
@@ -7565,10 +8187,10 @@
                 }
             }
 
-            window.logAction(`Zapisano wynik meczu #${state.active.id}: ${state.active.t1.name} ${state.active.g1}:${state.active.g2} ${state.active.t2.name}.`);
+            const cardsLog = window.formatCardsLogSnippet(state.active);
+            window.logAction(`Zapisano wynik meczu #${state.active.id}: ${state.active.t1.name} ${state.active.g1}:${state.active.g2} ${state.active.t2.name}${cardsLog ? ' · ' + cardsLog : ''}.`);
             window.clearHallLiveMatchMeta();
             if (isAssistantMode) {
-                const wasPo = !!state.active.isPo;
                 const savedMatchId = state.active.id;
                 window.persistMatchViaAssistant({
                     matchId: savedMatchId,
@@ -7579,6 +8201,8 @@
                     pen2: state.active.pen2,
                     s1: state.active.s1 || [],
                     s2: state.active.s2 || [],
+                    cards1: state.active.cards1 || [],
+                    cards2: state.active.cards2 || [],
                 }).then(() => {
                     window.clearInlineScoreDraft(savedMatchId);
                     window.closeModal('matchModal');
@@ -7588,7 +8212,7 @@
                 return;
             }
             window.save(); window.closeModal('matchModal'); 
-            if(!state.active.isPo) window.calcTables();
+            if(!wasPo) window.calcTables();
             else { window.renderPlayoffTree(); window.renderPodium(); }
             
             window.filterAndRenderMatches();
@@ -7775,6 +8399,8 @@
             state.active = JSON.parse(JSON.stringify(m)); state.active.isPo = isPo;
             if (!state.active.s1) state.active.s1 = [];
             if (!state.active.s2) state.active.s2 = [];
+            if (!state.active.cards1) state.active.cards1 = [];
+            if (!state.active.cards2) state.active.cards2 = [];
             const draft = window.inlineScoreDrafts && window.inlineScoreDrafts[id];
             if (draft && !m.played) {
                 if (draft.g1 !== undefined && draft.g1 !== '') state.active.g1 = parseInt(draft.g1, 10) || 0;
@@ -7806,15 +8432,27 @@
                 pen1: m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : null,
                 pen2: m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : null
             };
-            window.checkPenaltyVisibility(); window.renderSc(); document.getElementById('matchModal').style.display='block';
+            const cardsOn = window.isCardsEnabled();
+            const cardSec = document.getElementById('match-cards-section');
+            const cardBtns = document.getElementById('card-btn-container');
+            if (cardSec) cardSec.style.display = cardsOn ? '' : 'none';
+            if (cardBtns) cardBtns.style.display = cardsOn ? '' : 'none';
+            window.checkPenaltyVisibility(); window.renderSc(); window.renderCards(); window.renderSuspendedBanner();
+            document.getElementById('matchModal').style.display='block';
         };
 
         window.addSc = (n) => {
             if (!state.active) return;
             if (!state.active['s' + n]) state.active['s' + n] = [];
-            const goals = parseInt(state.active['g' + n], 10) || 0;
+            const gEl = document.getElementById('mG' + n);
+            if (gEl && !state.active.played) {
+                const typed = parseInt(gEl.value, 10);
+                if (!isNaN(typed) && typed >= 0) state.active['g' + n] = typed;
+            }
+            let goals = parseInt(state.active['g' + n], 10) || 0;
+            const scorersLen = state.active['s' + n].length;
             if (state.active.played) {
-                if (state.active['s' + n].length >= goals) {
+                if (scorersLen >= goals) {
                     alert('Drużyna strzeliła tylko ' + goals + ' ' + (goals === 1 ? 'bramkę' : (goals >= 2 && goals <= 4 ? 'bramki' : 'bramek')) + ' — nie można dodać kolejnego strzelca.');
                     return;
                 }
@@ -7822,9 +8460,17 @@
                 window.renderSc();
                 return;
             }
+            // W trakcie: wolne miejsca na strzelców (wynik wpisany ręcznie) → tylko slot; inaczej +1 gol + slot
+            if (scorersLen < goals) {
+                state.active['s' + n].push({ name: '' });
+                window.renderSc();
+                window.pushLiveMatchFromActive();
+                if (isHallMode) window.renderHallView();
+                return;
+            }
             state.active['s' + n].push({ name: '' });
             state.active['g' + n] = goals + 1;
-            document.getElementById('mG' + n).value = state.active['g' + n];
+            if (gEl) gEl.value = state.active['g' + n];
             window.checkPenaltyVisibility();
             window.renderSc();
             window.pushLiveMatchFromActive();
@@ -7837,26 +8483,163 @@
             window.renderSc();
         };
 
+        window.renderPlayerNameControl = (side, listKey, index, teamId, currentName, currentPlayerId) => {
+            const tp = window.getTeamParams();
+            const players = tp.players ? window.getTeamPlayers(teamId) : [];
+            const requireName = listKey.indexOf('cards') === 0 && window.getMatchParams().cardsRequireName;
+            const placeholder = requireName ? 'Nazwisko (wymagane)' : 'Imię / nazwisko';
+            if (players.length) {
+                let opts = '<option value="">' + (requireName ? '— wybierz —' : '— opcjonalnie —') + '</option>';
+                opts += players.map(p => {
+                    const sel = currentPlayerId === p.id || (!currentPlayerId && window.normalizePlayerName(currentName) === window.normalizePlayerName(p.name));
+                    return '<option value="' + escAttr(p.id) + '"' + (sel ? ' selected' : '') + '>' + esc(p.name) + '</option>';
+                }).join('');
+                return '<select class="match-modal-scorer-input match-modal-scorer-input--' + (side === 1 ? 'home' : 'away') + '" onchange="onMatchPersonSelect(' + side + ',\'' + listKey + '\',' + index + ',this.value)">' + opts + '</select>';
+            }
+            return '<input type="text" class="match-modal-scorer-input match-modal-scorer-input--' + (side === 1 ? 'home' : 'away') + '" value="' + escAttr(currentName || '') + '" placeholder="' + placeholder + '" oninput="onMatchPersonTextInput(' + side + ',\'' + listKey + '\',' + index + ',this.value)" onchange="onMatchPersonTextCommit(' + side + ',\'' + listKey + '\',' + index + ',this.value)">';
+        };
+
+        window.onMatchPersonSelect = (side, listKey, index, playerId) => {
+            if (!state.active || !state.active[listKey] || !state.active[listKey][index]) return;
+            const team = state.active['t' + side];
+            const players = window.getTeamPlayers(team && team.id);
+            const p = players.find(x => x.id === playerId);
+            state.active[listKey][index].playerId = p ? p.id : null;
+            state.active[listKey][index].name = p ? p.name : '';
+            if (listKey.indexOf('cards') === 0) {
+                const added = window.maybeApplySecondYellow(side);
+                if (added) window.renderCards();
+            }
+            if (!state.active.played) window.pushLiveMatchFromActive();
+        };
+
+        window.onMatchPersonTextInput = (side, listKey, index, value) => {
+            if (!state.active || !state.active[listKey] || !state.active[listKey][index]) return;
+            state.active[listKey][index].name = value;
+            state.active[listKey][index].playerId = null;
+        };
+
+        window.onMatchPersonTextCommit = (side, listKey, index, value) => {
+            if (!state.active || !state.active[listKey] || !state.active[listKey][index]) return;
+            state.active[listKey][index].name = value;
+            state.active[listKey][index].playerId = null;
+            if (listKey.indexOf('cards') === 0 && window.normalizePlayerName(value)) {
+                const added = window.maybeApplySecondYellow(side);
+                if (added) window.renderCards();
+            }
+            if (!state.active.played) window.pushLiveMatchFromActive();
+        };
+
         window.renderSc = () => {
             if (!state.active) return;
             const t1 = (state.active.t1 && state.active.t1.name) ? state.active.t1.name : 'Drużyna 1';
             const t2 = (state.active.t2 && state.active.t2.name) ? state.active.t2.name : 'Drużyna 2';
-            const renderCol = (n, teamName, side) => {
+            const renderCol = (n, teamName) => {
                 const list = state.active['s' + n] || [];
-                const head = '<div class="match-modal-scorer-head match-modal-scorer-head--' + side + '">' + esc(teamName) + '</div>';
+                const teamId = state.active['t' + n] && state.active['t' + n].id;
+                const head = '<div class="match-modal-scorer-head match-modal-scorer-head--' + (n === 1 ? 'home' : 'away') + '">' + esc(teamName) + '</div>';
                 if (!list.length) {
                     return head + '<div class="match-modal-scorer-empty">Brak wpisanych strzelców</div>';
                 }
                 const rows = list.map((s, i) =>
                     '<div class="match-modal-scorer-row">' +
-                    '<input type="text" class="match-modal-scorer-input match-modal-scorer-input--' + side + '" value="' + escAttr(s.name) + '" placeholder="Imię / nazwisko" onchange="state.active.s' + n + '[' + i + '].name=this.value" oninput="state.active.s' + n + '[' + i + '].name=this.value">' +
+                    window.renderPlayerNameControl(n, 's' + n, i, teamId, s.name, s.playerId) +
                     '<button type="button" class="match-modal-scorer-remove" onclick="removeSc(' + n + ', ' + i + ')" aria-label="Usuń strzelca">&times;</button>' +
                     '</div>'
                 ).join('');
                 return head + rows;
             };
-            document.getElementById('sc1').innerHTML = renderCol(1, t1, 'home');
-            document.getElementById('sc2').innerHTML = renderCol(2, t2, 'away');
+            document.getElementById('sc1').innerHTML = renderCol(1, t1);
+            document.getElementById('sc2').innerHTML = renderCol(2, t2);
+        };
+
+        window.renderCards = () => {
+            if (!state.active) return;
+            const cardsOn = window.isCardsEnabled();
+            const sec = document.getElementById('match-cards-section');
+            const btns = document.getElementById('card-btn-container');
+            if (sec) sec.style.display = cardsOn ? '' : 'none';
+            if (btns) btns.style.display = cardsOn ? '' : 'none';
+            if (!cardsOn) return;
+            const renderCol = (n, teamName) => {
+                const list = state.active['cards' + n] || [];
+                const teamId = state.active['t' + n] && state.active['t' + n].id;
+                const head = '<div class="match-modal-scorer-head match-modal-scorer-head--' + (n === 1 ? 'home' : 'away') + '">' + esc(teamName) + ' — kartki</div>';
+                if (!list.length) {
+                    return head + '<div class="match-modal-scorer-empty">Brak kartek</div>';
+                }
+                const rows = list.map((c, i) => {
+                    const badge = c.type === 'R'
+                        ? (c.viaSecondYellow ? '🟥 2żółta' : '🟥')
+                        : '🟨';
+                    return '<div class="match-modal-scorer-row">' +
+                        '<span style="font-weight:800; min-width:52px;">' + badge + '</span>' +
+                        window.renderPlayerNameControl(n, 'cards' + n, i, teamId, c.name, c.playerId) +
+                        '<button type="button" class="match-modal-scorer-remove" onclick="removeCard(' + n + ', ' + i + ')" aria-label="Usuń kartkę">&times;</button>' +
+                        '</div>';
+                }).join('');
+                return head + rows;
+            };
+            const t1 = (state.active.t1 && state.active.t1.name) ? state.active.t1.name : 'Drużyna 1';
+            const t2 = (state.active.t2 && state.active.t2.name) ? state.active.t2.name : 'Drużyna 2';
+            const cd1 = document.getElementById('cd1');
+            const cd2 = document.getElementById('cd2');
+            if (cd1) cd1.innerHTML = renderCol(1, t1);
+            if (cd2) cd2.innerHTML = renderCol(2, t2);
+        };
+
+        window.renderSuspendedBanner = () => {
+            const el = document.getElementById('mSuspendedBanner');
+            if (!el || !state.active) return;
+            if (!window.isCardsEnabled()) { el.style.display = 'none'; el.innerHTML = ''; return; }
+            const list = window.getSuspendedPlayersForMatch(state.active, !!state.active.isPo);
+            if (!list.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+            el.style.display = 'block';
+            el.innerHTML = '<b>Zawieszeni w tym meczu:</b> ' + list.map(s => {
+                const team = window.findTeamById(s.teamId);
+                return esc((s.name || '?') + (team ? ' (' + team.name + ')' : '') + ' — ' + s.reason);
+            }).join('; ');
+        };
+
+        window.addCard = (n, type) => {
+            if (!state.active || !window.isCardsEnabled()) return;
+            if (!state.active['cards' + n]) state.active['cards' + n] = [];
+            const card = { type: type, name: '', playerId: null };
+            state.active['cards' + n].push(card);
+            window.renderCards();
+            if (!state.active.played) window.pushLiveMatchFromActive();
+        };
+
+        window.removeCard = (n, i) => {
+            if (!state.active || !state.active['cards' + n]) return;
+            state.active['cards' + n].splice(i, 1);
+            window.renderCards();
+            if (!state.active.played) window.pushLiveMatchFromActive();
+        };
+
+        window.maybeApplySecondYellow = (side) => {
+            if (!state.active) return false;
+            const list = state.active['cards' + side] || [];
+            const yellowsByKey = {};
+            let added = false;
+            list.forEach((c, idx) => {
+                if (!c || c.type !== 'Y') return;
+                const key = window.playerDisciplineKey(state.active['t' + side].id, c.name, c.playerId);
+                if (!key) return;
+                if (!yellowsByKey[key]) yellowsByKey[key] = [];
+                yellowsByKey[key].push(idx);
+            });
+            Object.keys(yellowsByKey).forEach(key => {
+                const idxs = yellowsByKey[key];
+                if (idxs.length < 2) return;
+                const already = list.some(c => c && c.type === 'R' && c.viaSecondYellow && window.playerDisciplineKey(state.active['t' + side].id, c.name, c.playerId) === key);
+                if (already) return;
+                const src = list[idxs[idxs.length - 1]];
+                if (!confirm('Druga żółta dla ' + (src.name || 'zawodnika') + ' — dodać czerwoną (wykluczenie z gry)?')) return;
+                list.push({ type: 'R', name: src.name || '', playerId: src.playerId || null, viaSecondYellow: true });
+                added = true;
+            });
+            return added;
         };
 
         window.closeModal = (id) => { document.getElementById(id).style.display = 'none'; };
@@ -8437,6 +9220,7 @@
                 : null;
             if (d) {
                 state = { teams: [], groups: {}, matches: [], playoffs: [], settings: {}, logs: [], ...d };
+                window.ensureTeamAndMatchParams();
                 // Wyczyść lokalne drafty wyniku dla meczów już zamkniętych przez asystenta / inny klient
                 if (window.inlineScoreDrafts) {
                     const playedIds = new Set(
@@ -8452,7 +9236,7 @@
                     document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="background:#de350b; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px; vertical-align:middle;">💾 ARCHIWUM</span>`;
                     initArchiveViewer(d);
                 }
-                window.renderInputs();
+                if (!window.isSkladyInputsFocused()) window.renderInputs();
                 window.syncTournamentMetaToForm();
                 if (state.groups && Object.keys(state.groups).length > 0) {
                     window.renderGroupsList();

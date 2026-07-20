@@ -138,6 +138,22 @@ async function assistantSaveMatch(db, payload) {
     match.s2 = payload.s2.map((s) => ({ name: String(s.name || '').trim().toUpperCase() })).filter((s) => s.name);
   }
 
+  const normalizeCards = (arr) => {
+    if (!Array.isArray(arr)) return undefined;
+    return arr
+      .map((c) => {
+        const type = c && c.type === 'R' ? 'R' : 'Y';
+        const name = String((c && c.name) || '').trim().toUpperCase();
+        const out = { type, name };
+        if (c && c.playerId) out.playerId = String(c.playerId);
+        if (c && c.viaSecondYellow) out.viaSecondYellow = true;
+        return out;
+      })
+      .filter((c) => c.type === 'Y' || c.type === 'R');
+  };
+  if (Array.isArray(payload?.cards1)) match.cards1 = normalizeCards(payload.cards1);
+  if (Array.isArray(payload?.cards2)) match.cards2 = normalizeCards(payload.cards2);
+
   arr[idx] = match;
   if (isPo) state.playoffs = arr;
   else state.matches = arr;
