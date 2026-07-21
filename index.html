@@ -4147,6 +4147,15 @@
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan</span></label>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz</span></label>
+                    <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
+                        <span style="font-weight:bold;">Format gry:</span>
+                        <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                            <input type="radio" name="tp-squad-size" id="tp-squad-size-6" value="6" onchange="syncTeamParamsFromForm()"> 6-osobowy
+                        </label>
+                        <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                            <input type="radio" name="tp-squad-size" id="tp-squad-size-7" value="7" checked onchange="syncTeamParamsFromForm()"> 7-osobowy
+                        </label>
+                    </div>
 
                     <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry meczowe</div>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
@@ -4188,6 +4197,10 @@
                 <div class="time-setting"><span>Przerwa (po meczach grupowych):</span> <input type="number" id="t-after-g" value="0"></div>
                 <div class="time-setting"><span>Mecz faza PLAY-OFF:</span> <input type="number" id="t-po-dur" value="0"></div>
                 <div class="time-setting"><span>Finał:</span> <input type="number" id="t-fin-dur" value="0"></div>
+                <label class="time-setting" style="align-items:flex-start; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="t-final-after-third" style="margin-top:3px; flex-shrink:0;" onchange="syncFinalAfterThirdSetting(this.checked)">
+                    <span style="font-weight:600; line-height:1.35;">Finał po meczu o 3. miejsce<br><span style="font-weight:500; color:#64748b; font-size:11px;">Przy 2+ boiskach finał nie startuje równolegle z meczem o brąz — czeka na jego zakończenie.</span></span>
+                </label>
                 
                 <div class="time-setting" style="margin-top:10px;"><span>Tryb układania drabinki:</span> 
                     <select id="schedule-mode">
@@ -4197,6 +4210,7 @@
                 </div>
                 <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach: fale grup (jedna grupa równolegle na boiskach, potem następna). Żadna drużyna nie gra w dwóch kolejnych slotach. Play-off: najwcześniejsze wolne boisko.</p>
                 <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
+                <button type="button" class="btn-main" onclick="openWalkoverWizard()" style="margin-top:10px; background:#64748b;">WALKOVER / DYSKWALIFIKACJA</button>
             </div>
         </div>
 
@@ -4272,6 +4286,32 @@
                 <h4 style="margin-top:0; color:#0052cc;">📜 DZIENNIK SYSTEMOWY (LOG LIVE)</h4>
                 <p style="font-size:11px; color:#666; margin-bottom:5px;">Historia operacji sędziowskich wykonanych w bieżącej sesji:</p>
                 <div class="log-container" id="system-log-display">Brak zarejestrowanych akcji w tej sesji.</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="walkoverModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:560px;">
+            <span class="match-modal-close" onclick="closeModal('walkoverModal')" aria-label="Zamknij">&times;</span>
+            <h4 style="margin-top:0;">Walkower / dyskwalifikacja</h4>
+            <p style="font-size:12px; color:#64748b; margin-top:0;">Pary meczów bez zmian. Wynik 3:0 WO dla przeciwnika; pending mecze mogą zostać przełożone.</p>
+            <div class="time-setting" style="margin-bottom:10px;">
+                <span style="font-weight:700;">Drużyna:</span>
+                <select id="wo-team-select" style="flex:1; min-width:180px; padding:6px;"></select>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:12px; font-size:13px;">
+                <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="no_show" checked> Przed startem / nieobecność (tylko niedokończone)</label>
+                <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="dq"> W trakcie / dyskwalifikacja (tylko niedokończone)</label>
+                <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="retro_dq"> Po fazie grupowej / dyskwalifikacja (rozegrane → 3:0 WO)</label>
+                <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="revert"> Cofnij walkower tej drużyny</label>
+            </div>
+            <button type="button" class="btn-main" onclick="previewWalkoverRepack()" style="width:100%;">PODGLĄD</button>
+            <div id="wo-preview-panel" style="display:none; margin-top:14px; border-top:1px solid #e2e8f0; padding-top:12px;">
+                <div id="wo-preview-summary" style="font-size:13px; margin-bottom:10px;"></div>
+                <div id="wo-preview-wo-title" style="font-size:11px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:4px;">Mecze</div>
+                <div id="wo-preview-wo-list" style="font-size:12px; margin-bottom:10px;"></div>
+                <div id="wo-preview-diff" style="font-size:12px; color:#64748b; margin-bottom:12px;"></div>
+                <button type="button" class="btn-main" onclick="confirmWalkoverRepack()" style="width:100%; background:#00875a;">ZATWIERDŹ</button>
             </div>
         </div>
     </div>
@@ -5768,17 +5808,497 @@
         return sorted;
     };
 
+    window.validateFullSchedule = function (matches) {
+        return [];
+    };
+
+    window.repairScheduleConflicts = function () {
+        /* no-op: packing w assignGroupPitchesAndTimes wystarcza do WO repack */
+    };
+
+    window.WALKOVER_GOALS = 3;
+
+    window.buildTeamNextFreeSeedFromPlayed = function (matches, settings) {
+        const s = settings || state.settings || {};
+        const gDur = parseInt(s.gDur, 10) || 0;
+        const gBreak = parseInt(s.gBreak, 10) || 0;
+        const slotLen = Math.max(1, gDur + gBreak);
+        const seed = {};
+        (matches || []).forEach(m => {
+            if (!m || !m.played || !m.time) return;
+            if (m.resultType === 'walkover') return;
+            [m.t1, m.t2].forEach(t => {
+                if (!t || t.id == null || t.id < 0) return;
+                const free = window.addMin(m.time, 2 * slotLen);
+                if (!seed[t.id] || window.timeToMinutes(free) > window.timeToMinutes(seed[t.id])) {
+                    seed[t.id] = free;
+                }
+            });
+        });
+        return seed;
+    };
+
+    window.applyTeamWalkoversToMatches = function (matches, teamId, mode) {
+        const tid = parseInt(teamId, 10);
+        const goals = window.WALKOVER_GOALS || 3;
+        const retro = mode === 'retro_dq';
+        const walkoverMode = retro ? 'retro_dq' : (mode === 'dq' ? 'dq' : 'no_show');
+        const affected = [];
+        (matches || []).forEach(m => {
+            if (!m) return;
+            if (!m.t1 || !m.t2 || m.t1.id == null || m.t2.id == null) return;
+            if (m.t1.id !== tid && m.t2.id !== tid) return;
+            if (m.t1.id === tid && m.t2.id === tid) return;
+            if (m.resultType === 'walkover' && parseInt(m.walkoverTeamId, 10) === tid) return;
+            if (!retro && m.played) return;
+
+            if (retro && !m.preWalkover) {
+                m.preWalkover = {
+                    g1: m.g1,
+                    g2: m.g2,
+                    s1: JSON.parse(JSON.stringify(m.s1 || [])),
+                    s2: JSON.parse(JSON.stringify(m.s2 || [])),
+                    pen1: m.pen1 != null ? m.pen1 : null,
+                    pen2: m.pen2 != null ? m.pen2 : null,
+                    played: !!m.played,
+                    resultType: m.resultType || null,
+                    cards1: JSON.parse(JSON.stringify(m.cards1 || [])),
+                    cards2: JSON.parse(JSON.stringify(m.cards2 || []))
+                };
+            }
+
+            if (m.t1.id === tid) { m.g1 = 0; m.g2 = goals; }
+            else { m.g1 = goals; m.g2 = 0; }
+            m.played = true;
+            m.s1 = [];
+            m.s2 = [];
+            m.pen1 = null;
+            m.pen2 = null;
+            m.cards1 = [];
+            m.cards2 = [];
+            m.resultType = 'walkover';
+            m.walkoverTeamId = tid;
+            m.walkoverMode = walkoverMode;
+            affected.push(m);
+        });
+        return affected;
+    };
+
+    window.revertTeamWalkoversInMatches = function (matches, teamId) {
+        const tid = parseInt(teamId, 10);
+        const affected = [];
+        (matches || []).forEach(m => {
+            if (!m || m.resultType !== 'walkover') return;
+            if (m.walkoverTeamId != null && parseInt(m.walkoverTeamId, 10) !== tid) return;
+            if (m.walkoverTeamId == null) {
+                if (!m.t1 || !m.t2 || (m.t1.id !== tid && m.t2.id !== tid)) return;
+            }
+            if (m.preWalkover) {
+                const snap = m.preWalkover;
+                m.g1 = snap.g1;
+                m.g2 = snap.g2;
+                m.s1 = snap.s1 || [];
+                m.s2 = snap.s2 || [];
+                m.pen1 = snap.pen1;
+                m.pen2 = snap.pen2;
+                m.played = !!snap.played;
+                m.cards1 = snap.cards1 || [];
+                m.cards2 = snap.cards2 || [];
+                if (snap.resultType) m.resultType = snap.resultType;
+                else delete m.resultType;
+                delete m.preWalkover;
+            } else {
+                m.played = false;
+                m.g1 = 0;
+                m.g2 = 0;
+                m.s1 = [];
+                m.s2 = [];
+                delete m.resultType;
+                delete m.pen1;
+                delete m.pen2;
+            }
+            delete m.walkoverTeamId;
+            delete m.walkoverMode;
+            affected.push(m);
+        });
+        return affected;
+    };
+
+    window.getTeamWalkoverMatches = function (teamId) {
+        const tid = parseInt(teamId, 10);
+        return (state.matches || []).filter(m =>
+            m && m.resultType === 'walkover' &&
+            (parseInt(m.walkoverTeamId, 10) === tid ||
+                (m.walkoverTeamId == null && m.t1 && m.t2 && (m.t1.id === tid || m.t2.id === tid)))
+        );
+    };
+
+    window.clearGroupTableOverridesForTeam = function (teamId) {
+        const tid = parseInt(teamId, 10);
+        const groups = [];
+        Object.keys(state.groups || {}).forEach(gn => {
+            if ((state.groups[gn] || []).some(t => t && t.id === tid)) groups.push(gn);
+        });
+        groups.forEach(gn => {
+            if (typeof tempLocalOrders !== 'undefined' && tempLocalOrders) delete tempLocalOrders[gn];
+            if (state.settings && state.settings.customTableOrder) delete state.settings.customTableOrder[gn];
+            if (state.settings && state.settings.confirmedTableOrder) delete state.settings.confirmedTableOrder[gn];
+        });
+        return groups;
+    };
+
+    window.repackPendingMatchesClone = function (before, after, settings) {
+        const s = Object.assign({}, settings || state.settings || {});
+        const pitchN = window.getPitchCount();
+        const packPc = pitchN >= 2 ? pitchN : 1;
+        const seed = window.buildTeamNextFreeSeedFromPlayed(after, s);
+        const realPlayed = after.filter(m => m && m.played && m.resultType !== 'walkover' && m.time);
+        let startOverride = s.start || '09:00';
+        if (realPlayed.length) {
+            let maxT = startOverride;
+            realPlayed.forEach(m => {
+                if (window.timeToMinutes(m.time) >= window.timeToMinutes(maxT)) maxT = m.time;
+            });
+            startOverride = maxT;
+        }
+        const pending = after.filter(m => m && !m.played);
+        if (pending.length) {
+            pending.sort((a, b) => {
+                const ta = window.timeToMinutes(a.time || '99:99');
+                const tb = window.timeToMinutes(b.time || '99:99');
+                if (ta !== tb) return ta - tb;
+                return (a.id || 0) - (b.id || 0);
+            });
+            window.assignGroupPitchesAndTimes(pending, s, packPc, {
+                startOverride: startOverride,
+                teamNextFreeSeed: seed
+            });
+            if (pitchN < 2) {
+                pending.forEach(m => { if (m) m.pitch = null; });
+            }
+            window.repairScheduleConflicts(pending, s, packPc);
+        }
+        const finalized = window.finalizeGroupMatchOrder(after);
+        const beforeByKey = {};
+        (before || []).forEach(m => {
+            if (!m) return;
+            const k = (m.t1 && m.t1.id) + '|' + (m.t2 && m.t2.id) + '|' + (m.group || '');
+            beforeByKey[k] = m;
+        });
+        const scheduleDiff = [];
+        finalized.forEach(m => {
+            if (!m || m.played) return;
+            const k = (m.t1 && m.t1.id) + '|' + (m.t2 && m.t2.id) + '|' + (m.group || '');
+            const prev = beforeByKey[k];
+            if (!prev) return;
+            if ((prev.time || '') !== (m.time || '') || (prev.pitch || null) !== (m.pitch || null)) {
+                scheduleDiff.push({
+                    group: m.group,
+                    t1: m.t1 && m.t1.name,
+                    t2: m.t2 && m.t2.name,
+                    oldTime: prev.time || '—',
+                    newTime: m.time || '—',
+                    oldPitch: prev.pitch || '—',
+                    newPitch: m.pitch || '—'
+                });
+            }
+        });
+        return {
+            after: finalized,
+            pendingCount: pending.length,
+            scheduleDiff: scheduleDiff,
+            conflicts: 0
+        };
+    };
+
+    window.buildWalkoverRepackPreview = function (teamId, mode) {
+        const tid = parseInt(teamId, 10);
+        if (!Number.isFinite(tid)) return { ok: false, error: 'Nieprawidłowa drużyna.' };
+        const team = (state.teams || []).find(t => t && t.id === tid);
+        if (!team) return { ok: false, error: 'Nie znaleziono drużyny.' };
+        if (!state.matches || !state.matches.length) return { ok: false, error: 'Brak terminarza grupowego.' };
+
+        const retro = mode === 'retro_dq';
+        const candidates = (state.matches || []).filter(m => {
+            if (!m || !m.t1 || !m.t2) return false;
+            if (m.t1.id !== tid && m.t2.id !== tid) return false;
+            if (m.resultType === 'walkover' && parseInt(m.walkoverTeamId, 10) === tid) return false;
+            if (!retro && m.played) return false;
+            return true;
+        });
+        if (!candidates.length) {
+            return {
+                ok: false,
+                error: retro
+                    ? 'Ta drużyna nie ma meczów grupowych do dyskwalifikacji (WO).'
+                    : 'Ta drużyna nie ma niedokończonych meczów do walkowera.'
+            };
+        }
+
+        const before = JSON.parse(JSON.stringify(state.matches));
+        const after = JSON.parse(JSON.stringify(state.matches));
+        const woMatches = window.applyTeamWalkoversToMatches(after, tid, mode);
+        const packed = window.repackPendingMatchesClone(before, after, state.settings);
+
+        const beforeByKey = {};
+        before.forEach(m => {
+            if (!m) return;
+            const k = (m.t1 && m.t1.id) + '|' + (m.t2 && m.t2.id) + '|' + (m.group || '');
+            beforeByKey[k] = m;
+        });
+        const scoreDiff = woMatches.map(m => {
+            const k = (m.t1 && m.t1.id) + '|' + (m.t2 && m.t2.id) + '|' + (m.group || '');
+            const prev = beforeByKey[k];
+            const oldScore = prev
+                ? ((prev.played ? (prev.g1 + ':' + prev.g2) : '–:–') + (prev.resultType === 'walkover' ? ' WO' : ''))
+                : '—';
+            return {
+                group: m.group,
+                t1: m.t1 && m.t1.name,
+                t2: m.t2 && m.t2.name,
+                oldScore: oldScore,
+                newScore: m.g1 + ':' + m.g2 + ' WO',
+                time: m.time
+            };
+        });
+
+        const normalizedMode = retro ? 'retro_dq' : (mode === 'dq' ? 'dq' : 'no_show');
+        return {
+            ok: true,
+            action: 'apply',
+            teamId: tid,
+            teamName: team.name,
+            mode: normalizedMode,
+            before: before,
+            after: packed.after,
+            woMatches: scoreDiff,
+            woCount: woMatches.length,
+            pendingCount: packed.pendingCount,
+            scheduleDiff: packed.scheduleDiff,
+            scoreDiff: scoreDiff,
+            conflicts: packed.conflicts,
+            playoffsExist: !!(state.playoffs && state.playoffs.length)
+        };
+    };
+
+    window.buildWalkoverRevertPreview = function (teamId) {
+        const tid = parseInt(teamId, 10);
+        if (!Number.isFinite(tid)) return { ok: false, error: 'Nieprawidłowa drużyna.' };
+        const team = (state.teams || []).find(t => t && t.id === tid);
+        if (!team) return { ok: false, error: 'Nie znaleziono drużyny.' };
+        const existing = window.getTeamWalkoverMatches(tid);
+        if (!existing.length) {
+            return { ok: false, error: 'Ta drużyna nie ma meczów oznaczonych jako walkower.' };
+        }
+
+        const before = JSON.parse(JSON.stringify(state.matches));
+        const after = JSON.parse(JSON.stringify(state.matches));
+        const reverted = window.revertTeamWalkoversInMatches(after, tid);
+        const packed = window.repackPendingMatchesClone(before, after, state.settings);
+        const modeHint = (existing[0] && existing[0].walkoverMode) || 'no_show';
+
+        const scoreDiff = reverted.map(m => {
+            const restored = m.played ? (m.g1 + ':' + m.g2) : '–:–';
+            return {
+                group: m.group,
+                t1: m.t1 && m.t1.name,
+                t2: m.t2 && m.t2.name,
+                oldScore: 'WO',
+                newScore: restored,
+                time: m.time
+            };
+        });
+
+        return {
+            ok: true,
+            action: 'revert',
+            teamId: tid,
+            teamName: team.name,
+            mode: modeHint,
+            before: before,
+            after: packed.after,
+            woMatches: scoreDiff,
+            woCount: reverted.length,
+            pendingCount: packed.pendingCount,
+            scheduleDiff: packed.scheduleDiff,
+            scoreDiff: scoreDiff,
+            conflicts: packed.conflicts,
+            playoffsExist: !!(state.playoffs && state.playoffs.length)
+        };
+    };
+
+    window.commitWalkoverRepackPreview = function (preview) {
+        if (!preview || !preview.ok || !preview.after) return false;
+        if (typeof saveLastSnapshot === 'function') saveLastSnapshot();
+        state.matches = preview.after;
+        if (!state.meta) state.meta = {};
+        if (!state.meta.teamStatus) state.meta.teamStatus = {};
+        if (preview.clearPlayoffs) {
+            state.playoffs = [];
+        }
+        if (preview.action === 'revert') {
+            delete state.meta.teamStatus[preview.teamId];
+            window.clearGroupTableOverridesForTeam(preview.teamId);
+            window.logAction(
+                'Cofnięto walkower: ' + (preview.teamName || ('#' + preview.teamId)) +
+                ' — ' + preview.woCount + ' mecz(y) przywrócone' +
+                (preview.scheduleDiff && preview.scheduleDiff.length
+                    ? ', przesunięto ' + preview.scheduleDiff.length + ' slot(ów).'
+                    : '.')
+            );
+        } else {
+            const isDq = preview.mode === 'dq' || preview.mode === 'retro_dq';
+            state.meta.teamStatus[preview.teamId] = isDq ? 'disqualified' : 'no_show';
+            window.clearGroupTableOverridesForTeam(preview.teamId);
+            const label = preview.mode === 'retro_dq'
+                ? 'dyskwalifikacja po grupie'
+                : (preview.mode === 'dq' ? 'dyskwalifikacja' : 'nieobecność');
+            window.logAction(
+                'Walkower (' + label + '): ' + (preview.teamName || ('#' + preview.teamId)) +
+                ' — ' + preview.woCount + ' mecz(y) 3:0 WO' +
+                (preview.clearPlayoffs ? ', wyczyszczono play-off.' : '') +
+                (preview.scheduleDiff && preview.scheduleDiff.length
+                    ? ', przesunięto ' + preview.scheduleDiff.length + ' slot(ów).'
+                    : '.')
+            );
+        }
+        window.save();
+        if (typeof window.renderDashboard === 'function') window.renderDashboard();
+        if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+        if (typeof window.renderGroupsList === 'function') window.renderGroupsList();
+        if (typeof window.calcTables === 'function') window.calcTables();
+        if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
+        if (typeof window.refreshAfterScheduleTimeChange === 'function') window.refreshAfterScheduleTimeChange();
+        return true;
+    };
+
+    window.openWalkoverWizard = function () {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        if (!state.matches || !state.matches.length) {
+            alert('Najpierw wygeneruj terminarz grupowy.');
+            return;
+        }
+        const sel = document.getElementById('wo-team-select');
+        const panel = document.getElementById('wo-preview-panel');
+        if (panel) panel.style.display = 'none';
+        window._woPreview = null;
+        if (sel) {
+            const teams = (state.teams || []).slice().sort(function (a, b) {
+                return String(a.name || '').localeCompare(String(b.name || ''), 'pl');
+            });
+            sel.innerHTML = teams.map(function (t) {
+                const pending = (state.matches || []).filter(function (m) {
+                    return m && !m.played && m.t1 && m.t2 && (m.t1.id === t.id || m.t2.id === t.id);
+                }).length;
+                const woN = window.getTeamWalkoverMatches(t.id).length;
+                const st = (state.meta && state.meta.teamStatus && state.meta.teamStatus[t.id]) || '';
+                const tag = st === 'no_show' ? ' [nieobecna]' : (st === 'disqualified' ? ' [DQ]' : '');
+                const hint = woN ? (', ' + woN + ' do cofnięcia') : '';
+                return '<option value="' + t.id + '">' +
+                    esc(t.name) + ' (' + pending + ' do WO' + hint + ')' + tag + '</option>';
+            }).join('');
+        }
+        const modal = document.getElementById('walkoverModal');
+        if (modal) modal.style.display = 'block';
+    };
+
+    window.previewWalkoverRepack = function () {
+        const sel = document.getElementById('wo-team-select');
+        const teamId = sel ? parseInt(sel.value, 10) : NaN;
+        const modeEl = document.querySelector('input[name="wo-mode"]:checked');
+        const mode = modeEl ? modeEl.value : 'no_show';
+        const preview = mode === 'revert'
+            ? window.buildWalkoverRevertPreview(teamId)
+            : window.buildWalkoverRepackPreview(teamId, mode);
+        if (!preview.ok) {
+            alert(preview.error || 'Nie można przygotować podglądu.');
+            return;
+        }
+        window._woPreview = preview;
+        const panel = document.getElementById('wo-preview-panel');
+        const sum = document.getElementById('wo-preview-summary');
+        const woList = document.getElementById('wo-preview-wo-list');
+        const woTitle = document.getElementById('wo-preview-wo-title');
+        const diffEl = document.getElementById('wo-preview-diff');
+        const isRevert = preview.action === 'revert';
+        if (woTitle) {
+            woTitle.textContent = isRevert
+                ? 'Mecze wracające do gry (cofnięcie WO)'
+                : 'Mecze walkower (3:0)';
+        }
+        if (sum) {
+            const modeLabel = preview.mode === 'retro_dq'
+                ? 'dyskwalifikacja po grupie'
+                : (preview.mode === 'dq' ? 'dyskwalifikacja' : 'nieobecność');
+            let html = '<b>' + esc(preview.teamName) + '</b> — ' +
+                (isRevert ? 'cofnięcie walkowera' : modeLabel) + '<br>' +
+                preview.woCount + ' mecz(y) · ' +
+                (preview.scheduleDiff.length ? preview.scheduleDiff.length + ' zmian czasu/boiska' : 'bez zmian slotów');
+            if (preview.playoffsExist && !isRevert && preview.mode === 'retro_dq') {
+                html += '<br><span style="color:#de350b;">Uwaga: istnieje drabinka play-off — zatwierdzenie ją wyczyści.</span>';
+            }
+            sum.innerHTML = html;
+        }
+        if (woList) {
+            woList.innerHTML = preview.woMatches.length
+                ? ('<table style="width:100%; border-collapse:collapse;">' +
+                    preview.woMatches.map(function (w) {
+                        return '<tr><td style="padding:3px 4px; border-bottom:1px solid #e2e8f0;">Gr. ' + esc(w.group || '') +
+                            '</td><td style="padding:3px 4px; border-bottom:1px solid #e2e8f0;">' + esc(w.t1) + ' vs ' + esc(w.t2) +
+                            '</td><td style="padding:3px 4px; border-bottom:1px solid #e2e8f0; font-weight:800;">' +
+                            esc(w.oldScore) + ' → ' + esc(w.newScore) + '</td></tr>';
+                    }).join('') + '</table>')
+                : '—';
+        }
+        if (diffEl) {
+            diffEl.innerHTML = preview.scheduleDiff.length
+                ? ('Przesunięcia: ' + preview.scheduleDiff.map(function (d) {
+                    return esc(d.t1) + '–' + esc(d.t2) + ' ' + esc(d.oldTime) + '→' + esc(d.newTime);
+                }).join('; '))
+                : '';
+        }
+        if (panel) panel.style.display = 'block';
+    };
+
+    window.confirmWalkoverRepack = function () {
+        const preview = window._woPreview;
+        if (!preview || !preview.ok) {
+            alert('Najpierw wygeneruj podgląd.');
+            return;
+        }
+        if (preview.action !== 'revert' && preview.playoffsExist && preview.mode === 'retro_dq') {
+            if (!confirm('Istnieje drabinka play-off. Zatwierdzenie dyskwalifikacji wyczyści play-off. Kontynuować?')) return;
+            preview.clearPlayoffs = true;
+        } else if (preview.action !== 'revert' && preview.playoffsExist) {
+            if (!confirm('Istnieje drabinka play-off. Zalecane wyczyszczenie. Wyczyścić play-off przy zatwierdzeniu?')) {
+                preview.clearPlayoffs = false;
+            } else {
+                preview.clearPlayoffs = true;
+            }
+        }
+        if (!window.commitWalkoverRepackPreview(preview)) return;
+        window._woPreview = null;
+        if (typeof closeModal === 'function') closeModal('walkoverModal');
+        else {
+            const modal = document.getElementById('walkoverModal');
+            if (modal) modal.style.display = 'none';
+        }
+    };
+
     /**
      * Terminarz grupowy: fale (jedna grupa / slot, do pc meczów równolegle)
      * + teamNextFree — żadna drużyna w dwóch kolejnych slotach.
      * Działa też dla pc=1 (serial / 0–1 boisko).
      */
-    window.assignGroupPitchesAndTimes = function (matches, settings, pitchCount) {
+    window.assignGroupPitchesAndTimes = function (matches, settings, pitchCount, opts) {
+        opts = opts || {};
         const list = matches || [];
         let pc = parseInt(pitchCount, 10) || 0;
         if (pc < 1) pc = 1;
         if (!list.length) return;
-        const start = (settings && settings.start) ? String(settings.start) : '09:00';
+        const start = opts.startOverride
+            ? String(opts.startOverride)
+            : ((settings && settings.start) ? String(settings.start) : '09:00');
         const gDur = parseInt(settings && settings.gDur, 10) || 0;
         const gBreak = parseInt(settings && settings.gBreak, 10) || 0;
         const slotLen = Math.max(1, gDur + gBreak);
@@ -5799,7 +6319,7 @@
             });
         });
         const groupOrder = Object.keys(queues).sort();
-        const teamNextFree = {};
+        const teamNextFree = Object.assign({}, opts.teamNextFreeSeed || {});
 
         function teamIdsOf(m) {
             const ids = [];
@@ -5920,57 +6440,197 @@
     };
 
     /**
-     * Przydział boisk do play-off (czasy już ustawione): najwcześniejszy wolny tor; przy braku — przesuń time.
+     * Pełny grafik play-off: packing boisk, gap 2×slot drużyn, zależności next/loserNext, opcjonalnie finał po 3M.
      */
+    window.getPlayoffSlotLen = function (m, settings) {
+        const s = settings || (state && state.settings) || {};
+        const poDur = parseInt(s.poDur, 10) || 15;
+        const finDur = parseInt(s.finDur, 10) || poDur;
+        const name = String(m && m.n || '').toUpperCase();
+        const isFinal = (name.indexOf('WIELKI FINAŁ') >= 0) ||
+            (name.indexOf('FINAŁ') >= 0 && name.indexOf('1/') < 0 && name.indexOf('ĆWIERĆ') < 0 && name.indexOf('PÓŁ') < 0);
+        const isThird = name.indexOf('3. MIEJSCE') >= 0 || name.indexOf('3 MIEJSCE') >= 0;
+        return (isFinal || isThird) ? (finDur + 5) : (poDur + 2);
+    };
+
+    window.isPlayoffGrandFinalMatch = function (m) {
+        const name = String(m && m.n || '').toUpperCase();
+        return name.indexOf('WIELKI FINAŁ') >= 0 ||
+            (name.indexOf('FINAŁ') >= 0 && name.indexOf('1/') < 0 && name.indexOf('ĆWIERĆ') < 0 && name.indexOf('PÓŁ') < 0 && name.indexOf('3.') < 0);
+    };
+
+    window.isPlayoffThirdPlaceMatch = function (m) {
+        const name = String(m && m.n || '').toUpperCase();
+        return name.indexOf('3. MIEJSCE') >= 0 || name.indexOf('3 MIEJSCE') >= 0;
+    };
+
     window.assignPlayoffPitchesAndTimes = function (playoffs, startTime, settings, pitchCount) {
         const list = playoffs || [];
-        const pc = parseInt(pitchCount, 10) || 0;
-        if (pc < 2 || !list.length) return;
-        const poDur = parseInt(settings && settings.poDur, 10) || 15;
-        const finDur = parseInt(settings && settings.finDur, 10) || poDur;
+        const s = settings || {};
+        let pc = parseInt(pitchCount, 10) || 0;
+        if (pc < 1) pc = 1;
+        if (!list.length) return;
+        let start = startTime || s.start || '09:00';
+        if (!startTime) {
+            const existing = list.filter(function (m) { return m && m.time; }).map(function (m) { return m.time; });
+            if (existing.length) {
+                start = existing.reduce(function (a, b) {
+                    return window.timeToMinutes(a) <= window.timeToMinutes(b) ? a : b;
+                });
+            }
+        }
         const nextFree = {};
-        for (let p = 1; p <= pc; p++) nextFree[p] = startTime || '09:00';
-        const teamBusy = {};
-        const sorted = list.slice().sort((a, b) => {
-            const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
-            if (dt !== 0) return dt;
+        for (let p = 1; p <= pc; p++) nextFree[p] = start;
+        const teamNextFree = {};
+
+        const sorted = list.slice().sort(function (a, b) {
             return (a.id || 0) - (b.id || 0);
         });
-        sorted.forEach(m => {
+
+        sorted.forEach(function (m) {
             if (!m) return;
             const isBye = m.played && m.t1 && m.t2 && (m.t1.id === -99 || m.t2.id === -99);
             if (isBye) { m.pitch = null; return; }
+
+            let earliest = start;
+            (list || []).forEach(function (f) {
+                if (!f || f === m || !f.time) return;
+                if (f.next !== m.id && f.loserNext !== m.id) return;
+                const need = window.addMin(f.time, 2 * window.getPlayoffSlotLen(f, s));
+                if (window.timeToMinutes(need) > window.timeToMinutes(earliest)) earliest = need;
+            });
+            if (s.finalAfterThird && window.isPlayoffGrandFinalMatch(m)) {
+                (list || []).forEach(function (third) {
+                    if (!third || !window.isPlayoffThirdPlaceMatch(third) || !third.time) return;
+                    const need = window.addMin(third.time, 2 * window.getPlayoffSlotLen(third, s));
+                    if (window.timeToMinutes(need) > window.timeToMinutes(earliest)) earliest = need;
+                });
+            }
+
             const t1id = m.t1 && m.t1.id != null && m.t1.id >= 0 ? m.t1.id : null;
             const t2id = m.t2 && m.t2.id != null && m.t2.id >= 0 ? m.t2.id : null;
-            const scheduled = m.time || startTime;
+            if (t1id != null && teamNextFree[t1id]) earliest = window.maxTimeStr(earliest, teamNextFree[t1id]);
+            if (t2id != null && teamNextFree[t2id]) earliest = window.maxTimeStr(earliest, teamNextFree[t2id]);
+
             let bestPitch = 1;
             let bestSlot = null;
             for (let p = 1; p <= pc; p++) {
-                let slotStart = window.maxTimeStr(nextFree[p], scheduled);
-                if (window.timeToMinutes(nextFree[p]) <= window.timeToMinutes(scheduled)) {
-                    slotStart = scheduled;
-                } else {
-                    slotStart = nextFree[p];
-                }
-                if (t1id != null && teamBusy[t1id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t1id]);
-                if (t2id != null && teamBusy[t2id]) slotStart = window.maxTimeStr(slotStart, teamBusy[t2id]);
-                if (bestSlot == null || window.timeToMinutes(slotStart) < window.timeToMinutes(bestSlot) ||
+                const slotStart = window.maxTimeStr(nextFree[p], earliest);
+                if (bestSlot == null ||
+                    window.timeToMinutes(slotStart) < window.timeToMinutes(bestSlot) ||
                     (window.timeToMinutes(slotStart) === window.timeToMinutes(bestSlot) && p < bestPitch)) {
                     bestSlot = slotStart;
                     bestPitch = p;
                 }
             }
-            m.pitch = bestPitch;
             m.time = bestSlot;
-            const name = String(m.n || '').toUpperCase();
-            const isFinal = name.indexOf('FINAŁ') >= 0 || name.indexOf('FINAL') >= 0;
-            const isThird = name.indexOf('3. MIEJSCE') >= 0 || name.indexOf('3 MIEJSCE') >= 0;
-            const slotLen = (isFinal || isThird) ? (finDur + 5) : (poDur + 2);
-            const end = window.addMin(bestSlot, Math.max(1, slotLen));
-            nextFree[bestPitch] = end;
-            if (t1id != null) teamBusy[t1id] = end;
-            if (t2id != null) teamBusy[t2id] = end;
+            m.pitch = pc >= 2 ? bestPitch : null;
+            const slotLen = window.getPlayoffSlotLen(m, s);
+            nextFree[bestPitch] = window.addMin(bestSlot, Math.max(1, slotLen));
+            if (t1id != null) teamNextFree[t1id] = window.addMin(bestSlot, 2 * slotLen);
+            if (t2id != null) teamNextFree[t2id] = window.addMin(bestSlot, 2 * slotLen);
         });
+    };
+
+    window.validatePlayoffSchedule = function (playoffs, settings) {
+        const s = settings || (state && state.settings) || {};
+        const list = (playoffs || []).filter(Boolean);
+        const issues = [];
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i + 1; j < list.length; j++) {
+                const a = list[i];
+                const b = list[j];
+                if (!a.time || !b.time || a.played || b.played) continue;
+                if (a.pitch != null && b.pitch != null && a.pitch === b.pitch) {
+                    const aEnd = window.addMin(a.time, window.getPlayoffSlotLen(a, s));
+                    const bEnd = window.addMin(b.time, window.getPlayoffSlotLen(b, s));
+                    const aStart = window.timeToMinutes(a.time);
+                    const bStart = window.timeToMinutes(b.time);
+                    if (aStart < window.timeToMinutes(bEnd) && bStart < window.timeToMinutes(aEnd)) {
+                        issues.push({ matchA: a, matchB: b, reason: 'overlap boiska' });
+                    }
+                }
+            }
+        }
+        (playoffs || []).forEach(function (m) {
+            if (!m || m.played || !m.time) return;
+            (playoffs || []).forEach(function (f) {
+                if (!f || !f.time || f === m) return;
+                if (f.next !== m.id && f.loserNext !== m.id) return;
+                const need = window.addMin(f.time, 2 * window.getPlayoffSlotLen(f, s));
+                if (window.timeToMinutes(m.time) < window.timeToMinutes(need)) {
+                    issues.push({ matchA: m, matchB: f, reason: 'za wcześnie po meczu drabinki' });
+                }
+            });
+        });
+        if (s.finalAfterThird) {
+            (playoffs || []).forEach(function (fin) {
+                if (!fin || fin.played || !fin.time || !window.isPlayoffGrandFinalMatch(fin)) return;
+                (playoffs || []).forEach(function (third) {
+                    if (!third || !third.time || !window.isPlayoffThirdPlaceMatch(third)) return;
+                    const need = window.addMin(third.time, 2 * window.getPlayoffSlotLen(third, s));
+                    if (window.timeToMinutes(fin.time) < window.timeToMinutes(need)) {
+                        issues.push({ matchA: fin, matchB: third, reason: 'finał przed końcem 3. miejsca' });
+                    }
+                });
+            });
+        }
+        return issues;
+    };
+
+    window.repairPlayoffScheduleConflicts = function (playoffs, settings, pitchCount) {
+        const s = settings || {};
+        let pc = parseInt(pitchCount, 10) || 1;
+        if (pc < 1) pc = 1;
+        for (let pass = 0; pass < 3; pass++) {
+            const issues = window.validatePlayoffSchedule(playoffs, s);
+            if (!issues.length) break;
+            issues.forEach(function (iss) {
+                const later = (window.timeToMinutes(iss.matchA.time) >= window.timeToMinutes(iss.matchB.time))
+                    ? iss.matchA : iss.matchB;
+                const earlier = later === iss.matchA ? iss.matchB : iss.matchA;
+                const bump = window.addMin(earlier.time, window.getPlayoffSlotLen(earlier, s));
+                if (window.timeToMinutes(later.time) < window.timeToMinutes(bump)) {
+                    later.time = bump;
+                }
+            });
+            window.assignPlayoffPitchesAndTimes(playoffs, null, s, pc);
+        }
+    };
+
+    window.isPlayoffSideResolved = function (t) {
+        if (!t) return false;
+        if (t.id == null || t.id < 0) return false;
+        const name = String(t.name || '').trim();
+        if (!name || name === '?' || name === '—') return false;
+        return true;
+    };
+
+    window.isPlayoffMatchReadyToScore = function (m) {
+        if (!m) return false;
+        if (!window.isPlayoffSideResolved(m.t1) || !window.isPlayoffSideResolved(m.t2)) return false;
+        const feeders = (state.playoffs || []).filter(function (f) {
+            return f && (f.next === m.id || f.loserNext === m.id);
+        });
+        for (let i = 0; i < feeders.length; i++) {
+            if (!feeders[i].played) return false;
+        }
+        return true;
+    };
+
+    window.getPlayoffMatchNotReadyReason = function (m) {
+        if (!m) return 'Brak meczu.';
+        if (!window.isPlayoffSideResolved(m.t1) || !window.isPlayoffSideResolved(m.t2)) {
+            return 'Para nie jest jeszcze wyłoniona (oczekiwanie na wcześniejsze mecze drabinki).';
+        }
+        const feeders = (state.playoffs || []).filter(function (f) {
+            return f && (f.next === m.id || f.loserNext === m.id);
+        });
+        const pending = feeders.filter(function (f) { return !f.played; });
+        if (pending.length) {
+            return 'Najpierw dokończ mecze prowadzące do tej pary.';
+        }
+        return 'Mecz nie jest gotowy do wpisania wyniku.';
     };
 
     window.getMatchDurationMinutes = function (m, isPo) {
@@ -6222,7 +6882,7 @@
                 return (gk && !placeholderGk) || (cap && !placeholderCap) || t.gkId || t.capId;
             });
             if (hasRoster || anyGkCap) {
-                state.settings.teamParams = { players: true, captain: true, gk: true };
+                state.settings.teamParams = { players: true, captain: true, gk: true, squadSize: 7 };
                 teams.forEach(t => {
                     if (!Array.isArray(t.players)) t.players = [];
                     const seedRole = (raw, role) => {
@@ -6240,8 +6900,11 @@
                     seedRole(t.cap, 'cap');
                 });
             } else {
-                state.settings.teamParams = { players: false, captain: false, gk: false };
+                state.settings.teamParams = { players: false, captain: false, gk: false, squadSize: 7 };
             }
+        }
+        if (!state.settings.teamParams.squadSize) {
+            state.settings.teamParams.squadSize = 7;
         }
         if ((state.settings.teamParams.captain || state.settings.teamParams.gk) && !state.settings.teamParams.players) {
             state.settings.teamParams.players = true;
@@ -6274,10 +6937,14 @@
             players: players,
             captain: captain,
             gk: gk,
-            squadSize: parseInt((state.settings.teamParams && state.settings.teamParams.squadSize), 10) === 6 ? 6 : 7
+            squadSize: (document.getElementById('tp-squad-size-6') && document.getElementById('tp-squad-size-6').checked) ? 6 : 7
         };
+        if (typeof window.trimAwardsToSquadSize === 'function') window.trimAwardsToSquadSize();
         window.save();
         if (typeof window.renderInputs === 'function') window.renderInputs();
+        if (typeof window.renderPodium === 'function' && document.getElementById('podium') && document.getElementById('podium').classList.contains('active')) {
+            window.renderPodium();
+        }
     };
 
     window.syncMatchParamsFromForm = function () {
@@ -6312,6 +6979,12 @@
         if (playersEl) playersEl.checked = tp.players;
         if (capEl) capEl.checked = tp.captain;
         if (gkEl) gkEl.checked = tp.gk;
+        const squad6 = document.getElementById('tp-squad-size-6');
+        const squad7 = document.getElementById('tp-squad-size-7');
+        if (squad6 && squad7) {
+            if (tp.squadSize === 6) { squad6.checked = true; squad7.checked = false; }
+            else { squad7.checked = true; squad6.checked = false; }
+        }
         if (cardsEl) cardsEl.checked = mp.cardsEnabled;
         if (nameEl) nameEl.checked = mp.cardsRequireName;
         if (nameRow) nameRow.style.display = mp.cardsEnabled ? '' : 'none';
@@ -7772,11 +8445,15 @@
                 : '<span class="live-score-display" style="color:#94a3b8;">–:–</span>';
         } else if (m.played) {
             scoreHTML = '<span class="live-score-display">' + m.g1 + ':' + m.g2 + (m.pen1 != null ? ' <small>(k.' + m.pen1 + ':' + m.pen2 + ')</small>' : '') + '</span>';
+        } else if (isPo && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(m)) {
+            scoreHTML = '<span class="live-score-display" style="color:#94a3b8;" title="' + escAttr(window.getPlayoffMatchNotReadyReason(m)) + '">—</span>';
         } else {
             scoreHTML = renderInlineScoreInputs(m.id, opts.idSuffix || '', isPo);
         }
         const scorersHTML = opts.showScorers
-            ? renderScorersBtn(m.id, isPo, !m.played)
+            ? ((isPo && !m.played && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(m))
+                ? ''
+                : renderScorersBtn(m.id, isPo, !m.played))
             : '';
         const statusHTML = '<span class="live-status-dot ' + (m.played ? 'is-played' : '') + '"></span>';
         const pitchCell = (window.getPitchCount() > 0)
@@ -7848,6 +8525,8 @@
                 : '<span class="live-score-display" style="color:#94a3b8;">–:–</span>';
         } else if (m.played) {
             scoreHTML = '<span class="live-score-display">' + m.g1 + ':' + m.g2 + (m.pen1 != null ? ' <small>(k.' + m.pen1 + ':' + m.pen2 + ')</small>' : '') + '</span>';
+        } else if (isPo && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(m)) {
+            scoreHTML = '<span class="live-score-display" style="color:#94a3b8;" title="' + escAttr(window.getPlayoffMatchNotReadyReason(m)) + '">—</span>';
         } else {
             /* Strzelcy po lewej, potem pola wyniku + zatwierdzenie */
             scoreHTML = (scorersHTML || '') +
@@ -8372,7 +9051,11 @@
 
             saveLastSnapshot();
             const mode = document.getElementById('schedule-mode').value;
-            Object.assign(state.settings, { start: document.getElementById('t-start').value, gDur, gBreak, afterG, poDur, finDur });
+            Object.assign(state.settings, {
+                start: document.getElementById('t-start').value,
+                gDur, gBreak, afterG, poDur, finDur,
+                finalAfterThird: !!(document.getElementById('t-final-after-third') && document.getElementById('t-final-after-third').checked)
+            });
             const pitchEl = document.getElementById('pitch-count');
             if (pitchEl) {
                 let pc = parseInt(pitchEl.value, 10);
@@ -8420,6 +9103,13 @@
             window.renderDashboard();
         };
 
+        window.syncFinalAfterThirdSetting = function (checked) {
+            if (isFanMode || isHallMode || isAssistantMode) return;
+            if (!state.settings) state.settings = {};
+            state.settings.finalAfterThird = !!checked;
+            if (typeof window.save === 'function') window.save();
+        };
+
         window.syncTournamentMetaToForm = () => {
             const nameEl = document.getElementById('tournament-name');
             if (nameEl && state.meta && state.meta.tournamentName && document.activeElement !== nameEl) {
@@ -8428,6 +9118,10 @@
             const pitchEl = document.getElementById('pitch-count');
             if (typeof window.syncPitchCountToForm === 'function' && document.activeElement !== pitchEl) {
                 window.syncPitchCountToForm();
+            }
+            const finalAfterEl = document.getElementById('t-final-after-third');
+            if (finalAfterEl && document.activeElement !== finalAfterEl) {
+                finalAfterEl.checked = !!(state.settings && state.settings.finalAfterThird);
             }
             if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
@@ -8605,6 +9299,10 @@
             }
             if ((m.t1 && m.t1.id === -99) || (m.t2 && m.t2.id === -99)) {
                 alert('Mecz z wolnym losem jest rozstrzygany automatycznie.');
+                return;
+            }
+            if (isPo && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(m)) {
+                alert(window.getPlayoffMatchNotReadyReason(m));
                 return;
             }
             window.syncInlineScoreFromRow(matchId, btnEl);
@@ -9168,7 +9866,11 @@
                                 <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
                             </div>`;
 
-                        let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span></span>` : `<span><b>${esc(s.t.name)}</b></span>`;
+                        let woBadge = '';
+                        const teamSt = state.meta && state.meta.teamStatus && state.meta.teamStatus[s.t.id];
+                        if (teamSt === 'no_show') woBadge = ' <span style="float:right; font-size:10px; font-weight:800; color:#b45309;">WO nieobecność</span>';
+                        else if (teamSt === 'disqualified') woBadge = ' <span style="float:right; font-size:10px; font-weight:800; color:#de350b;">WO dyscyplinarny</span>';
+                        let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span style="display:block;"><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span>${woBadge}</span>` : `<span style="display:block;"><b>${esc(s.t.name)}</b>${woBadge}</span>`;
                         const remisClick = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1) && !hideControls && !fanRo)
                             ? ' style="cursor:pointer;" onclick="openTableOrderDrawer(\'' + gn + '\')" title="Kliknij, aby rozstrzygnąć remis absolutny"'
                             : '';
@@ -9314,9 +10016,16 @@
 
         window.getAdvancingTeamsFull = () => {
             if (!state.groups || Object.keys(state.groups).length === 0) return [];
+            const statusMap = (state.meta && state.meta.teamStatus) || {};
             let allStats = []; Object.keys(state.groups).forEach(gn => { allStats.push(...window.getSortedGroupStats(gn)); });
             allStats.sort((a,b) => a.rank - b.rank || b.pkt - a.pkt || (b.bz-b.bs) - (a.bz-a.bs));
-            let advCount = state.settings.advCount || 4; return allStats.slice(0, advCount).map(s => s.t).filter(t => t !== undefined);
+            let advCount = state.settings.advCount || 4;
+            return allStats.slice(0, advCount).map(s => s.t).filter(t => {
+                if (!t || t === undefined) return false;
+                const st = statusMap[t.id];
+                if (st === 'disqualified' || st === 'no_show') return false;
+                return true;
+            });
         };
 
         window.moveTableTeam = (gn, index, dir) => {
@@ -9359,6 +10068,13 @@
                 if (!confirm('⚠ ' + window.formatUnevenGroupsMessage(sizeInfo) + '\n\nCzy na pewno chcesz wygenerować play-off?')) return;
             }
             saveLastSnapshot();
+            if (!state.settings) state.settings = {};
+            const finalAfterEl = document.getElementById('t-final-after-third');
+            if (finalAfterEl) state.settings.finalAfterThird = !!finalAfterEl.checked;
+            const poDurEl = document.getElementById('t-po-dur');
+            const finDurEl = document.getElementById('t-fin-dur');
+            if (poDurEl) state.settings.poDur = parseInt(poDurEl.value, 10) || state.settings.poDur || 15;
+            if (finDurEl) state.settings.finDur = parseInt(finDurEl.value, 10) || state.settings.finDur || state.settings.poDur || 15;
             const pool = window.getAdvancingTeamsFull();
             let bSize = state.settings.bracketSize || 8;
             if (pool.length <= 4) bSize = 4;
@@ -9374,14 +10090,13 @@
                 state.playoffs.push(
                     {id: 101, n:"1/8 Finału - 1", time:curr, t1:pool[0], t2:pool[15], g1:0, g2:0, played:false, s1:[], s2:[], next:201, slot:'t1'},
                     {id: 102, n:"1/8 Finału - 2", time:curr, t1:pool[7], t2:pool[8], g1:0, g2:0, played:false, s1:[], s2:[], next:201, slot:'t2'},
-                    {id: 103, n:"1/8 Finału - 3", time:window.addMin(curr, parseInt(state.settings.poDur) + 2), t1:pool[3], t2:pool[12], g1:0, g2:0, played:false, s1:[], s2:[], next:202, slot:'t1'},
-                    {id: 104, n:"1/8 Finału - 4", time:window.addMin(curr, parseInt(state.settings.poDur) + 2), t1:pool[4], t2:pool[11], g1:0, g2:0, played:false, s1:[], s2:[], next:202, slot:'t2'},
-                    {id: 105, n:"1/8 Finału - 5", time:window.addMin(curr, (parseInt(state.settings.poDur) + 2)*2), t1:pool[1], t2:pool[14], g1:0, g2:0, played:false, s1:[], s2:[], next:203, slot:'t1'},
-                    {id: 106, n:"1/8 Finału - 6", time:window.addMin(curr, (parseInt(state.settings.poDur) + 2)*2), t1:pool[6], t2:pool[9], g1:0, g2:0, played:false, s1:[], s2:[], next:203, slot:'t2'},
-                    {id: 107, n:"1/8 Finału - 7", time:window.addMin(curr, (parseInt(state.settings.poDur) + 2)*3), t1:pool[2], t2:pool[13], g1:0, g2:0, played:false, s1:[], s2:[], next:204, slot:'t1'},
-                    {id: 108, n:"1/8 Finału - 8", time:window.addMin(curr, (parseInt(state.settings.poDur) + 2)*3), t1:pool[5], t2:pool[10], g1:0, g2:0, played:false, s1:[], s2:[], next:204, slot:'t2'}
+                    {id: 103, n:"1/8 Finału - 3", time:curr, t1:pool[3], t2:pool[12], g1:0, g2:0, played:false, s1:[], s2:[], next:202, slot:'t1'},
+                    {id: 104, n:"1/8 Finału - 4", time:curr, t1:pool[4], t2:pool[11], g1:0, g2:0, played:false, s1:[], s2:[], next:202, slot:'t2'},
+                    {id: 105, n:"1/8 Finału - 5", time:curr, t1:pool[1], t2:pool[14], g1:0, g2:0, played:false, s1:[], s2:[], next:203, slot:'t1'},
+                    {id: 106, n:"1/8 Finału - 6", time:curr, t1:pool[6], t2:pool[9], g1:0, g2:0, played:false, s1:[], s2:[], next:203, slot:'t2'},
+                    {id: 107, n:"1/8 Finału - 7", time:curr, t1:pool[2], t2:pool[13], g1:0, g2:0, played:false, s1:[], s2:[], next:204, slot:'t1'},
+                    {id: 108, n:"1/8 Finału - 8", time:curr, t1:pool[5], t2:pool[10], g1:0, g2:0, played:false, s1:[], s2:[], next:204, slot:'t2'}
                 );
-                curr = window.addMin(curr, (parseInt(state.settings.poDur) + 2)*4 + 5);
             }
 
             if (bSize >= 8) {
@@ -9392,22 +10107,20 @@
                 state.playoffs.push(
                     {id: 201, n:"Ćwierćfinał 1", time:curr, t1:qfT1_1, t2:qfT2_1, g1:0, g2:0, played:false, s1:[], s2:[], next:301, slot:'t1'},
                     {id: 202, n:"Ćwierćfinał 2", time:curr, t1:qfT1_2, t2:qfT2_2, g1:0, g2:0, played:false, s1:[], s2:[], next:301, slot:'t2'},
-                    {id: 203, n:"Ćwierćfinał 3", time:window.addMin(curr, parseInt(state.settings.poDur) + 2), t1:qfT1_3, t2:qfT2_3, g1:0, g2:0, played:false, s1:[], s2:[], next:302, slot:'t1'},
-                    {id: 204, n:"Ćwierćfinał 4", time:window.addMin(curr, parseInt(state.settings.poDur) + 2), t1:qfT1_4, t2:qfT2_4, g1:0, g2:0, played:false, s1:[], s2:[], next:302, slot:'t2'}
+                    {id: 203, n:"Ćwierćfinał 3", time:curr, t1:qfT1_3, t2:qfT2_3, g1:0, g2:0, played:false, s1:[], s2:[], next:302, slot:'t1'},
+                    {id: 204, n:"Ćwierćfinał 4", time:curr, t1:qfT1_4, t2:qfT2_4, g1:0, g2:0, played:false, s1:[], s2:[], next:302, slot:'t2'}
                 );
-                curr = window.addMin(window.addMin(curr, parseInt(state.settings.poDur) + 2), parseInt(state.settings.poDur) + 5);
             }
 
             let sfT1_1 = bSize===4 ? pool[0] : {name:"?"}; let sfT2_1 = bSize===4 ? pool[3] : {name:"?"};
             let sfT1_2 = bSize===4 ? pool[1] : {name:"?"}; let sfT2_2 = bSize===4 ? pool[2] : {name:"?"};
             state.playoffs.push(
                 {id: 301, n:"Półfinał 1", time:curr, t1:sfT1_1, t2:sfT2_1, g1:0, g2:0, played:false, s1:[], s2:[], next:402, slot:'t1', loserNext:401, loserSlot:'t1'},
-                {id: 302, n:"Półfinał 2", time:window.addMin(curr, parseInt(state.settings.poDur) + 2), t1:sfT1_2, t2:sfT2_2, g1:0, g2:0, played:false, s1:[], s2:[], next:402, slot:'t2', loserNext:401, loserSlot:'t2'}
+                {id: 302, n:"Półfinał 2", time:curr, t1:sfT1_2, t2:sfT2_2, g1:0, g2:0, played:false, s1:[], s2:[], next:402, slot:'t2', loserNext:401, loserSlot:'t2'}
             );
-            curr = window.addMin(curr, parseInt(state.settings.poDur) + 2);
             state.playoffs.push(
-                {id: 401, n:"MECZ O 3. MIEJSCE", time:window.addMin(curr, 5), t1:{name:"?"}, t2:{name:"?"}, g1:0, g2:0, played:false, s1:[], s2:[]},
-                {id: 402, n:"WIELKI FINAŁ", time:window.addMin(window.addMin(curr, 5), parseInt(state.settings.poDur) + 5), t1:{name:"?"}, t2:{name:"?"}, g1:0, g2:0, played:false, s1:[], s2:[]}
+                {id: 401, n:"MECZ O 3. MIEJSCE", time:curr, t1:{name:"?"}, t2:{name:"?"}, g1:0, g2:0, played:false, s1:[], s2:[]},
+                {id: 402, n:"WIELKI FINAŁ", time:curr, t1:{name:"?"}, t2:{name:"?"}, g1:0, g2:0, played:false, s1:[], s2:[]}
             );
 
             state.playoffs.forEach(m => {
@@ -9421,9 +10134,13 @@
                 }
             });
 
-            const pitchN = window.getPitchCount();
-            if (pitchN >= 2) {
-                window.assignPlayoffPitchesAndTimes(state.playoffs, poScheduleStart, state.settings, pitchN);
+            const pitchN = Math.max(1, window.getPitchCount() || 1);
+            window.assignPlayoffPitchesAndTimes(state.playoffs, poScheduleStart, state.settings, pitchN);
+            if (typeof window.repairPlayoffScheduleConflicts === 'function') {
+                window.repairPlayoffScheduleConflicts(state.playoffs, state.settings, pitchN);
+            }
+            if (pitchN < 2) {
+                state.playoffs.forEach(m => { if (m) m.pitch = null; });
             }
 
             window.logAction(`Wygenerowano strukturę Play-Off.`);
@@ -9446,6 +10163,10 @@
 
         window.saveMatch = () => {
             if (!state.active) return;
+            if (state.active.isPo && !state.active.played && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(state.active)) {
+                alert(window.getPlayoffMatchNotReadyReason(state.active));
+                return;
+            }
             const newG1 = parseInt(document.getElementById('mG1').value)||0;
             const newG2 = parseInt(document.getElementById('mG2').value)||0;
             let newPen1 = null;
@@ -9743,6 +10464,10 @@
         window.openMatch = (id, isPo=false) => {
             if(isFanMode || isHallMode) return; const m = isPo ? state.playoffs.find(x=>x.id===id) : state.matches.find(x=>x.id===id);
             if(!m || m.t1.id === -99 || m.t2.id === -99) { alert("Mecze z wolnym losem są automatycznie rozstrzygane."); return; }
+            if (isPo && !m.played && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(m)) {
+                alert(window.getPlayoffMatchNotReadyReason(m));
+                return;
+            }
             state.active = JSON.parse(JSON.stringify(m)); state.active.isPo = isPo;
             if (!state.active.s1) state.active.s1 = [];
             if (!state.active.s2) state.active.s2 = [];
