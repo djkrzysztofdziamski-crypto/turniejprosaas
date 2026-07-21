@@ -786,6 +786,7 @@
         #view-app .hall-award-card { padding: 12px 14px; border-radius: 10px; background: linear-gradient(145deg, #172b4d 0%, #1e3a5f 55%, #243b53 100%); color: #f8fafc; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2); border: 1px solid rgba(255,255,255,0.1); }
         #view-app .hall-award-card--scorer { border-left: 4px solid #38bdf8; }
         #view-app .hall-award-card--gk { border-left: 4px solid #fbbf24; }
+        #view-app .hall-award-card--mvp { border-left: 4px solid #fcd34d; }
         #view-app .hall-award-card-label { font-size: clamp(9px, 1vw, 11px); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(248, 250, 252, 0.72); margin-bottom: 6px; }
         #view-app .hall-award-card-player { font-size: clamp(14px, 1.85vw, 22px); font-weight: 800; line-height: 1.2; word-break: break-word; }
         #view-app .hall-award-card-player--ex + .hall-award-card-team { margin-bottom: 6px; }
@@ -926,6 +927,19 @@
             flex-direction: column;
             justify-content: center;
         }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete #hall-live-body {
+            justify-content: flex-start;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete .hall-live-board {
+            flex: 1 1 auto;
+            min-height: 0;
+            place-content: center;
+            margin: 0;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete .hall-podium-wrap {
+            flex-shrink: 0;
+            margin-top: 8px;
+        }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-team-name {
             font-size: clamp(16px, min(3.2vw, 4.5vh), 40px);
         }
@@ -1001,6 +1015,76 @@
             min-height: 0;
             overflow: hidden;
         }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-slot--next {
+            container-type: size;
+            container-name: hall-next;
+        }
+        #view-app .hall-topn-list {
+            --hall-topn-n: 7;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-rows: repeat(var(--hall-topn-n), minmax(0, 1fr));
+            gap: clamp(2px, 0.4vh, 4px);
+            margin: 0;
+            padding: clamp(4px, 0.6vh, 8px);
+            list-style: none;
+            height: 100%;
+            min-height: 0;
+            flex: 1;
+            overflow: hidden;
+            border: 1px solid var(--color-app-border, #e2e8f0);
+            border-radius: var(--radius-md, 10px);
+            background: #fff;
+            box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+        }
+        #view-app .hall-topn-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(4px, 0.6vw, 8px);
+            min-height: 0;
+            min-width: 0;
+            padding: 0 clamp(6px, 0.8vw, 10px);
+            border-radius: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: clamp(9px, 1.5vh, 14px);
+            font-weight: 700;
+            line-height: 1.15;
+            overflow: hidden;
+        }
+        @supports (font-size: 1cqh) {
+            #view-app .hall-topn-row {
+                font-size: clamp(9px, min(calc(85cqh / var(--hall-topn-n, 7)), 1.6vh), 14px);
+            }
+        }
+        #view-app .hall-topn-list[data-n="7"] .hall-topn-row {
+            font-size: clamp(8px, 1.35vh, 13px);
+        }
+        @supports (font-size: 1cqh) {
+            #view-app .hall-topn-list[data-n="7"] .hall-topn-row {
+                font-size: clamp(8px, min(calc(80cqh / 7), 1.4vh), 13px);
+            }
+        }
+        #view-app .hall-topn-rank {
+            flex-shrink: 0;
+            width: 1.35em;
+            color: #64748b;
+            font-weight: 800;
+        }
+        #view-app .hall-topn-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #172b4d;
+        }
+        #view-app .hall-topn-team {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.92em;
+        }
+        #view-app .hall-topn-empty .hall-topn-name { color: #94a3b8; font-weight: 600; }
         body.hall-view #view-app .hall-demo-match-table-wrap {
             border: 1px solid var(--color-app-border);
             border-radius: var(--radius-md, 10px);
@@ -1454,6 +1538,48 @@
         #view-app .award-box b { font-size: 16px; display: block; margin-top: 6px; line-height: 1.45; font-weight: normal; }
         #view-app .award-box .podium-award-player { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.02em; }
         #view-app .award-box .podium-award-team { font-size: 13px; color: #c7d2fe; font-weight: 700; }
+        /* Kompaktowe podium */
+        #view-app .podium-compact { max-width: 720px; margin: 0 auto; }
+        #view-app .podium-compact-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+        #view-app .podium-compact-title { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; margin: 0 0 8px; }
+        #view-app .podium-team-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 14px; font-weight: 700; line-height: 1.25; }
+        #view-app .podium-team-row:last-child { margin-bottom: 0; }
+        #view-app .podium-team-row--1 { background: #fffbeb; border: 1px solid #fcd34d; color: #172b4d; }
+        #view-app .podium-team-row--2 { background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; }
+        #view-app .podium-team-row--3 { background: #fff7ed; border: 1px solid #fdba74; color: #7c2d12; }
+        #view-app .podium-team-place { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.75; min-width: 72px; }
+        #view-app .podium-team-name { flex: 1; min-width: 0; word-break: break-word; }
+        #view-app .podium-awards-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #view-app .podium-awards-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; padding: 4px 6px; border-bottom: 1px solid #e2e8f0; }
+        #view-app .podium-awards-table td { padding: 8px 6px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+        #view-app .podium-awards-table tr:last-child td { border-bottom: none; }
+        #view-app .podium-award-label { font-weight: 800; color: #172b4d; white-space: nowrap; width: 34%; }
+        #view-app .podium-award-value { font-weight: 700; color: #0f172a; }
+        #view-app .podium-award-team { font-weight: 600; color: #64748b; }
+        #view-app .podium-award-meta { font-size: 12px; color: #64748b; font-weight: 600; margin-top: 2px; }
+        #view-app .podium-award-fields { display: flex; flex-direction: column; gap: 6px; }
+        #view-app .podium-award-select,
+        #view-app .podium-award-input {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 6px 8px;
+            font-size: 13px;
+            border: 1px solid #c1c7d0;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            background: #fff;
+            color: #172b4d;
+        }
+        #view-app .podium-top-details { margin-top: 6px; font-size: 12px; }
+        #view-app .podium-top-details summary { cursor: pointer; color: #0052cc; font-weight: 700; list-style: none; }
+        #view-app .podium-top-details summary::-webkit-details-marker { display: none; }
+        #view-app .podium-top-details[open] summary { margin-bottom: 6px; }
+        #view-app .podium-xi-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #view-app .podium-xi-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; padding: 4px 6px; border-bottom: 1px solid #e2e8f0; }
+        #view-app .podium-xi-table td { padding: 6px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        #view-app .podium-xi-table td.col-num { width: 36px; font-weight: 800; color: #0052cc; }
+        #view-app .podium-xi-empty { color: #94a3b8; font-weight: 600; }
         #view-app .podium-top-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2590,6 +2716,19 @@
             justify-content: center;
             gap: 4px;
         }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete #hall-live-body {
+            justify-content: flex-start;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete .hall-live-board {
+            flex: 1 1 auto;
+            min-height: 0;
+            place-content: center;
+            margin: 0;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete .hall-podium-wrap {
+            flex-shrink: 0;
+            margin-top: 8px;
+        }
         #view-demo-story .demo-hall-embed-host .hall-demo-qr-cell {
             grid-area: qr;
             display: flex !important;
@@ -2650,6 +2789,76 @@
             min-height: 0;
             overflow: hidden;
         }
+        #view-demo-story .demo-hall-embed-host .hall-demo-slot--next {
+            container-type: size;
+            container-name: hall-next;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-list {
+            --hall-topn-n: 7;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-rows: repeat(var(--hall-topn-n), minmax(0, 1fr));
+            gap: clamp(2px, 0.4vh, 4px);
+            margin: 0;
+            padding: clamp(4px, 0.6vh, 8px);
+            list-style: none;
+            height: 100%;
+            min-height: 0;
+            flex: 1;
+            overflow: hidden;
+            border: 1px solid var(--color-app-border, #e2e8f0);
+            border-radius: var(--radius-md, 10px);
+            background: #fff;
+            box-shadow: var(--shadow-card, 0 2px 12px rgba(11,31,51,0.08));
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(4px, 0.6vw, 8px);
+            min-height: 0;
+            min-width: 0;
+            padding: 0 clamp(6px, 0.8vw, 10px);
+            border-radius: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: clamp(9px, 1.5vh, 14px);
+            font-weight: 700;
+            line-height: 1.15;
+            overflow: hidden;
+        }
+        @supports (font-size: 1cqh) {
+            #view-demo-story .demo-hall-embed-host .hall-topn-row {
+                font-size: clamp(9px, min(calc(85cqh / var(--hall-topn-n, 7)), 1.6vh), 14px);
+            }
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-list[data-n="7"] .hall-topn-row {
+            font-size: clamp(8px, 1.35vh, 13px);
+        }
+        @supports (font-size: 1cqh) {
+            #view-demo-story .demo-hall-embed-host .hall-topn-list[data-n="7"] .hall-topn-row {
+                font-size: clamp(8px, min(calc(80cqh / 7), 1.4vh), 13px);
+            }
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-rank {
+            flex-shrink: 0;
+            width: 1.35em;
+            color: #64748b;
+            font-weight: 800;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #172b4d;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-team {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.92em;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-topn-empty .hall-topn-name { color: #94a3b8; font-weight: 600; }
         #view-demo-story .demo-hall-embed-host .hall-demo-match-table-wrap {
             border: 1px solid var(--color-app-border);
             border-radius: var(--radius-md, 10px);
@@ -5853,8 +6062,132 @@
         return {
             players: !!tp.players,
             captain: !!tp.captain,
-            gk: !!tp.gk
+            gk: !!tp.gk,
+            squadSize: parseInt(tp.squadSize, 10) === 6 ? 6 : 7
         };
+    };
+
+    window.getSquadSize = function () {
+        return window.getTeamParams().squadSize;
+    };
+
+    window.getAwardsMeta = function () {
+        if (!state.meta) state.meta = {};
+        if (!state.meta.awards || typeof state.meta.awards !== 'object') {
+            state.meta.awards = { mvp: null, allStar: [] };
+        }
+        if (!Array.isArray(state.meta.awards.allStar)) state.meta.awards.allStar = [];
+        return state.meta.awards;
+    };
+
+    window.trimAwardsToSquadSize = function () {
+        const awards = window.getAwardsMeta();
+        const n = window.getSquadSize();
+        if (awards.allStar.length > n) awards.allStar = awards.allStar.slice(0, n);
+        while (awards.allStar.length < n) awards.allStar.push(null);
+        return awards;
+    };
+
+    window.getMvpAward = function () {
+        const awards = window.getAwardsMeta();
+        const mvp = awards.mvp;
+        if (!mvp || typeof mvp !== 'object') return null;
+        const name = String(mvp.name || '').trim();
+        if (!name) return null;
+        let teamId = (mvp.teamId != null && mvp.teamId !== '') ? mvp.teamId : null;
+        let teamName = String(mvp.teamName || '').trim();
+        if (teamId != null) {
+            const t = (state.teams || []).find(function (x) { return x && String(x.id) === String(teamId); });
+            if (t && t.name) teamName = String(t.name).trim();
+        }
+        return { name: name, teamId: teamId, teamName: teamName };
+    };
+
+    window.setAwardMvp = function (opts) {
+        opts = opts || {};
+        const awards = window.getAwardsMeta();
+        const name = String(opts.name != null ? opts.name : '').trim();
+        if (!name) {
+            awards.mvp = null;
+        } else {
+            let teamId = (opts.teamId != null && opts.teamId !== '') ? opts.teamId : null;
+            let teamName = '';
+            if (teamId != null) {
+                const t = (state.teams || []).find(function (x) { return x && String(x.id) === String(teamId); });
+                if (t) {
+                    teamId = t.id;
+                    teamName = String(t.name || '').trim();
+                } else {
+                    teamId = null;
+                }
+            }
+            if (!teamName && opts.teamName) teamName = String(opts.teamName).trim();
+            awards.mvp = { name: name, teamId: teamId, teamName: teamName };
+        }
+        window._hallLiveRenderSig = '';
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.renderHallView === 'function' && typeof isHallMode !== 'undefined' && isHallMode) {
+            window.renderHallView();
+        }
+    };
+
+    window.commitAwardMvpFromForm = function () {
+        const nameEl = document.getElementById('award-mvp-name');
+        const teamEl = document.getElementById('award-mvp-team');
+        if (!nameEl) return;
+        window.setAwardMvp({
+            name: nameEl.value,
+            teamId: teamEl ? teamEl.value : ''
+        });
+    };
+
+    window.setAllStarSlot = function (index, opts) {
+        opts = opts || {};
+        const awards = window.trimAwardsToSquadSize();
+        const i = parseInt(index, 10);
+        if (isNaN(i) || i < 0 || i >= awards.allStar.length) return;
+        const name = String(opts.name != null ? opts.name : '').trim();
+        if (!name) {
+            awards.allStar[i] = null;
+        } else {
+            let teamId = (opts.teamId != null && opts.teamId !== '') ? opts.teamId : null;
+            let teamName = '';
+            if (teamId != null) {
+                const t = (state.teams || []).find(function (x) { return x && String(x.id) === String(teamId); });
+                if (t) {
+                    teamId = t.id;
+                    teamName = String(t.name || '').trim();
+                } else {
+                    teamId = null;
+                }
+            }
+            if (!teamName && opts.teamName) teamName = String(opts.teamName).trim();
+            awards.allStar[i] = { name: name, teamId: teamId, teamName: teamName };
+        }
+        window._hallDemoListsSig = '';
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.renderHallView === 'function' && typeof isHallMode !== 'undefined' && isHallMode) {
+            window.renderHallView();
+        }
+    };
+
+    window.commitAllStarSlotFromForm = function (index) {
+        const nameEl = document.getElementById('award-xi-name-' + index);
+        const teamEl = document.getElementById('award-xi-team-' + index);
+        if (!nameEl) return;
+        window.setAllStarSlot(index, {
+            name: nameEl.value,
+            teamId: teamEl ? teamEl.value : ''
+        });
+    };
+
+    window.formatMvpAwardHTML = function (mvp) {
+        const m = mvp && mvp.name ? mvp : (typeof window.getMvpAward === 'function' ? window.getMvpAward() : null);
+        if (!m || !m.name) return '—';
+        if (typeof window.formatPlayerAwardHTML === 'function') {
+            return window.formatPlayerAwardHTML(m.name, m.teamName || '');
+        }
+        return esc(m.name) + (m.teamName ? ' (' + esc(m.teamName) + ')' : '');
     };
 
     window.getMatchParams = function () {
@@ -5913,6 +6246,9 @@
         if ((state.settings.teamParams.captain || state.settings.teamParams.gk) && !state.settings.teamParams.players) {
             state.settings.teamParams.players = true;
         }
+        if (parseInt(state.settings.teamParams.squadSize, 10) !== 6) {
+            state.settings.teamParams.squadSize = 7;
+        }
     };
 
     window.syncTeamParamsFromForm = function () {
@@ -5934,7 +6270,12 @@
             if (capEl) capEl.checked = false;
             if (gkEl) gkEl.checked = false;
         }
-        state.settings.teamParams = { players: players, captain: captain, gk: gk };
+        state.settings.teamParams = {
+            players: players,
+            captain: captain,
+            gk: gk,
+            squadSize: parseInt((state.settings.teamParams && state.settings.teamParams.squadSize), 10) === 6 ? 6 : 7
+        };
         window.save();
         if (typeof window.renderInputs === 'function') window.renderInputs();
     };
@@ -6681,7 +7022,17 @@
         const scorerName = sc && sc.name ? esc(sc.name) : '—';
         const scorerTeam = sc && sc.team ? esc(sc.team) : '';
         const scorerStat = (s.scorer && s.scorer[1]) ? window.formatPolishGoals(s.scorer[1]) : '';
+        const mvp = (typeof window.getMvpAward === 'function') ? window.getMvpAward() : null;
+        const mvpName = mvp && mvp.name
+            ? esc((typeof window.formatPodiumPersonName === 'function') ? window.formatPodiumPersonName(mvp.name) : mvp.name)
+            : '—';
+        const mvpTeam = mvp && mvp.teamName ? esc(mvp.teamName) : '';
         return '<div class="hall-podium-awards">' +
+            '<div class="hall-award-card hall-award-card--mvp">' +
+            '<div class="hall-award-card-label">⭐ MVP turnieju</div>' +
+            '<div class="hall-award-card-player">' + mvpName + '</div>' +
+            (mvpTeam ? '<div class="hall-award-card-team">' + mvpTeam + '</div>' : '') +
+            '</div>' +
             '<div class="hall-award-card hall-award-card--scorer">' +
             '<div class="hall-award-card-label">⚽ Król strzelców</div>' +
             '<div class="hall-award-card-player">' + scorerName + '</div>' +
@@ -6745,7 +7096,9 @@
         const labelEl = document.getElementById('hall-live-label');
         if (!panel || !bodyEl) return;
 
-        const renderSig = 'complete:' + hallMatchBrief(podium.final) + ':' + podium.g1 + ':' + podium.g2;
+        const mvp = (typeof window.getMvpAward === 'function') ? window.getMvpAward() : null;
+        const mvpSig = mvp ? (mvp.name + '|' + (mvp.teamName || '')) : '';
+        const renderSig = 'complete:' + hallMatchBrief(podium.final) + ':' + podium.g1 + ':' + podium.g2 + ':' + mvpSig;
         if (window._hallLiveRenderSig === renderSig && bodyEl.querySelector('.hall-live-board')) {
             window._hallLiveScoreKey = renderSig;
             return;
@@ -7033,12 +7386,62 @@
         return sorted.slice(0, limit || 3);
     }
 
+    function renderHallTopNListHTML() {
+        if (typeof window.trimAwardsToSquadSize === 'function') window.trimAwardsToSquadSize();
+        const awards = (typeof window.getAwardsMeta === 'function') ? window.getAwardsMeta() : { allStar: [] };
+        const n = (typeof window.getSquadSize === 'function') ? window.getSquadSize() : 7;
+        const slots = Array.isArray(awards.allStar) ? awards.allStar : [];
+        let rows = '';
+        for (let i = 0; i < n; i++) {
+            const slot = slots[i];
+            const nameRaw = slot && slot.name ? slot.name : '';
+            const nameFmt = nameRaw && typeof window.formatPodiumPersonName === 'function'
+                ? window.formatPodiumPersonName(nameRaw)
+                : nameRaw;
+            const team = slot && slot.teamName ? slot.teamName : '';
+            if (nameFmt) {
+                rows += '<li class="hall-topn-row">' +
+                    '<span class="hall-topn-rank">' + (i + 1) + '.</span>' +
+                    '<span class="hall-topn-name">' + esc(nameFmt) +
+                    (team ? ' <span class="hall-topn-team">(' + esc(team) + ')</span>' : '') +
+                    '</span></li>';
+            } else {
+                rows += '<li class="hall-topn-row hall-topn-empty">' +
+                    '<span class="hall-topn-rank">' + (i + 1) + '.</span>' +
+                    '<span class="hall-topn-name">—</span></li>';
+            }
+        }
+        return '<ul class="hall-topn-list" data-n="' + n + '" style="--hall-topn-n:' + n + '">' + rows + '</ul>';
+    }
+
     window.renderHallDemoSixteenLists = function () {
         const nextEl = document.getElementById('hall-demo-next-list');
         const doneEl = document.getElementById('hall-demo-done-list');
         if (!nextEl || !doneEl) return;
         if (!window._demoStoryOrganizerEmbed && !isHallMode) return;
 
+        const nextPanel = document.getElementById('hall-demo-next-panel');
+        const nextLabel = nextPanel ? nextPanel.querySelector('.hall-next-label') : null;
+        const podiumDone = typeof window.getHallTournamentPodium === 'function' && !!window.getHallTournamentPodium();
+
+        if (podiumDone) {
+            if (typeof window.trimAwardsToSquadSize === 'function') window.trimAwardsToSquadSize();
+            const awards = (typeof window.getAwardsMeta === 'function') ? window.getAwardsMeta() : { allStar: [] };
+            const n = (typeof window.getSquadSize === 'function') ? window.getSquadSize() : 7;
+            const allStarSig = (awards.allStar || []).map(function (x) {
+                return x ? (x.playerId || x.name || '') : '';
+            }).join(',');
+            const sig = 'topn:' + n + ':' + allStarSig;
+            if (sig === window._hallDemoListsSig) return;
+            window._hallDemoListsSig = sig;
+            if (nextLabel) nextLabel.textContent = 'Top ' + n + ' piłkarzy turnieju';
+            nextEl.innerHTML = renderHallTopNListHTML();
+            const done = getHallDemoDoneMatches(3);
+            doneEl.innerHTML = renderHallDemoMatchTable(done, 'Brak zakończonych meczów');
+            return;
+        }
+
+        if (nextLabel) nextLabel.textContent = 'Mecze następne';
         const next = getHallDemoNextMatches(3);
         const done = getHallDemoDoneMatches(3);
         const sig = 'n:' + next.map(hallMatchBrief).join(',') + '|d:' + done.map(hallMatchBrief).join(',');
@@ -10079,6 +10482,160 @@
             }
         };
 
+        window.buildPodiumTeamOptionsHTML = function (selectedTeamId) {
+            const teamIdVal = selectedTeamId != null && selectedTeamId !== '' ? String(selectedTeamId) : '';
+            let opts = '<option value="">— drużyna —</option>';
+            (state.teams || []).forEach(function (t) {
+                if (!t || t.id == null) return;
+                const sel = String(t.id) === teamIdVal ? ' selected' : '';
+                opts += '<option value="' + escAttr(String(t.id)) + '"' + sel + '>' + esc(t.name || '') + '</option>';
+            });
+            return opts;
+        };
+
+        window.buildPodiumAwardPersonHTML = function (entry) {
+            if (!entry || !entry.name) return '<span class="podium-xi-empty">—</span>';
+            const person = window.formatPodiumPersonName(entry.name);
+            return '<span class="podium-award-value">' + esc(person) + '</span>' +
+                (entry.teamName ? ' <span class="podium-award-team">(' + esc(entry.teamName) + ')</span>' : '');
+        };
+
+        window.buildPodiumManualPersonFieldsHTML = function (entry, nameId, teamId, commitFn) {
+            const nameVal = entry && entry.name ? entry.name : '';
+            const teamVal = entry && entry.teamId != null ? entry.teamId : '';
+            return '<div class="podium-award-fields">' +
+                '<input type="text" class="podium-award-input" id="' + nameId + '" maxlength="80" placeholder="Imię i nazwisko" value="' + escAttr(nameVal) + '" ' +
+                'onblur="' + commitFn + '" onkeydown="if(event.key===\'Enter\'){this.blur();}">' +
+                '<select class="podium-award-select" id="' + teamId + '" onchange="' + commitFn + '">' +
+                window.buildPodiumTeamOptionsHTML(teamVal) +
+                '</select></div>';
+        };
+
+        window.buildPodiumScorerTop3DetailsHTML = function (stats) {
+            const rawTopSc = (stats && stats.topSc) ? stats.topSc.filter(Boolean) : [];
+            if (!rawTopSc.length) return '<div class="podium-xi-empty">Brak wpisów</div>';
+            const topSc = window.padTopN(rawTopSc, 3);
+            return topSc.map(function (x, i) {
+                if (!x) return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>';
+                const p = window.parseScorerEntry(x);
+                const person = window.formatPodiumPersonName(p && p.name ? p.name : '—');
+                const team = p && p.team ? p.team : '';
+                return '<div class="podium-top-row">' +
+                    '<span class="podium-top-rank">' + (i + 1) + '.</span> ' + esc(person) +
+                    (team ? ' <span class="podium-top-team">(' + esc(team) + ')</span>' : '') +
+                    ' — ' + esc(window.formatPolishGoals(x[1])) +
+                    '</div>';
+            }).join('');
+        };
+
+        window.buildPodiumGkTop3DetailsHTML = function (stats) {
+            let gkRows = window.buildGoalkeepersTopRanked(stats.allGk || stats.topGk || [], 3).slice(0, 3);
+            if (!gkRows.some(function (row) { return row && row.gk; })) {
+                return '<div class="podium-xi-empty">Brak wpisów</div>';
+            }
+            gkRows = window.padTopN(gkRows, 3);
+            return gkRows.map(function (row, i) {
+                if (!row || !row.gk) {
+                    return '<div class="podium-top-row podium-top-empty"><span class="podium-top-rank">' + (i + 1) + '.</span> —</div>';
+                }
+                const label = window.formatGkRankLabel(row.rank, row.ex);
+                const person = window.formatPodiumPersonName(row.gk.n);
+                return '<div class="podium-top-row">' +
+                    '<span class="podium-top-rank">' + label + '</span> ' + esc(person) +
+                    ' <span class="podium-top-team">(' + esc(row.gk.t) + ')</span>' +
+                    ' — ' + esc(window.formatGkStatLabel(row.gk)) +
+                    '</div>';
+            }).join('');
+        };
+
+        window.buildPodiumAwardsHTML = function (stats) {
+            if (typeof window.trimAwardsToSquadSize === 'function') window.trimAwardsToSquadSize();
+            const mvp = (typeof window.getMvpAward === 'function') ? window.getMvpAward() : null;
+            const canEdit = !isFanMode && !isHallMode && !isAssistantMode
+                && !archiveId && !localArchiveId
+                && !window._demoStoryFanEmbed
+                && !window._demoStoryPodiumEmbed;
+
+            const scorerP = window.parseScorerEntry(stats && stats.scorer);
+            const scorerHTML = scorerP
+                ? ('<span class="podium-award-value">' + esc(window.formatPodiumPersonName(scorerP.name)) + '</span>' +
+                    (scorerP.team ? ' <span class="podium-award-team">(' + esc(scorerP.team) + ')</span>' : '') +
+                    (stats.scorer && stats.scorer[1] != null
+                        ? '<div class="podium-award-meta">' + esc(window.formatPolishGoals(stats.scorer[1])) + '</div>'
+                        : ''))
+                : '<span class="podium-xi-empty">—</span>';
+
+            const gkWinners = (typeof window.buildGoalkeepersTopRanked === 'function' && stats && stats.allGk)
+                ? window.buildGoalkeepersTopRanked(stats.allGk, 1)
+                : (stats && stats.gk ? [{ gk: stats.gk }] : []);
+            let gkHTML = '<span class="podium-xi-empty">—</span>';
+            if (gkWinners.length) {
+                gkHTML = gkWinners.map(function (row) {
+                    return '<span class="podium-award-value">' + esc(window.formatPodiumPersonName(row.gk.n)) + '</span>' +
+                        ' <span class="podium-award-team">(' + esc(row.gk.t) + ')</span>' +
+                        '<div class="podium-award-meta">' + esc(window.formatGkStatLabel(row.gk)) +
+                        (gkWinners.length > 1 ? ' · ex aequo' : '') + '</div>';
+                }).join('');
+            }
+
+            const mvpCell = canEdit
+                ? window.buildPodiumManualPersonFieldsHTML(mvp, 'award-mvp-name', 'award-mvp-team', 'commitAwardMvpFromForm()')
+                : window.buildPodiumAwardPersonHTML(mvp);
+
+            return '<div class="podium-compact-card">' +
+                '<div class="podium-compact-title">Nagrody indywidualne</div>' +
+                '<table class="podium-awards-table"><tbody>' +
+                '<tr><td class="podium-award-label">MVP turnieju</td><td>' + mvpCell + '</td></tr>' +
+                '<tr><td class="podium-award-label">Król strzelców</td><td>' + scorerHTML +
+                '<details class="podium-top-details"><summary>Top 3 strzelców</summary>' +
+                window.buildPodiumScorerTop3DetailsHTML(stats) + '</details></td></tr>' +
+                '<tr><td class="podium-award-label">Złota rękawica</td><td>' + gkHTML +
+                '<details class="podium-top-details"><summary>Top 3 bramkarzy</summary>' +
+                window.buildPodiumGkTop3DetailsHTML(stats) + '</details></td></tr>' +
+                '</tbody></table></div>';
+        };
+
+        window.buildPodiumXiHTML = function () {
+            if (typeof window.trimAwardsToSquadSize === 'function') window.trimAwardsToSquadSize();
+            const awards = window.getAwardsMeta();
+            const n = window.getSquadSize();
+            const canEdit = !isFanMode && !isHallMode && !isAssistantMode
+                && !archiveId && !localArchiveId
+                && !window._demoStoryFanEmbed
+                && !window._demoStoryPodiumEmbed;
+            let rows = '';
+            for (let i = 0; i < n; i++) {
+                const slot = awards.allStar[i];
+                const cell = canEdit
+                    ? window.buildPodiumManualPersonFieldsHTML(
+                        slot,
+                        'award-xi-name-' + i,
+                        'award-xi-team-' + i,
+                        'commitAllStarSlotFromForm(' + i + ')'
+                    )
+                    : window.buildPodiumAwardPersonHTML(slot);
+                rows += '<tr><td class="col-num">' + (i + 1) + '</td><td>' + cell + '</td></tr>';
+            }
+            return '<div class="podium-compact-card">' +
+                '<div class="podium-compact-title">Top ' + n + ' piłkarzy turnieju</div>' +
+                '<table class="podium-xi-table"><thead><tr><th>#</th><th>Zawodnik</th></tr></thead><tbody>' +
+                rows + '</tbody></table></div>';
+        };
+
+        window.buildPodiumTeamsCompactHTML = function (gold, silver, bronze) {
+            const row = function (place, cls, team) {
+                return '<div class="podium-team-row podium-team-row--' + place + '">' +
+                    '<span class="podium-team-place">' + cls + '</span>' +
+                    '<span class="podium-team-name">' + esc(team && team.name ? team.name : '—') + '</span></div>';
+            };
+            return '<div class="podium-compact-card">' +
+                '<div class="podium-compact-title">Podium</div>' +
+                row(1, '1. miejsce', gold) +
+                row(2, '2. miejsce', silver) +
+                row(3, '3. miejsce', bronze) +
+                '</div>';
+        };
+
         window.renderPodium = () => {
             const s = window.calcStats(); const f = window.findGrandFinalMatch(); const m3 = (state.playoffs||[]).find(m=>m.n.includes("3. MIEJSCE"));
             if(!f?.played || !window.isMatchDecided(f)) {
@@ -10096,7 +10653,11 @@
             const getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
             const gold = getW(f); const silver = getL(f); const bronze = m3?.played ? getW(m3) : {name:"—"};
 
-            let podiumHTML = `<div class="podium-scene"><div class="podium-main"><div class="podium-winner">🏆 ${esc(gold.name)}</div></div><div class="steps"><div class="step silver">🥈 2. MIEJSCE<br>${esc(silver.name)}</div><div class="step gold">🥇 1. MIEJSCE<br>${esc(gold.name)}</div><div class="step bronze">🥉 3. MIEJSCE<br>${esc(bronze.name)}</div></div><div class="awards-banner"><div class="award-box"><h4>⚽ KRÓL STRZELCÓW</h4><b>${window.formatScorerAwardHTML(s.scorer)}</b></div><div class="award-box"><h4>🧤 ZŁOTA RĘKAWICA</h4><b>${window.formatGkAwardHTML(s.gk, s.allGk)}</b></div></div>${window.buildPodiumTopListsHTML(s)}</div>`;
+            let podiumHTML = '<div class="podium-compact">' +
+                window.buildPodiumTeamsCompactHTML(gold, silver, bronze) +
+                window.buildPodiumAwardsHTML(s) +
+                window.buildPodiumXiHTML() +
+                '</div>';
             if (window._demoStoryPodiumEmbed) {
                 podiumHTML += `<p style="text-align:center; font-size:12px; color:#00875a; margin-top:16px; font-weight:bold;">✓ Wyliczone automatycznie z protokołu meczowego</p>`;
             }

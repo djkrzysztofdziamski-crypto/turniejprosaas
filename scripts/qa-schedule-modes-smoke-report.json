@@ -1,0 +1,112 @@
+{
+  "startedAt": "2026-07-21T15:16:03.980Z",
+  "environment": {
+    "port": 8080
+  },
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0
+  },
+  "results": [
+    {
+      "name": "1. UI schedule-mode",
+      "ok": true,
+      "detail": "3 opcje: block, random, waves",
+      "at": "2026-07-21T15:16:07.598Z"
+    },
+    {
+      "name": "2. block / pc=1 / 3 grupy",
+      "ok": true,
+      "detail": "0 konfliktów, 18 meczów",
+      "at": "2026-07-21T15:16:07.610Z"
+    },
+    {
+      "name": "3. block / pc=2 / 3 grupy",
+      "ok": true,
+      "detail": "0 konfliktów, 18 meczów, boiska=1,2",
+      "at": "2026-07-21T15:16:07.618Z"
+    },
+    {
+      "name": "4. random x5 / pc=2 / 3 grupy",
+      "ok": true,
+      "detail": "wszystkie 5: 0 konfliktów [0,0,0,0,0]",
+      "at": "2026-07-21T15:16:07.700Z"
+    },
+    {
+      "name": "5. waves / pc=1 / rotacja A→B→C",
+      "ok": true,
+      "detail": "0 konfliktów, waveOrder=A,B,C",
+      "at": "2026-07-21T15:16:07.707Z"
+    },
+    {
+      "name": "6. waves / pc=2 / okno A+B→B+C",
+      "ok": true,
+      "detail": "0 konfliktów, waveOrder=A,B,B,C",
+      "at": "2026-07-21T15:16:07.712Z"
+    },
+    {
+      "name": "7. waves / pc=3 / 4 grupy",
+      "ok": true,
+      "detail": "0 konfliktów, waveOrder=A,B,C, matches=24",
+      "at": "2026-07-21T15:16:07.717Z"
+    },
+    {
+      "name": "8. block / pc=4 (>= grup)",
+      "ok": true,
+      "detail": "0 konfliktów, boiska=1,2,3,4, matches=12",
+      "at": "2026-07-21T15:16:07.721Z"
+    },
+    {
+      "name": "9. waves / 5+5 / pc=1",
+      "ok": true,
+      "detail": "0 konfliktów, sizes=5+5, matches=20",
+      "at": "2026-07-21T15:16:07.726Z"
+    },
+    {
+      "name": "10. invariant odpoczynku (2+5+6)",
+      "ok": true,
+      "detail": "brak naruszeń minGap we wszystkich 3 scenariuszach",
+      "at": "2026-07-21T15:16:07.744Z"
+    },
+    {
+      "name": "11. 9 drużyn / 3 grupy / pc=3 — wszystkie boiska",
+      "ok": true,
+      "detail": "block: parallel=3 pitches=[1,2,3] firstSlot=[1,2,3] conflicts=0 | random: parallel=3 pitches=[1,2,3] firstSlot=[1,2,3] conflicts=0 | waves: parallel=3 pitches=[1,2,3] firstSlot=[1,2,3] conflicts=0",
+      "at": "2026-07-21T15:16:07.759Z"
+    },
+    {
+      "name": "12. 9/2/pc=3 waves — bez chudych 3→1→3",
+      "ok": true,
+      "detail": "slotSizes=[3,3,3,3,2,2] maxParallel=3",
+      "at": "2026-07-21T15:16:07.763Z"
+    },
+    {
+      "name": "13. walkower 3:0 + preview repack",
+      "ok": true,
+      "detail": "wo=4 diff=8 revert=4 pairsSame=true conflicts=0/0",
+      "at": "2026-07-21T15:16:07.777Z"
+    },
+    {
+      "name": "14. retro_dq po grupie + cofnij + playoff",
+      "ok": true,
+      "detail": "wo=3 pairs=true playoffsCleared=true advOk=true restored=true",
+      "at": "2026-07-21T15:16:07.832Z"
+    },
+    {
+      "name": "15. play-off 4/pc=2 równoległe SF + gap",
+      "ok": true,
+      "detail": "SF 11:08 B1/2 3M=11:36 F=11:36 parallelFin=true waitF=11:56 after3=11:56 issues=0/0",
+      "at": "2026-07-21T15:16:07.839Z"
+    },
+    {
+      "name": "16. blokada wyniku 3M przed SF",
+      "ok": true,
+      "detail": "notReady=true blocked=true readyAfterSF=true saved=true sides=Team 4/Team 3",
+      "at": "2026-07-21T15:16:07.857Z"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-07-21T15:16:07.857Z",
+  "durationSec": 4
+}
