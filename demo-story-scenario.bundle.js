@@ -61,8 +61,8 @@ window.DEMO_SCENARIO_BUNDLE = {
       },
       {
         "id": "t03",
-        "name": "UKS Akademia Piłkarska Poznań",
-        "shortName": "Akademia",
+        "name": "UKS AP Poznań",
+        "shortName": "UKS AP",
         "groupId": "A",
         "city": "Poznań"
       },
@@ -1057,7 +1057,7 @@ window.DEMO_SCENARIO_BUNDLE = {
           {
             "position": 3,
             "teamId": "t03",
-            "teamName": "UKS Akademia Piłkarska Poznań",
+            "teamName": "UKS AP Poznań",
             "played": 3,
             "won": 1,
             "drawn": 0,

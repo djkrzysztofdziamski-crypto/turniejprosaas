@@ -28,8 +28,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=20260723fan1line"></script>
-    <script src="demo-story.js?v=20260723fan1line"></script>
+    <script src="demo-story-scenario.bundle.js?v=20260723cols"></script>
+    <script src="demo-story.js?v=20260723cols"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -2084,6 +2084,23 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+        /* Boisko / Wynik jak Grupa — readonly nie potrzebuje szerokości pod inputy */
+        body.fan-view #view-app .live-match-table col.col-pitch,
+        body.fan-view #view-app .live-match-table col.col-group,
+        #view-demo-story .demo-embed-app .live-match-table col.col-pitch,
+        #view-demo-story .demo-embed-app .live-match-table col.col-group {
+            width: 42px;
+        }
+        body.fan-view #view-app .live-match-table col.col-score,
+        #view-demo-story .demo-embed-app .live-match-table col.col-score {
+            width: 48px;
+        }
+        body.fan-view #view-app .live-match-table th.col-teams,
+        #view-demo-story .demo-embed-app .live-match-table th.col-teams {
+            text-align: center;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
         body.fan-view #view-app .live-match-teams,
         body.fan-view #view-app .live-match-teams .live-team-name,
         #view-demo-story .demo-embed-app .live-match-teams,
@@ -2091,6 +2108,17 @@
             white-space: nowrap;
             overflow-wrap: normal;
             word-break: normal;
+            max-width: none;
+            font-size: clamp(9px, 2.6vw, 12px);
+        }
+        body.fan-view #view-app .live-match-teams .live-teams-vs,
+        #view-demo-story .demo-embed-app .live-match-teams .live-teams-vs {
+            font-size: clamp(8px, 2.2vw, 9px);
+            margin: 0 2px;
+        }
+        body.fan-view #view-app .live-cards-badge,
+        #view-demo-story .demo-embed-app .live-cards-badge {
+            font-size: clamp(8px, 2.2vw, 10px);
         }
         @media (max-width: 767px) {
             body.fan-view #view-app .live-match-table,
@@ -2109,13 +2137,21 @@
             body.fan-view #view-app .live-match-table col.col-no,
             #view-demo-story .demo-embed-app .live-match-table col.col-no { width: 28px; }
             body.fan-view #view-app .live-match-table col.col-group,
-            #view-demo-story .demo-embed-app .live-match-table col.col-group { width: 36px; }
+            body.fan-view #view-app .live-match-table col.col-pitch,
+            #view-demo-story .demo-embed-app .live-match-table col.col-group,
+            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 36px; }
             body.fan-view #view-app .live-match-table col.col-time,
             #view-demo-story .demo-embed-app .live-match-table col.col-time { width: 42px; }
             body.fan-view #view-app .live-match-table col.col-score,
-            #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 56px; }
+            #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 44px; }
             body.fan-view #view-app .live-match-table col.col-status,
             #view-demo-story .demo-embed-app .live-match-table col.col-status { width: 22px; }
+            body.fan-view #view-app .live-match-teams,
+            body.fan-view #view-app .live-match-teams .live-team-name,
+            #view-demo-story .demo-embed-app .live-match-teams,
+            #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+                font-size: clamp(8px, 2.8vw, 11px);
+            }
         }
 
         /* Asystent / Demo Story — lokalny skrót Mecze ↔ Boiska (bez sticky) */
