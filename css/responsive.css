@@ -405,9 +405,13 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
 
     #view-demo-story .demo-fan-tab {
         min-width: 0;
-        flex: 1 1 30%;
+        flex: 1 1 0;
+        font-size: 11px;
+        padding: 10px 4px;
+    }
+
+    #view-demo-story .demo-fan-rules-tip {
         font-size: 10px;
-        padding: 10px 6px;
     }
 
     #view-demo-story .demo-btn-primary,

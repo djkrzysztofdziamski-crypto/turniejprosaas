@@ -28,8 +28,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=20260718ux9"></script>
-    <script src="demo-story.js?v=20260719livepane"></script>
+    <script src="demo-story-scenario.bundle.js?v=20260723fan1line"></script>
+    <script src="demo-story.js?v=20260723fan1line"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -2057,8 +2057,68 @@
         body.fan-view #view-app header { box-shadow: 0 4px 20px rgba(0,82,204,0.2); }
         body.fan-view #view-app .match-card { pointer-events: none; }
         body.fan-view #view-app .nav-tabs button.active { background: #e8f0fe; }
+        /* Kibic: jedna belka Mecze|Tabele|… — bez dual desktop/mobile i bez drugiej ramki */
+        body.fan-view #view-app .nav-tabs .nav-desktop-only { display: none !important; }
+        body.fan-view #view-app .nav-tabs .nav-mobile-only { display: block !important; }
+        /* Sticky budget: tylko header + nav — treść zawsze pod spodem */
+        body.fan-view #view-app .container { position: relative; z-index: 0; }
+        body.fan-view #view-app .tables-render-target,
+        body.fan-view #view-app .matches-render-target,
+        body.fan-view #view-app #playoff-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        @media (max-width: 767px) {
+            body.fan-view #view-app .nav-tabs button {
+                min-width: 56px; padding: 10px 4px; font-size: 11px;
+            }
+            body.fan-view #view-app .rules-box {
+                font-size: 12px; padding: 10px 12px; margin: 8px 10px 10px;
+            }
+            body.fan-view #view-app .container { margin-top: 8px; padding: 0 8px; }
+        }
+        /* Kibic + Demo embed: tabela meczów 1-liniowa (scroll zamiast zawijania) */
+        body.fan-view #view-app .live-match-table-wrap,
+        #view-demo-story .demo-embed-app .live-match-table-wrap,
+        #view-demo-story .demo-fan-embed-host .live-match-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        body.fan-view #view-app .live-match-teams,
+        body.fan-view #view-app .live-match-teams .live-team-name,
+        #view-demo-story .demo-embed-app .live-match-teams,
+        #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+            white-space: nowrap;
+            overflow-wrap: normal;
+            word-break: normal;
+        }
+        @media (max-width: 767px) {
+            body.fan-view #view-app .live-match-table,
+            #view-demo-story .demo-embed-app .live-match-table {
+                font-size: 11px;
+            }
+            body.fan-view #view-app .live-match-table th,
+            #view-demo-story .demo-embed-app .live-match-table th {
+                font-size: 8px;
+                padding: 4px 4px;
+            }
+            body.fan-view #view-app .live-match-table td,
+            #view-demo-story .demo-embed-app .live-match-table td {
+                padding: 3px 4px;
+            }
+            body.fan-view #view-app .live-match-table col.col-no,
+            #view-demo-story .demo-embed-app .live-match-table col.col-no { width: 28px; }
+            body.fan-view #view-app .live-match-table col.col-group,
+            #view-demo-story .demo-embed-app .live-match-table col.col-group { width: 36px; }
+            body.fan-view #view-app .live-match-table col.col-time,
+            #view-demo-story .demo-embed-app .live-match-table col.col-time { width: 42px; }
+            body.fan-view #view-app .live-match-table col.col-score,
+            #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 56px; }
+            body.fan-view #view-app .live-match-table col.col-status,
+            #view-demo-story .demo-embed-app .live-match-table col.col-status { width: 22px; }
+        }
 
-        /* Kibic / Demo Story — skrót Tabele ↔ Mecze przy liście meczów */
+        /* Asystent / Demo Story — lokalny skrót Mecze ↔ Boiska (bez sticky) */
         .fan-subnav {
             display: none;
             align-items: center;
@@ -2069,13 +2129,8 @@
             border: 1px solid var(--color-app-border-strong, #c1c7d0);
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            position: sticky;
-            top: var(--header-h, 56px);
-            z-index: 12;
-        }
-        body.fan-view #view-app .fan-subnav,
-        #view-demo-story .demo-fan-embed-host .fan-subnav {
-            top: calc(var(--header-h, 56px) + 4px);
+            position: relative;
+            z-index: 1;
         }
         .fan-subnav-btn {
             background: #fff;
@@ -3264,19 +3319,31 @@
         }
         #view-login .gate-marketing-link:hover { color: #fff; text-decoration: underline; }
         #view-demo-story .demo-callout { background: #19354f; border: 1px solid #486581; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #57d9a3; margin: 16px 0; }
-        #view-demo-story .demo-fan-tabs { display: flex; gap: 8px; margin: 16px 0 12px; flex-wrap: wrap; }
-        #view-demo-story .demo-fan-tab {
-            flex: 1; min-width: 88px; padding: 11px 10px;
-            border: 1px solid rgba(255,255,255,0.14); background: rgba(25, 53, 79, 0.85);
-            color: #bcccdc; border-radius: 999px; font-weight: 800; font-size: 11px;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
-            font-family: var(--font-display); transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        #view-demo-story .demo-fan-tabs {
+            display: flex; gap: 0; margin: 12px 0 8px; flex-wrap: nowrap;
+            background: #fff; border-radius: 10px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.12);
         }
-        #view-demo-story .demo-fan-tab:hover { border-color: rgba(255,255,255,0.28); color: #fff; }
+        #view-demo-story .demo-fan-tab {
+            flex: 1; min-width: 0; padding: 12px 8px;
+            border: none; border-bottom: 3px solid transparent;
+            background: #f8fafc; color: #64748b; border-radius: 0;
+            font-weight: 800; font-size: 12px;
+            cursor: pointer; text-transform: none; letter-spacing: 0.01em;
+            font-family: var(--font-display);
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        #view-demo-story .demo-fan-tab:hover { color: #0052cc; background: #eef4ff; }
         #view-demo-story .demo-fan-tab.active {
-            background: linear-gradient(180deg, #0066ff 0%, #0052cc 100%);
-            color: #fff; border-color: rgba(134, 182, 255, 0.55);
-            box-shadow: 0 4px 16px rgba(0, 82, 204, 0.35);
+            background: #e8f0fe; color: #0052cc;
+            border-bottom-color: #0052cc;
+            box-shadow: inset 0 0 0 1px rgba(0, 82, 204, 0.12), 0 0 12px rgba(0, 82, 204, 0.18);
+        }
+        #view-demo-story .demo-fan-rules-tip {
+            margin: 0 0 10px; padding: 0 2px;
+            font-size: 11px; line-height: 1.35; color: #94a3b8;
+            font-family: var(--font-body);
         }
         /* --- Demo embed: lustrzany wygląd panelu turnieju (premium) --- */
         #view-demo-story .demo-embed-app {
@@ -3759,7 +3826,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=20260719livepane">
+    <link rel="stylesheet" href="css/responsive.css?v=20260723fanux">
 </head>
 <body>
 
@@ -3973,7 +4040,7 @@
         <div class="app-rotate-gate-card">
             <div class="app-rotate-gate-icon" aria-hidden="true">↻</div>
             <p class="app-rotate-gate-title">Obróć urządzenie poziomo</p>
-            <p class="app-rotate-gate-sub">Wyniki live i karty turnieju (Mecze, Tabele, Play-Off, Podium) są czytelne w orientacji poziomej.</p>
+            <p class="app-rotate-gate-sub">Karty turnieju organizatora (m.in. Mecze, Tabele, Play-Off, Podium) są czytelne w orientacji poziomej. Widok kibica działa też pionowo.</p>
         </div>
     </div>
     <div id="license-blocked-screen">
@@ -4216,18 +4283,10 @@
 
         <div id="mecze" class="tab-content">
             <div class="filter-bar match-filter-bar" id="match-filter-bar"></div>
-            <div id="fan-matches-toolbar" class="fan-subnav">
-                <button type="button" class="fan-subnav-btn" onclick="openFanPitchesView()">Boiska</button>
-                <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>
-            </div>
             <div id="matches-container" class="matches-render-target"></div>
         </div>
 
         <div id="boiska" class="tab-content">
-            <div id="fan-pitches-toolbar" class="fan-subnav">
-                <button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>
-                <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>
-            </div>
             <div id="pitches-container" class="pitches-render-target"></div>
         </div>
 
@@ -4259,9 +4318,6 @@
         </div>
         
         <div id="tabele" class="tab-content">
-            <div id="fan-tables-toolbar" class="fan-subnav">
-                <button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>
-            </div>
             <div id="tables-container" class="tables-render-target"></div>
             <button class="btn-main" id="btn-start-po" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button>
         </div>
@@ -4465,6 +4521,11 @@
     window.tpMqMax = (px) => window.matchMedia('(max-width: ' + px + 'px)');
     window.tpIsDesktopLayout = () => window.tpMqMin(window.TP_BREAKPOINTS.desktop).matches;
     window.tpPreferMatchCards = () => {
+        /* Kibic + Demo fan: tabela 1-liniowa; karty UI tylko na ekstremalnie wąskim ekranie */
+        const fanOrDemoFan = document.body.classList.contains('fan-view') || window._demoStoryFanEmbed === true;
+        if (fanOrDemoFan) {
+            return window.matchMedia('(max-width: 359px)').matches;
+        }
         if (window._demoStoryPreferCards === true) return true;
         if (window.tpMqMax(window.TP_BREAKPOINTS.phoneMax).matches) return true;
         /* Telefon landscape: szerokość >767, ale niski viewport — nadal karty */
@@ -4480,7 +4541,8 @@
         if (!window.matchMedia('(orientation: portrait)').matches) return false;
         const body = document.body;
         if (body.classList.contains('hall-view') || body.classList.contains('assistant-view')) return false;
-        if (body.classList.contains('fan-view')) return true;
+        /* Kibic: portrait-first na telefonie — bez twardego gate „obróć poziomo” */
+        if (body.classList.contains('fan-view')) return false;
         const active = document.querySelector('#view-app .tab-content.active');
         return !!(active && window.APP_LANDSCAPE_TAB_IDS[active.id]);
     };
@@ -10430,8 +10492,7 @@
             if (!panel) return;
             document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active'));
             panel.classList.add('active');
-            const navBtn = document.querySelector(`.nav-tabs [onclick="switchTab('${t}')"]`);
-            if (navBtn) navBtn.classList.add('active');
+            document.querySelectorAll(`.nav-tabs [onclick="switchTab('${t}')"]`).forEach(btn => btn.classList.add('active'));
 
             const guideContainer = document.getElementById('demo-guide-container');
             if (guideContainer) {
@@ -11777,40 +11838,8 @@
         window.scrollTo(0, 0);
     };
 
-    window.syncFanSubnav = () => {
-        const matchesBar = document.getElementById('fan-matches-toolbar');
-        const tablesBar = document.getElementById('fan-tables-toolbar');
-        const pitchesBar = document.getElementById('fan-pitches-toolbar');
-        if (!matchesBar || !tablesBar) return;
-        matchesBar.style.display = '';
-        tablesBar.style.display = '';
-        if (pitchesBar) pitchesBar.style.display = '';
-        const inFanCtx = isFanMode || window._demoStoryFanEmbed === true;
-        const pitchesOn = window.getPitchCount() > 0;
-        matchesBar.querySelectorAll('[onclick="openFanPitchesView()"]').forEach(btn => {
-            btn.style.display = pitchesOn ? '' : 'none';
-        });
-        if (!inFanCtx) {
-            matchesBar.classList.remove('fan-subnav--visible');
-            tablesBar.classList.remove('fan-subnav--visible');
-            if (pitchesBar) pitchesBar.classList.remove('fan-subnav--visible');
-            return;
-        }
-        let activePane = '';
-        if (window._demoStoryFanEmbed) {
-            activePane = window._demoStoryFanTab || 'mecze';
-        } else {
-            const activeTab = document.querySelector('.tab-content.active');
-            activePane = activeTab ? activeTab.id : '';
-        }
-        const showOnViewport = (isFanMode && !window._demoStoryFanEmbed)
-            || window.tpMqMax(window.TP_BREAKPOINTS.desktop - 1).matches;
-        matchesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'mecze');
-        tablesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'tabele');
-        if (pitchesBar) {
-            pitchesBar.classList.toggle('fan-subnav--visible', showOnViewport && activePane === 'boiska' && pitchesOn);
-        }
-    };
+    /* Kibic + Demo Story: jedna belka kart — bez drugiej ramki skrótów */
+    window.syncFanSubnav = () => {};
 
     window.openFanTablesView = () => {
         if (window._demoStoryFanEmbed) {

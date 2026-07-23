@@ -451,6 +451,18 @@ window.DEMO_SCENARIO_BUNDLE = {
             ]
           }
         ],
+        "homeCards": [
+          {
+            "type": "Y",
+            "playerId": "p003"
+          }
+        ],
+        "awayCards": [
+          {
+            "type": "Y",
+            "playerId": "p013"
+          }
+        ],
         "cleanSheetGoalkeeperId": null
       },
       {
@@ -466,6 +478,12 @@ window.DEMO_SCENARIO_BUNDLE = {
         "status": "played",
         "kickoff": "2026-04-12T08:00:00",
         "scorers": [],
+        "awayCards": [
+          {
+            "type": "Y",
+            "playerId": "p012"
+          }
+        ],
         "cleanSheetGoalkeeperId": null
       },
       {
@@ -489,6 +507,18 @@ window.DEMO_SCENARIO_BUNDLE = {
             ]
           }
         ],
+        "homeCards": [
+          {
+            "type": "Y",
+            "playerId": "p001"
+          }
+        ],
+        "awayCards": [
+          {
+            "type": "Y",
+            "playerId": "p010"
+          }
+        ],
         "cleanSheetGoalkeeperId": "p002"
       },
       {
@@ -504,6 +534,18 @@ window.DEMO_SCENARIO_BUNDLE = {
         "status": "played",
         "kickoff": "2026-04-12T08:25:00",
         "scorers": [],
+        "homeCards": [
+          {
+            "type": "Y",
+            "playerId": "p013"
+          }
+        ],
+        "awayCards": [
+          {
+            "type": "R",
+            "playerId": "p012"
+          }
+        ],
         "cleanSheetGoalkeeperId": null
       },
       {

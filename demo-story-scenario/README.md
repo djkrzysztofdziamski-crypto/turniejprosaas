@@ -99,6 +99,7 @@ Każdy mecz w `matches.json` zawiera:
 - `homeScore`, `awayScore` — `null` jeśli nierozegrany
 - `status` — `played` | `pending`
 - `scorers` — tablica `{ playerId, teamId, goals[] }` (minute opcjonalna)
+- `homeCards` / `awayCards` — opcjonalnie `[{ type: "Y"|"R", playerId }]` (badge’e jak w kibicu)
 - `cleanSheetGoalkeeperId` — ID bramkarza z czystym kontem (jeśli dotyczy)
 
 ---

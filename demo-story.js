@@ -48,7 +48,7 @@
 
     const EMBED_NODES = {
 
-        fan: ['fan-matches-toolbar', 'match-filter-bar', 'matches-container', 'fan-tables-toolbar', 'tables-container', 'playoff-container'],
+        fan: ['match-filter-bar', 'matches-container', 'tables-container', 'playoff-container'],
 
         organizer: ['tournament-dashboard'],
 
@@ -428,6 +428,34 @@
 
 
 
+    function mapCards(list, playersById) {
+
+        if (!list || !list.length) return [];
+
+        return list.map(function (c) {
+
+            if (!c) return null;
+
+            const type = (c.type === 'R' || c.type === 'r') ? 'R' : 'Y';
+
+            const p = c.playerId ? playersById[c.playerId] : null;
+
+            const name = p ? (playerFullName(p) || p.displayName || '') : (c.name || '');
+
+            const out = { type: type, name: name };
+
+            if (c.playerId) out.playerId = String(c.playerId);
+
+            if (c.viaSecondYellow) out.viaSecondYellow = true;
+
+            return out;
+
+        }).filter(Boolean);
+
+    }
+
+
+
     function playoffLabel(phase, label, bracketPosition) {
 
         if (label) return label.toUpperCase();
@@ -560,6 +588,10 @@
 
                     s2: mapScorers(m.scorers, playersById, m.awayTeamId),
 
+                    cards1: mapCards(m.homeCards || m.cardsHome, playersById),
+
+                    cards2: mapCards(m.awayCards || m.cardsAway, playersById),
+
                     cleanSheetGoalkeeperId: m.cleanSheetGoalkeeperId || null
 
                 };
@@ -605,6 +637,10 @@
                     s1: mapScorers(m.scorers, playersById, m.homeTeamId),
 
                     s2: mapScorers(m.scorers, playersById, m.awayTeamId),
+
+                    cards1: mapCards(m.homeCards || m.cardsHome, playersById),
+
+                    cards2: mapCards(m.awayCards || m.cardsAway, playersById),
 
                     cleanSheetGoalkeeperId: m.cleanSheetGoalkeeperId || null
 
@@ -960,72 +996,6 @@
 
 
 
-    function ensureFanSubnavInHost(hostEl) {
-
-        if (!hostEl) return;
-
-        let matchesBar = document.getElementById('fan-matches-toolbar');
-
-        if (!matchesBar) {
-
-            hostEl.insertAdjacentHTML('afterbegin',
-
-                '<div id="fan-matches-toolbar" class="fan-subnav">' +
-
-                '<button type="button" class="fan-subnav-btn fan-subnav-btn--primary" onclick="openFanTablesView()">Tabele</button>' +
-
-                '</div>');
-
-            matchesBar = document.getElementById('fan-matches-toolbar');
-
-        } else if (!hostEl.contains(matchesBar)) {
-
-            hostEl.insertBefore(matchesBar, hostEl.firstChild);
-
-        }
-
-        let tablesBar = document.getElementById('fan-tables-toolbar');
-
-        if (!tablesBar) {
-
-            const tables = document.getElementById('tables-container');
-
-            tablesBar = document.createElement('div');
-
-            tablesBar.id = 'fan-tables-toolbar';
-
-            tablesBar.className = 'fan-subnav';
-
-            tablesBar.innerHTML = '<button type="button" class="fan-subnav-btn" onclick="openFanMatchesView()">← Mecze</button>';
-
-            if (tables && hostEl.contains(tables)) {
-
-                hostEl.insertBefore(tablesBar, tables);
-
-            } else if (tables && tables.parentNode) {
-
-                tables.parentNode.insertBefore(tablesBar, tables);
-
-            } else {
-
-                hostEl.appendChild(tablesBar);
-
-            }
-
-        } else if (!hostEl.contains(tablesBar)) {
-
-            const tables = document.getElementById('tables-container');
-
-            if (tables && hostEl.contains(tables)) hostEl.insertBefore(tablesBar, tables);
-
-            else hostEl.appendChild(tablesBar);
-
-        }
-
-    }
-
-
-
     function mountNodes(nodeIds, hostEl) {
 
         nodeIds.forEach(function (id) {
@@ -1077,8 +1047,6 @@
         };
 
         EMBED_NODES.fan.forEach(function (id) {
-
-            if (id.indexOf('fan-') === 0) return;
 
             const el = document.getElementById(id);
 
@@ -1355,6 +1323,8 @@
 
         return '<div class="demo-fan-tabs">' + tabsHtml + '</div>' +
 
+            '<p class="demo-fan-rules-tip">3 pkt za wygraną · 1 za remis · 0 za porażkę — kolejność: H2H → bilans → Fair Play</p>' +
+
             '<div id="demo-fan-embed-host" class="demo-embed-app"></div>';
 
     }
@@ -1589,18 +1559,11 @@
 
         global._demoStoryFanEmbed = true;
 
-        global._demoStoryPreferCards = true;
+        global._demoStoryPreferCards = false;
 
         activeEmbedKind = 'fan';
 
         mountNodes(EMBED_NODES.fan, hostEl);
-
-        ['fan-matches-toolbar', 'fan-tables-toolbar'].forEach(function (id) {
-            const el = document.getElementById(id);
-            if (el && hostEl && !hostEl.contains(el)) hostEl.appendChild(el);
-        });
-
-        ensureFanSubnavInHost(hostEl);
 
         renderFanTabContent(demoFanTab);
 
