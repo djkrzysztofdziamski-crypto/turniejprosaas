@@ -400,7 +400,7 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
     #view-demo-story .demo-screen[data-step="5"] .demo-embed-app,
     #view-demo-story .demo-screen--podium .demo-embed-app {
         max-height: none;
-        min-height: min(70dvh, 640px);
+        min-height: 0;
     }
 
     #view-demo-story .demo-fan-tab {

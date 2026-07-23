@@ -29,7 +29,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="demo-story-scenario.bundle.js?v=20260723cols"></script>
-    <script src="demo-story.js?v=20260723cols"></script>
+    <script src="demo-story.js?v=20260723podium"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -2196,7 +2196,6 @@
         #view-app .podium-scene .podium-main { border: none; box-shadow: 0 8px 32px rgba(255,204,0,0.35); margin-bottom: 16px; }
         #view-app .podium-scene .steps { margin-top: 0; }
         #view-app .podium-scene .awards-banner { margin-top: 12px; }
-        #view-demo-story .demo-embed-app .podium-scene { border-radius: 10px; padding: 14px 10px; }
 
         /* --- PAKIET PREMIUM 5+: DASHBOARD (organizator) --- */
         #view-app .dashboard-stat { transition: border-color 0.15s; }
@@ -3588,18 +3587,34 @@
             font-family: var(--font-display); letter-spacing: 0.03em;
         }
         #view-demo-story .demo-embed-app .bracket-match { pointer-events: none; cursor: default; }
-        #view-demo-story .demo-embed-app .podium-main { border: 3px solid #ffcc00; border-radius: 12px; padding: 20px; text-align: center; background: white; margin-bottom: 16px; box-shadow: var(--shadow-card); }
-        #view-demo-story .demo-embed-app .podium-winner { font-size: 24px; font-weight: 800; color: #102a43; font-family: var(--font-display); }
-        #view-demo-story .demo-embed-app .steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; align-items: flex-end; }
-        #view-demo-story .demo-embed-app .step { padding: 14px 6px; text-align: center; border-radius: 8px 8px 0 0; font-size: 12px; font-weight: bold; line-height: 1.35; border: 1px solid var(--color-app-border); font-family: var(--font-display); }
-        #view-demo-story .demo-embed-app .step.gold { background: #ffcc00; height: 78px; font-size: 13px; }
-        #view-demo-story .demo-embed-app .step.silver { background: #e5e5e5; height: 62px; }
-        #view-demo-story .demo-embed-app .step.bronze { background: #f5f5f5; height: 54px; }
-        #view-demo-story .demo-embed-app .awards-banner { background: #102a43; color: white; border-radius: 10px; display: grid; grid-template-columns: 1fr 1fr; padding: 16px; gap: 8px; margin-top: 12px; text-align: center; font-size: 12px; box-shadow: var(--shadow-card); }
-        #view-demo-story .demo-embed-app .award-box h4 { margin: 0; font-size: 10px; color: #a5b3bb; text-transform: uppercase; letter-spacing: 0.06em; }
-        #view-demo-story .demo-embed-app .award-box b { font-size: 14px; display: block; margin-top: 5px; line-height: 1.45; font-weight: normal; }
-        #view-demo-story .demo-embed-app .award-box .podium-award-player { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.02em; font-family: var(--font-display); }
-        #view-demo-story .demo-embed-app .award-box .podium-award-team { font-size: 12px; color: #c7d2fe; font-weight: 700; }
+        /* Demo embed: te same karty podium-compact co kibic/sędzia (#podium-view poza #view-app) */
+        #view-demo-story .demo-embed-app .podium-compact { max-width: 720px; margin: 0 auto; }
+        #view-demo-story .demo-embed-app .podium-compact-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+        #view-demo-story .demo-embed-app .podium-compact-title { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; margin: 0 0 8px; }
+        #view-demo-story .demo-embed-app .podium-team-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 14px; font-weight: 700; line-height: 1.25; }
+        #view-demo-story .demo-embed-app .podium-team-row:last-child { margin-bottom: 0; }
+        #view-demo-story .demo-embed-app .podium-team-row--1 { background: #fffbeb; border: 1px solid #fcd34d; color: #172b4d; }
+        #view-demo-story .demo-embed-app .podium-team-row--2 { background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; }
+        #view-demo-story .demo-embed-app .podium-team-row--3 { background: #fff7ed; border: 1px solid #fdba74; color: #7c2d12; }
+        #view-demo-story .demo-embed-app .podium-team-place { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.75; min-width: 72px; }
+        #view-demo-story .demo-embed-app .podium-team-name { flex: 1; min-width: 0; word-break: break-word; }
+        #view-demo-story .demo-embed-app .podium-awards-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #view-demo-story .demo-embed-app .podium-awards-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; padding: 4px 6px; border-bottom: 1px solid #e2e8f0; }
+        #view-demo-story .demo-embed-app .podium-awards-table td { padding: 8px 6px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+        #view-demo-story .demo-embed-app .podium-awards-table tr:last-child td { border-bottom: none; }
+        #view-demo-story .demo-embed-app .podium-award-label { font-weight: 800; color: #172b4d; white-space: nowrap; width: 34%; }
+        #view-demo-story .demo-embed-app .podium-award-value { font-weight: 700; color: #0f172a; }
+        #view-demo-story .demo-embed-app .podium-award-team { font-weight: 600; color: #64748b; }
+        #view-demo-story .demo-embed-app .podium-award-meta { font-size: 12px; color: #64748b; font-weight: 600; margin-top: 2px; }
+        #view-demo-story .demo-embed-app .podium-top-details { margin-top: 6px; font-size: 12px; }
+        #view-demo-story .demo-embed-app .podium-top-details summary { cursor: pointer; color: #0052cc; font-weight: 700; list-style: none; }
+        #view-demo-story .demo-embed-app .podium-top-details summary::-webkit-details-marker { display: none; }
+        #view-demo-story .demo-embed-app .podium-top-details[open] summary { margin-bottom: 6px; }
+        #view-demo-story .demo-embed-app .podium-xi-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #view-demo-story .demo-embed-app .podium-xi-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; padding: 4px 6px; border-bottom: 1px solid #e2e8f0; }
+        #view-demo-story .demo-embed-app .podium-xi-table td { padding: 6px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        #view-demo-story .demo-embed-app .podium-xi-table td.col-num { width: 36px; font-weight: 800; color: #0052cc; }
+        #view-demo-story .demo-embed-app .podium-xi-empty { color: #94a3b8; font-weight: 600; }
         #view-demo-story .demo-embed-app .podium-top-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -4557,9 +4572,10 @@
     window.tpMqMax = (px) => window.matchMedia('(max-width: ' + px + 'px)');
     window.tpIsDesktopLayout = () => window.tpMqMin(window.TP_BREAKPOINTS.desktop).matches;
     window.tpPreferMatchCards = () => {
-        /* Kibic + Demo fan: tabela 1-liniowa; karty UI tylko na ekstremalnie wąskim ekranie */
-        const fanOrDemoFan = document.body.classList.contains('fan-view') || window._demoStoryFanEmbed === true;
-        if (fanOrDemoFan) {
+        /* Kibic + Demo showcase (fan/organizer embed): tabela 1-liniowa; karty UI tylko <360px */
+        const demoScan = window._demoStoryFanEmbed === true || window._demoStoryOrganizerEmbed === true;
+        const fanOrDemoScan = document.body.classList.contains('fan-view') || demoScan;
+        if (fanOrDemoScan) {
             return window.matchMedia('(max-width: 359px)').matches;
         }
         if (window._demoStoryPreferCards === true) return true;
@@ -5059,13 +5075,21 @@
         if (redirectLegacyApexTraffic()) return;
 
         if (!isDemoStoryHost && urlParams.get('demo') === 'story') {
-            window.location.replace('https://demo.turniejomat.pl/');
-            return;
+            const h = (window.location.hostname || '').toLowerCase();
+            const localDemo = h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
+            if (!localDemo) {
+                window.location.replace('https://demo.turniejomat.pl/');
+                return;
+            }
         }
 
         initAppModule({ bridgeOnly: true });
 
-        if (urlParams.get('id') === 'DEMO-2026' || isDemoStoryHost) {
+        const hRouter = (window.location.hostname || '').toLowerCase();
+        const localDemoHost = hRouter === 'localhost' || hRouter === '127.0.0.1' || hRouter === '[::1]';
+        const localDemoStory = localDemoHost && urlParams.get('demo') === 'story';
+
+        if (urlParams.get('id') === 'DEMO-2026' || isDemoStoryHost || localDemoStory) {
             if (window.DemoStoryController) {
                 if (!DemoStoryController.tryRestoreSession()) {
                     DemoStoryController.showEntry();
@@ -7995,6 +8019,24 @@
         }).filter(Boolean);
     };
 
+    /** Stabilny podpis kartek do porównań (korekta vs snapshot). */
+    window.cardsSignature = function (cards1, cards2) {
+        return JSON.stringify(window.sanitizeCardsForSave(cards1)) + '|' +
+            JSON.stringify(window.sanitizeCardsForSave(cards2));
+    };
+
+    /**
+     * Protokół tylko do odczytu: kibic/hala/archiwum URL albo turniej zamknięty po ZARCHIWIZUJ.
+     * Korekty kartek/wyniku po `played` są dozwolone, dopóki turniej nie jest zamknięty.
+     */
+    window.isMatchProtocolLocked = function () {
+        if (typeof isFanMode !== 'undefined' && isFanMode) return true;
+        if (typeof isHallMode !== 'undefined' && isHallMode) return true;
+        if (typeof archiveId !== 'undefined' && archiveId) return true;
+        if (typeof localArchiveId !== 'undefined' && localArchiveId) return true;
+        return !!(state && state.meta && state.meta.tournamentClosed);
+    };
+
     window.formatCardsLogSnippet = function (m) {
         if (!m || !window.isCardsEnabled()) return '';
         const a = window.countCardsPublic(m.cards1);
@@ -8009,6 +8051,7 @@
     };
 
     window.pushLiveMatchScores = function (matchId, isPo, g1, g2, s1, s2, cards1, cards2) {
+        if (window.isMatchProtocolLocked && window.isMatchProtocolLocked()) return;
         matchId = parseInt(matchId, 10);
         isPo = !!isPo;
         g1 = parseInt(g1, 10) || 0;
@@ -9387,6 +9430,10 @@
 
         window.saveInlineScore = (matchId, isPo, btnEl) => {
             if (isFanMode || isHallMode) return;
+            if (window.isMatchProtocolLocked()) {
+                alert('Turniej jest zamknięty (archiwum) — protokół meczu jest tylko do odczytu.');
+                return;
+            }
             const resolved = resolveMatchForSave(matchId, isPo);
             matchId = resolved.matchId;
             isPo = resolved.isPo;
@@ -10261,6 +10308,10 @@
 
         window.saveMatch = () => {
             if (!state.active) return;
+            if (window.isMatchProtocolLocked()) {
+                alert('Turniej jest zamknięty (archiwum) — protokół meczu jest tylko do odczytu.');
+                return;
+            }
             if (state.active.isPo && !state.active.played && typeof window.isPlayoffMatchReadyToScore === 'function' && !window.isPlayoffMatchReadyToScore(state.active)) {
                 alert(window.getPlayoffMatchNotReadyReason(state.active));
                 return;
@@ -10283,6 +10334,15 @@
                 if (scoreChanged) {
                     if (!confirm('UWAGA: Zmiana zapisanego wyniku meczu wpłynie na tabelę i statystyki. Czy na pewno chcesz zmienić wynik?')) return;
                     if (!confirm('Potwierdź ponownie: naprawdę zmieniasz wynik tego meczu w harmonogramie? Tej operacji nie cofniesz jednym kliknięciem.')) return;
+                }
+                if (window.isCardsEnabled()) {
+                    const nextSig = window.cardsSignature(state.active.cards1, state.active.cards2);
+                    const prevSig = snap.cardsSig != null
+                        ? snap.cardsSig
+                        : window.cardsSignature(snap.cards1, snap.cards2);
+                    if (nextSig !== prevSig) {
+                        if (!confirm('Zmieniasz kartki w już zapisanym meczu. Może to wpłynąć na Fair Play i zawieszenia. Kontynuować?')) return;
+                    }
                 }
             }
 
@@ -10611,13 +10671,20 @@
                 g1: state.active.g1,
                 g2: state.active.g2,
                 pen1: m.pen1 !== undefined && m.pen1 !== null ? m.pen1 : null,
-                pen2: m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : null
+                pen2: m.pen2 !== undefined && m.pen2 !== null ? m.pen2 : null,
+                cardsSig: window.cardsSignature(state.active.cards1, state.active.cards2)
             };
             const cardsOn = window.isCardsEnabled();
+            const protocolLocked = window.isMatchProtocolLocked();
             const cardSec = document.getElementById('match-cards-section');
             const cardBtns = document.getElementById('card-btn-container');
             if (cardSec) cardSec.style.display = cardsOn ? '' : 'none';
-            if (cardBtns) cardBtns.style.display = cardsOn ? '' : 'none';
+            if (cardBtns) cardBtns.style.display = (cardsOn && !protocolLocked) ? '' : 'none';
+            const saveBtn = document.querySelector('#matchModal > .match-modal-content > button.btn-main');
+            if (saveBtn) {
+                saveBtn.disabled = !!protocolLocked;
+                saveBtn.textContent = protocolLocked ? 'PROTOKÓŁ ZAMKNIĘTY (ARCHIWUM)' : 'ZAPISZ WYNIK MECZU';
+            }
             window.checkPenaltyVisibility(); window.renderSc(); window.renderCards(); window.renderSuspendedBanner();
             document.getElementById('matchModal').style.display='block';
         };
@@ -10737,10 +10804,11 @@
         window.renderCards = () => {
             if (!state.active) return;
             const cardsOn = window.isCardsEnabled();
+            const protocolLocked = window.isMatchProtocolLocked();
             const sec = document.getElementById('match-cards-section');
             const btns = document.getElementById('card-btn-container');
             if (sec) sec.style.display = cardsOn ? '' : 'none';
-            if (btns) btns.style.display = cardsOn ? '' : 'none';
+            if (btns) btns.style.display = (cardsOn && !protocolLocked) ? '' : 'none';
             if (!cardsOn) return;
             const renderCol = (n, teamName) => {
                 const list = state.active['cards' + n] || [];
@@ -10753,10 +10821,16 @@
                     const badge = c.type === 'R'
                         ? (c.viaSecondYellow ? '🟥 2żółta' : '🟥')
                         : '🟨';
+                    const nameCtrl = protocolLocked
+                        ? ('<span class="match-modal-scorer-input match-modal-scorer-input--' + (n === 1 ? 'home' : 'away') + '" style="display:inline-block;padding:6px 8px;">' + esc(c.name || '—') + '</span>')
+                        : window.renderPlayerNameControl(n, 'cards' + n, i, teamId, c.name, c.playerId);
+                    const removeBtn = protocolLocked
+                        ? ''
+                        : '<button type="button" class="match-modal-scorer-remove" onclick="removeCard(' + n + ', ' + i + ')" aria-label="Usuń kartkę">&times;</button>';
                     return '<div class="match-modal-scorer-row">' +
                         '<span class="match-modal-card-type">' + badge + '</span>' +
-                        window.renderPlayerNameControl(n, 'cards' + n, i, teamId, c.name, c.playerId) +
-                        '<button type="button" class="match-modal-scorer-remove" onclick="removeCard(' + n + ', ' + i + ')" aria-label="Usuń kartkę">&times;</button>' +
+                        nameCtrl +
+                        removeBtn +
                         '</div>';
                 }).join('');
                 return head + rows;
@@ -10784,6 +10858,10 @@
 
         window.addCard = (n, type) => {
             if (!state.active || !window.isCardsEnabled()) return;
+            if (window.isMatchProtocolLocked()) {
+                alert('Turniej jest zamknięty (archiwum) — protokół meczu jest tylko do odczytu.');
+                return;
+            }
             if (!state.active['cards' + n]) state.active['cards' + n] = [];
             const card = { type: type, name: '', playerId: null };
             state.active['cards' + n].push(card);
@@ -10793,6 +10871,10 @@
 
         window.removeCard = (n, i) => {
             if (!state.active || !state.active['cards' + n]) return;
+            if (window.isMatchProtocolLocked()) {
+                alert('Turniej jest zamknięty (archiwum) — protokół meczu jest tylko do odczytu.');
+                return;
+            }
             state.active['cards' + n].splice(i, 1);
             window.renderCards();
             if (!state.active.played) window.pushLiveMatchFromActive();
@@ -10848,7 +10930,8 @@
                 matches: [],
                 playoffs: [],
                 settings: {},
-                logs: []
+                logs: [],
+                meta: {}
             }).then(() => location.reload());
         };
 
@@ -10864,14 +10947,22 @@
                 return;
             }
             panel.style.display = 'block';
-            if (window.isTournamentReadyToArchive()) {
+            if (state.meta && state.meta.tournamentClosed) {
+                panel.className = 'archive-close-panel';
+                panel.innerHTML =
+                    '<h4>🔒 Turniej zarchiwizowany — protokół zamknięty</h4>' +
+                    '<p>Wyniki i kartki są tylko do odczytu. Korekty nie są już możliwe w aktywnej sesji. Podgląd: zakładka <b>Archiwum</b> lub raport PDF.</p>' +
+                    '<div class="archive-close-actions">' +
+                    '<button type="button" class="btn-main" style="background:#de350b;" onclick="exportToPDF()">📥 GENERUJ RAPORT PDF</button>' +
+                    '</div>';
+            } else if (window.isTournamentReadyToArchive()) {
                 const f = window.findGrandFinalMatch();
                 const getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
                 const gold = getW(f);
                 panel.className = 'archive-close-panel';
                 panel.innerHTML =
                     '<h4>🏆 Turniej ukończony — zapisz wyniki na stałe</h4>' +
-                    '<p>Wielki finał rozstrzygnięty (<b>' + esc(gold.name) + '</b>). Zarchiwizuj turniej, aby dodać go do listy zakończonych i wysłać raport do centralnego archiwum serwera.</p>' +
+                    '<p>Wielki finał rozstrzygnięty (<b>' + esc(gold.name) + '</b>). Do archiwizacji możesz jeszcze poprawić kartki/wyniki. Po zarchiwizowaniu protokół będzie tylko do odczytu.</p>' +
                     '<div class="archive-close-actions">' +
                     '<button type="button" class="btn-main" style="background:#0052cc;" onclick="archiveTournament()">💾 ZARCHIWIZUJ I ZAKOŃCZ TURNIEJ</button>' +
                     '<button type="button" class="btn-main" style="background:#de350b;" onclick="exportToPDF()">📥 GENERUJ RAPORT PDF</button>' +
@@ -10896,6 +10987,8 @@
             let archiveName = prompt('Podaj nazwę dla archiwum:', defaultName);
             if (!archiveName) return;
             archiveName = archiveName.trim().toUpperCase();
+            if (!state.meta) state.meta = {};
+            state.meta.tournamentClosed = true;
             const { active, archiwum, wstrzymane, ...cleanState } = state;
             let archivePayload = {
                 ...cleanState,
@@ -10903,19 +10996,21 @@
                 _meta_date: new Date().toLocaleString('pl-PL'),
                 _license_owner: activeKey,
             };
-            window.logAction('Zarchiwizowano turniej: ' + archiveName);
+            window.logAction('Zarchiwizowano turniej: ' + archiveName + ' · protokół zamknięty');
             db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').push(archivePayload).then((ref) => {
                 if (ref && ref.key) archiveDatabase[ref.key] = archivePayload;
+                window.save();
                 window.renderArchiveAndFrozen();
                 window.renderArchiveClosePanel();
                 if (typeof window.switchTab === 'function') window.switchTab('archiwum');
                 return db.ref('archiwum').push(archivePayload);
             }).then(() => {
-                alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!');
+                alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!\nProtokoły meczów są od teraz tylko do odczytu.');
                 window.renderArchiveClosePanel();
             }).catch(() => {
                 alert('❌ Nie udało się zapisać w centralnym archiwum. Lokalna kopia mogła zostać utworzona — sprawdź listę poniżej.');
                 window.renderArchiveAndFrozen();
+                window.renderArchiveClosePanel();
             });
         };
 
@@ -11480,9 +11575,6 @@
                 window.buildPodiumAwardsHTML(s) +
                 window.buildPodiumXiHTML() +
                 '</div>';
-            if (window._demoStoryPodiumEmbed) {
-                podiumHTML += `<p style="text-align:center; font-size:12px; color:#00875a; margin-top:16px; font-weight:bold;">✓ Wyliczone automatycznie z protokołu meczowego</p>`;
-            }
             document.getElementById('podium-view').innerHTML = podiumHTML;
             window.renderArchiveClosePanel();
         };

@@ -1385,7 +1385,7 @@
 
     function renderPodiumBody() {
 
-        return '<div class="demo-callout">✓ Podium i statystyki wyliczone automatycznie po zapisie finału</div>' +
+        return '<p class="demo-fan-rules-tip">Podium i statystyki wyliczone automatycznie po zapisie finału</p>' +
 
             '<div id="demo-podium-embed-host" class="demo-embed-app"></div>';
 
@@ -1844,7 +1844,7 @@
 
         global._demoStoryOrganizerEmbed = true;
 
-        global._demoStoryPreferCards = true;
+        global._demoStoryPreferCards = false;
 
         activeEmbedKind = 'organizer';
 
