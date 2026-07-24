@@ -40,6 +40,16 @@
         ".read": true,
         ".write": "(auth != null && auth.token.admin === true) || (!data.exists() && newData.exists() && newData.child('_license_owner').isString() && newData.child('_license_owner').val().matches(/^TP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/) && root.child('licencje').child(newData.child('_license_owner').val()).exists() && root.child('licencje').child(newData.child('_license_owner').val()).child('status').val() === 'aktywny' && (!root.child('licencje').child(newData.child('_license_owner').val()).child('wygasa').exists() || root.child('licencje').child(newData.child('_license_owner').val()).child('wygasa').val() > now))"
       }
+    },
+
+    "kapitanowie": {
+      ".read": false,
+      ".write": false
+    },
+
+    "asystenci": {
+      ".read": false,
+      ".write": false
     }
   }
 }

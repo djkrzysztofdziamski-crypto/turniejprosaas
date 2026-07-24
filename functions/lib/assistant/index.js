@@ -96,6 +96,11 @@ async function assistantSaveMatch(db, payload) {
   const path = `turnieje_uzytkownikow/${key}`;
   const snap = await db.ref(path).once('value');
   const state = snap.val() || {};
+  if (state.meta && state.meta.tournamentClosed) {
+    const err = new Error('Turniej jest zamknięty (zarchiwizowany) — zapis wyniku niedozwolony.');
+    err.code = 'failed-precondition';
+    throw err;
+  }
   const arr = isPo ? (state.playoffs || []) : (state.matches || []);
   const idx = arr.findIndex((m) => m.id === matchId);
   if (idx === -1) {

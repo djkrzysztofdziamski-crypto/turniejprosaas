@@ -21,6 +21,15 @@ const {
 const { createAutopayPayment, handleAutopayItn } = require('./lib/billing/providers/autopay');
 const { generateAssistantToken, assistantSaveMatch } = require('./lib/assistant');
 const {
+  generateCaptainToken,
+  revokeCaptainToken,
+  getCaptainForm,
+  submitCaptainRoster,
+  uploadCaptainTeamPhoto,
+  acceptCaptainRoster,
+  rejectCaptainRoster,
+} = require('./lib/captain');
+const {
   billingSecrets,
   emailSecrets,
   stripeSecrets,
@@ -152,6 +161,75 @@ exports.generateAssistantToken = functions.region(region).https.onCall(async (da
 exports.assistantSaveMatch = functions.region(region).https.onCall(async (data) => {
   try {
     return await assistantSaveMatch(db, data || {});
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.generateCaptainToken = functions.region(region).https.onCall(async (data) => {
+  const key = String(data?.key || '').trim();
+  const teamId = data?.teamId;
+  if (!key || teamId === undefined || teamId === null || teamId === '') {
+    throw new functions.https.HttpsError('invalid-argument', 'Wymagane key i teamId.');
+  }
+  try {
+    return await generateCaptainToken(db, key, teamId, data?.noteEmail);
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.revokeCaptainToken = functions.region(region).https.onCall(async (data) => {
+  const key = String(data?.key || '').trim();
+  const teamId = data?.teamId;
+  if (!key || teamId === undefined || teamId === null || teamId === '') {
+    throw new functions.https.HttpsError('invalid-argument', 'Wymagane key i teamId.');
+  }
+  try {
+    return await revokeCaptainToken(db, key, teamId);
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.getCaptainForm = functions.region(region).https.onCall(async (data) => {
+  try {
+    return await getCaptainForm(db, data || {});
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.submitCaptainRoster = functions.region(region).https.onCall(async (data) => {
+  try {
+    return await submitCaptainRoster(db, data || {});
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.uploadCaptainTeamPhoto = functions
+  .runWith({ timeoutSeconds: 60, memory: '512MB' })
+  .region(region)
+  .https.onCall(async (data) => {
+    try {
+      return await uploadCaptainTeamPhoto(db, data || {});
+    } catch (err) {
+      throw toHttpsError(err);
+    }
+  });
+
+exports.acceptCaptainRoster = functions.region(region).https.onCall(async (data) => {
+  try {
+    return await acceptCaptainRoster(db, data || {});
+  } catch (err) {
+    throw toHttpsError(err);
+  }
+});
+
+exports.rejectCaptainRoster = functions.region(region).https.onCall(async (data) => {
+  try {
+    return await rejectCaptainRoster(db, data || {});
   } catch (err) {
     throw toHttpsError(err);
   }

@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /captain-photos/{licenseKey}/{teamId}/{fileName} {
+      // Odczyt publiczny przez token w URL (CF ustawia download token).
+      // Zapis wyłącznie przez Admin SDK (Cloud Functions) — klienci bez zapisu.
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -12,6 +12,7 @@ Jeden turniej, cztery świadome okna:
 | **Kibic** | Informacja oczami rodzica — zero zbędnych akcji |
 | **Demo Story** | Zachęta i „wow” w stylu produktu — nie pełny feature set |
 | **Asystent** | Edycja wyników w terenie — OK, nie ruszamy |
+| **Kapitan** | Invite-only: skład do 15 + opis + zdjęcie drużyny → akceptacja sędziego |
 
 ## Zależność od turnieju głównego
 
@@ -52,6 +53,7 @@ Elastyczność: layout musi znosić **pinch-zoom** i **Ctrl+scroll** (zoom ≠ 1
 | 5 | Zoom | Priorytet: **czytelność bez poziomego scrolla** (kompakt, zawijanie/clamp, nie „pełna tabela + scroll”). |
 | 6 | Hala | **Potwierdzona — nie ruszamy** (osobny tor wyświetlacza obiektu; poza zakresem zmian UX czwórki). |
 | 7 | Lokalne `?demo=story` | **Wyjątek localhost / 127.0.0.1** — bez redirectu na `demo.turniejomat.pl`. |
+| 8 | Kapitan | Invite-only; skład **1–15**; tylko zdjęcie drużyny; **obowiązkowa akceptacja** sędziego; landing po testach. |
 
 ---
 

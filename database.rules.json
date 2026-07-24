@@ -42,6 +42,16 @@
       }
     },
 
+    "kapitanowie": {
+      ".read": false,
+      ".write": false
+    },
+
+    "asystenci": {
+      ".read": false,
+      ".write": false
+    },
+
     "zamowienia": {
       ".read": "auth != null && auth.token.admin === true",
       ".write": false,

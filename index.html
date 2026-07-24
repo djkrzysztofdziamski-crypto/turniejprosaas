@@ -30,13 +30,194 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="demo-story-scenario.bundle.js?v=20260723cols"></script>
     <script src="demo-story.js?v=20260723podium"></script>
+    <script src="captain.js?v=20260724cap3"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
         .view { display: none; }
         .view.active { display: block; }
-        #view-login.active { display: flex; } 
+        #view-login.active { display: flex; }
+        #view-captain.active { display: block; }
         body { margin: 0; font-family: var(--font-body); }
+
+        /* --- MODUŁ KAPITANA --- */
+        #view-captain {
+            min-height: 100dvh;
+            background: linear-gradient(180deg, #0b1f33 0%, #132f4c 42%, #f0f4f8 42%);
+            color: #172b4d;
+            box-sizing: border-box;
+            padding: 16px 12px 28px;
+        }
+        #view-captain .captain-shell {
+            max-width: 440px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px 16px 22px;
+            box-shadow: 0 10px 36px rgba(11, 31, 51, 0.18);
+            border: 1px solid #e2e8f0;
+        }
+        #view-captain .captain-brand {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #view-captain .captain-brand img { max-width: 96px; height: auto; }
+        #view-captain h1 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin: 0 0 4px;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+        #view-captain .captain-sub {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            margin: 0 0 14px;
+            line-height: 1.4;
+        }
+        #view-captain label.captain-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin: 12px 0 5px;
+        }
+        #view-captain input[type="text"],
+        #view-captain input[type="number"],
+        #view-captain select,
+        #view-captain textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #c1c7d0;
+            border-radius: 8px;
+            padding: 10px 10px;
+            font-size: 14px;
+            font-family: var(--font-body);
+            color: #172b4d;
+            background: #fff;
+        }
+        #view-captain textarea { min-height: 72px; resize: vertical; }
+        #view-captain .captain-player-row {
+            display: grid;
+            grid-template-columns: 52px 1fr 36px;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        #view-captain .captain-remove {
+            border: none;
+            background: #ffebe6;
+            color: #de350b;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 40px;
+        }
+        #view-captain .captain-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        #view-captain .captain-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+        #view-captain .captain-btn--primary {
+            background: #0052cc;
+            color: #fff;
+            width: 100%;
+            margin-top: 14px;
+        }
+        #view-captain .captain-btn--secondary {
+            background: #eef2ff;
+            color: #0747a6;
+        }
+        #view-captain .captain-status {
+            font-size: 12px;
+            margin: 10px 0 0;
+            line-height: 1.4;
+            color: #64748b;
+            min-height: 1.2em;
+        }
+        #view-captain .captain-status--ok { color: #067647; font-weight: 700; }
+        #view-captain .captain-status--warn { color: #b54708; font-weight: 700; }
+        #view-captain .captain-status--err { color: #b42318; font-weight: 700; }
+        #view-captain .captain-roster-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 8px;
+        }
+        #view-captain .captain-empty { font-size: 12px; color: #94a3b8; margin: 6px 0; }
+        #view-captain .captain-photo-preview {
+            display: none;
+            width: 100%;
+            max-height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+        }
+        #view-captain .captain-char-count { font-size: 10px; color: #94a3b8; text-align: right; }
+        #view-app .captain-invite-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #f1f5f9;
+        }
+        #view-app .captain-invite-badge {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        #view-app .captain-invite-badge--pending { background: #fff7ed; color: #c2410c; }
+        #view-app .captain-invite-badge--accepted { background: #ecfdf5; color: #067647; }
+        #view-app .captain-invite-badge--rejected { background: #fef2f2; color: #b91c1c; }
+        #view-app .captain-invite-badge--invited { background: #eef2ff; color: #3730a3; }
+        #view-app .captain-team-photo-thumb {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        #captainReviewModal .captain-review-photo {
+            max-width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        #captainReviewModal .captain-review-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px;
+            font-size: 13px;
+        }
+        #captainReviewModal .captain-review-list li {
+            display: flex;
+            gap: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
         
         /* --- SYSTEM STYLÓW: LOGOWANIE --- */
         #view-login { background-color: var(--color-bg-deep); color: var(--color-text); justify-content: center; align-items: center; height: 100vh; }
@@ -3875,6 +4056,25 @@
             display: none !important;
             visibility: hidden !important;
         }
+        /* Formularz kapitana: bez badge’y Firebase / ostatni zapis */
+        body.captain-view #status-badges-home,
+        body.captain-view #firebase-status,
+        body.captain-view #last-save-info {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        #view-captain .captain-btn--close {
+            width: 100%;
+            margin-top: 10px;
+            background: #172b4d;
+            color: #fff;
+        }
+        #view-captain .captain-btn--close:disabled {
+            background: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+            opacity: 1;
+        }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
     <link rel="stylesheet" href="css/responsive.css?v=20260723fanux">
@@ -3927,6 +4127,57 @@
             </div>
         </div>
         <div class="brand-footer" data-brand-footer></div>
+    </div>
+</div>
+
+<div id="view-captain" class="view" aria-label="Formularz kapitana">
+    <div class="captain-shell">
+        <div class="captain-brand">
+            <picture class="brand-picture brand-picture--logo">
+                <source srcset="logo.webp" type="image/webp">
+                <img src="logo.png" alt="Turniejomat">
+            </picture>
+        </div>
+        <h1 id="captain-tour-title">Zgłoszenie składu</h1>
+        <p class="captain-sub">Uzupełnij drużynę (do 15 zawodników) i wyślij do akceptacji sędziego.</p>
+
+        <label class="captain-label" for="captain-team-name">Nazwa drużyny</label>
+        <input type="text" id="captain-team-name" maxlength="80" autocomplete="organization">
+
+        <div class="captain-roster-head">
+            <label class="captain-label" style="margin:0;">Skład</label>
+            <span id="captain-roster-count" style="font-size:11px;font-weight:800;color:#64748b;">0 / 15</span>
+        </div>
+        <div id="captain-players"></div>
+        <div class="captain-actions">
+            <button type="button" class="captain-btn captain-btn--secondary" id="captain-add-player">+ Zawodnik</button>
+        </div>
+
+        <div id="captain-gk-wrap">
+            <label class="captain-label" for="captain-gk">Bramkarz (wymagane)</label>
+            <select id="captain-gk" required></select>
+        </div>
+        <div id="captain-cap-wrap">
+            <label class="captain-label" for="captain-cap">Kapitan (wymagane)</label>
+            <select id="captain-cap" required></select>
+        </div>
+
+        <label class="captain-label" for="captain-team-note">O drużynie</label>
+        <textarea id="captain-team-note" maxlength="500" placeholder="Skąd jesteście, jak długo gracie, osiągnięcia…"></textarea>
+        <div class="captain-char-count" id="captain-note-count">0 / 500</div>
+
+        <label class="captain-label" for="captain-bio">Kilka słów o kapitanie</label>
+        <textarea id="captain-bio" maxlength="500" placeholder="Kim jesteś, jak zespół się zorganizował…"></textarea>
+        <div class="captain-char-count" id="captain-bio-count">0 / 500</div>
+
+        <label class="captain-label" for="captain-photo-input">Zdjęcie drużyny</label>
+        <input type="file" id="captain-photo-input" accept="image/jpeg,image/png,image/*">
+        <img id="captain-photo-preview" class="captain-photo-preview" alt="Podgląd zdjęcia drużyny">
+        <button type="button" class="captain-btn captain-btn--secondary" id="captain-photo-clear" style="display:none;">Usuń zdjęcie</button>
+
+        <button type="button" class="captain-btn captain-btn--primary" id="captain-submit">Wyślij do akceptacji</button>
+        <button type="button" class="captain-btn captain-btn--close" id="captain-close" disabled title="Dostępne po wysłaniu składu">Zamknij stronę</button>
+        <p id="captain-status" class="captain-status" role="status"></p>
     </div>
 </div>
 
@@ -4263,8 +4514,9 @@
 
                     <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry drużyny</div>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan</span></label>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz</span></label>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz (w karcie Składy)</span></label>
+                    <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Przy włączonych zawodnikach Kapitan i Bramkarz są wymagane. Formularz kapitana zawsze wymaga wyboru obu ról.</p>
                     <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
                         <span style="font-weight:bold;">Format gry:</span>
                         <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
@@ -4482,6 +4734,18 @@
         </div>
     </div>
 
+    <div id="captainReviewModal" class="modal">
+        <div class="modal-content match-modal-content" style="max-width:480px;">
+            <span class="match-modal-close" onclick="closeModal('captainReviewModal')" aria-label="Zamknij">&times;</span>
+            <h4 class="match-modal-title" id="captain-review-title">Zgłoszenie kapitana</h4>
+            <div id="captain-review-body"></div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
+                <button type="button" class="btn-main" style="flex:1; background:#067647; margin:0;" onclick="acceptCaptainSubmission()">Akceptuj</button>
+                <button type="button" class="btn-main" style="flex:1; background:#de350b; margin:0;" onclick="rejectCaptainSubmission()">Odrzuć</button>
+            </div>
+        </div>
+    </div>
+
     <div id="shareModal" class="modal">
         <div class="modal-content share-modal-content">
             <span class="match-modal-close" onclick="closeModal('shareModal')" aria-label="Zamknij">&times;</span>
@@ -4679,6 +4943,10 @@
     const verifyEmailConfigCallable = cloudFunctions.httpsCallable('verifyEmailConfig');
     const generateAssistantTokenCallable = cloudFunctions.httpsCallable('generateAssistantToken');
     const assistantSaveMatchCallable = cloudFunctions.httpsCallable('assistantSaveMatch');
+    const generateCaptainTokenCallable = cloudFunctions.httpsCallable('generateCaptainToken');
+    const acceptCaptainRosterCallable = cloudFunctions.httpsCallable('acceptCaptainRoster');
+    const rejectCaptainRosterCallable = cloudFunctions.httpsCallable('rejectCaptainRoster');
+    window._captainTokenCache = window._captainTokenCache || {};
     let cachedAssistantToken = null;
     let tableOrderDrawerGroup = null;
     window.inlineScoreDrafts = window.inlineScoreDrafts || {};
@@ -4904,7 +5172,9 @@
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
     let isHallMode = viewMode === 'hall';
     let isAssistantMode = viewMode === 'assistant';
+    let isCaptainMode = viewMode === 'captain';
     const assistantTokenParam = urlParams.get('token') || '';
+    const captainTeamParam = urlParams.get('team');
     window.getTournamentDbPath = () => {
         if (archiveId) return 'archiwum/' + archiveId;
         if (localArchiveId && activeKey) return 'turnieje_uzytkownikow/' + activeKey + '/archiwum/' + localArchiveId;
@@ -4922,7 +5192,7 @@
         return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches);
     };
     window.isOrganizerSession = function () {
-        if (isFanMode || isHallMode || isAssistantMode || viewMode === 'admin') return false;
+        if (isFanMode || isHallMode || isAssistantMode || isCaptainMode || viewMode === 'admin') return false;
         const demoStoryOn = !!(document.getElementById('view-demo-story')?.classList.contains('active')
             || (window.DemoStoryController && window.DemoStoryController.isActive && window.DemoStoryController.isActive()));
         if (demoStoryOn || isDemoStoryHost) return false;
@@ -4947,7 +5217,7 @@
         if (appGate) appGate.hidden = !blockApp;
     };
 
-    const isAppDeepLink = !!(activeKey || archiveId || localArchiveId || viewMode === 'archive' || viewMode === 'fan' || viewMode === 'hall' || viewMode === 'assistant');
+    const isAppDeepLink = !!(activeKey || archiveId || localArchiveId || viewMode === 'archive' || viewMode === 'fan' || viewMode === 'hall' || viewMode === 'assistant' || viewMode === 'captain');
     if (isAdminHost && isAppDeepLink) {
         window.location.replace(APP_SITE_URL + '/' + (window.location.search || ''));
     } else if (isAdminHost) {
@@ -5108,6 +5378,12 @@
             document.getElementById('view-login').classList.remove('active'); 
             document.getElementById('view-admin').classList.add('active');
             initAdminAuth();
+        } else if (isCaptainMode && activeKey) {
+            document.body.classList.add('captain-view');
+            document.getElementById('view-captain').classList.add('active');
+            if (window.CaptainView && typeof window.CaptainView.init === 'function') {
+                window.CaptainView.init();
+            }
         } else if (activeKey || archiveId) {
             document.getElementById('view-app').classList.add('active');
             initAppModule();
@@ -6800,6 +7076,11 @@
 
     window.syncPitchCountFromForm = function () {
         if (isFanMode || isHallMode || isAssistantMode) return;
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            if (typeof window.syncPitchCountToForm === 'function') window.syncPitchCountToForm();
+            window.alertTournamentWriteLocked();
+            return;
+        }
         if (!state.settings) state.settings = {};
         const el = document.getElementById('pitch-count');
         let n = el ? parseInt(el.value, 10) : 0;
@@ -6886,6 +7167,10 @@
     };
 
     window.setAwardMvp = function (opts) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
         opts = opts || {};
         const awards = window.getAwardsMeta();
         const name = String(opts.name != null ? opts.name : '').trim();
@@ -6924,6 +7209,10 @@
     };
 
     window.setAllStarSlot = function (index, opts) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
         opts = opts || {};
         const awards = window.trimAwardsToSquadSize();
         const i = parseInt(index, 10);
@@ -7031,6 +7320,10 @@
         if ((state.settings.teamParams.captain || state.settings.teamParams.gk) && !state.settings.teamParams.players) {
             state.settings.teamParams.players = true;
         }
+        if (state.settings.teamParams.players) {
+            state.settings.teamParams.captain = true;
+            state.settings.teamParams.gk = true;
+        }
         if (parseInt(state.settings.teamParams.squadSize, 10) !== 6) {
             state.settings.teamParams.squadSize = 7;
         }
@@ -7038,6 +7331,11 @@
 
     window.syncTeamParamsFromForm = function () {
         if (isFanMode || isHallMode || isAssistantMode) return;
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
+            window.alertTournamentWriteLocked();
+            return;
+        }
         if (!state.settings) state.settings = {};
         const playersEl = document.getElementById('tp-players');
         const capEl = document.getElementById('tp-captain');
@@ -7054,6 +7352,12 @@
             gk = false;
             if (capEl) capEl.checked = false;
             if (gkEl) gkEl.checked = false;
+        } else {
+            // Zawodnicy włączone → Kapitan i Bramkarz obowiązkowe (widok Składy + spójność z formularzem kapitana)
+            captain = true;
+            gk = true;
+            if (capEl) capEl.checked = true;
+            if (gkEl) gkEl.checked = true;
         }
         state.settings.teamParams = {
             players: players,
@@ -7071,6 +7375,11 @@
 
     window.syncMatchParamsFromForm = function () {
         if (isFanMode || isHallMode || isAssistantMode) return;
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
+            window.alertTournamentWriteLocked();
+            return;
+        }
         if (!state.settings) state.settings = {};
         const cardsEl = document.getElementById('mp-cards');
         const nameEl = document.getElementById('mp-cards-name');
@@ -7092,6 +7401,7 @@
         window.ensureTeamAndMatchParams();
         const tp = window.getTeamParams();
         const mp = window.getMatchParams();
+        const writeLocked = window.isTournamentWriteLocked && window.isTournamentWriteLocked();
         const playersEl = document.getElementById('tp-players');
         const capEl = document.getElementById('tp-captain');
         const gkEl = document.getElementById('tp-gk');
@@ -7099,8 +7409,14 @@
         const nameEl = document.getElementById('mp-cards-name');
         const nameRow = document.getElementById('mp-cards-name-row');
         if (playersEl) playersEl.checked = tp.players;
-        if (capEl) capEl.checked = tp.captain;
-        if (gkEl) gkEl.checked = tp.gk;
+        if (capEl) {
+            capEl.checked = tp.players ? true : tp.captain;
+            capEl.disabled = writeLocked || !!tp.players;
+        }
+        if (gkEl) {
+            gkEl.checked = tp.players ? true : tp.gk;
+            gkEl.disabled = writeLocked || !!tp.players;
+        }
         const squad6 = document.getElementById('tp-squad-size-6');
         const squad7 = document.getElementById('tp-squad-size-7');
         if (squad6 && squad7) {
@@ -7110,6 +7426,52 @@
         if (cardsEl) cardsEl.checked = mp.cardsEnabled;
         if (nameEl) nameEl.checked = mp.cardsRequireName;
         if (nameRow) nameRow.style.display = mp.cardsEnabled ? '' : 'none';
+        if (typeof window.applyTournamentWriteLockToStartUi === 'function') {
+            window.applyTournamentWriteLockToStartUi();
+        }
+    };
+
+    /** Disable Start/Składy structure controls when tournament is archived. */
+    window.applyTournamentWriteLockToStartUi = function () {
+        const locked = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked()
+            && !(typeof isFanMode !== 'undefined' && isFanMode)
+            && !(typeof isHallMode !== 'undefined' && isHallMode)
+            && !(typeof isAssistantMode !== 'undefined' && isAssistantMode));
+        const ids = [
+            'tournament-name', 'team-count', 'group-count', 'bracket-size', 'advancing-count',
+            'pitch-count', 'tp-players', 'tp-captain', 'tp-gk', 'tp-squad-size-6', 'tp-squad-size-7',
+            'mp-cards', 'mp-cards-name'
+        ];
+        ids.forEach(function (id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (id === 'tp-captain' || id === 'tp-gk') {
+                const tp = window.getTeamParams ? window.getTeamParams() : {};
+                el.disabled = locked || !!tp.players;
+            } else {
+                el.disabled = locked;
+            }
+        });
+        document.querySelectorAll('#setup-view button.btn-main, #demo-lock-btn-container button.btn-main').forEach(function (btn) {
+            if (!btn) return;
+            btn.disabled = locked;
+            btn.style.opacity = locked ? '0.55' : '';
+            btn.style.cursor = locked ? 'not-allowed' : '';
+        });
+        let banner = document.getElementById('tournament-closed-banner');
+        if (locked) {
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'tournament-closed-banner';
+                banner.style.cssText = 'background:#fff7ed;border:1px solid #fdba74;color:#9a3412;padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;line-height:1.4;';
+                const setup = document.getElementById('setup-view');
+                if (setup && setup.firstChild) setup.insertBefore(banner, setup.firstChild.nextSibling);
+                else if (setup) setup.prepend(banner);
+            }
+            banner.textContent = 'Turniej zamknięty (zarchiwizowany) — tylko odczyt. Edycja ustawień, składów i wyników jest zablokowana.';
+        } else if (banner) {
+            banner.remove();
+        }
     };
 
     window.findTeamById = function (teamId) {
@@ -7143,9 +7505,14 @@
     };
 
     window.addTeamPlayer = function (teamIndex) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
         const t = state.teams && state.teams[teamIndex];
         if (!t) return;
         const input = document.getElementById('tp-add-player-' + teamIndex);
+        const numInput = document.getElementById('tp-add-num-' + teamIndex);
         const name = window.normalizePlayerName(input ? input.value : '');
         if (!name) { alert('Wpisz nazwisko zawodnika.'); return; }
         if (!Array.isArray(t.players)) t.players = [];
@@ -7154,14 +7521,27 @@
             return;
         }
         const player = { id: window.genPlayerId(), name: name };
+        if (numInput && String(numInput.value).trim() !== '') {
+            const n = parseInt(numInput.value, 10);
+            if (isNaN(n) || n < 0 || n > 99) {
+                alert('Numer zawodnika musi być w zakresie 0–99.');
+                return;
+            }
+            player.number = n;
+        }
         t.players.push(player);
         window.syncTeamObjectField(t.id, { players: t.players.slice() });
         if (input) input.value = '';
+        if (numInput) numInput.value = '';
         window.renderInputs();
         window.save();
     };
 
     window.removeTeamPlayer = function (teamIndex, playerId) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
         const t = state.teams && state.teams[teamIndex];
         if (!t || !Array.isArray(t.players)) return;
         const p = t.players.find(x => x.id === playerId);
@@ -7177,6 +7557,10 @@
     };
 
     window.setTeamRoleFromSelect = function (teamIndex, role, playerId) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
         const t = state.teams && state.teams[teamIndex];
         if (!t) return;
         const pid = playerId || null;
@@ -8026,15 +8410,24 @@
     };
 
     /**
-     * Protokół tylko do odczytu: kibic/hala/archiwum URL albo turniej zamknięty po ZARCHIWIZUJ.
-     * Korekty kartek/wyniku po `played` są dozwolone, dopóki turniej nie jest zamknięty.
+     * Pełny zakaz zapisu: kibic/hala/archiwum URL albo turniej po ZARCHIWIZUJ (`meta.tournamentClosed`).
+     * Po samym finale (przed archiwum) edycja pozostaje otwarta.
      */
-    window.isMatchProtocolLocked = function () {
+    window.isTournamentWriteLocked = function () {
         if (typeof isFanMode !== 'undefined' && isFanMode) return true;
         if (typeof isHallMode !== 'undefined' && isHallMode) return true;
         if (typeof archiveId !== 'undefined' && archiveId) return true;
         if (typeof localArchiveId !== 'undefined' && localArchiveId) return true;
         return !!(state && state.meta && state.meta.tournamentClosed);
+    };
+
+    /** Alias historyczny — protokół meczu / kartki / wynik. */
+    window.isMatchProtocolLocked = function () {
+        return window.isTournamentWriteLocked();
+    };
+
+    window.alertTournamentWriteLocked = function () {
+        alert('Turniej jest zamknięty (zarchiwizowany) — tylko odczyt. Edycja wyników, składów i ustawień jest zablokowana.');
     };
 
     window.formatCardsLogSnippet = function (m) {
@@ -9004,6 +9397,11 @@
         };
 
         window.syncTeamData = (index, field, value) => {
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                if (typeof window.renderInputs === 'function') window.renderInputs();
+                return;
+            }
             value = value.trim().toUpperCase();
             const tid = state.teams[index].id; state.teams[index][field] = value;
             if(state.groups) Object.keys(state.groups).forEach(gn => state.groups[gn].forEach(t => { if(t.id === tid) t[field] = value; }));
@@ -9023,6 +9421,10 @@
         };
 
         window.generateInputs = () => {
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                return;
+            }
             const c = parseInt(document.getElementById('team-count').value) || 0;
             const nG = parseInt(document.getElementById('group-count').value) || 0;
             const bSize = parseInt(document.getElementById('bracket-size').value) || 8;
@@ -9063,49 +9465,249 @@
             const cont = document.getElementById('inputs-container');
             if (!cont) return;
             const tp = window.getTeamParams();
+            const writeLocked = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
             const help = document.getElementById('sklady-help');
             if (help) {
-                const bits = ['Wpisz nazwy drużyn'];
-                if (tp.players) bits.push('dodaj zawodników do składu');
-                if (tp.gk) bits.push('wybierz bramkarza');
-                if (tp.captain) bits.push('wybierz kapitana');
-                help.textContent = bits.join(', ') + '. Zmiany zapisują się automatycznie.';
+                if (writeLocked) {
+                    help.textContent = 'Turniej zamknięty — tylko odczyt. Edycja składów i linków kapitana jest zablokowana.';
+                } else {
+                    const bits = ['Wpisz nazwy drużyn'];
+                    if (tp.players) bits.push('dodaj zawodników albo wyślij link kapitanowi (do 15 osób)');
+                    if (tp.gk) bits.push('wybierz bramkarza');
+                    if (tp.captain) bits.push('wybierz kapitana');
+                    help.textContent = bits.join(', ') + '. Zmiany zapisują się automatycznie.';
+                }
             }
+            if (typeof window.applyTournamentWriteLockToStartUi === 'function') {
+                window.applyTournamentWriteLockToStartUi();
+            }
+            const subs = state.captainSubmissions || {};
             cont.innerHTML = state.teams.map((t, i) => {
                 if (!Array.isArray(t.players)) t.players = [];
+                const sub = subs[String(t.id)] || null;
+                const inviteSt = (sub && sub.status === 'pending') ? 'pending'
+                    : (sub && sub.status === 'rejected') ? 'rejected'
+                    : (sub && sub.status === 'accepted') ? 'accepted'
+                    : (t.captainInviteStatus || '');
+                let badge = '';
+                if (inviteSt === 'pending') badge = '<span class="captain-invite-badge captain-invite-badge--pending">Czeka na akceptację</span>';
+                else if (inviteSt === 'accepted') badge = '<span class="captain-invite-badge captain-invite-badge--accepted">Zaakceptowano</span>';
+                else if (inviteSt === 'rejected') badge = '<span class="captain-invite-badge captain-invite-badge--rejected">Odrzucono</span>';
+                else if (inviteSt === 'invited') badge = '<span class="captain-invite-badge captain-invite-badge--invited">Zaproszenie</span>';
+
                 let html = '<div class="card" style="margin-bottom:10px; padding:10px 12px;">';
                 html += '<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:' + (tp.players ? '8px' : '0') + ';">';
-                html += '<input type="text" value="' + escAttr(t.name) + '" onchange="syncTeamData(' + i + ',\'name\',this.value)" placeholder="Nazwa drużyny" style="flex:1.5; min-width:140px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-weight:700;">';
-                if (tp.gk) {
-                    html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Bramkarz<select onchange="setTeamRoleFromSelect(' + i + ',\'gk\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
-                        t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.gkId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
-                        '</select></label>';
+                if (t.photoUrl) {
+                    html += '<img class="captain-team-photo-thumb" src="' + escAttr(t.photoUrl) + '" alt="">';
                 }
-                if (tp.captain) {
-                    html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Kapitan<select onchange="setTeamRoleFromSelect(' + i + ',\'cap\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
-                        t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.capId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
-                        '</select></label>';
+                if (writeLocked) {
+                    html += '<div style="flex:1.5; min-width:140px; font-size:13px; font-weight:800; color:#172b4d;">' + esc(t.name || ('Drużyna ' + (i + 1))) + '</div>';
+                    if (tp.gk) {
+                        const gkName = (t.players.find(p => p.id === t.gkId) || {}).name || t.gk || '—';
+                        html += '<span style="font-size:11px; color:#64748b;">Bramkarz: <b style="color:#172b4d;">' + esc(gkName) + '</b></span>';
+                    }
+                    if (tp.captain) {
+                        const capName = (t.players.find(p => p.id === t.capId) || {}).name || t.cap || '—';
+                        html += '<span style="font-size:11px; color:#64748b;">Kapitan: <b style="color:#172b4d;">' + esc(capName) + '</b></span>';
+                    }
+                } else {
+                    html += '<input type="text" value="' + escAttr(t.name) + '" onchange="syncTeamData(' + i + ',\'name\',this.value)" placeholder="Nazwa drużyny" style="flex:1.5; min-width:140px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-weight:700;">';
+                    if (tp.gk) {
+                        html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Bramkarz<select onchange="setTeamRoleFromSelect(' + i + ',\'gk\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
+                            t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.gkId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
+                            '</select></label>';
+                    }
+                    if (tp.captain) {
+                        html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Kapitan<select onchange="setTeamRoleFromSelect(' + i + ',\'cap\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
+                            t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.capId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
+                            '</select></label>';
+                    }
                 }
+                html += badge;
                 html += '</div>';
                 if (tp.players) {
                     html += '<div style="font-size:11px; font-weight:700; color:#172b4d; margin-bottom:4px;">Skład</div>';
                     if (!t.players.length) {
-                        html += '<div style="font-size:11px; color:#94a3b8; margin-bottom:6px;">Brak zawodników — dodaj poniżej (zapis trwały).</div>';
+                        html += '<div style="font-size:11px; color:#94a3b8; margin-bottom:6px;">' +
+                            (writeLocked ? 'Brak zawodników.' : 'Brak zawodników — dodaj poniżej albo wyślij link kapitanowi.') +
+                            '</div>';
                     } else {
                         html += '<ul style="list-style:none; padding:0; margin:0 0 8px;">' + t.players.map(p =>
-                            '<li style="display:flex; align-items:center; gap:8px; padding:4px 0; border-bottom:1px solid #f1f5f9; font-size:12px;"><span style="flex:1; font-weight:600;">' + esc(p.name) + '</span>' +
-                            '<button type="button" onclick="removeTeamPlayer(' + i + ',\'' + escAttr(p.id) + '\')" style="border:none; background:#ffebe6; color:#de350b; border-radius:4px; padding:2px 8px; cursor:pointer; font-weight:700;">Usuń</button></li>'
+                            '<li style="display:flex; align-items:center; gap:8px; padding:4px 0; border-bottom:1px solid #f1f5f9; font-size:12px;">' +
+                            (p.number != null ? '<span style="min-width:28px;font-weight:800;color:#64748b;">#' + esc(String(p.number)) + '</span>' : '') +
+                            '<span style="flex:1; font-weight:600;">' + esc(p.name) + '</span>' +
+                            (writeLocked ? '' : '<button type="button" onclick="removeTeamPlayer(' + i + ',\'' + escAttr(p.id) + '\')" style="border:none; background:#ffebe6; color:#de350b; border-radius:4px; padding:2px 8px; cursor:pointer; font-weight:700;">Usuń</button>') +
+                            '</li>'
                         ).join('') + '</ul>';
                     }
-                    html += '<div style="display:flex; gap:6px;"><input type="text" id="tp-add-player-' + i + '" placeholder="Nazwisko zawodnika" style="flex:1; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addTeamPlayer(' + i + ');}">' +
-                        '<button type="button" class="btn-main" style="margin:0; padding:8px 12px; width:auto;" onclick="addTeamPlayer(' + i + ')">Dodaj</button></div>';
+                    if (!writeLocked) {
+                        html += '<div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">' +
+                            '<input type="number" id="tp-add-num-' + i + '" min="0" max="99" placeholder="#" title="Numer zawodnika (0–99)" style="width:56px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; text-align:center; font-weight:700;" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addTeamPlayer(' + i + ');}">' +
+                            '<input type="text" id="tp-add-player-' + i + '" placeholder="Imię i nazwisko" style="flex:1; min-width:120px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px;" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addTeamPlayer(' + i + ');}">' +
+                            '<button type="button" class="btn-main" style="margin:0; padding:8px 12px; width:auto;" onclick="addTeamPlayer(' + i + ')">Dodaj</button></div>';
+                    }
+                }
+                if ((t.teamNote || t.captainBio) && !isFanMode) {
+                    html += '<div style="margin-top:8px;font-size:11px;color:#64748b;line-height:1.4;">';
+                    if (t.teamNote) html += '<div><b>O drużynie:</b> ' + esc(t.teamNote) + '</div>';
+                    if (t.captainBio) html += '<div><b>Kapitan:</b> ' + esc(t.captainBio) + '</div>';
+                    html += '</div>';
+                }
+                if (!writeLocked && !isFanMode && !isHallMode && !isAssistantMode && tp.players) {
+                    html += '<div class="captain-invite-bar">';
+                    html += '<button type="button" class="btn-main" style="margin:0;padding:6px 10px;width:auto;font-size:11px;" onclick="inviteCaptainForTeam(' + i + ')">Link kapitana</button>';
+                    if (inviteSt === 'pending') {
+                        html += '<button type="button" class="btn-main" style="margin:0;padding:6px 10px;width:auto;font-size:11px;background:#c2410c;" onclick="openCaptainReview(' + i + ')">Przejrzyj zgłoszenie</button>';
+                    }
+                    html += '<span id="captain-link-' + i + '" style="font-size:10px;color:#64748b;word-break:break-all;"></span>';
+                    html += '</div>';
                 }
                 html += '</div>';
                 return html;
             }).join('');
         };
 
+        window.buildCaptainShareUrl = function (teamId, token) {
+            const base = window.location.href.split('?')[0];
+            return base + '?view=captain&id=' + encodeURIComponent(activeKey) +
+                '&team=' + encodeURIComponent(teamId) +
+                '&token=' + encodeURIComponent(token);
+        };
+
+        window.inviteCaptainForTeam = function (teamIndex) {
+            if (!activeKey || isFanMode || isAssistantMode) return;
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                return;
+            }
+            const t = state.teams && state.teams[teamIndex];
+            if (!t) return;
+            const tp = window.getTeamParams();
+            if (!tp.players) {
+                alert('Włącz „Podaj dane zawodników” w ustawieniach turnieju.');
+                return;
+            }
+            generateCaptainTokenCallable({ key: activeKey, teamId: t.id })
+                .then(function (res) {
+                    const token = res.data && res.data.token;
+                    if (!token) throw new Error('Brak tokenu');
+                    window._captainTokenCache[String(t.id)] = token;
+                    t.captainInviteStatus = 'invited';
+                    if (typeof window.syncTeamObjectField === 'function') {
+                        window.syncTeamObjectField(t.id, { captainInviteStatus: 'invited' });
+                    }
+                    const url = window.buildCaptainShareUrl(t.id, token);
+                    if (typeof window.renderInputs === 'function') window.renderInputs();
+                    const el = document.getElementById('captain-link-' + teamIndex);
+                    if (el) el.textContent = url;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(url).then(function () {
+                            alert('Skopiowano link kapitana do schowka.\nWyślij go kapitanowi (mail / WhatsApp).');
+                        }).catch(function () {
+                            prompt('Skopiuj link kapitana:', url);
+                        });
+                    } else {
+                        prompt('Skopiuj link kapitana:', url);
+                    }
+                })
+                .catch(function (err) {
+                    alert('❌ ' + ((err && err.message) || 'Nie udało się wygenerować linku.'));
+                });
+        };
+
+        window._captainReviewTeamId = null;
+
+        window.openCaptainReview = function (teamIndex) {
+            const t = state.teams && state.teams[teamIndex];
+            if (!t) return;
+            const sub = (state.captainSubmissions || {})[String(t.id)];
+            if (!sub || sub.status !== 'pending' || !sub.payload) {
+                alert('Brak zgłoszenia oczekującego na akceptację.');
+                return;
+            }
+            window._captainReviewTeamId = t.id;
+            const p = sub.payload;
+            const body = document.getElementById('captain-review-body');
+            const title = document.getElementById('captain-review-title');
+            if (title) title.textContent = p.name || t.name || 'Zgłoszenie kapitana';
+            if (body) {
+                let html = '';
+                if (p.photoUrl) html += '<img class="captain-review-photo" src="' + escAttr(p.photoUrl) + '" alt="">';
+                html += '<ul class="captain-review-list">';
+                (p.players || []).forEach(function (pl) {
+                    html += '<li><span style="min-width:28px;font-weight:800;color:#64748b;">' +
+                        (pl.number != null ? '#' + esc(String(pl.number)) : '—') +
+                        '</span><span style="flex:1;font-weight:600;">' + esc(pl.name) + '</span></li>';
+                });
+                html += '</ul>';
+                html += '<div style="font-size:12px;color:#64748b;line-height:1.45;">';
+                html += '<div><b>Bramkarz:</b> ' + esc(p.gk || '—') + '</div>';
+                html += '<div><b>Kapitan:</b> ' + esc(p.cap || '—') + '</div>';
+                if (p.teamNote) html += '<div style="margin-top:6px;"><b>O drużynie:</b> ' + esc(p.teamNote) + '</div>';
+                if (p.captainBio) html += '<div><b>O kapitanie:</b> ' + esc(p.captainBio) + '</div>';
+                html += '</div>';
+                body.innerHTML = html;
+            }
+            document.getElementById('captainReviewModal').style.display = 'block';
+        };
+
+        window.acceptCaptainSubmission = function () {
+            if (!activeKey || window._captainReviewTeamId == null) return;
+            acceptCaptainRosterCallable({ key: activeKey, teamId: window._captainReviewTeamId })
+                .then(function () {
+                    window.closeModal('captainReviewModal');
+                    return db.ref(window.getTournamentDbPath()).once('value');
+                })
+                .then(function (snap) {
+                    if (typeof window.applyTournamentState === 'function') window.applyTournamentState(snap.val());
+                    else if (snap && snap.val) {
+                        const data = snap.val();
+                        if (data) {
+                            state.teams = data.teams || state.teams;
+                            state.captainSubmissions = data.captainSubmissions || {};
+                            state.groups = data.groups || state.groups;
+                            state.matches = data.matches || state.matches;
+                            state.playoffs = data.playoffs || state.playoffs;
+                        }
+                    }
+                    if (typeof window.renderInputs === 'function') window.renderInputs();
+                    alert('Skład zaakceptowany.');
+                })
+                .catch(function (err) {
+                    alert('❌ ' + ((err && err.message) || 'Akceptacja nie powiodła się.'));
+                });
+        };
+
+        window.rejectCaptainSubmission = function () {
+            if (!activeKey || window._captainReviewTeamId == null) return;
+            const reason = prompt('Powód odrzucenia (opcjonalnie):', 'Popraw skład i wyślij ponownie.') || '';
+            rejectCaptainRosterCallable({ key: activeKey, teamId: window._captainReviewTeamId, reason: reason })
+                .then(function () {
+                    window.closeModal('captainReviewModal');
+                    return db.ref(window.getTournamentDbPath()).once('value');
+                })
+                .then(function (snap) {
+                    if (typeof window.applyTournamentState === 'function') window.applyTournamentState(snap.val());
+                    else if (snap && snap.val) {
+                        const data = snap.val();
+                        if (data) {
+                            state.teams = data.teams || state.teams;
+                            state.captainSubmissions = data.captainSubmissions || {};
+                        }
+                    }
+                    if (typeof window.renderInputs === 'function') window.renderInputs();
+                    alert('Zgłoszenie odrzucone — kapitan może poprawić i wysłać ponownie.');
+                })
+                .catch(function (err) {
+                    alert('❌ ' + ((err && err.message) || 'Odrzucenie nie powiodło się.'));
+                });
+        };
+
         window.losujGrupy = () => {
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                return;
+            }
             if(state.groups && Object.keys(state.groups).length > 0) { if(!confirm("UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. Kontynuować?")) return; }
             saveLastSnapshot();
             let sh = [...(state.teams || [])].sort(()=>0.5-Math.random()); let nG = parseInt(document.getElementById('group-count').value) || 1;
@@ -9238,6 +9840,10 @@
 
         window.syncTournamentMeta = (field, value) => {
             if (isFanMode) return;
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                return;
+            }
             if (!state.meta) state.meta = {};
             state.meta[field] = String(value || '').trim();
             window.save();
@@ -9246,6 +9852,10 @@
 
         window.syncFinalAfterThirdSetting = function (checked) {
             if (isFanMode || isHallMode || isAssistantMode) return;
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                window.alertTournamentWriteLocked();
+                return;
+            }
             if (!state.settings) state.settings = {};
             state.settings.finalAfterThird = !!checked;
             if (typeof window.save === 'function') window.save();
@@ -9721,7 +10331,8 @@
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
             /* Demo Story 3/6 „Na żywo”: bez pól wyniku — jak kibic (–:– + szary status) */
             const demoOrgRo = window._demoStoryOrganizerEmbed === true;
-            const matchRo = fanRo || demoOrgRo;
+            const closedRo = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+            const matchRo = fanRo || demoOrgRo || closedRo;
             const hasPlayoffs = (state.playoffs || []).length > 0;
             if (currentGroupFilter === 'PO' && !hasPlayoffs) currentGroupFilter = 'all';
             const filterIsPo = currentGroupFilter === 'PO';
@@ -10950,8 +11561,8 @@
             if (state.meta && state.meta.tournamentClosed) {
                 panel.className = 'archive-close-panel';
                 panel.innerHTML =
-                    '<h4>🔒 Turniej zarchiwizowany — protokół zamknięty</h4>' +
-                    '<p>Wyniki i kartki są tylko do odczytu. Korekty nie są już możliwe w aktywnej sesji. Podgląd: zakładka <b>Archiwum</b> lub raport PDF.</p>' +
+                    '<h4>🔒 Turniej zarchiwizowany — tylko odczyt</h4>' +
+                    '<p>Turniej zamknięty: wyniki, kartki, składy i ustawienia są tylko do odczytu. Podgląd: zakładka <b>Archiwum</b> lub raport PDF.</p>' +
                     '<div class="archive-close-actions">' +
                     '<button type="button" class="btn-main" style="background:#de350b;" onclick="exportToPDF()">📥 GENERUJ RAPORT PDF</button>' +
                     '</div>';
@@ -11000,12 +11611,16 @@
             db.ref('turnieje_uzytkownikow/' + activeKey + '/archiwum').push(archivePayload).then((ref) => {
                 if (ref && ref.key) archiveDatabase[ref.key] = archivePayload;
                 window.save();
+                if (typeof window.applyTournamentWriteLockToStartUi === 'function') window.applyTournamentWriteLockToStartUi();
+                if (typeof window.renderInputs === 'function') window.renderInputs();
+                if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+                if (typeof window.renderPodium === 'function') window.renderPodium();
                 window.renderArchiveAndFrozen();
                 window.renderArchiveClosePanel();
                 if (typeof window.switchTab === 'function') window.switchTab('archiwum');
                 return db.ref('archiwum').push(archivePayload);
             }).then(() => {
-                alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!\nProtokoły meczów są od teraz tylko do odczytu.');
+                alert('✅ Turniej został pomyślnie zakończony i przesłany do centralnego archiwum!\nEdycja wyników, składów i ustawień jest od teraz zablokowana (tylko odczyt).');
                 window.renderArchiveClosePanel();
             }).catch(() => {
                 alert('❌ Nie udało się zapisać w centralnym archiwum. Lokalna kopia mogła zostać utworzona — sprawdź listę poniżej.');
@@ -11372,7 +11987,8 @@
                 return;
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            const matchRo = fanRo || window._demoStoryOrganizerEmbed === true;
+            const closedRo = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+            const matchRo = fanRo || window._demoStoryOrganizerEmbed === true || closedRo;
             po = typeof window.sortPlayoffMatchesByRound === 'function'
                 ? window.sortPlayoffMatchesByRound(po)
                 : po;
@@ -11471,7 +12087,8 @@
             const canEdit = !isFanMode && !isHallMode && !isAssistantMode
                 && !archiveId && !localArchiveId
                 && !window._demoStoryFanEmbed
-                && !window._demoStoryPodiumEmbed;
+                && !window._demoStoryPodiumEmbed
+                && !(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
 
             const scorerP = window.parseScorerEntry(stats && stats.scorer);
             const scorerHTML = scorerP
@@ -11519,7 +12136,8 @@
             const canEdit = !isFanMode && !isHallMode && !isAssistantMode
                 && !archiveId && !localArchiveId
                 && !window._demoStoryFanEmbed
-                && !window._demoStoryPodiumEmbed;
+                && !window._demoStoryPodiumEmbed
+                && !(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
             let rows = '';
             for (let i = 0; i < n; i++) {
                 const slot = awards.allStar[i];
@@ -11880,7 +12498,8 @@
 
         const preferCards = (typeof window.tpPreferMatchCards === 'function' && window.tpPreferMatchCards())
             || isFanMode;
-        const matchRo = isFanMode || window._demoStoryFanEmbed === true;
+        const matchRo = isFanMode || window._demoStoryFanEmbed === true
+            || !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
         const sortByTime = (list) => list.slice().sort((a, b) => {
             const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
             if (dt !== 0) return dt;
