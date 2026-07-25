@@ -630,11 +630,8 @@
         #view-app .live-panel-head-meta { display: none; font-weight: 600; color: var(--color-app-text-muted, #64748b); }
         #view-app .live-split-schedule.card,
         #view-app .live-split-standings.card { padding: 8px 10px; margin-bottom: 8px; }
-        #view-app .live-split-standings .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
-        #view-app .live-split-standings .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
-        #view-app .live-split-standings .standings-group-card table { margin-top: 0; }
-        #view-app .live-split-standings .standings-group-card th { padding: 1px 3px; font-size: 7px; line-height: 1.1; }
-        #view-app .live-split-standings .standings-group-card td { padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15; }
+        /* Tabele w Na żywo = te same proporcje co karta Tabele u kibica (bez compact) */
+        #view-app .live-split-standings .standings-group-card { margin-bottom: 10px; }
         #view-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
         #view-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
         #view-app .tables-render-target[data-compact="true"] table { margin-top: 0; }
@@ -1649,6 +1646,37 @@
             gap: 6px 8px;
             margin-bottom: 4px;
         }
+        /* Kibic / Demo fan: karta Boiska — 1 linia (godz. → drużyny → wynik) */
+        body.fan-view #view-app .assistant-match-card-head,
+        #view-demo-story .demo-fan-embed-host .assistant-match-card-head,
+        #view-demo-story .demo-embed-app .assistant-match-card-head:has(.assistant-match-card-teams--inline) {
+            flex-wrap: nowrap;
+            margin-bottom: 0;
+        }
+        body.fan-view #view-app .assistant-match-card-teams--inline,
+        #view-demo-story .demo-fan-embed-host .assistant-match-card-teams--inline,
+        #view-demo-story .demo-embed-app .assistant-match-card-teams--inline {
+            flex: 1 1 auto;
+            min-width: 0;
+            margin: 0;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1.2;
+            color: #172b4d;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+        body.fan-view #view-app .assistant-match-card-head .live-time,
+        body.fan-view #view-app .assistant-match-card-head .live-score-cell,
+        body.fan-view #view-app .assistant-match-card-head .live-status-dot,
+        body.fan-view #view-app .assistant-match-card-head .live-match-no,
+        body.fan-view #view-app .assistant-match-card-head .live-group-badge,
+        body.fan-view #view-app .assistant-match-card-head .live-pitch-badge {
+            flex-shrink: 0;
+        }
         #view-app .assistant-match-card-teams,
         #view-demo-story .demo-embed-app .assistant-match-card-teams {
             font-weight: 700;
@@ -2265,12 +2293,30 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-        /* Boisko / Wynik jak Grupa — readonly nie potrzebuje szerokości pod inputy */
-        body.fan-view #view-app .live-match-table col.col-pitch,
+        /* Grupa jak wcześniej; Boisko szersze pod badge „Boisko N” (bez nachodzenia na Godz.) */
         body.fan-view #view-app .live-match-table col.col-group,
-        #view-demo-story .demo-embed-app .live-match-table col.col-pitch,
         #view-demo-story .demo-embed-app .live-match-table col.col-group {
             width: 42px;
+        }
+        body.fan-view #view-app .live-match-table col.col-pitch,
+        #view-demo-story .demo-embed-app .live-match-table col.col-pitch {
+            width: 80px;
+        }
+        body.fan-view #view-app .live-match-table td.col-pitch,
+        #view-demo-story .demo-embed-app .live-match-table td.col-pitch {
+            max-width: 80px;
+            overflow: hidden;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+        body.fan-view #view-app .live-pitch-badge,
+        #view-demo-story .demo-embed-app .live-pitch-badge {
+            display: inline-block;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
         }
         body.fan-view #view-app .live-match-table col.col-score,
         #view-demo-story .demo-embed-app .live-match-table col.col-score {
@@ -2318,9 +2364,11 @@
             body.fan-view #view-app .live-match-table col.col-no,
             #view-demo-story .demo-embed-app .live-match-table col.col-no { width: 28px; }
             body.fan-view #view-app .live-match-table col.col-group,
+            #view-demo-story .demo-embed-app .live-match-table col.col-group { width: 36px; }
             body.fan-view #view-app .live-match-table col.col-pitch,
-            #view-demo-story .demo-embed-app .live-match-table col.col-group,
-            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 36px; }
+            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 72px; }
+            body.fan-view #view-app .live-match-table td.col-pitch,
+            #view-demo-story .demo-embed-app .live-match-table td.col-pitch { max-width: 72px; }
             body.fan-view #view-app .live-match-table col.col-time,
             #view-demo-story .demo-embed-app .live-match-table col.col-time { width: 42px; }
             body.fan-view #view-app .live-match-table col.col-score,
@@ -3641,13 +3689,7 @@
         }
         #view-demo-story .demo-embed-app .live-split-schedule.card,
         #view-demo-story .demo-embed-app .live-split-standings.card { padding: 8px 10px; margin-bottom: 8px; }
-        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
-        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
-        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card table { margin-top: 0; }
-        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card th { padding: 1px 3px; font-size: 7px; }
-        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card td {
-            padding: 1px 3px; min-height: var(--row-height-table-compact, 20px); font-size: 10px; line-height: 1.15;
-        }
+        #view-demo-story .demo-embed-app .live-split-standings .standings-group-card { margin-bottom: 10px; }
         #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] .standings-group-card { margin-bottom: 4px; padding: 4px 6px; }
         #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] .standings-group-card h4 { font-size: 10px; margin: 0 0 2px; line-height: 1.15; }
         #view-demo-story .demo-embed-app .tables-render-target[data-compact="true"] th { padding: 1px 3px; font-size: 7px; }
@@ -4610,7 +4652,7 @@
                     </div>
                     <div class="live-split-standings card">
                         <h4 class="live-panel-head">Tabele na żywo</h4>
-                        <div id="live-tables-container" class="tables-render-target" data-compact="true"></div>
+                        <div id="live-tables-container" class="tables-render-target" data-layout="fan"></div>
                         <div id="live-table-order-cta" class="live-table-order-cta"></div>
                         <div class="live-po-actions">
                             <button class="btn-main" id="btn-start-po-live" onclick="generujPlayoff()" style="background:#00875a; width:100%;">START PLAY-OFF</button>
@@ -9074,6 +9116,21 @@
             ? window.renderScheduleShiftControlsHTML(m, isPo)
             : '';
         const cardCls = 'assistant-match-card' + (m.played ? ' is-played' : '');
+        const teamsTitle = escAttr((m.t1 && m.t1.name ? m.t1.name : '') + ' vs ' + (m.t2 && m.t2.name ? m.t2.name : ''));
+        /* Kibic / readonly: 1 linia — drużyny między godziną a wynikiem */
+        if (opts.readonly) {
+            return '<article class="' + cardCls + '">' +
+                '<div class="assistant-match-card-head">' +
+                '<span class="live-match-no">#' + matchNo + '</span>' +
+                groupBadge +
+                (pitchCtrl || '') +
+                '<span class="live-time">' + esc(m.time || '—') + '</span>' +
+                shiftHTML +
+                '<span class="assistant-match-card-teams assistant-match-card-teams--inline" title="' + teamsTitle + '">' + teamsHTML + '</span>' +
+                headScore +
+                '</div>' +
+                '</article>';
+        }
         return '<article class="' + cardCls + '">' +
             '<div class="assistant-match-card-head">' +
             '<span class="live-match-no">#' + matchNo + '</span>' +
@@ -10648,19 +10705,28 @@
             };
 
             const fullBody = buildTablesBody(fanRo);
-            const compactBody = buildTablesBody(true);
+            const fanLikeBody = buildTablesBody(true);
+            const compactBody = fanLikeBody;
 
             containers.forEach(cont => {
                 const compact = cont.getAttribute('data-compact') === 'true';
+                const fanLayout = fanRo || cont.getAttribute('data-layout') === 'fan' || cont.id === 'live-tables-container';
                 // Na żywo / demo: w fazie pucharowej ZOSTAW tabele grup (zielona strefa awansu).
-                // Nie podmieniaj na hall-po-sidebar — po przeniesieniu #nazywo do demo-embed
-                // style hali (#view-app / .demo-hall-embed-host) nie działają → „surowy tekst”.
                 if (compact && window.isPlayoffPhase()) {
                     cont.innerHTML = compactBody
                         || '<p style="color:#64748b;font-size:12px;margin:8px 0;">Brak tabel grupowych.</p>';
                     return;
                 }
-                cont.innerHTML = (compact ? '' : infoBanner) + (compact ? compactBody : fullBody);
+                if (compact) {
+                    cont.innerHTML = compactBody;
+                    return;
+                }
+                // Kibic + Na żywo Tabele (sędzia): te same proporcje i treść bez strzałek ↑↓
+                if (fanLayout) {
+                    cont.innerHTML = infoBanner + fanLikeBody;
+                    return;
+                }
+                cont.innerHTML = infoBanner + fullBody;
             });
 
             ['btn-start-po', 'btn-start-po-live'].forEach(btnId => {
