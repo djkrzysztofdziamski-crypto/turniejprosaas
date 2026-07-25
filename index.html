@@ -4554,6 +4554,10 @@
                     <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
                     <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–99):</span> <input type="number" id="pitch-count" min="0" max="99" value="0" title="0 lub 1 = wyłączone; 2–99 = przydział boisk" onchange="syncPitchCountFromForm()"></div>
 
+                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Losowanie grup</div>
+                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="seeding-enabled" onchange="syncSeedingEnabledFromForm()"> <span>Rozstawiaj zespoły</span></label>
+                    <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Po włączeniu w karcie Składy oznaczysz rozstawione drużyny i kolejność siły (1 = najmocniejsza, max 10). Wyłączone = klasyczne losowanie wszystkich.</p>
+
                     <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry drużyny</div>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
                     <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
@@ -7468,9 +7472,170 @@
         if (cardsEl) cardsEl.checked = mp.cardsEnabled;
         if (nameEl) nameEl.checked = mp.cardsRequireName;
         if (nameRow) nameRow.style.display = mp.cardsEnabled ? '' : 'none';
+        if (typeof window.syncSeedingEnabledToForm === 'function') window.syncSeedingEnabledToForm();
         if (typeof window.applyTournamentWriteLockToStartUi === 'function') {
             window.applyTournamentWriteLockToStartUi();
         }
+    };
+
+    window.SEED_MAX = 10;
+
+    window.isSeedingEnabled = function () {
+        return !!(state && state.settings && state.settings.seedingEnabled);
+    };
+
+    window.syncSeedingEnabledToForm = function () {
+        const el = document.getElementById('seeding-enabled');
+        if (el) el.checked = window.isSeedingEnabled();
+    };
+
+    window.clearAllTeamSeeds = function () {
+        (state.teams || []).forEach(function (t) {
+            if (!t) return;
+            if (t.seeded || t.seedRank != null) {
+                delete t.seeded;
+                delete t.seedRank;
+                if (typeof window.syncTeamObjectField === 'function') {
+                    window.syncTeamObjectField(t.id, { seeded: null, seedRank: null });
+                }
+            }
+        });
+    };
+
+    window.syncSeedingEnabledFromForm = function () {
+        if (typeof isFanMode !== 'undefined' && (isFanMode || isHallMode || isAssistantMode)) return;
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.syncSeedingEnabledToForm();
+            window.alertTournamentWriteLocked();
+            return;
+        }
+        if (!state.settings) state.settings = {};
+        const el = document.getElementById('seeding-enabled');
+        const on = !!(el && el.checked);
+        state.settings.seedingEnabled = on;
+        if (!on) window.clearAllTeamSeeds();
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.renderInputs === 'function') window.renderInputs();
+    };
+
+    window.getSeededTeamsSorted = function () {
+        return (state.teams || [])
+            .filter(function (t) { return t && t.seeded; })
+            .sort(function (a, b) {
+                return (parseInt(a.seedRank, 10) || 999) - (parseInt(b.seedRank, 10) || 999);
+            });
+    };
+
+    window.renumberSeedRanks = function () {
+        const seeded = window.getSeededTeamsSorted();
+        seeded.forEach(function (t, i) {
+            t.seeded = true;
+            t.seedRank = i + 1;
+            if (typeof window.syncTeamObjectField === 'function') {
+                window.syncTeamObjectField(t.id, { seeded: true, seedRank: t.seedRank });
+            }
+        });
+    };
+
+    window.toggleTeamSeeded = function (teamIndex, checked) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            if (typeof window.renderInputs === 'function') window.renderInputs();
+            return;
+        }
+        if (!window.isSeedingEnabled()) return;
+        const t = state.teams && state.teams[teamIndex];
+        if (!t) return;
+        if (checked) {
+            const n = window.getSeededTeamsSorted().length;
+            if (n >= window.SEED_MAX) {
+                alert('Można rozstawić maksymalnie ' + window.SEED_MAX + ' drużyn.');
+                if (typeof window.renderInputs === 'function') window.renderInputs();
+                return;
+            }
+            t.seeded = true;
+            t.seedRank = n + 1;
+            if (typeof window.syncTeamObjectField === 'function') {
+                window.syncTeamObjectField(t.id, { seeded: true, seedRank: t.seedRank });
+            }
+        } else {
+            t.seeded = false;
+            delete t.seedRank;
+            if (typeof window.syncTeamObjectField === 'function') {
+                window.syncTeamObjectField(t.id, { seeded: null, seedRank: null });
+            }
+            window.renumberSeedRanks();
+        }
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.renderInputs === 'function') window.renderInputs();
+    };
+
+    window.setTeamSeedRank = function (teamIndex, newRank) {
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            window.alertTournamentWriteLocked();
+            return;
+        }
+        const t = state.teams && state.teams[teamIndex];
+        if (!t || !t.seeded) return;
+        newRank = parseInt(newRank, 10);
+        if (!Number.isFinite(newRank) || newRank < 1) return;
+        const others = window.getSeededTeamsSorted().filter(function (x) { return x.id !== t.id; });
+        newRank = Math.min(newRank, others.length + 1);
+        others.splice(newRank - 1, 0, t);
+        others.forEach(function (x, i) {
+            x.seeded = true;
+            x.seedRank = i + 1;
+            if (typeof window.syncTeamObjectField === 'function') {
+                window.syncTeamObjectField(x.id, { seeded: true, seedRank: x.seedRank });
+            }
+        });
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.renderInputs === 'function') window.renderInputs();
+    };
+
+    window.pickGroupWithFewest = function (groupNames, scoreFn) {
+        let best = Infinity;
+        const candidates = [];
+        groupNames.forEach(function (gn) {
+            const c = scoreFn(gn);
+            if (c < best) {
+                best = c;
+                candidates.length = 0;
+                candidates.push(gn);
+            } else if (c === best) {
+                candidates.push(gn);
+            }
+        });
+        return candidates[Math.floor(Math.random() * candidates.length)];
+    };
+
+    /** Wariant B: koszyk 1 (po 1 na grupę) + nadwyżka do grup z najmniejszą liczbą seedów, potem reszta. */
+    window.assignTeamsToGroupsWithSeeding = function (allTeams, groupNames, seedsSorted) {
+        const groups = {};
+        groupNames.forEach(function (gn) { groups[gn] = []; });
+        const seedIds = {};
+        (seedsSorted || []).forEach(function (t) { seedIds[t.id] = true; });
+        const pot1 = (seedsSorted || []).slice(0, Math.min(seedsSorted.length, groupNames.length));
+        const pot2 = (seedsSorted || []).slice(groupNames.length);
+        const groupOrder = groupNames.slice().sort(function () { return 0.5 - Math.random(); });
+        pot1.forEach(function (t, i) {
+            groups[groupOrder[i % groupOrder.length]].push(t);
+        });
+        pot2.forEach(function (t) {
+            const gn = window.pickGroupWithFewest(groupNames, function (name) {
+                return groups[name].filter(function (x) { return seedIds[x.id]; }).length;
+            });
+            groups[gn].push(t);
+        });
+        const rest = (allTeams || []).filter(function (t) { return t && !seedIds[t.id]; })
+            .sort(function () { return 0.5 - Math.random(); });
+        rest.forEach(function (t) {
+            const gn = window.pickGroupWithFewest(groupNames, function (name) {
+                return groups[name].length;
+            });
+            groups[gn].push(t);
+        });
+        return groups;
     };
 
     /** Disable Start/Składy structure controls when tournament is archived. */
@@ -7481,7 +7646,7 @@
             && !(typeof isAssistantMode !== 'undefined' && isAssistantMode));
         const ids = [
             'tournament-name', 'team-count', 'group-count', 'bracket-size', 'advancing-count',
-            'pitch-count', 'tp-players', 'tp-captain', 'tp-gk', 'tp-squad-size-6', 'tp-squad-size-7',
+            'pitch-count', 'seeding-enabled', 'tp-players', 'tp-captain', 'tp-gk', 'tp-squad-size-6', 'tp-squad-size-7',
             'mp-cards', 'mp-cards-name'
         ];
         ids.forEach(function (id) {
@@ -9450,7 +9615,12 @@
             const banner = info.uneven
                 ? `<div class="uneven-groups-banner" style="background:#fff7e6; border:1px solid #ffd591; color:#ad6800; padding:10px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; line-height:1.4;">⚠ ${esc(window.formatUnevenGroupsMessage(info))}</div>`
                 : '';
-            cont.innerHTML = banner + Object.keys(state.groups).map(gn => `<div class="card"><h4>Grupa ${gn}</h4><ul>${state.groups[gn].map(t=>`<li>${esc(t.name)}</li>`).join('')}</ul></div>`).join('');
+            cont.innerHTML = banner + Object.keys(state.groups).map(gn => `<div class="card"><h4>Grupa ${gn}</h4><ul>${state.groups[gn].map(t => {
+                const seed = t && t.seeded && t.seedRank != null
+                    ? ' <span style="font-size:10px;font-weight:800;color:#067647;">(seed ' + esc(String(t.seedRank)) + ')</span>'
+                    : '';
+                return '<li>' + esc(t.name) + seed + '</li>';
+            }).join('')}</ul></div>`).join('');
         };
 
         window.syncTeamData = (index, field, value) => {
@@ -9523,16 +9693,20 @@
             if (!cont) return;
             const tp = window.getTeamParams();
             const writeLocked = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+            const seedingOn = !isFanMode && !isHallMode && !isAssistantMode && window.isSeedingEnabled();
+            const seededList = seedingOn ? window.getSeededTeamsSorted() : [];
             const help = document.getElementById('sklady-help');
             if (help) {
                 if (writeLocked) {
                     help.textContent = 'Turniej zamknięty — tylko odczyt. Edycja składów i linków kapitana jest zablokowana.';
                 } else {
                     const bits = ['Wpisz nazwy drużyn'];
+                    if (seedingOn) bits.push('oznacz rozstawione (max ' + window.SEED_MAX + ', 1 = najmocniejsza)');
                     if (tp.players) bits.push('dodaj zawodników albo wyślij link kapitanowi (do 15 osób)');
                     if (tp.gk) bits.push('wybierz bramkarza');
                     if (tp.captain) bits.push('wybierz kapitana');
-                    help.textContent = bits.join(', ') + '. Zmiany zapisują się automatycznie.';
+                    help.textContent = bits.join(', ') + '. Zmiany zapisują się automatycznie.' +
+                        (seedingOn ? ' Rozstawione: ' + seededList.length + '/' + window.SEED_MAX + '.' : '');
                 }
             }
             if (typeof window.applyTournamentWriteLockToStartUi === 'function') {
@@ -9559,6 +9733,9 @@
                 }
                 if (writeLocked) {
                     html += '<div style="flex:1.5; min-width:140px; font-size:13px; font-weight:800; color:#172b4d;">' + esc(t.name || ('Drużyna ' + (i + 1))) + '</div>';
+                    if (seedingOn && t.seeded) {
+                        html += '<span class="live-group-badge" style="background:#ecfdf5;color:#067647;border-color:#abefc6;" title="Rozstawienie">Seed ' + esc(String(t.seedRank || '')) + '</span>';
+                    }
                     if (tp.gk) {
                         const gkName = (t.players.find(p => p.id === t.gkId) || {}).name || t.gk || '—';
                         html += '<span style="font-size:11px; color:#64748b;">Bramkarz: <b style="color:#172b4d;">' + esc(gkName) + '</b></span>';
@@ -9569,6 +9746,18 @@
                     }
                 } else {
                     html += '<input type="text" value="' + escAttr(t.name) + '" onchange="syncTeamData(' + i + ',\'name\',this.value)" placeholder="Nazwa drużyny" style="flex:1.5; min-width:140px; font-size:12px; padding:8px 5px; border:1px solid #c1c7d0; border-radius:4px; font-weight:700;">';
+                    if (seedingOn) {
+                        html += '<label style="font-size:11px; color:#64748b; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">' +
+                            '<input type="checkbox" ' + (t.seeded ? 'checked ' : '') + 'onchange="toggleTeamSeeded(' + i + ', this.checked)"> Rozstawiona</label>';
+                        if (t.seeded) {
+                            const maxR = Math.max(seededList.length, 1);
+                            let opts = '';
+                            for (let r = 1; r <= maxR; r++) {
+                                opts += '<option value="' + r + '"' + (parseInt(t.seedRank, 10) === r ? ' selected' : '') + '>' + r + '</option>';
+                            }
+                            html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Siła<select onchange="setTeamSeedRank(' + i + ', this.value)" style="min-width:52px; padding:6px; border:1px solid #c1c7d0; border-radius:4px; font-weight:700;">' + opts + '</select></label>';
+                        }
+                    }
                     if (tp.gk) {
                         html += '<label style="font-size:11px; color:#64748b; display:flex; flex-direction:column; gap:2px;">Bramkarz<select onchange="setTeamRoleFromSelect(' + i + ',\'gk\',this.value)" style="min-width:120px; padding:6px; border:1px solid #c1c7d0; border-radius:4px;"><option value="">—</option>' +
                             t.players.map(p => '<option value="' + escAttr(p.id) + '"' + (t.gkId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
@@ -9765,16 +9954,54 @@
                 window.alertTournamentWriteLocked();
                 return;
             }
-            if(state.groups && Object.keys(state.groups).length > 0) { if(!confirm("UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. Kontynuować?")) return; }
+            const teams = (state.teams || []).slice();
+            if (!teams.length) {
+                alert('Najpierw utwórz drużyny na karcie Start.');
+                return;
+            }
+            let nG = parseInt(document.getElementById('group-count').value, 10) || 1;
+            if (nG > teams.length) nG = teams.length;
+            if (nG < 1) {
+                alert('Ustaw liczbę grup większą od 0.');
+                return;
+            }
+
+            const seedingOn = window.isSeedingEnabled();
+            const seeds = seedingOn ? window.getSeededTeamsSorted() : [];
+            if (seedingOn && seeds.length === 0) {
+                if (!confirm('Włączono „Rozstawiaj zespoły”, ale nie oznaczono żadnej drużyny w Składach.\nLosować klasycznie (wszystkie drużyny)?')) return;
+            }
+            if (seedingOn && seeds.length > nG) {
+                const extra = seeds.length - nG;
+                if (!confirm(
+                    'Rozstawionych: ' + seeds.length + ', grup: ' + nG + '.\n' +
+                    'Nadwyżka (' + extra + ') trafi do grup, które już mają rozstawionego — niektóre grupy będą miały po 2 (lub więcej) rozstawionych.\n\nKontynuować?'
+                )) return;
+            }
+            if (state.groups && Object.keys(state.groups).length > 0) {
+                if (!confirm('UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. Kontynuować?')) return;
+            }
+
             saveLastSnapshot();
-            let sh = [...(state.teams || [])].sort(()=>0.5-Math.random()); let nG = parseInt(document.getElementById('group-count').value) || 1;
-            if (nG > sh.length) nG = sh.length;
+            const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').slice(0, nG);
 
-            let names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').slice(0,nG); state.groups = {}; names.forEach(g=>state.groups[g]=[]);
-            sh.forEach((t,i)=>state.groups[names[i%nG]].push(t));
+            if (seedingOn && seeds.length > 0) {
+                state.groups = window.assignTeamsToGroupsWithSeeding(teams, names, seeds);
+                window.logAction('Rozlosowano grupy z rozstawieniem (' + seeds.length + ' seedów, wariant B).');
+                if (!state.settings) state.settings = {};
+                state.settings.seedingEnabled = false;
+                if (typeof window.syncSeedingEnabledToForm === 'function') window.syncSeedingEnabledToForm();
+            } else {
+                state.groups = {};
+                names.forEach(function (g) { state.groups[g] = []; });
+                const sh = teams.slice().sort(function () { return 0.5 - Math.random(); });
+                sh.forEach(function (t, i) { state.groups[names[i % nG]].push(t); });
+                window.logAction('Rozlosowano drużyny do grup automatycznie.');
+            }
 
-            if(state.settings) { delete state.settings.customTableOrder; delete state.settings.confirmedTableOrder; }
-            tempLocalOrders = {}; window.logAction("Rozlosowano drużyny do grup automatycznie.");
+            if (state.settings) { delete state.settings.customTableOrder; delete state.settings.confirmedTableOrder; }
+            tempLocalOrders = {};
+            if (typeof window.renderInputs === 'function') window.renderInputs();
             window.renderGroupsList(); window.save(); window.renderDashboard(); switchTab('grupy');
             const sizeInfo = window.getGroupSizeInfo();
             if (sizeInfo.uneven) alert('⚠ ' + window.formatUnevenGroupsMessage(sizeInfo));
@@ -10734,7 +10961,7 @@
                 if(!poBtn) return;
                 if (isDemoMode || window._demoStoryFanEmbed) { poBtn.style.display = 'none'; return; }
                 poBtn.style.display = '';
-                if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
+                if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 START PLAY-OFF - ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
                 else { poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer'; poBtn.innerText = "START PLAY-OFF"; }
             });
 
@@ -12358,6 +12585,8 @@
                 }
                 if (!window.isSkladyInputsFocused()) window.renderInputs();
                 window.syncTournamentMetaToForm();
+                if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
+                if (typeof window.syncPitchCountToForm === 'function') window.syncPitchCountToForm();
                 if (state.groups && Object.keys(state.groups).length > 0) {
                     window.renderGroupsList();
                     if (!isAssistantMode) window.filterAndRenderMatches();
