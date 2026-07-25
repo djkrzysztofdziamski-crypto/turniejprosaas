@@ -11348,55 +11348,128 @@
         };
 
         window.exportToPDF = function() {
-            const s = window.calcStats(); const f = window.findGrandFinalMatch(); const m3 = state.playoffs.find(m => m.n.includes("3. MIEJSCE"));
+            const s = window.calcStats();
+            const f = window.findGrandFinalMatch();
+            const m3 = (state.playoffs || []).find(m => m.n && m.n.includes('3. MIEJSCE'));
             const getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
             const getL = (m) => m.g1 > m.g2 ? m.t2 : (m.g1 < m.g2 ? m.t1 : (m.pen1 > m.pen2 ? m.t2 : m.t1));
             const finalDecided = f && window.isMatchDecided(f);
-            const gold = finalDecided ? getW(f) : {name:"-"}; const silver = finalDecided ? getL(f) : {name:"-"}; const bronze = m3?.played && window.isMatchDecided(m3) ? getW(m3) : {name:"-"};
-            const gkAward = window.formatGkAwardHTML(s.gk, s.allGk);
-            const scorerAward = window.formatScorerAwardHTML(s.scorer);
-            const now = new Date().toLocaleString('pl-PL'); const el = document.createElement('div');
+            const gold = finalDecided ? getW(f) : { name: '—' };
+            const silver = finalDecided ? getL(f) : { name: '—' };
+            const bronze = m3 && m3.played && window.isMatchDecided(m3) ? getW(m3) : { name: '—' };
 
-            el.innerHTML = `<div style="padding:26px 26px 24px; font-family: sans-serif; background:white; color:#172b4d;">
-                <style>
-                    .podium-award-player{font-size:16px;font-weight:800;color:#fff;}
-                    .podium-award-team{font-size:13px;color:#57d9a3;font-weight:700;}
-                    /* PDF: nie ucinaj wierszy tabeli między stronami */
-                    table { page-break-inside: auto; break-inside: auto; }
-                    tr { page-break-inside: avoid; break-inside: avoid; }
-                    td { page-break-inside: avoid; break-inside: avoid; }
-                    /* PDF: protokół czytelny i szeroki */
-                    .pdf-match-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px; }
-                    .pdf-match-table td { padding: 8px 8px; border: 1px solid #102a43; vertical-align: middle; line-height: 1.35; }
-                    .pdf-match-table td:nth-child(1) { text-align: left; }
-                    .pdf-match-table td:nth-child(2) { width: 72px; text-align: center; font-weight: 800; }
-                    .pdf-match-table td:nth-child(3) { text-align: left; word-break: break-word; overflow-wrap: anywhere; }
-                    .pdf-section-title { margin-top: 18px; border-bottom: 2px solid #0747a6; padding-bottom: 6px; }
-                </style>
-                <div style="text-align:center; margin-bottom:20px;">
-                    <picture><source srcset="logo.webp" type="image/webp"><img src="logo.png" alt="Turniejomat" style="max-width:180px; height:auto; margin:0 auto;"></picture>
-                    <p style="font-size:11px; color:#94a3b8; margin:8px 0 0;">Turniejomat · powered by TurniejPro</p>
-                </div>
-                <h1 style="text-align:center; color:#0747a6; margin:0; font-size:28px;">OFICJALNY RAPORT TURNIEJU</h1>
-                <p style="text-align:center; font-size:12px; color:#666;">Wygenerowano: ${now}</p>
-                <div style="border:3px solid #ffcc00; border-radius:15px; padding:24px; text-align:center; margin:22px 0 18px;"><span style="font-size:40px;">🏆</span> <span style="font-size:32px; font-weight:800; color:#0747a6;">${esc(gold.name)}</span></div>
-                <div style="display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:5px; text-align:center; align-items:flex-end;"><div style="background:#e5e5e5; padding:15px; border-radius:8px 8px 0 0;">2. MIEJSCE<br><b>${esc(silver.name)}</b></div><div style="background:#ffcc00; padding:25px; border-radius:8px 8px 0 0;">1. MIEJSCE<br><b style="font-size:18px;">${esc(gold.name)}</b></div><div style="background:#f5f5f5; padding:10px; border-radius:8px 8px 0 0;">3. MIEJSCE<br><b>${esc(bronze.name)}</b></div></div>
-                <div style="background:#172b4d; color:white; border-radius:12px; display:grid; grid-template-columns:1fr 1fr; padding:16px; gap:10px; margin-top:14px;"><div style="border-right:1px solid rgba(255,255,255,0.16);">⚽ KRÓL STRZELCÓW<br><b>${scorerAward}</b></div><div>🧤 ZŁOTA RĘKAWICA<br><b>${gkAward}</b></div></div>
-                <h3 class="pdf-section-title">🗓 PROTOKÓŁ MECZOWY</h3>
-                <table class="pdf-match-table">
-                    <colgroup>
-                        <col style="width:52%">
-                        <col style="width:12%">
-                        <col style="width:36%">
-                    </colgroup>
-                    ${state.matches.filter(m=>m.played).map(m=>`<tr><td>${esc(m.t1.name)} - ${esc(m.t2.name)}</td><td>${m.g1}:${m.g2}</td><td>${(m.s1||[]).map(x=>esc(x.name)).join(', ')} / ${(m.s2||[]).map(x=>esc(x.name)).join(', ')}</td></tr>`).join('')}
-                    ${state.playoffs.filter(m=>m.played).map(m=>`<tr style="background:#fff9c4;"><td>${esc(m.n)}: ${esc(m.t1.name)} - ${esc(m.t2.name)}</td><td>${m.g1}:${m.g2}${m.pen1!=null ? ` (k. ${m.pen1}:${m.pen2})` : ''}</td><td>${(m.s1||[]).map(x=>esc(x.name)).join(', ')} / ${(m.s2||[]).map(x=>esc(x.name)).join(', ')}</td></tr>`).join('')}
-                </table>
-            </div>`;
+            const scorerP = typeof window.parseScorerEntry === 'function' ? window.parseScorerEntry(s.scorer) : null;
+            let scorerLine = '—';
+            if (scorerP && scorerP.name) {
+                const person = window.formatPodiumPersonName(scorerP.name);
+                scorerLine = person + (scorerP.team ? ' (' + scorerP.team + ')' : '');
+                if (s.scorer && s.scorer[1] != null && typeof window.formatPolishGoals === 'function') {
+                    scorerLine += ' · ' + window.formatPolishGoals(s.scorer[1]);
+                }
+            }
+            let gkLine = '—';
+            const gkWinners = (typeof window.buildGoalkeepersTopRanked === 'function' && s.allGk)
+                ? window.buildGoalkeepersTopRanked(s.allGk, 1)
+                : (s.gk ? [{ gk: s.gk }] : []);
+            if (gkWinners.length) {
+                gkLine = gkWinners.map(function (row) {
+                    const n = row.gk && row.gk.n ? window.formatPodiumPersonName(row.gk.n) : '—';
+                    const t = row.gk && row.gk.t ? row.gk.t : '';
+                    return n + (t ? ' (' + t + ')' : '');
+                }).join(', ');
+                if (gkWinners.length > 1) gkLine += ' · ex aequo';
+            }
+
+            const pdfScorers = function (m) {
+                const a = (m.s1 || []).map(function (x) { return x && x.name ? String(x.name).trim() : ''; }).filter(Boolean).join(', ');
+                const b = (m.s2 || []).map(function (x) { return x && x.name ? String(x.name).trim() : ''; }).filter(Boolean).join(', ');
+                if (!a && !b) return '—';
+                return (a || '—') + ' / ' + (b || '—');
+            };
+
+            const matchRows = [];
+            (state.matches || []).filter(function (m) { return m && m.played; }).forEach(function (m) {
+                matchRows.push({
+                    label: (m.t1 && m.t1.name ? m.t1.name : '—') + ' - ' + (m.t2 && m.t2.name ? m.t2.name : '—'),
+                    score: String(m.g1) + ':' + String(m.g2),
+                    scorers: pdfScorers(m),
+                    po: false
+                });
+            });
+            (state.playoffs || []).filter(function (m) { return m && m.played; }).forEach(function (m) {
+                matchRows.push({
+                    label: (m.n ? m.n + ': ' : '') + (m.t1 && m.t1.name ? m.t1.name : '—') + ' - ' + (m.t2 && m.t2.name ? m.t2.name : '—'),
+                    score: String(m.g1) + ':' + String(m.g2) + (m.pen1 != null ? ' (k. ' + m.pen1 + ':' + m.pen2 + ')' : ''),
+                    scorers: pdfScorers(m),
+                    po: true
+                });
+            });
+
+            const chunkSize = 14;
+            let protocolHTML = '';
+            if (!matchRows.length) {
+                protocolHTML = '<p style="font-size:12px;color:#64748b;">Brak zakończonych meczów.</p>';
+            } else {
+                for (let i = 0; i < matchRows.length; i += chunkSize) {
+                    const chunk = matchRows.slice(i, i + chunkSize);
+                    if (i > 0) protocolHTML += '<div class="pdf-break"></div>';
+                    protocolHTML += '<table class="pdf-match-table"><thead><tr>' +
+                        '<th>Mecz</th><th>Wynik</th><th>Strzelcy</th>' +
+                        '</tr></thead><tbody>' +
+                        chunk.map(function (row) {
+                            return '<tr' + (row.po ? ' style="background:#fff9c4;"' : '') + '>' +
+                                '<td>' + esc(row.label) + '</td>' +
+                                '<td>' + esc(row.score) + '</td>' +
+                                '<td>' + esc(row.scorers) + '</td></tr>';
+                        }).join('') +
+                        '</tbody></table>';
+                }
+            }
+
+            const now = new Date().toLocaleString('pl-PL');
+            const el = document.createElement('div');
+            el.innerHTML =
+                '<div style="padding:16px 18px 12px; font-family:Arial,Helvetica,sans-serif; background:#fff; color:#172b4d; box-sizing:border-box;">' +
+                '<style>' +
+                '.pdf-break{page-break-before:always;break-before:page;height:0;margin:0;padding:0;}' +
+                '.pdf-match-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;margin:0 0 8px;}' +
+                '.pdf-match-table th,.pdf-match-table td{padding:5px 6px;border:1px solid #102a43;vertical-align:middle;line-height:1.3;word-break:break-word;}' +
+                '.pdf-match-table th{background:#e8eef5;font-size:9px;text-transform:uppercase;letter-spacing:0.04em;text-align:center;}' +
+                '.pdf-match-table td:nth-child(1){text-align:left;width:48%;}' +
+                '.pdf-match-table td:nth-child(2){text-align:center;font-weight:800;width:14%;}' +
+                '.pdf-match-table td:nth-child(3){text-align:left;width:38%;}' +
+                '.pdf-match-table thead{display:table-header-group;}' +
+                '.pdf-match-table tr{page-break-inside:avoid;break-inside:avoid;}' +
+                '.pdf-section-title{margin:14px 0 8px;border-bottom:2px solid #0747a6;padding-bottom:4px;font-size:14px;color:#0747a6;}' +
+                '.pdf-nobreak{page-break-inside:avoid;break-inside:avoid;}' +
+                '</style>' +
+                '<div class="pdf-nobreak" style="text-align:center;margin-bottom:12px;">' +
+                '<img src="logo.png" alt="Turniejomat" style="max-width:160px;height:auto;display:block;margin:0 auto;">' +
+                '<p style="font-size:11px;color:#94a3b8;margin:6px 0 0;">Turniejomat · powered by TurniejPro</p>' +
+                '<h1 style="text-align:center;color:#0747a6;margin:10px 0 4px;font-size:22px;">OFICJALNY RAPORT TURNIEJU</h1>' +
+                '<p style="text-align:center;font-size:11px;color:#666;margin:0;">Wygenerowano: ' + esc(now) + '</p>' +
+                '</div>' +
+                '<div class="pdf-nobreak" style="border:3px solid #ffcc00;border-radius:12px;padding:14px;text-align:center;margin:12px 0 10px;">' +
+                '<span style="font-size:28px;">🏆</span> ' +
+                '<span style="font-size:24px;font-weight:800;color:#0747a6;">' + esc(gold.name) + '</span></div>' +
+                '<div class="pdf-nobreak" style="display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:5px;text-align:center;align-items:flex-end;margin-bottom:10px;">' +
+                '<div style="background:#e5e5e5;padding:10px;border-radius:8px 8px 0 0;font-size:12px;">2. MIEJSCE<br><b>' + esc(silver.name) + '</b></div>' +
+                '<div style="background:#ffcc00;padding:16px;border-radius:8px 8px 0 0;font-size:12px;">1. MIEJSCE<br><b style="font-size:16px;">' + esc(gold.name) + '</b></div>' +
+                '<div style="background:#f5f5f5;padding:8px;border-radius:8px 8px 0 0;font-size:12px;">3. MIEJSCE<br><b>' + esc(bronze.name) + '</b></div></div>' +
+                '<div class="pdf-nobreak" style="background:#172b4d;color:#ffffff;border-radius:10px;display:grid;grid-template-columns:1fr 1fr;padding:12px;gap:10px;margin:0 0 8px;">' +
+                '<div style="border-right:1px solid rgba(255,255,255,0.2);padding-right:8px;color:#ffffff;font-size:11px;">⚽ KRÓL STRZELCÓW<br>' +
+                '<span style="font-size:14px;font-weight:800;color:#ffffff;">' + esc(scorerLine) + '</span></div>' +
+                '<div style="color:#ffffff;font-size:11px;">🧤 ZŁOTA RĘKAWICA<br>' +
+                '<span style="font-size:14px;font-weight:800;color:#ffffff;">' + esc(gkLine) + '</span></div></div>' +
+                '<h3 class="pdf-section-title">PROTOKÓŁ MECZOWY</h3>' +
+                protocolHTML +
+                '</div>';
+
             html2pdf().from(el).set({
                 filename: 'Raport_Turnieju.pdf',
-                margin: [10, 10, 12, 10],
-                pagebreak: { mode: ['css', 'legacy'], avoid: ['tr'] },
+                margin: [8, 8, 10, 8],
+                pagebreak: { mode: ['css', 'legacy'], before: '.pdf-break', avoid: ['tr', '.pdf-nobreak', 'thead'] },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save();
         };
