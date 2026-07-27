@@ -9764,6 +9764,12 @@
                 if (tp.captain) { t.cap = ''; t.capId = null; }
                 return t;
             });
+            /* Stare zgłoszenia kapitana (accepted/pending) mają te same teamId 0..n — wyczyść przy nowej bazie */
+            state.captainSubmissions = {};
+            if (window._captainTokenCache) window._captainTokenCache = {};
+            if (activeKey) {
+                try { db.ref('kapitanowie/' + activeKey).remove(); } catch (_) {}
+            }
 
             window.logAction(`Utworzono baza ${c} drużyn. Szablon drabinki: ${bSize}, Realny awans: ${advC} zespołów.`);
             window.renderInputs(); window.save(); window.renderDashboard(); switchTab('sklady');
@@ -12006,15 +12012,21 @@
         window.resetData = () => {
             if (!confirm("RESET? Aktywny turniej zostanie wyczyszczony. Archiwum i wstrzymane sesje zostaną zachowane.")) return;
             saveLastSnapshot();
-            db.ref('turnieje_uzytkownikow/' + activeKey).update({
+            const base = 'turnieje_uzytkownikow/' + activeKey;
+            db.ref(base).update({
                 teams: [],
                 groups: {},
                 matches: [],
                 playoffs: [],
                 settings: {},
                 logs: [],
-                meta: {}
-            }).then(() => location.reload());
+                meta: {},
+                captainSubmissions: null
+            }).then(() => db.ref('kapitanowie/' + activeKey).remove().catch(function () { return null; }))
+            .then(() => location.reload())
+            .catch(function (err) {
+                alert('❌ Reset nie powiódł się: ' + ((err && err.message) || 'błąd zapisu'));
+            });
         };
 
         window.isTournamentReadyToArchive = function () {
