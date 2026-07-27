@@ -84,7 +84,7 @@
     --bp-tablet: 768px;         /* start TL (dawniej 640) */
     --bp-tablet-md: 768px;
     --bp-tablet-lg: 900px;      /* hall / gęstsze układy */
-    --bp-live-split: 768px;     /* 2-col Na żywo */
+    --bp-live-split: 1100px;    /* 2-col Na żywo (mecze | tabele) */
     --bp-desktop: 1366px;       /* start D (dawniej 1024) */
     --bp-laptop: 1366px;
     --bp-desktop-lg: 1536px;

@@ -595,37 +595,45 @@
         #view-app th { background: var(--color-table-head-bg, #eef2ff); color: var(--color-table-head-text, #334155); padding: 5px 7px; border: 1px solid var(--color-app-border-strong, #cbd5e1); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
         #view-app td { padding: 4px 7px; border: 1px solid var(--color-app-border); text-align: center; min-height: var(--row-height-table, 30px); box-sizing: border-box; line-height: 1.25; font-size: var(--font-size-table, 12px); }
         #view-app tr:nth-child(even) { background-color: var(--color-app-surface-muted, #f1f5f9); }
-        /* --- Na żywo: panele Mecze | Tabele (przełączanie, bez splitu) --- */
+        /* --- Na żywo: mecze | tabele (stały split; stack na wąskim) --- */
         #view-app .live-toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
         #view-app .live-toolbar-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
         #view-app .live-btn-secondary { background: #fff; border: 1px solid var(--color-app-border-strong); color: var(--color-app-text); padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
         #view-app .live-btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
-        #view-app .live-pane-toggle {
-            background: var(--color-accent, #0052cc);
-            border-color: var(--color-accent, #0052cc);
-            color: #fff;
-        }
-        #view-app .live-pane-toggle:hover { background: #0747a6; border-color: #0747a6; color: #fff; }
         #view-app .live-split,
         #view-demo-story .demo-embed-app .live-split {
-            display: block !important;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+            gap: 10px;
+            align-items: start;
             max-width: 100%;
             overflow-x: hidden;
-            grid-template-columns: none !important;
         }
-        #view-app .live-split.live-pane--matches .live-split-standings,
-        #view-demo-story .live-split.live-pane--matches .live-split-standings { display: none !important; }
-        #view-app .live-split.live-pane--tables .live-split-schedule,
-        #view-demo-story .live-split.live-pane--tables .live-split-schedule { display: none !important; }
-        #view-app .live-pane--tables #live-match-filter-bar,
-        #view-demo-story .live-pane--tables #live-match-filter-bar { display: none !important; }
-        body.print-live .live-split.live-pane--matches .live-split-standings,
-        body.print-live .live-split.live-pane--tables .live-split-schedule,
-        body.print-live .live-pane--tables #live-match-filter-bar {
-            display: block !important;
+        @media (max-width: 1099px) {
+            #view-app .live-split,
+            #view-demo-story .demo-embed-app .live-split {
+                grid-template-columns: 1fr;
+            }
         }
         #view-app .live-split-schedule,
         #view-app .live-split-standings { min-width: 0; max-width: 100%; }
+        #view-app #live-workspace-pitches { display: none; margin-top: 0; }
+        #view-app #nazywo.is-pitches-view #live-workspace-matches { display: none; }
+        #view-app #nazywo.is-pitches-view #live-workspace-pitches { display: block; }
+        #view-app #nazywo.is-pitches-view #live-match-filter-bar { display: none; }
+        #view-app .live-pitches-back-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        body:not(.fan-view) #view-app .nav-tabs .nav-pitch-tab { display: none !important; }
+        #view-app #live-boiska-btn { display: none; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-no { width: 26px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-group { width: 32px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-pitch { width: 52px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-time { width: 56px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-score { width: 64px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table col.col-status { width: 22px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table { font-size: 11px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table th { font-size: 8px; padding: 4px 4px; }
+        #view-app .pitches-render-target.pitches-compact .live-match-table td { padding: 2px 4px; }
+        #view-app .pitch-filter-bar { margin-bottom: 10px; }
         #view-app .live-panel-head { font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px; padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display); }
         #view-app .live-panel-head-meta { display: none; font-weight: 600; color: var(--color-app-text-muted, #64748b); }
         #view-app .live-split-schedule.card,
@@ -762,6 +770,7 @@
             body.print-live #tournament-dashboard,
             body.print-live .live-toolbar,
             body.print-live .live-po-actions,
+            body.print-live #live-workspace-pitches,
             body.print-live .header-organizer-actions,
             body.print-live .table-order-btn,
             body.print-live .table-save-btn,
@@ -2783,13 +2792,24 @@
         #view-app .log-line { margin-bottom: 4px; border-bottom: 1px dashed #222; padding-bottom: 2px; }
         #view-app #license-blocked-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(16,42,67,0.98); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; text-align: center; color: white; }
 
-        #view-app #tournament-dashboard { max-width: 950px; margin: 12px auto 0; padding: 0 10px; box-sizing: border-box; }
-        #view-app .tournament-dashboard-card { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #c1c7d0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        #view-app .tournament-dashboard-title { margin: 0 0 12px 0; font-size: 13px; color: #0747a6; font-weight: 800; letter-spacing: 0.3px; }
-        #view-app .tournament-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 10px; }
-        #view-app .dashboard-stat { background: #f4f8ff; border: 1px solid #c1c7d0; border-radius: 8px; padding: 10px 12px; min-width: 0; overflow: hidden; }
-        #view-app .dashboard-stat-label { font-size: 10px; font-weight: 700; color: #42526e; margin-bottom: 4px; line-height: 1.3; white-space: nowrap; }
-        #view-app .dashboard-stat-value { font-size: clamp(12px, 2.2vw, 15px); font-weight: 800; color: #172b4d; white-space: nowrap; word-break: normal; overflow-wrap: normal; }
+        #view-app #tournament-dashboard { max-width: 1100px; margin: 8px auto 0; padding: 0 10px; box-sizing: border-box; }
+        #view-app .tournament-dashboard-card { background: #fff; border-radius: 10px; padding: 10px 12px; border: 1px solid #c1c7d0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        #view-app .tournament-dashboard-title { margin: 0 0 8px 0; font-size: 12px; color: #0747a6; font-weight: 800; letter-spacing: 0.3px; }
+        #view-app .tournament-dashboard-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 2px;
+        }
+        #view-app .dashboard-stat {
+            background: #f4f8ff; border: 1px solid #c1c7d0; border-radius: 8px;
+            padding: 6px 10px; min-width: 0; overflow: hidden;
+            flex: 1 1 0; min-width: 88px;
+        }
+        #view-app .dashboard-stat-label { font-size: 9px; font-weight: 700; color: #42526e; margin-bottom: 2px; line-height: 1.2; white-space: nowrap; }
+        #view-app .dashboard-stat-value { font-size: clamp(11px, 1.6vw, 13px); font-weight: 800; color: #172b4d; white-space: nowrap; word-break: normal; overflow-wrap: normal; }
         #view-app .dashboard-stat-value.dash-fb-online { color: #00875a; }
         #view-app .dashboard-stat-value.dash-fb-offline { color: #de350b; }
 
@@ -2918,11 +2938,6 @@
             cursor: pointer;
             font-family: var(--font-body, sans-serif);
             min-height: 36px;
-        }
-        #view-demo-story .demo-live-embed-host .live-pane-toggle {
-            background: var(--color-accent, #0052cc) !important;
-            border-color: var(--color-accent, #0052cc) !important;
-            color: #fff !important;
         }
         #view-demo-story .demo-hall-embed-host {
             background: #fff;
@@ -3723,7 +3738,15 @@
         #view-demo-story .demo-embed-app .advancing-row td:first-child { border-left: 4px solid #00875a; }
         #view-demo-story .demo-embed-app .absolute-remis-row { background-color: #fff0b3 !important; }
         #view-demo-story .demo-embed-app .absolute-remis-row td:first-child { border-left: 4px solid #ff8b00; }
-        #view-demo-story .demo-embed-app .live-split { display: block; }
+        #view-demo-story .demo-embed-app .live-split {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+            gap: 10px;
+            align-items: start;
+        }
+        @media (max-width: 1099px) {
+            #view-demo-story .demo-embed-app .live-split { grid-template-columns: 1fr; }
+        }
         #view-demo-story .demo-embed-app .live-panel-head {
             font-size: 12px; font-weight: 800; color: var(--color-app-text); margin: 0 0 6px;
             padding-bottom: 4px; border-bottom: 2px solid var(--color-app-border); font-family: var(--font-display);
@@ -4685,7 +4708,7 @@
         </div>
 
         <div id="boiska" class="tab-content">
-            <div id="pitches-container" class="pitches-render-target"></div>
+            <div id="pitches-container" class="pitches-render-target pitches-compact"></div>
         </div>
 
         <div id="nazywo" class="tab-content">
@@ -4693,24 +4716,32 @@
                 <div class="live-toolbar">
                     <div class="filter-bar match-filter-bar" id="live-match-filter-bar" style="flex:1; margin:0;"></div>
                     <div class="live-toolbar-actions">
-                        <button type="button" id="live-pane-toggle" class="live-btn-secondary live-pane-toggle" onclick="toggleLivePane()">Tabele</button>
+                        <button type="button" id="live-boiska-btn" class="live-btn-secondary" onclick="openLivePitchesView()">Boiska</button>
                         <button type="button" class="live-btn-secondary" onclick="showShareModal('fan')">Udostępnij</button>
                         <button type="button" class="live-btn-secondary" onclick="window.printLiveView()">Drukuj</button>
                     </div>
                 </div>
-                <div class="live-split">
-                    <div class="live-split-schedule card">
-                        <h4 class="live-panel-head">Harmonogram meczów<span class="live-panel-head-meta" id="live-schedule-print-meta" hidden></span></h4>
-                        <div id="live-matches-container" class="matches-render-target"></div>
-                    </div>
-                    <div class="live-split-standings card">
-                        <h4 class="live-panel-head">Tabele na żywo</h4>
-                        <div id="live-tables-container" class="tables-render-target" data-layout="fan"></div>
-                        <div id="live-table-order-cta" class="live-table-order-cta"></div>
-                        <div class="live-po-actions">
-                            <button class="btn-main" id="btn-start-po-live" onclick="generujPlayoff()" style="background:#00875a; width:100%;">START PLAY-OFF</button>
+                <div id="live-workspace-matches">
+                    <div class="live-split">
+                        <div class="live-split-schedule card">
+                            <h4 class="live-panel-head">Harmonogram meczów<span class="live-panel-head-meta" id="live-schedule-print-meta" hidden></span></h4>
+                            <div id="live-matches-container" class="matches-render-target"></div>
+                        </div>
+                        <div class="live-split-standings card">
+                            <h4 class="live-panel-head">Tabele fazy grupowej</h4>
+                            <div id="live-tables-container" class="tables-render-target" data-layout="fan"></div>
+                            <div id="live-table-order-cta" class="live-table-order-cta"></div>
+                            <div class="live-po-actions">
+                                <button class="btn-main" id="btn-start-po-live" onclick="generujPlayoff()" style="background:#00875a; width:100%;">START PLAY-OFF</button>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div id="live-workspace-pitches">
+                    <div class="live-pitches-back-bar">
+                        <button type="button" class="live-btn-secondary" onclick="closeLivePitchesView()">← Wróć do Na żywo</button>
+                    </div>
+                    <div id="live-pitches-container" class="pitches-render-target pitches-compact"></div>
                 </div>
             </div>
         </div>
@@ -4945,7 +4976,7 @@
         ).matches;
     };
 
-    window.APP_LANDSCAPE_TAB_IDS = Object.freeze({ mecze: true, tabele: true, playoff: true, podium: true });
+    window.APP_LANDSCAPE_TAB_IDS = Object.freeze({ nazywo: true, mecze: true, tabele: true, playoff: true, podium: true, boiska: true });
     window.tpNeedsAppLandscapeGate = () => {
         if (!window.matchMedia) return false;
         if (window.tpIsDesktopLayout()) return false;
@@ -9639,14 +9670,14 @@
 
             el.innerHTML = `
                 <div class="tournament-dashboard-card">
-                    <h3 class="tournament-dashboard-title">📊 Dashboard turnieju${tourName ? ' · ' + esc(tourName) : ''}</h3>
+                    <h3 class="tournament-dashboard-title">Dashboard${tourName ? ' · ' + esc(tourName) : ''}</h3>
                     <div class="tournament-dashboard-grid">
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">👥 Drużyny</div><div class="dashboard-stat-value">${teams.length}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">⚽ Mecze</div><div class="dashboard-stat-value">${playedMatches} / ${totalMatches}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">🏁 Faza</div><div class="dashboard-stat-value dash-phase">${phase}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">🏆 Play-Off</div><div class="dashboard-stat-value">${poStatus}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">💾 Ostatni zapis</div><div class="dashboard-stat-value">${lastSave}</div></div>
-                        <div class="dashboard-stat"><div class="dashboard-stat-label">🟢 Firebase</div><div class="dashboard-stat-value ${fbClass}" data-dash="fb">${fbStatus}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Drużyny</div><div class="dashboard-stat-value">${teams.length}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Mecze</div><div class="dashboard-stat-value">${playedMatches}/${totalMatches}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Faza</div><div class="dashboard-stat-value dash-phase">${esc(phase)}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Play-Off</div><div class="dashboard-stat-value">${poStatus === 'wygenerowany' ? 'tak' : 'nie'}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Zapis</div><div class="dashboard-stat-value">${esc(lastSave)}</div></div>
+                        <div class="dashboard-stat"><div class="dashboard-stat-label">Firebase</div><div class="dashboard-stat-value ${fbClass}" data-dash="fb">${fbStatus}</div></div>
                     </div>
                 </div>`;
             window._dashSig = sig;
@@ -10254,7 +10285,6 @@
                     metaEl.textContent = '';
                     metaEl.hidden = true;
                 }
-                if (typeof window.syncLivePane === 'function') window.syncLivePane();
             }, 500);
         };
 
@@ -11620,6 +11650,22 @@
 
         window.switchTab = (t) => {
             if (!isFanMode && t === 'mecze') t = 'nazywo';
+            if (!isFanMode && !isAssistantMode && t === 'boiska') {
+                const panelN = document.getElementById('nazywo');
+                if (panelN) {
+                    document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active'));
+                    panelN.classList.add('active');
+                    document.querySelectorAll(`.nav-tabs [onclick="switchTab('nazywo')"]`).forEach(btn => btn.classList.add('active'));
+                    window.renderFilterBar();
+                    window.filterAndRenderMatches();
+                    window.calcTables();
+                    if (typeof window.openLivePitchesView === 'function') window.openLivePitchesView();
+                    if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
+                    if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
+                    if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
+                    return;
+                }
+            }
             const panel = document.getElementById(t);
             if (!panel) return;
             document.querySelectorAll('.tab-content, .nav-btn').forEach(e => e.classList.remove('active'));
@@ -11641,7 +11687,7 @@
                 window.renderFilterBar();
                 window.filterAndRenderMatches();
                 window.calcTables();
-                if (typeof window.syncLivePane === 'function') window.syncLivePane();
+                if (typeof window.closeLivePitchesView === 'function') window.closeLivePitchesView();
             }
             if(t==='grupy') window.renderGroupsList();
             if(t==='podium') window.renderPodium();
@@ -12837,52 +12883,67 @@
     }
 
     // --- 7. START CAŁEGO SYSTEMU ---
-    window._livePane = 'matches';
-
     window.syncLivePane = () => {
-        const split = document.querySelector('#nazywo .live-split');
-        const toggle = document.getElementById('live-pane-toggle');
-        const pane = window._livePane === 'tables' ? 'tables' : 'matches';
-        window._livePane = pane;
-        if (split) {
-            split.classList.toggle('live-pane--matches', pane === 'matches');
-            split.classList.toggle('live-pane--tables', pane === 'tables');
-        }
-        const nazywo = document.getElementById('nazywo');
-        if (nazywo) {
-            nazywo.classList.toggle('live-pane--matches', pane === 'matches');
-            nazywo.classList.toggle('live-pane--tables', pane === 'tables');
-        }
-        if (toggle) {
-            toggle.textContent = pane === 'tables' ? '← Mecze' : 'Tabele';
-        }
-        if (pane === 'tables' && typeof window.calcTables === 'function') {
-            window.calcTables();
-        }
+        /* Legacy no-op: Na żywo always shows matches + group tables side by side. */
+        if (typeof window.calcTables === 'function') window.calcTables();
     };
 
     window.openLiveTablesPane = () => {
-        window._livePane = 'tables';
-        window.syncLivePane();
+        if (typeof window.switchTab === 'function') window.switchTab('nazywo');
+        if (typeof window.calcTables === 'function') window.calcTables();
     };
 
     window.openLiveMatchesPane = () => {
-        window._livePane = 'matches';
-        window.syncLivePane();
+        if (typeof window.switchTab === 'function') window.switchTab('nazywo');
         if (typeof window.renderFilterBar === 'function') window.renderFilterBar();
         if (typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
     };
 
     window.toggleLivePane = () => {
-        if (window._livePane === 'tables') window.openLiveMatchesPane();
-        else window.openLiveTablesPane();
+        window.openLiveMatchesPane();
+    };
+
+    window._pitchViewFilter = 'all';
+    window._pitchViewFilterCount = 0;
+
+    window.setPitchViewFilter = function (val) {
+        if (val === 'all' || val === '' || val == null) {
+            window._pitchViewFilter = 'all';
+        } else {
+            const n = parseInt(val, 10);
+            window._pitchViewFilter = Number.isFinite(n) && n > 0 ? n : 'all';
+        }
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+    };
+
+    window.openLivePitchesView = () => {
+        if (isFanMode || isHallMode || isAssistantMode) return;
+        if (window.getPitchCount() < 1) return;
+        const nazywo = document.getElementById('nazywo');
+        if (!nazywo) return;
+        if (typeof window.switchTab === 'function' && !nazywo.classList.contains('active')) {
+            window.switchTab('nazywo');
+        }
+        nazywo.classList.add('is-pitches-view');
+        if (typeof window.renderPitchesView === 'function') window.renderPitchesView();
+    };
+
+    window.closeLivePitchesView = () => {
+        const nazywo = document.getElementById('nazywo');
+        if (nazywo) nazywo.classList.remove('is-pitches-view');
     };
 
     window.syncPitchNavVisibility = () => {
         const on = window.getPitchCount() > 0;
         document.querySelectorAll('.nav-pitch-tab').forEach(btn => {
-            btn.style.display = on ? '' : 'none';
+            /* Organizator: bez zakładki — Boiska w toolbarze Na żywo; kibic zostaje z nav */
+            if (isFanMode) btn.style.display = on ? '' : 'none';
+            else btn.style.display = 'none';
         });
+        const liveBtn = document.getElementById('live-boiska-btn');
+        if (liveBtn) {
+            liveBtn.style.display = (!isFanMode && !isAssistantMode && !isHallMode && on) ? 'inline-block' : 'none';
+        }
         const hint = document.getElementById('pitch-schedule-hint');
         if (hint) hint.style.display = on ? '' : 'none';
         const asTool = document.getElementById('assistant-pitches-toolbar');
@@ -12896,6 +12957,9 @@
             }
         }
         if (!on) {
+            window._pitchViewFilter = 'all';
+            window._pitchViewFilterCount = 0;
+            if (typeof window.closeLivePitchesView === 'function') window.closeLivePitchesView();
             const pitchesPane = document.getElementById('boiska');
             if (pitchesPane && pitchesPane.classList.contains('active') && typeof window.switchTab === 'function') {
                 window.switchTab(isFanMode ? 'mecze' : 'nazywo');
@@ -12912,29 +12976,54 @@
         const targets = [];
         const main = document.getElementById('pitches-container');
         if (main) targets.push(main);
+        const liveCont = document.getElementById('live-pitches-container');
+        if (liveCont && !isFanMode && !isAssistantMode) targets.push(liveCont);
         const asCont = document.getElementById('assistant-pitches-container');
         if (asCont && isAssistantMode) targets.push(asCont);
         if (!targets.length) return;
 
         if (count < 1) {
+            window._pitchViewFilter = 'all';
+            window._pitchViewFilterCount = 0;
             targets.forEach(el => {
                 el.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Boiska wyłączone — ustaw liczbę boisk (2–99) na karcie Start.</div>';
             });
             return;
         }
 
+        if (window._pitchViewFilterCount !== count) {
+            window._pitchViewFilterCount = count;
+            if (window._pitchViewFilter !== 'all') {
+                const f = parseInt(window._pitchViewFilter, 10);
+                if (!Number.isFinite(f) || f < 1 || f > count) window._pitchViewFilter = 'all';
+            }
+        }
+
         const preferCards = (typeof window.tpPreferMatchCards === 'function' && window.tpPreferMatchCards())
             || isFanMode;
-        const matchRo = isFanMode || window._demoStoryFanEmbed === true
-            || !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+        const closedRo = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+        const fanRo = isFanMode || window._demoStoryFanEmbed === true;
+        /* Organizator w Boiskach: wynik tylko odczyt, bez strzelców; boisko/slot edytowalne */
+        const orgPitchView = !fanRo && !isAssistantMode;
+        const matchRo = fanRo || closedRo || orgPitchView;
+        const showScorers = isAssistantMode && !closedRo;
         const sortByTime = (list) => list.slice().sort((a, b) => {
             const dt = window.timeToMinutes(a.time) - window.timeToMinutes(b.time);
             if (dt !== 0) return dt;
             return (a.id || 0) - (b.id || 0);
         });
 
-        let html = '';
+        const activeFilter = window._pitchViewFilter;
+        let filterHtml = '<div class="filter-bar pitch-filter-bar">';
+        filterHtml += '<button type="button" class="filter-btn' + (activeFilter === 'all' ? ' active' : '') + '" onclick="setPitchViewFilter(\'all\')">Wszystkie</button>';
+        for (let i = 1; i <= count; i++) {
+            filterHtml += '<button type="button" class="filter-btn' + (activeFilter === i ? ' active' : '') + '" onclick="setPitchViewFilter(' + i + ')">Boisko ' + i + '</button>';
+        }
+        filterHtml += '</div>';
+
+        let html = filterHtml;
         for (let n = 1; n <= count; n++) {
+            if (activeFilter !== 'all' && activeFilter !== n) continue;
             const groupMs = sortByTime((state.matches || []).filter(m => !m.played && parseInt(m.pitch, 10) === n));
             const poMs = sortByTime((state.playoffs || []).filter(m => !m.played && parseInt(m.pitch, 10) === n));
             const allOnPitch = groupMs.concat(poMs);
@@ -12954,7 +13043,12 @@
                 html += '<div class="pitch-section-empty">Brak przypisanego meczu</div>';
             } else {
                 const renderList = (list, isPo) => {
-                    const opts = { readonly: matchRo, showScorers: !matchRo, isPo: !!isPo, allowPitchAssign: !matchRo && window.canAssignPitch() };
+                    const opts = {
+                        readonly: matchRo,
+                        showScorers: showScorers,
+                        isPo: !!isPo,
+                        allowPitchAssign: !fanRo && !closedRo && window.canAssignPitch()
+                    };
                     if (preferCards) {
                         return '<div class="assistant-match-cards">' + renderAssistantMatchCardsHTML(list, opts) + '</div>';
                     }
