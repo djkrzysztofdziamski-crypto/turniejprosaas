@@ -2,6 +2,10 @@
 # Hosty: app.turniejomat.pl | demo.turniejomat.pl | admin.turniejomat.pl
 # Landing marketingowy: osobny folder landing/ → osobny site Netlify
 
+[build]
+  command = "node scripts/write-app-version.mjs"
+  publish = "."
+
 # app.turniejomat.pl — bramka logowania + panel turnieju
 [[redirects]]
   from = "/*"

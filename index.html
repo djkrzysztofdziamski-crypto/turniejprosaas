@@ -4,8 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Turniejomat — panel organizatora</title>
+    <meta name="app-build-id" content="ab5ec23">
     <meta name="description" content="Turniejomat — wyniki live, tabele i podium. Demo 2 min bez rejestracji: demo.turniejomat.pl">
     <!-- OG wspólne dla app / demo / admin (ten sam index.html). og:url celowo bez stałego hosta — FB bierze URL udostępniony. -->
+    <script>
+    /* Freshness: porównaj meta app-build-id z /version.json (no-store). Baner zamiast auto-reload (dzień turnieju). */
+    (function () {
+        var meta = document.querySelector('meta[name="app-build-id"]');
+        var localId = meta && meta.getAttribute('content');
+        if (!localId || localId === '__APP_BUILD_ID__') return;
+        var checking = false;
+        var lastCheck = 0;
+        var MIN_INTERVAL_MS = 60000;
+
+        function showBanner() {
+            if (document.getElementById('app-update-banner')) return;
+            var el = document.createElement('div');
+            el.id = 'app-update-banner';
+            el.setAttribute('role', 'status');
+            el.style.cssText = 'position:fixed;z-index:99999;left:0;right:0;top:0;padding:10px 12px;background:#0747a6;color:#fff;font:600 13px/1.35 system-ui,sans-serif;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+            el.innerHTML = '<span>Dostępna nowa wersja aplikacji.</span><button type="button" style="font:700 13px system-ui,sans-serif;padding:6px 12px;border:0;border-radius:6px;background:#fff;color:#0747a6;cursor:pointer">Odśwież</button>';
+            var btn = el.querySelector('button');
+            if (btn) btn.onclick = function () { location.reload(); };
+            (document.body || document.documentElement).appendChild(el);
+        }
+
+        function checkForUpdate() {
+            if (checking) return;
+            var now = Date.now();
+            if (lastCheck && (now - lastCheck) < MIN_INTERVAL_MS) return;
+            checking = true;
+            lastCheck = now;
+            fetch('/version.json?_=' + now, { cache: 'no-store' })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (v) {
+                    if (v && v.buildId && String(v.buildId) !== String(localId)) showBanner();
+                })
+                .catch(function () {})
+                .then(function () { checking = false; });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkForUpdate);
+        } else {
+            checkForUpdate();
+        }
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') checkForUpdate();
+        });
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) checkForUpdate();
+        });
+        window.addEventListener('focus', checkForUpdate);
+    })();
+    </script>
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pl_PL">
     <meta property="og:site_name" content="Turniejomat">
@@ -21,16 +73,16 @@
     <meta name="twitter:image" content="https://app.turniejomat.pl/og-share.png">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=20260718ux9">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=ab5ec23">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=20260723cols"></script>
-    <script src="demo-story.js?v=20260723podium"></script>
-    <script src="captain.js?v=20260724cap3"></script>
+    <script src="demo-story-scenario.bundle.js?v=ab5ec23"></script>
+    <script src="demo-story.js?v=ab5ec23"></script>
+    <script src="captain.js?v=ab5ec23"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -4191,7 +4243,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=20260723fanux">
+    <link rel="stylesheet" href="css/responsive.css?v=ab5ec23">
 </head>
 <body>
 

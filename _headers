@@ -1,7 +1,15 @@
-# Turniejomat app — security headers (Netlify)
+# Turniejomat app — security + cache headers (Netlify)
 # app / demo / admin hosts (repo root deploy)
+# Kolejność: najbardziej specyficzne ścieżki najpierw.
+
+/version.json
+  Cache-Control: no-store, max-age=0
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /*
+  Cache-Control: no-cache
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
