@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Turniejomat — panel organizatora</title>
-    <meta name="app-build-id" content="ab5ec23">
+    <meta name="app-build-id" content="856628d">
+    <meta name="app-version" content="1.0.98">
     <meta name="description" content="Turniejomat — wyniki live, tabele i podium. Demo 2 min bez rejestracji: demo.turniejomat.pl">
     <!-- OG wspólne dla app / demo / admin (ten sam index.html). og:url celowo bez stałego hosta — FB bierze URL udostępniony. -->
     <script>
@@ -73,16 +74,16 @@
     <meta name="twitter:image" content="https://app.turniejomat.pl/og-share.png">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=ab5ec23">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=856628d">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=ab5ec23"></script>
-    <script src="demo-story.js?v=ab5ec23"></script>
-    <script src="captain.js?v=ab5ec23"></script>
+    <script src="demo-story-scenario.bundle.js?v=856628d"></script>
+    <script src="demo-story.js?v=856628d"></script>
+    <script src="captain.js?v=856628d"></script>
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -204,6 +205,10 @@
         #view-captain .captain-status--ok { color: #067647; font-weight: 700; }
         #view-captain .captain-status--warn { color: #b54708; font-weight: 700; }
         #view-captain .captain-status--err { color: #b42318; font-weight: 700; }
+        #view-captain .brand-footer {
+            margin-top: 24px; padding: 14px 12px 20px; text-align: center;
+            color: #94a3b8; font-size: 11px; border-top: 1px solid #e2e8f0;
+        }
         #view-captain .captain-roster-head {
             display: flex;
             justify-content: space-between;
@@ -617,8 +622,9 @@
         /* Nav + live split: desktop od --bp-desktop (1024) — tablet landscape / laptop */
         @media (min-width: 1366px) { #view-app .nav-tabs .nav-mobile-only { display: none; } }
         @media (max-width: 1365px) { #view-app .nav-tabs .nav-desktop-only { display: none; } }
-        /* Sędzia: lista meczów jest w Na żywo — ukryj duplikat Mecze (kibic zostaje) */
-        body:not(.fan-view) #view-app .nav-tabs [onclick="switchTab('mecze')"] {
+        /* Organizator: mecze i tabele są w Na żywo — ukryj duplikaty (kibic zostaje) */
+        body:not(.fan-view) #view-app .nav-tabs [onclick="switchTab('mecze')"],
+        body:not(.fan-view) #view-app .nav-tabs [onclick="switchTab('tabele')"] {
             display: none !important;
         }
         #view-app .container { max-width: 1200px; margin: 15px auto; padding: 0 10px; }
@@ -4243,7 +4249,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=ab5ec23">
+    <link rel="stylesheet" href="css/responsive.css?v=856628d">
 </head>
 <body>
 
@@ -4344,6 +4350,7 @@
         <button type="button" class="captain-btn captain-btn--primary" id="captain-submit">Wyślij do akceptacji</button>
         <button type="button" class="captain-btn captain-btn--close" id="captain-close" disabled title="Dostępne po wysłaniu składu">Zamknij stronę</button>
         <p id="captain-status" class="captain-status" role="status"></p>
+        <div class="brand-footer" data-brand-footer></div>
     </div>
 </div>
 
@@ -5340,13 +5347,16 @@
     const activeKey = normalizeLicenseKey(activeKeyRaw);
     const archiveId = urlParams.get('archiveId');
     const localArchiveId = urlParams.get('localArchiveId');
+    const appVersionMeta = document.querySelector('meta[name="app-version"]');
+    const appVersion = (appVersionMeta && appVersionMeta.getAttribute('content')) || '';
     const BRAND = {
         name: 'Turniejomat',
         poweredBy: 'TurniejPro',
         adminTitle: 'TurniejPro SaaS',
-        footer: 'Turniejomat © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span>'
+        version: appVersion,
+        footer: 'Turniejomat' + (appVersion ? (' ' + appVersion) : '') + ' © 2026'
     };
-    document.querySelectorAll('[data-brand-footer]').forEach(function (el) { el.innerHTML = BRAND.footer; });
+    document.querySelectorAll('[data-brand-footer]').forEach(function (el) { el.textContent = BRAND.footer; });
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
     let isHallMode = viewMode === 'hall';
     let isAssistantMode = viewMode === 'assistant';
