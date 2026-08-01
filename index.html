@@ -1128,9 +1128,41 @@
         #view-app .hall-live-slot .hall-next-meta { font-size: clamp(12px, 1.4vw, 16px); margin-bottom: 0; }
         #view-app .hall-live-slot .hall-live-time { font-size: clamp(11px, 1.2vw, 13px); margin-left: auto; }
         #view-app .hall-live-slot .hall-live-board { flex: 1; min-height: 0; margin: 4px 0 0; }
-        #view-app .hall-live-layout--dual .hall-live-digit { font-size: clamp(40px, 7vw, 72px); }
-        #view-app .hall-live-layout--dual .hall-live-colon { font-size: clamp(24px, 4vw, 42px); }
-        #view-app .hall-live-layout--dual .hall-live-team-name { font-size: clamp(13px, 1.8vw, 20px); }
+        #view-app .hall-live-layout--dual .hall-live-digit { font-size: clamp(28px, 5.5vw, 56px); }
+        #view-app .hall-live-layout--dual .hall-live-colon { font-size: clamp(18px, 3.2vw, 34px); }
+        #view-app .hall-live-layout--dual .hall-live-team-name {
+            font-size: clamp(12px, 1.5vw, 18px);
+            line-height: 1.15;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        #view-app .hall-live-layout--dual .hall-live-score-wrap { padding: 6px 8px; border-radius: 12px; gap: 4px 8px; }
+        #view-app .hall-live-layout--dual[data-live-count="2"] .hall-live-digit { font-size: clamp(28px, 5.5vw, 56px); }
+        #view-app .hall-live-layout--stack .hall-live-digit { font-size: clamp(24px, 4vw, 40px); }
+        #view-app .hall-live-layout--stack .hall-live-colon { font-size: clamp(16px, 2.6vw, 26px); margin-top: 0; }
+        #view-app .hall-live-layout--stack .hall-live-stack-teams .hall-live-team-name { font-size: clamp(12px, 1.5vw, 18px); }
+        #view-app .hall-live-layout--stack[data-live-count="3"] .hall-live-digit { font-size: clamp(24px, 4vw, 40px); }
+        #view-app .hall-live-layout--stack[data-live-count="3"] .hall-live-stack-teams .hall-live-team-name { font-size: clamp(12px, 1.5vw, 18px); }
+        #view-app .hall-live-layout--stack[data-live-count="3"] .hall-live-score-wrap--stack { padding: 4px 8px; }
+        #view-app .hall-live-layout--stack[data-live-count="4"] .hall-live-digit,
+        #view-app .hall-live-layout--stack[data-live-count="5"] .hall-live-digit,
+        #view-app .hall-live-layout--stack[data-live-count="6"] .hall-live-digit,
+        #view-app .hall-live-layout--stack[data-live-count="7"] .hall-live-digit,
+        #view-app .hall-live-layout--stack[data-live-count="8"] .hall-live-digit,
+        #view-app .hall-live-stack--dense .hall-live-digit { font-size: clamp(20px, 3.2vw, 34px); }
+        #view-app .hall-live-layout--stack[data-live-count="4"] .hall-live-stack-teams .hall-live-team-name,
+        #view-app .hall-live-layout--stack[data-live-count="5"] .hall-live-stack-teams .hall-live-team-name,
+        #view-app .hall-live-layout--stack[data-live-count="6"] .hall-live-stack-teams .hall-live-team-name,
+        #view-app .hall-live-layout--stack[data-live-count="7"] .hall-live-stack-teams .hall-live-team-name,
+        #view-app .hall-live-layout--stack[data-live-count="8"] .hall-live-stack-teams .hall-live-team-name,
+        #view-app .hall-live-stack--dense .hall-live-stack-teams .hall-live-team-name { font-size: clamp(11px, 1.25vw, 15px); }
+        #view-app .hall-live-layout--stack[data-live-count="4"] .hall-live-score-wrap--stack,
+        #view-app .hall-live-layout--stack[data-live-count="5"] .hall-live-score-wrap--stack,
+        #view-app .hall-live-layout--stack[data-live-count="6"] .hall-live-score-wrap--stack,
+        #view-app .hall-live-layout--stack[data-live-count="7"] .hall-live-score-wrap--stack,
+        #view-app .hall-live-layout--stack[data-live-count="8"] .hall-live-score-wrap--stack { padding: 3px 6px; gap: 3px 6px; border-radius: 8px; }
         #view-app .hall-live-stack {
             display: flex;
             flex-direction: column;
@@ -1174,11 +1206,7 @@
         #view-app .hall-live-score-wrap--stack {
             padding: 4px 8px; border-radius: 10px; gap: 4px 8px;
         }
-        #view-app .hall-live-layout--stack .hall-live-digit { font-size: clamp(28px, 4.5vw, 48px); }
-        #view-app .hall-live-layout--stack .hall-live-colon { font-size: clamp(18px, 3vw, 28px); margin-top: 0; }
         #view-app .hall-live-stack--dense .hall-live-stack-row { padding: 6px 8px; }
-        #view-app .hall-live-stack--dense .hall-live-digit { font-size: clamp(22px, 3.5vw, 36px); }
-        #view-app .hall-live-stack--dense .hall-live-stack-teams .hall-live-team-name { font-size: clamp(11px, 1.3vw, 15px); }
         @media (max-width: 900px) {
             #view-app .hall-live-dual { grid-template-columns: 1fr; }
             #view-app .hall-live-stack-row {
@@ -1363,6 +1391,49 @@
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-colon {
             font-size: clamp(26px, min(6.5vw, 8vh), 56px);
+        }
+        /* Dual/stack must beat generic sixteen digit/name sizes */
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--dual[data-live-count="2"] .hall-live-digit {
+            font-size: clamp(28px, min(5.5vw, 8vh), 56px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--dual[data-live-count="2"] .hall-live-colon {
+            font-size: clamp(18px, min(3.2vw, 5vh), 34px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--dual[data-live-count="2"] .hall-live-team-name {
+            font-size: clamp(12px, min(1.6vw, 2.4vh), 18px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--dual[data-live-count="2"] .hall-live-score-wrap {
+            padding: 6px 8px; border-radius: 12px; gap: 4px 8px;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="3"] .hall-live-digit {
+            font-size: clamp(24px, min(4vw, 6vh), 40px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="3"] .hall-live-colon {
+            font-size: clamp(16px, min(2.6vw, 4vh), 26px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="3"] .hall-live-stack-teams .hall-live-team-name {
+            font-size: clamp(12px, min(1.5vw, 2.2vh), 18px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="4"] .hall-live-digit,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="5"] .hall-live-digit,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="6"] .hall-live-digit,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="7"] .hall-live-digit,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="8"] .hall-live-digit {
+            font-size: clamp(20px, min(3.2vw, 5vh), 34px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="4"] .hall-live-colon,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="5"] .hall-live-colon,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="6"] .hall-live-colon,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="7"] .hall-live-colon,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="8"] .hall-live-colon {
+            font-size: clamp(14px, min(2.2vw, 3.5vh), 22px);
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="4"] .hall-live-stack-teams .hall-live-team-name,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="5"] .hall-live-stack-teams .hall-live-team-name,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="6"] .hall-live-stack-teams .hall-live-team-name,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="7"] .hall-live-stack-teams .hall-live-team-name,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack[data-live-count="8"] .hall-live-stack-teams .hall-live-team-name {
+            font-size: clamp(11px, min(1.25vw, 1.9vh), 15px);
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-demo-qr-cell {
             grid-area: qr;
@@ -3660,9 +3731,13 @@
             text-transform: uppercase; color: #fff; background: #de350b; padding: 2px 6px; border-radius: 999px;
         }
         #view-demo-story .demo-hall-embed-host .hall-live-slot .hall-next-meta { font-size: 12px; margin-bottom: 0; }
-        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-digit { font-size: clamp(28px, 5vw, 48px); }
-        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-colon { font-size: clamp(18px, 3vw, 28px); }
-        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-team-name { font-size: clamp(12px, 1.6vw, 16px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-digit,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual[data-live-count="2"] .hall-live-digit { font-size: clamp(24px, 4.2vw, 42px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-colon,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual[data-live-count="2"] .hall-live-colon { font-size: clamp(16px, 2.6vw, 26px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-team-name,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual[data-live-count="2"] .hall-live-team-name { font-size: clamp(11px, 1.4vw, 15px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-score-wrap { padding: 5px 7px; border-radius: 10px; gap: 3px 6px; }
         #view-demo-story .demo-hall-embed-host .hall-live-stack {
             display: flex; flex-direction: column; gap: 6px; min-height: 0; overflow: auto; height: 100%;
         }
@@ -3682,8 +3757,17 @@
         #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name { font-size: 12px; font-weight: 800; }
         #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name:first-child { text-align: right; }
         #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name:last-child { text-align: left; }
-        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-digit { font-size: clamp(22px, 3.5vw, 32px); }
-        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-colon { font-size: clamp(14px, 2.2vw, 20px); margin-top: 0; }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-digit,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="3"] .hall-live-digit { font-size: clamp(20px, 3.2vw, 30px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-colon,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="3"] .hall-live-colon { font-size: clamp(13px, 2vw, 18px); margin-top: 0; }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="3"] .hall-live-stack-teams .hall-live-team-name { font-size: 11px; }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="4"] .hall-live-digit,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="5"] .hall-live-digit,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="6"] .hall-live-digit { font-size: clamp(16px, 2.6vw, 24px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="4"] .hall-live-stack-teams .hall-live-team-name,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="5"] .hall-live-stack-teams .hall-live-team-name,
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack[data-live-count="6"] .hall-live-stack-teams .hall-live-team-name { font-size: 10px; }
         #view-demo-story .demo-hall-embed-host .hall-live-score-wrap--stack { padding: 3px 6px; border-radius: 8px; gap: 3px 6px; }
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-complete { border-color: #fcd34d; background: linear-gradient(180deg, #fffef7 0%, #ffffff 100%); }
         #view-demo-story .demo-hall-embed-host .hall-complete-badge { display: none; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #172b4d; background: linear-gradient(180deg, #ffcc00 0%, #f59e0b 100%); padding: 3px 10px; border-radius: 999px; }
@@ -8768,10 +8852,12 @@
         return [];
     };
 
-    function setHallLiveLayoutClass(panel, layout) {
+    function setHallLiveLayoutClass(panel, layout, liveCount) {
         if (!panel) return;
         panel.classList.remove('hall-live-layout--hero', 'hall-live-layout--dual', 'hall-live-layout--stack');
         if (layout) panel.classList.add('hall-live-layout--' + layout);
+        const n = parseInt(liveCount, 10);
+        panel.setAttribute('data-live-count', Number.isFinite(n) && n > 0 ? String(n) : '0');
     }
 
     function hallBumpDigit(el) {
@@ -9062,7 +9148,7 @@
 
         panel.classList.remove('is-live');
         panel.classList.add('is-complete');
-        setHallLiveLayoutClass(panel, 'hero');
+        setHallLiveLayoutClass(panel, 'hero', 1);
         if (metaEl) metaEl.style.display = '';
         if (timeEl) timeEl.style.display = '';
         if (labelEl) labelEl.textContent = 'Wielki finał — wynik końcowy';
@@ -9099,7 +9185,7 @@
             return;
         }
 
-        setHallLiveLayoutClass(panel, 'hero');
+        setHallLiveLayoutClass(panel, 'hero', 1);
         window._hallLiveLayoutSig = 'hero';
         window._hallLiveScoreKey = scoreKey;
         panel.classList.toggle('is-live', live);
@@ -9152,7 +9238,7 @@
             return isHallMatchLive(m, window.resolveHallLiveScores(m));
         });
         panel.classList.toggle('is-live', anyLive);
-        setHallLiveLayoutClass(panel, layout);
+        setHallLiveLayoutClass(panel, layout, liveList.length);
         if (metaEl) {
             metaEl.style.display = 'none';
             metaEl.textContent = '';
@@ -9215,7 +9301,7 @@
         if (!current) {
             const emptySig = 'empty';
             panel.classList.remove('is-live');
-            setHallLiveLayoutClass(panel, 'hero');
+            setHallLiveLayoutClass(panel, 'hero', 0);
             if (metaEl) metaEl.style.display = '';
             if (timeEl) timeEl.style.display = '';
             if (window._hallLiveRenderSig === emptySig && bodyEl.querySelector('.hall-live-empty')) {
