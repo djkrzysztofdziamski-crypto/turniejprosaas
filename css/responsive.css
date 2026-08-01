@@ -187,6 +187,7 @@ body.assistant-view #view-app .header-status-badges #last-save-info {
         --page-pad-x: 8px;
         --font-size-nav-tab: 11px;
         --standings-stat-col: 36px;
+        --standings-goals-col: 52px;
         --standings-pkt-col: 44px;
         --standings-arrow-col: 48px;
     }

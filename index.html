@@ -615,6 +615,7 @@
                 repeating-linear-gradient(0deg, rgba(11, 31, 51, 0.02) 0 1px, rgba(11, 31, 51, 0) 1px 26px);
             background-attachment: fixed;
             --standings-stat-col: 44px;
+            --standings-goals-col: 58px;
             --standings-pkt-col: 52px;
             --standings-arrow-col: 56px;
         }
@@ -642,6 +643,8 @@
         #view-demo-story .demo-embed-app .standings-table { table-layout: fixed; width: 100%; }
         #view-app .standings-table col.col-stat,
         #view-demo-story .demo-embed-app .standings-table col.col-stat { width: var(--standings-stat-col); }
+        #view-app .standings-table col.col-goals,
+        #view-demo-story .demo-embed-app .standings-table col.col-goals { width: var(--standings-goals-col); }
         #view-app .standings-table col.col-pkt,
         #view-demo-story .demo-embed-app .standings-table col.col-pkt { width: var(--standings-pkt-col); }
         #view-app .standings-table th,
@@ -654,6 +657,100 @@
         #view-demo-story .demo-embed-app .standings-table td:first-child { text-align: left; }
         #view-app .standings-table th:not(:first-child),
         #view-app .standings-table td:not(:first-child) { text-align: center; }
+        #view-app .standings-table td.col-goals-cell,
+        #view-app .standings-table td.col-gd-cell,
+        #view-demo-story .demo-embed-app .standings-table td.col-goals-cell,
+        #view-demo-story .demo-embed-app .standings-table td.col-gd-cell {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+            font-weight: 700;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+        #view-app .final-ranking-card,
+        #view-demo-story .demo-embed-app .final-ranking-card {
+            margin-top: 14px;
+        }
+        #view-app .final-ranking-title,
+        #view-demo-story .demo-embed-app .final-ranking-title {
+            font-size: 12px;
+            margin: 0 0 8px;
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #172b4d;
+        }
+        #view-app .final-ranking-table,
+        #view-demo-story .demo-embed-app .final-ranking-table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            font-size: var(--font-size-table, 12px);
+        }
+        #view-app .final-ranking-table col.col-final-place,
+        #view-demo-story .demo-embed-app .final-ranking-table col.col-final-place {
+            width: 72px;
+        }
+        #view-app .final-ranking-table th,
+        #view-app .final-ranking-table td,
+        #view-demo-story .demo-embed-app .final-ranking-table th,
+        #view-demo-story .demo-embed-app .final-ranking-table td {
+            box-sizing: border-box;
+            padding: 5px 8px;
+            border: 1px solid var(--color-app-border);
+            vertical-align: middle;
+        }
+        #view-app .final-ranking-table th,
+        #view-demo-story .demo-embed-app .final-ranking-table th {
+            background: var(--color-table-head-bg, #eef2ff);
+            color: var(--color-table-head-text, #334155);
+            font-weight: 800;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: left;
+        }
+        #view-app .final-rank-place,
+        #view-demo-story .demo-embed-app .final-rank-place {
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            width: 72px;
+            color: #475569;
+        }
+        #view-app .final-rank-team,
+        #view-demo-story .demo-embed-app .final-rank-team {
+            text-align: left;
+            font-weight: 700;
+            color: #172b4d;
+            word-break: break-word;
+        }
+        #view-app .final-rank-ex,
+        #view-demo-story .demo-embed-app .final-rank-ex {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+        #view-app .final-rank-row--1 .final-rank-place,
+        #view-app .final-rank-row--1 .final-rank-team { color: #92400e; }
+        #view-app .final-rank-row--1 { background: #fffbeb; }
+        #view-app .final-rank-row--2 .final-rank-place,
+        #view-app .final-rank-row--2 .final-rank-team { color: #334155; }
+        #view-app .final-rank-row--2 { background: #f8fafc; }
+        #view-app .final-rank-row--3 .final-rank-place,
+        #view-app .final-rank-row--3 .final-rank-team { color: #7c2d12; }
+        #view-app .final-rank-row--3 { background: #fff7ed; }
+        #view-demo-story .demo-embed-app .final-rank-row--1 { background: #fffbeb; }
+        #view-demo-story .demo-embed-app .final-rank-row--2 { background: #f8fafc; }
+        #view-demo-story .demo-embed-app .final-rank-row--3 { background: #fff7ed; }
+        #view-app .tables-render-target[data-compact="true"] .final-ranking-card { margin-top: 8px; padding: 6px 8px; }
+        #view-app .tables-render-target[data-compact="true"] .final-ranking-title { font-size: 10px; margin-bottom: 4px; }
         #view-app th { background: var(--color-table-head-bg, #eef2ff); color: var(--color-table-head-text, #334155); padding: 5px 7px; border: 1px solid var(--color-app-border-strong, #cbd5e1); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
         #view-app td { padding: 4px 7px; border: 1px solid var(--color-app-border); text-align: center; min-height: var(--row-height-table, 30px); box-sizing: border-box; line-height: 1.25; font-size: var(--font-size-table, 12px); }
         #view-app tr:nth-child(even) { background-color: var(--color-app-surface-muted, #f1f5f9); }
@@ -4011,6 +4108,7 @@
         /* --- Demo embed: lustrzany wygląd panelu turnieju (premium) --- */
         #view-demo-story .demo-embed-app {
             --standings-stat-col: 44px;
+            --standings-goals-col: 58px;
             --standings-pkt-col: 52px;
             font-family: var(--font-body);
             color: var(--color-app-text);
@@ -9031,6 +9129,222 @@
         };
     };
 
+    function hallPlayoffElimBand(m) {
+        if (!m) return 0;
+        const n = String(m.n || '').toUpperCase();
+        if (n.indexOf('1/8') >= 0) return 10;
+        if (n.indexOf('ĆWIERĆ') >= 0 || n.indexOf('CWIERC') >= 0) return 20;
+        if (n.indexOf('PÓŁFINAŁ') >= 0 || n.indexOf('POLFINAL') >= 0) return 30;
+        return 0;
+    }
+
+    function hallIsThirdPlaceMatch(m) {
+        return !!(m && String(m.n || '').toUpperCase().indexOf('3. MIEJSCE') >= 0);
+    }
+
+    function hallIsGrandFinalMatch(m) {
+        if (!m) return false;
+        if (m.isDemoFinal) return true;
+        const n = String(m.n || '').toUpperCase();
+        return n.indexOf('WIELKI') >= 0 && n.indexOf('FINAŁ') >= 0;
+    }
+
+    window.getAllTournamentTeams = function () {
+        const out = [];
+        const seen = {};
+        Object.keys(state.groups || {}).forEach(function (gn) {
+            (state.groups[gn] || []).forEach(function (t) {
+                if (!t || t.id == null || t.id === -99) return;
+                if (seen[t.id]) return;
+                seen[t.id] = true;
+                out.push(t);
+            });
+        });
+        return out;
+    };
+
+    window.getTeamGroupStatsById = function (teamId) {
+        const id = teamId;
+        let found = null;
+        Object.keys(state.groups || {}).forEach(function (gn) {
+            if (found) return;
+            const st = window.getSortedGroupStats(gn) || [];
+            for (let i = 0; i < st.length; i++) {
+                if (st[i] && st[i].t && st[i].t.id === id) {
+                    found = st[i];
+                    break;
+                }
+            }
+        });
+        return found;
+    };
+
+    function compareFinalRankingGroupForm(aStats, bStats) {
+        const a = aStats || { pkt: 0, bz: 0, bs: 0, fairPlay: 0 };
+        const b = bStats || { pkt: 0, bz: 0, bs: 0, fairPlay: 0 };
+        if ((b.pkt || 0) !== (a.pkt || 0)) return (b.pkt || 0) - (a.pkt || 0);
+        const aGd = (a.bz || 0) - (a.bs || 0);
+        const bGd = (b.bz || 0) - (b.bs || 0);
+        if (bGd !== aGd) return bGd - aGd;
+        if ((b.bz || 0) !== (a.bz || 0)) return (b.bz || 0) - (a.bz || 0);
+        if (window.isCardsEnabled && window.isCardsEnabled()) {
+            if ((a.fairPlay || 0) !== (b.fairPlay || 0)) return (a.fairPlay || 0) - (b.fairPlay || 0);
+        }
+        return 0;
+    }
+
+    function isAbsoluteRemisCrossGroup(aStats, bStats) {
+        return compareFinalRankingGroupForm(aStats, bStats) === 0;
+    }
+
+    function sortTeamsByGroupForm(teams) {
+        return (teams || []).slice().sort(function (ta, tb) {
+            const sa = window.getTeamGroupStatsById(ta.id);
+            const sb = window.getTeamGroupStatsById(tb.id);
+            const c = compareFinalRankingGroupForm(sa, sb);
+            if (c) return c;
+            return String(ta.name || '').localeCompare(String(tb.name || ''), 'pl');
+        });
+    }
+
+    function assignOlympicPlaces(rows, startPlace) {
+        let place = startPlace;
+        const out = [];
+        let i = 0;
+        while (i < rows.length) {
+            let j = i + 1;
+            while (j < rows.length && isAbsoluteRemisCrossGroup(
+                window.getTeamGroupStatsById(rows[i].id),
+                window.getTeamGroupStatsById(rows[j].id)
+            )) j++;
+            const block = rows.slice(i, j);
+            const ex = block.length > 1;
+            block.forEach(function (t) {
+                out.push({ place: place, team: t, exAequo: ex });
+            });
+            place += block.length;
+            i = j;
+        }
+        return { rows: out, nextPlace: place };
+    }
+
+    /**
+     * Klasyfikacja końcowa: drabinka ustala pasma, grupa — kolejność w pasie.
+     * null jeśli finał (i ewentualny mecz o 3.) nie są rozstrzygnięte.
+     */
+    window.getFinalTournamentRanking = function () {
+        const finalM = hallFindGrandFinal();
+        if (!finalM || !hallIsMatchDecided(finalM)) return null;
+
+        const m3 = (state.playoffs || []).find(hallIsThirdPlaceMatch);
+        if (m3 && !hallIsMatchDecided(m3)) return null;
+
+        const allTeams = window.getAllTournamentTeams();
+        if (!allTeams.length) return null;
+
+        const byId = {};
+        allTeams.forEach(function (t) { byId[t.id] = t; });
+
+        const placed = {};
+        const ranking = [];
+
+        function pushFixed(place, team, exAequo) {
+            if (!team || team.id == null || placed[team.id]) return;
+            placed[team.id] = true;
+            ranking.push({ place: place, team: byId[team.id] || team, exAequo: !!exAequo });
+        }
+
+        const gold = hallGetWinnerTeam(finalM);
+        const silver = hallGetLoserTeam(finalM);
+        pushFixed(1, gold, false);
+        pushFixed(2, silver, false);
+
+        let nextPlace = 3;
+        if (m3 && hallIsMatchDecided(m3)) {
+            pushFixed(3, hallGetWinnerTeam(m3), false);
+            pushFixed(4, hallGetLoserTeam(m3), false);
+            nextPlace = 5;
+        } else {
+            const sfLosers = [];
+            (state.playoffs || []).forEach(function (m) {
+                if (hallPlayoffElimBand(m) !== 30 || !hallIsMatchDecided(m)) return;
+                const loser = hallGetLoserTeam(m);
+                if (loser && loser.id != null && !placed[loser.id]) sfLosers.push(byId[loser.id] || loser);
+            });
+            const sortedSf = sortTeamsByGroupForm(sfLosers);
+            const assigned = assignOlympicPlaces(sortedSf, 3);
+            assigned.rows.forEach(function (r) {
+                pushFixed(r.place, r.team, r.exAequo);
+            });
+            nextPlace = assigned.nextPlace;
+        }
+
+        // Pasmo eliminacji KO (im wyższy band, tym lepsze miejsca): 30→20→10
+        const elimBand = {};
+        (state.playoffs || []).forEach(function (m) {
+            if (!hallIsMatchDecided(m) || hallIsGrandFinalMatch(m) || hallIsThirdPlaceMatch(m)) return;
+            const band = hallPlayoffElimBand(m);
+            if (!band) return;
+            const loser = hallGetLoserTeam(m);
+            if (!loser || loser.id == null || placed[loser.id]) return;
+            // SF losers already handled when no m3; when m3 exists they are in 3/4
+            if (band === 30) return;
+            const prev = elimBand[loser.id];
+            if (prev == null || band > prev) elimBand[loser.id] = band;
+        });
+
+        const bandsDesc = Object.keys(elimBand).reduce(function (acc, id) {
+            const b = elimBand[id];
+            if (!acc[b]) acc[b] = [];
+            acc[b].push(byId[id] || { id: parseInt(id, 10) });
+            return acc;
+        }, {});
+
+        Object.keys(bandsDesc).map(Number).sort(function (a, b) { return b - a; }).forEach(function (band) {
+            const sorted = sortTeamsByGroupForm(bandsDesc[band].filter(function (t) { return t && !placed[t.id]; }));
+            const assigned = assignOlympicPlaces(sorted, nextPlace);
+            assigned.rows.forEach(function (r) {
+                pushFixed(r.place, r.team, r.exAequo);
+            });
+            nextPlace = assigned.nextPlace;
+        });
+
+        const rest = allTeams.filter(function (t) { return !placed[t.id]; });
+        const sortedRest = sortTeamsByGroupForm(rest);
+        const assignedRest = assignOlympicPlaces(sortedRest, nextPlace);
+        assignedRest.rows.forEach(function (r) {
+            pushFixed(r.place, r.team, r.exAequo);
+        });
+
+        // Bezpiecznik: dopisz brakujące (np. anomalia danych)
+        allTeams.forEach(function (t) {
+            if (!placed[t.id]) pushFixed(ranking.length + 1, t, false);
+        });
+
+        return ranking;
+    };
+
+    window.renderFinalRankingHTML = function () {
+        const rows = typeof window.getFinalTournamentRanking === 'function' ? window.getFinalTournamentRanking() : null;
+        if (!rows || !rows.length) return '';
+        let body = '';
+        rows.forEach(function (r) {
+            const placeCls = r.place === 1 ? ' final-rank-row--1' : (r.place === 2 ? ' final-rank-row--2' : (r.place === 3 ? ' final-rank-row--3' : ''));
+            const ex = r.exAequo ? ' <span class="final-rank-ex">ex aequo</span>' : '';
+            const name = r.team && r.team.name ? r.team.name : '—';
+            body += '<tr class="final-rank-row' + placeCls + '">' +
+                '<td class="final-rank-place">' + esc(String(r.place)) + ex + '</td>' +
+                '<td class="final-rank-team">' + esc(name) + '</td>' +
+                '</tr>';
+        });
+        return '<div class="card final-ranking-card">' +
+            '<h4 class="final-ranking-title">Klasyfikacja końcowa</h4>' +
+            '<table class="final-ranking-table">' +
+            '<colgroup><col class="col-final-place"><col class="col-final-team"></colgroup>' +
+            '<thead><tr><th>#</th><th>Drużyna</th></tr></thead>' +
+            '<tbody>' + body + '</tbody></table></div>';
+    };
+
     function renderHallGkAwardCard(s) {
         const winners = (typeof window.buildGoalkeepersTopRanked === 'function')
             ? window.buildGoalkeepersTopRanked(s.allGk || [], 1)
@@ -11611,7 +11925,23 @@
             st.forEach((s, idx) => { s.rank = idx + 1; s.group = gn; }); return st;
         };
 
-        const STANDINGS_TABLE_COLGROUP = '<colgroup><col class="col-team"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-pkt"></colgroup>';
+        const STANDINGS_TABLE_COLGROUP = '<colgroup><col class="col-team"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-goals"><col class="col-stat"><col class="col-pkt"></colgroup>';
+
+        window.formatStandingsGoalsHTML = function (s) {
+            const bz = parseInt(s && s.bz, 10);
+            const bs = parseInt(s && s.bs, 10);
+            const a = Number.isFinite(bz) ? bz : 0;
+            const b = Number.isFinite(bs) ? bs : 0;
+            return esc(String(a)) + ' : ' + esc(String(b));
+        };
+
+        window.formatStandingsGd = function (s) {
+            const bz = parseInt(s && s.bz, 10);
+            const bs = parseInt(s && s.bs, 10);
+            const a = Number.isFinite(bz) ? bz : 0;
+            const b = Number.isFinite(bs) ? bs : 0;
+            return String(a - b);
+        };
 
         /* --- NOWA MODYFIKACJA: IDEALNE WYRÓWNANIE STRZAŁEK W KIERUNKU PRAWEJ KRAWĘDZI --- */
         window.calcTables = () => {
@@ -11665,7 +11995,7 @@
                         const remisClick = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1) && !hideControls && !fanRo)
                             ? ' style="cursor:pointer;" onclick="openTableOrderDrawer(\'' + gn + '\')" title="Kliknij, aby rozstrzygnąć remis absolutny"'
                             : '';
-                        rowsHTML += `<tr ${rowClass}><td class="table-team-cell"${remisClick}>${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td>${s.bz}</td><td>${s.bs}</td><td><b>${s.pkt}</b></td></tr>`;
+                        rowsHTML += `<tr ${rowClass}><td class="table-team-cell"${remisClick}>${teamLabelHTML} ${arrowControlsHTML}</td><td>${s.m}</td><td>${s.w}</td><td>${s.r}</td><td>${s.p}</td><td class="col-goals-cell">${window.formatStandingsGoalsHTML(s)}</td><td class="col-gd-cell">${esc(window.formatStandingsGd(s))}</td><td><b>${s.pkt}</b></td></tr>`;
                     });
 
                     let headerBadgeHTML = '';
@@ -11677,7 +12007,7 @@
                     } else if (detectRemisAlert) {
                         headerBadgeHTML = `<span style="font-size:10px; font-weight:bold; color:#ff8b00;">⚠️ remis</span>`;
                     }
-                    body += `<div class="card standings-group-card"><h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table class="standings-table">${STANDINGS_TABLE_COLGROUP}<tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BZ</th><th>BS</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
+                    body += `<div class="card standings-group-card"><h4>Tabela Gr. ${gn} ${headerBadgeHTML}</h4><table class="standings-table">${STANDINGS_TABLE_COLGROUP}<tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th title="Gole (strzelone : stracone)">G</th><th title="Różnica bramek">RB</th><th>Pkt</th></tr>${rowsHTML}</table></div>`;
                 });
                 return body;
             };
@@ -11685,26 +12015,29 @@
             const fullBody = buildTablesBody(fanRo);
             const fanLikeBody = buildTablesBody(true);
             const compactBody = fanLikeBody;
+            const finalRankHTML = (typeof window.renderFinalRankingHTML === 'function')
+                ? window.renderFinalRankingHTML()
+                : '';
 
             containers.forEach(cont => {
                 const compact = cont.getAttribute('data-compact') === 'true';
                 const fanLayout = fanRo || cont.getAttribute('data-layout') === 'fan' || cont.id === 'live-tables-container';
                 // Na żywo / demo: w fazie pucharowej ZOSTAW tabele grup (zielona strefa awansu).
                 if (compact && window.isPlayoffPhase()) {
-                    cont.innerHTML = compactBody
-                        || '<p style="color:#64748b;font-size:12px;margin:8px 0;">Brak tabel grupowych.</p>';
+                    cont.innerHTML = (compactBody || '<p style="color:#64748b;font-size:12px;margin:8px 0;">Brak tabel grupowych.</p>') +
+                        finalRankHTML;
                     return;
                 }
                 if (compact) {
-                    cont.innerHTML = compactBody;
+                    cont.innerHTML = compactBody + finalRankHTML;
                     return;
                 }
                 // Kibic + Na żywo Tabele (sędzia): te same proporcje i treść bez strzałek ↑↓
                 if (fanLayout) {
-                    cont.innerHTML = infoBanner + fanLikeBody;
+                    cont.innerHTML = infoBanner + fanLikeBody + finalRankHTML;
                     return;
                 }
-                cont.innerHTML = infoBanner + fullBody;
+                cont.innerHTML = infoBanner + fullBody + finalRankHTML;
             });
 
             ['btn-start-po', 'btn-start-po-live'].forEach(btnId => {
