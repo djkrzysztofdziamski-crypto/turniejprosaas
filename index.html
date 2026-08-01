@@ -737,6 +737,19 @@
             text-transform: uppercase;
             color: #94a3b8;
         }
+        #view-app .final-rank-row--empty .final-rank-team,
+        #view-demo-story .demo-embed-app .final-rank-row--empty .final-rank-team {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        #view-app .final-rank-slot,
+        #view-demo-story .demo-embed-app .final-rank-slot {
+            color: #cbd5e1;
+            letter-spacing: 0.12em;
+        }
+        #view-app .final-rank-row--empty {
+            background: #fafbfc;
+        }
         #view-app .final-rank-row--1 .final-rank-place,
         #view-app .final-rank-row--1 .final-rank-team { color: #92400e; }
         #view-app .final-rank-row--1 { background: #fffbeb; }
@@ -9228,117 +9241,203 @@
         return { rows: out, nextPlace: place };
     }
 
+    function getPlayoffParticipantIds() {
+        const ids = {};
+        (state.playoffs || []).forEach(function (m) {
+            if (m.t1 && m.t1.id != null && m.t1.id !== -99) ids[m.t1.id] = true;
+            if (m.t2 && m.t2.id != null && m.t2.id !== -99) ids[m.t2.id] = true;
+        });
+        return ids;
+    }
+
+    function fillContiguousSlotsOlympic(slots, fromIdx, teamsBestFirst) {
+        const list = teamsBestFirst || [];
+        if (!list.length || fromIdx < 0 || fromIdx >= slots.length) return;
+        const assigned = assignOlympicPlaces(list, fromIdx + 1);
+        assigned.rows.forEach(function (r, i) {
+            const idx = fromIdx + i;
+            if (idx >= slots.length) return;
+            slots[idx].team = r.team;
+            slots[idx].place = r.place;
+            slots[idx].exAequo = r.exAequo;
+            slots[idx].empty = false;
+        });
+    }
+
     /**
-     * Klasyfikacja końcowa: drabinka ustala pasma, grupa — kolejność w pasie.
-     * null jeśli finał (i ewentualny mecz o 3.) nie są rozstrzygnięte.
+     * Klasyfikacja turnieju / końcowa:
+     * - miejsca 1…R zarezerwowane na PO (puste, aż ktoś odpadnie / wygra),
+     * - od R+1 do N: nieawansujący (od razu, od dołu rankingu),
+     * - odpadający z PO wypełniają puste sloty od dołu zarezerwowanego pasa.
      */
     window.getFinalTournamentRanking = function () {
-        const finalM = hallFindGrandFinal();
-        if (!finalM || !hallIsMatchDecided(finalM)) return null;
-
-        const m3 = (state.playoffs || []).find(hallIsThirdPlaceMatch);
-        if (m3 && !hallIsMatchDecided(m3)) return null;
-
         const allTeams = window.getAllTournamentTeams();
         if (!allTeams.length) return null;
 
+        const N = allTeams.length;
         const byId = {};
         allTeams.forEach(function (t) { byId[t.id] = t; });
 
-        const placed = {};
-        const ranking = [];
-
-        function pushFixed(place, team, exAequo) {
-            if (!team || team.id == null || placed[team.id]) return;
-            placed[team.id] = true;
-            ranking.push({ place: place, team: byId[team.id] || team, exAequo: !!exAequo });
-        }
-
-        const gold = hallGetWinnerTeam(finalM);
-        const silver = hallGetLoserTeam(finalM);
-        pushFixed(1, gold, false);
-        pushFixed(2, silver, false);
-
-        let nextPlace = 3;
-        if (m3 && hallIsMatchDecided(m3)) {
-            pushFixed(3, hallGetWinnerTeam(m3), false);
-            pushFixed(4, hallGetLoserTeam(m3), false);
-            nextPlace = 5;
+        const poIds = getPlayoffParticipantIds();
+        const hasPo = Object.keys(poIds).length > 0;
+        let reservedN;
+        if (hasPo) {
+            reservedN = Object.keys(poIds).length;
         } else {
-            const sfLosers = [];
-            (state.playoffs || []).forEach(function (m) {
-                if (hallPlayoffElimBand(m) !== 30 || !hallIsMatchDecided(m)) return;
-                const loser = hallGetLoserTeam(m);
-                if (loser && loser.id != null && !placed[loser.id]) sfLosers.push(byId[loser.id] || loser);
+            reservedN = parseInt(state.settings && state.settings.advCount, 10) || 4;
+            const adv = (typeof window.getAdvancingTeamsFull === 'function') ? window.getAdvancingTeamsFull() : [];
+            if (adv && adv.length) reservedN = Math.max(reservedN, adv.length);
+        }
+        reservedN = Math.max(0, Math.min(N, reservedN));
+
+        const slots = [];
+        for (let i = 0; i < N; i++) {
+            slots.push({
+                place: i + 1,
+                team: null,
+                exAequo: false,
+                empty: true,
+                reserved: i < reservedN
             });
-            const sortedSf = sortTeamsByGroupForm(sfLosers);
-            const assigned = assignOlympicPlaces(sortedSf, 3);
-            assigned.rows.forEach(function (r) {
-                pushFixed(r.place, r.team, r.exAequo);
-            });
-            nextPlace = assigned.nextPlace;
         }
 
-        // Pasmo eliminacji KO (im wyższy band, tym lepsze miejsca): 30→20→10
-        const elimBand = {};
-        (state.playoffs || []).forEach(function (m) {
-            if (!hallIsMatchDecided(m) || hallIsGrandFinalMatch(m) || hallIsThirdPlaceMatch(m)) return;
-            const band = hallPlayoffElimBand(m);
-            if (!band) return;
-            const loser = hallGetLoserTeam(m);
-            if (!loser || loser.id == null || placed[loser.id]) return;
-            // SF losers already handled when no m3; when m3 exists they are in 3/4
-            if (band === 30) return;
-            const prev = elimBand[loser.id];
-            if (prev == null || band > prev) elimBand[loser.id] = band;
-        });
-
-        const bandsDesc = Object.keys(elimBand).reduce(function (acc, id) {
-            const b = elimBand[id];
-            if (!acc[b]) acc[b] = [];
-            acc[b].push(byId[id] || { id: parseInt(id, 10) });
-            return acc;
-        }, {});
-
-        Object.keys(bandsDesc).map(Number).sort(function (a, b) { return b - a; }).forEach(function (band) {
-            const sorted = sortTeamsByGroupForm(bandsDesc[band].filter(function (t) { return t && !placed[t.id]; }));
-            const assigned = assignOlympicPlaces(sorted, nextPlace);
-            assigned.rows.forEach(function (r) {
-                pushFixed(r.place, r.team, r.exAequo);
+        const advancingIds = {};
+        if (hasPo) {
+            Object.keys(poIds).forEach(function (id) { advancingIds[id] = true; });
+        } else {
+            ((typeof window.getAdvancingTeamsFull === 'function') ? window.getAdvancingTeamsFull() : []).forEach(function (t) {
+                if (t && t.id != null) advancingIds[t.id] = true;
             });
-            nextPlace = assigned.nextPlace;
+            if (Object.keys(advancingIds).length < reservedN) {
+                const ranked = sortTeamsByGroupForm(allTeams);
+                for (let i = 0; i < ranked.length && Object.keys(advancingIds).length < reservedN; i++) {
+                    advancingIds[ranked[i].id] = true;
+                }
+            }
+        }
+
+        // 1) Nieawansujący → kolejne wiersze od reservedN (najlepszy nieawansujący najwyżej)
+        const nonQ = allTeams.filter(function (t) { return !advancingIds[t.id]; });
+        const sortedNonQ = sortTeamsByGroupForm(nonQ);
+        fillContiguousSlotsOlympic(slots, reservedN, sortedNonQ);
+
+        const placedIds = {};
+        slots.forEach(function (s) {
+            if (s.team && s.team.id != null) placedIds[s.team.id] = true;
         });
 
-        const rest = allTeams.filter(function (t) { return !placed[t.id]; });
-        const sortedRest = sortTeamsByGroupForm(rest);
-        const assignedRest = assignOlympicPlaces(sortedRest, nextPlace);
-        assignedRest.rows.forEach(function (r) {
-            pushFixed(r.place, r.team, r.exAequo);
+        function takeEmptyReservedFromBottom(count) {
+            const emptyIdx = [];
+            for (let i = 0; i < reservedN; i++) {
+                if (!slots[i].team) emptyIdx.push(i);
+            }
+            if (count >= emptyIdx.length) return emptyIdx;
+            return emptyIdx.slice(emptyIdx.length - count);
+        }
+
+        function fillWaveIntoReservedBottom(teams) {
+            const list = sortTeamsByGroupForm((teams || []).filter(function (t) {
+                return t && t.id != null && !placedIds[t.id] && byId[t.id];
+            }));
+            if (!list.length) return;
+            const idxs = takeEmptyReservedFromBottom(list.length);
+            if (!idxs.length) return;
+            const fromIdx = idxs[0];
+            const slice = list.slice(0, idxs.length);
+            fillContiguousSlotsOlympic(slots, fromIdx, slice);
+            slice.forEach(function (t) { placedIds[t.id] = true; });
+        }
+
+        const finalM = hallFindGrandFinal();
+        const m3 = (state.playoffs || []).find(hallIsThirdPlaceMatch);
+        const finalDone = finalM && hallIsMatchDecided(finalM);
+        const m3Done = m3 && hallIsMatchDecided(m3);
+        const m3Exists = !!m3;
+
+        const waveBands = [10, 20, 30];
+        waveBands.forEach(function (band) {
+            if (band === 30 && m3Exists) return;
+            const losers = [];
+            (state.playoffs || []).forEach(function (m) {
+                if (!hallIsMatchDecided(m) || hallIsGrandFinalMatch(m) || hallIsThirdPlaceMatch(m)) return;
+                if (hallPlayoffElimBand(m) !== band) return;
+                const loser = hallGetLoserTeam(m);
+                if (loser && loser.id != null && byId[loser.id]) losers.push(byId[loser.id]);
+            });
+            fillWaveIntoReservedBottom(losers);
         });
 
-        // Bezpiecznik: dopisz brakujące (np. anomalia danych)
-        allTeams.forEach(function (t) {
-            if (!placed[t.id]) pushFixed(ranking.length + 1, t, false);
-        });
+        if (m3Done) {
+            const bronze = hallGetWinnerTeam(m3);
+            const fourth = hallGetLoserTeam(m3);
+            if (bronze && !placedIds[bronze.id] && !slots[2].team) {
+                slots[2].team = byId[bronze.id] || bronze;
+                slots[2].empty = false;
+                slots[2].place = 3;
+                placedIds[bronze.id] = true;
+            }
+            if (fourth && !placedIds[fourth.id] && !slots[3].team) {
+                slots[3].team = byId[fourth.id] || fourth;
+                slots[3].empty = false;
+                slots[3].place = 4;
+                placedIds[fourth.id] = true;
+            }
+        }
 
-        return ranking;
+        if (finalDone) {
+            const gold = hallGetWinnerTeam(finalM);
+            const silver = hallGetLoserTeam(finalM);
+            if (gold && !placedIds[gold.id] && !slots[0].team) {
+                slots[0].team = byId[gold.id] || gold;
+                slots[0].empty = false;
+                slots[0].place = 1;
+                placedIds[gold.id] = true;
+            }
+            if (silver && !placedIds[silver.id] && !slots[1].team) {
+                slots[1].team = byId[silver.id] || silver;
+                slots[1].empty = false;
+                slots[1].place = 2;
+                placedIds[silver.id] = true;
+            }
+        }
+
+        const complete = !!(finalDone && (!m3Exists || m3Done));
+        return {
+            complete: complete,
+            reservedN: reservedN,
+            rows: slots.map(function (s) {
+                return {
+                    place: s.place,
+                    team: s.team,
+                    exAequo: !!s.exAequo,
+                    empty: !s.team,
+                    reserved: !!s.reserved
+                };
+            })
+        };
     };
 
     window.renderFinalRankingHTML = function () {
-        const rows = typeof window.getFinalTournamentRanking === 'function' ? window.getFinalTournamentRanking() : null;
-        if (!rows || !rows.length) return '';
+        const data = typeof window.getFinalTournamentRanking === 'function' ? window.getFinalTournamentRanking() : null;
+        if (!data || !data.rows || !data.rows.length) return '';
+        const title = data.complete ? 'Klasyfikacja końcowa' : 'Klasyfikacja turnieju';
         let body = '';
-        rows.forEach(function (r) {
-            const placeCls = r.place === 1 ? ' final-rank-row--1' : (r.place === 2 ? ' final-rank-row--2' : (r.place === 3 ? ' final-rank-row--3' : ''));
+        data.rows.forEach(function (r) {
+            const placeCls = !r.empty && r.place === 1 ? ' final-rank-row--1'
+                : (!r.empty && r.place === 2 ? ' final-rank-row--2'
+                    : (!r.empty && r.place === 3 ? ' final-rank-row--3' : ''));
+            const emptyCls = r.empty ? ' final-rank-row--empty' : '';
             const ex = r.exAequo ? ' <span class="final-rank-ex">ex aequo</span>' : '';
-            const name = r.team && r.team.name ? r.team.name : '—';
-            body += '<tr class="final-rank-row' + placeCls + '">' +
+            const name = r.empty
+                ? '<span class="final-rank-slot">—</span>'
+                : esc(r.team && r.team.name ? r.team.name : '—');
+            body += '<tr class="final-rank-row' + placeCls + emptyCls + '">' +
                 '<td class="final-rank-place">' + esc(String(r.place)) + ex + '</td>' +
-                '<td class="final-rank-team">' + esc(name) + '</td>' +
+                '<td class="final-rank-team">' + name + '</td>' +
                 '</tr>';
         });
         return '<div class="card final-ranking-card">' +
-            '<h4 class="final-ranking-title">Klasyfikacja końcowa</h4>' +
+            '<h4 class="final-ranking-title">' + esc(title) + '</h4>' +
             '<table class="final-ranking-table">' +
             '<colgroup><col class="col-final-place"><col class="col-final-team"></colgroup>' +
             '<thead><tr><th>#</th><th>Drużyna</th></tr></thead>' +
