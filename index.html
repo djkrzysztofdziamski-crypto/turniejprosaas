@@ -1065,7 +1065,7 @@
         @keyframes hall-live-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(222, 53, 11, 0.45); } 50% { box-shadow: 0 0 0 8px rgba(222, 53, 11, 0); } }
         #view-app .hall-next-meta { font-size: clamp(14px, 1.8vw, 20px); font-weight: 800; color: #0747a6; font-family: var(--font-display); margin-bottom: 8px; letter-spacing: 0.02em; }
         #view-app .hall-next-meta.hall-next-meta--po { color: #b45309; }
-        #view-app .hall-next-meta .live-pitch-badge { font-size: clamp(11px, 1.2vw, 14px); min-width: 0; padding: 3px 9px; vertical-align: middle; letter-spacing: 0.04em; }
+        #view-app .hall-next-meta .live-pitch-badge { font-size: inherit; font-weight: inherit; font-family: inherit; letter-spacing: inherit; min-width: 0; padding: 2px 10px; vertical-align: middle; }
         #view-app .hall-live-board { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px 16px; margin: 6px 0 8px; }
         #view-app .hall-live-team { min-width: 0; }
         #view-app .hall-live-team--home { text-align: right; }
@@ -6305,12 +6305,12 @@
         return base;
     };
 
-    /** Hala LIVE: zielona odznaka „BOISKO N” (tylko gdy boiska ≥2). */
+    /** Hala LIVE: zielona odznaka „Boisko N” (tylko gdy boiska ≥2). */
     window.formatHallPitchBadgeHTML = function (m) {
         if (window.getPitchCount() <= 0) return '';
         const p = m && m.pitch != null ? parseInt(m.pitch, 10) : NaN;
         if (!Number.isFinite(p) || p < 1) return '';
-        const label = 'BOISKO ' + p;
+        const label = 'Boisko ' + p;
         return '<span class="live-pitch-badge" title="' + escAttr(label) + '">' + esc(label) + '</span>';
     };
 
