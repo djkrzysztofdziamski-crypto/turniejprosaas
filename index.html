@@ -293,7 +293,7 @@
         #view-login .msg { font-size: 12px; margin-top: 15px; font-weight: bold; padding: 8px; border-radius: 4px; display: none; }
         #view-login .msg.error { background: #ffebe6; color: var(--color-danger); border: 1px solid #ffbdad; }
         #view-login .msg.success { background: #e3fcef; color: #00875a; border: 1px solid var(--color-green-soft); }
-        #view-login .footer-info { margin-top: 30px; font-size: 13px; color: var(--color-text-muted); line-height: 1.5; }
+        #view-login .footer-info { margin-top: 30px; font-size: 13px; color: var(--color-text-muted); line-height: 1.5; position: relative; z-index: 2; }
         #view-login .brand-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--color-border-soft); color: var(--color-text-muted); font-size: 11px; }
         #view-login .gate-contact-email {
             display: inline-block;
@@ -304,6 +304,10 @@
             letter-spacing: 0.4px;
             text-decoration: underline;
             text-underline-offset: 4px;
+            cursor: pointer;
+            pointer-events: auto;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.25);
         }
         #view-login .gate-contact-email:hover { color: var(--color-green-soft); }
         #view-login .gate-marketing-link {
@@ -667,7 +671,7 @@
             max-width: 100%;
             overflow-x: hidden;
         }
-        @media (max-width: 1099px) {
+        @media (max-width: 1365px) {
             #view-app .live-split,
             #view-demo-story .demo-embed-app .live-split {
                 grid-template-columns: 1fr;
@@ -733,17 +737,17 @@
         #view-app .live-match-no { font-family: var(--font-display); font-weight: 800; font-size: 12px; color: #42526e; font-variant-numeric: tabular-nums; line-height: 1; }
         #view-app .live-group-badge { display: inline-block; min-width: 24px; padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #0747a6; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.03em; line-height: 1.2; box-sizing: border-box; border: 1px solid transparent; }
         #view-app .live-group-badge--po { background: #fff7ed; color: #b45309; }
-        #view-app .live-pitch-badge { display: inline-block; min-width: 22px; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; color: #067647; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; border: 1px solid #abefc6; white-space: nowrap; }
+        #view-app .live-pitch-badge { display: inline-block; min-width: 22px; max-width: 100%; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; color: #067647; font-family: var(--font-display); font-weight: 800; font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; border: 1px solid #abefc6; white-space: nowrap; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; }
         #view-app .live-pitch-select { max-width: 88px; font-size: 11px; font-weight: 700; padding: 4px 6px; border-radius: 6px; border: 1px solid #c1c7d0; background: #fff; color: #172b4d; }
         #view-app .pitch-section { margin-bottom: 16px; }
         #view-app .pitch-section-head { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-family: var(--font-display); font-size: 15px; font-weight: 800; color: #172b4d; }
         #view-app .pitch-section-empty { padding: 12px 14px; border: 1px dashed #c1c7d0; border-radius: 8px; color: #6b778c; font-size: 13px; background: #fafbfc; }
         #view-app .assistant-match-card-head .live-pitch-badge { margin-left: 2px; }
-        #view-app col.col-pitch { width: 72px; }
+        #view-app col.col-pitch { width: 56px; }
         #view-app .live-match-table th.col-pitch,
-        #view-app .live-match-table td.col-pitch { text-align: center; }
+        #view-app .live-match-table td.col-pitch { text-align: center; max-width: 56px; overflow: hidden; padding-left: 3px; padding-right: 3px; }
         #view-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
-        #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; max-width: 220px; min-width: 0; }
+        #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; min-width: 0; max-width: 100%; overflow: hidden; }
         #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
         #view-app .live-match-teams .live-team-name { display: inline; overflow-wrap: anywhere; word-break: break-word; }
         #view-app .live-cards-badge {
@@ -809,10 +813,57 @@
             #view-app .live-split-schedule,
             #view-app .live-split-standings { max-height: calc(100dvh - 210px); overflow-y: auto; padding-right: 4px; }
         }
+        /* Tablet / wąski laptop (≤1365): węższy Boisko+Wynik, Mecze = clamp + ellipsis */
+        @media (max-width: 1365px) {
+            #view-app .live-match-table col.col-pitch,
+            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 54px; }
+            #view-app .live-match-table th.col-pitch,
+            #view-app .live-match-table td.col-pitch,
+            #view-demo-story .demo-embed-app .live-match-table th.col-pitch,
+            #view-demo-story .demo-embed-app .live-match-table td.col-pitch {
+                max-width: 54px; overflow: hidden; padding-left: 2px; padding-right: 2px;
+            }
+            #view-app .live-pitch-select { max-width: 52px; font-size: 10px; padding: 2px 2px; }
+            #view-app .live-match-table col.col-score,
+            #view-app #mecze .live-match-table col.col-score,
+            #view-app #matches-container .live-match-table col.col-score,
+            #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 78px; }
+            #view-app .live-score-inputs input,
+            #view-app #mecze .live-score-inputs input,
+            #view-app #matches-container .live-score-inputs input {
+                width: 24px; min-width: 24px; max-width: 24px; font-size: 11px; padding: 2px 0;
+            }
+            #view-app .live-score-save { padding: 2px 4px; font-size: 9px; }
+            #view-app .live-match-teams,
+            #view-demo-story .demo-embed-app .live-match-teams {
+                max-width: none;
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: clamp(9px, 1.4vw, 12px);
+            }
+            #view-app .live-match-teams .live-team-name,
+            #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+                overflow-wrap: normal;
+                word-break: normal;
+                white-space: nowrap;
+            }
+            #view-app .live-match-teams .live-teams-vs,
+            #view-demo-story .demo-embed-app .live-match-teams .live-teams-vs {
+                font-size: clamp(8px, 1.1vw, 9px);
+                margin: 0 2px;
+            }
+        }
+        /* Demo / kibic: wynik tylko display — węższa kolumna niż inputy organizatora */
+        @media (max-width: 1365px) {
+            body.fan-view #view-app .live-match-table col.col-score,
+            #view-demo-story .demo-embed-app .live-match-table col.col-score { width: 48px; }
+        }
         @media (max-width: 767px) {
             #view-app .live-match-table th { font-size: 8px; padding: 4px 4px; }
             #view-app .live-match-table td { padding: 3px 4px; font-size: 11px; }
-            #view-app .live-match-teams { max-width: none; font-size: 11px; overflow-wrap: anywhere; }
+            #view-app .live-match-teams { max-width: none; font-size: clamp(8px, 2.8vw, 11px); }
             #view-app .live-match-no { font-size: 11px; }
             #view-app .assistant-scorers-btn { padding: 2px 5px; font-size: 9px; }
         }
@@ -2386,21 +2437,21 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-        /* Grupa jak wcześniej; Boisko szersze pod badge „Boisko N” (bez nachodzenia na Godz.) */
+        /* Grupa jak wcześniej; Boisko wąskie pod badge (ellipsis) */
         body.fan-view #view-app .live-match-table col.col-group,
         #view-demo-story .demo-embed-app .live-match-table col.col-group {
             width: 42px;
         }
         body.fan-view #view-app .live-match-table col.col-pitch,
         #view-demo-story .demo-embed-app .live-match-table col.col-pitch {
-            width: 80px;
+            width: 54px;
         }
         body.fan-view #view-app .live-match-table td.col-pitch,
         #view-demo-story .demo-embed-app .live-match-table td.col-pitch {
-            max-width: 80px;
+            max-width: 54px;
             overflow: hidden;
-            padding-left: 4px;
-            padding-right: 4px;
+            padding-left: 2px;
+            padding-right: 2px;
         }
         body.fan-view #view-app .live-pitch-badge,
         #view-demo-story .demo-embed-app .live-pitch-badge {
@@ -2422,14 +2473,20 @@
             padding-right: 6px;
         }
         body.fan-view #view-app .live-match-teams,
-        body.fan-view #view-app .live-match-teams .live-team-name,
-        #view-demo-story .demo-embed-app .live-match-teams,
-        #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+        #view-demo-story .demo-embed-app .live-match-teams {
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             overflow-wrap: normal;
             word-break: normal;
             max-width: none;
             font-size: clamp(9px, 2.6vw, 12px);
+        }
+        body.fan-view #view-app .live-match-teams .live-team-name,
+        #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+            white-space: nowrap;
+            overflow-wrap: normal;
+            word-break: normal;
         }
         body.fan-view #view-app .live-match-teams .live-teams-vs,
         #view-demo-story .demo-embed-app .live-match-teams .live-teams-vs {
@@ -2459,9 +2516,9 @@
             body.fan-view #view-app .live-match-table col.col-group,
             #view-demo-story .demo-embed-app .live-match-table col.col-group { width: 36px; }
             body.fan-view #view-app .live-match-table col.col-pitch,
-            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 72px; }
+            #view-demo-story .demo-embed-app .live-match-table col.col-pitch { width: 48px; }
             body.fan-view #view-app .live-match-table td.col-pitch,
-            #view-demo-story .demo-embed-app .live-match-table td.col-pitch { max-width: 72px; }
+            #view-demo-story .demo-embed-app .live-match-table td.col-pitch { max-width: 48px; }
             body.fan-view #view-app .live-match-table col.col-time,
             #view-demo-story .demo-embed-app .live-match-table col.col-time { width: 42px; }
             body.fan-view #view-app .live-match-table col.col-score,
@@ -2469,9 +2526,7 @@
             body.fan-view #view-app .live-match-table col.col-status,
             #view-demo-story .demo-embed-app .live-match-table col.col-status { width: 22px; }
             body.fan-view #view-app .live-match-teams,
-            body.fan-view #view-app .live-match-teams .live-team-name,
-            #view-demo-story .demo-embed-app .live-match-teams,
-            #view-demo-story .demo-embed-app .live-match-teams .live-team-name {
+            #view-demo-story .demo-embed-app .live-match-teams {
                 font-size: clamp(8px, 2.8vw, 11px);
             }
         }
@@ -3802,7 +3857,7 @@
             gap: 10px;
             align-items: start;
         }
-        @media (max-width: 1099px) {
+        @media (max-width: 1365px) {
             #view-demo-story .demo-embed-app .live-split { grid-template-columns: 1fr; }
         }
         #view-demo-story .demo-embed-app .live-panel-head {
@@ -4267,7 +4322,7 @@
         <h2 class="gate-title">Turniejomat</h2>
         <p class="gate-subtitle">Panel organizatora<br><span class="gate-powered">powered by TurniejPro</span></p>
         
-        <a href="https://demo.turniejomat.pl" class="btn-submit btn-demo-story" id="btn-demo-story-start">ZOBACZ FINAŁ TURNIEJU</a>
+        <a href="https://demo.turniejomat.pl" class="btn-submit btn-demo-story" id="btn-demo-story-start">ZOBACZ FINAŁ TURNIEJU — DEMO</a>
         <p style="font-size: 12px; color: #94a3b8; margin: 0 0 20px;">2 minuty · Bez rejestracji · Demo na demo.turniejomat.pl</p>
 
         <div id="login-organizer-too-small" class="login-organizer-too-small" hidden>
@@ -4418,13 +4473,17 @@
                 </div>
                 <div class="form-group">
                     <label for="lic-type">Pakiet Czasowy</label>
-                    <select id="lic-type">
+                    <select id="lic-type" onchange="syncAdminLicenseTypeUi()">
                         <option value="weekend" selected>Pakiet Weekendowy — 79 zł (72h / 3 dni)</option>
                         <option value="miesiac">Pakiet miesięczny — 149 zł (30 dni)</option>
+                        <option value="testy">Pakiet Testy — bezpłatny (90 dni)</option>
                     </select>
                 </div>
                 <button class="btn-primary" onclick="createNewLicense()" style="height: 40px;">UTWÓRZ I KOPIUJ KOD</button>
             </div>
+            <p id="lic-testy-hint" style="display:none; margin:8px 0 0; font-size:12px; color:#94a3b8; line-height:1.4;">
+                Notatka zapisze się jako <strong style="color:#e2e8f0;">Testy …</strong> (prefix obowiązkowy) + treść z pola powyżej. Tylko panel admina — nie ma w cenniku publicznym.
+            </p>
             <label class="lic-activate-now-label" for="lic-activate-now">
                 <input type="checkbox" id="lic-activate-now" checked>
                 <span>Aktywuj klucz od razu (organizator może wejść bez czekania)</span>
@@ -5142,6 +5201,7 @@
     const ADMIN_LICENSE_PRODUCTS = {
         weekend: { productId: 'football-weekend', sports: ['football'] },
         miesiac: { productId: 'football-month', sports: ['football'] },
+        testy: { productId: 'football-testy', sports: ['football'] },
     };
 
     function licenseCoversSport(lic, sport) {
@@ -5354,9 +5414,10 @@
         poweredBy: 'TurniejPro',
         adminTitle: 'TurniejPro SaaS',
         version: appVersion,
-        footer: 'Turniejomat' + (appVersion ? (' ' + appVersion) : '') + ' © 2026'
+        footer: 'Turniejomat' + (appVersion ? (' ' + appVersion) : '') +
+            ' © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span>'
     };
-    document.querySelectorAll('[data-brand-footer]').forEach(function (el) { el.textContent = BRAND.footer; });
+    document.querySelectorAll('[data-brand-footer]').forEach(function (el) { el.innerHTML = BRAND.footer; });
     let isFanMode = viewMode === 'fan' || viewMode === 'archive' || archiveId !== null;
     let isHallMode = viewMode === 'hall';
     let isAssistantMode = viewMode === 'assistant';
@@ -5438,10 +5499,27 @@
     function formatLicensePakiet(typ) {
         if (typ === 'weekend') return 'Weekend 79 zł';
         if (typ === 'miesiac') return 'Miesiąc 149 zł';
+        if (typ === 'testy') return 'Testy 90 dni (0 zł)';
         if (typ === '1-dzien') return '1 dzień (legacy)';
         if (typ === 'unlimited') return 'Bez limitu (legacy)';
         return typ || '—';
     }
+
+    function syncAdminLicenseTypeUi() {
+        const typeEl = document.getElementById('lic-type');
+        const hint = document.getElementById('lic-testy-hint');
+        const nameEl = document.getElementById('client-name');
+        if (!typeEl) return;
+        const isTesty = typeEl.value === 'testy';
+        if (hint) hint.style.display = isTesty ? 'block' : 'none';
+        if (nameEl) {
+            nameEl.placeholder = isTesty
+                ? 'np. Puchar Opalenicy (zapis: Testy Puchar Opalenicy)'
+                : 'np. Sędzia Kowalski - Puchar Opalenicy';
+        }
+    }
+
+    window.syncAdminLicenseTypeUi = syncAdminLicenseTypeUi;
 
     function formatAdminDateTime(value) {
         const d = new Date(value);
@@ -5806,9 +5884,19 @@
 
     function createNewLicense() {
         if (!isAdminSession()) return;
-        const name = document.getElementById('client-name').value.trim();
         const type = document.getElementById('lic-type').value;
-        if (!name) { alert("❌ Wpisz nazwę klienta lub turnieju!"); return; }
+        let name = document.getElementById('client-name').value.trim();
+        if (type === 'testy') {
+            name = name.replace(/^Testy\s+/i, '').trim();
+            if (!name) {
+                alert('❌ Dla pakietu Testy wpisz nazwę po prefiksie „Testy” (np. klub / turniej).');
+                return;
+            }
+            name = 'Testy ' + name;
+        } else if (!name) {
+            alert('❌ Wpisz nazwę klienta lub turnieju!');
+            return;
+        }
         const newKey = generateRandomKey();
         const nowStr = new Date().toLocaleString('pl-PL');
 
@@ -5823,6 +5911,7 @@
             wygasa: null,
             notatka: name
         };
+        if (type === 'testy') payload.cenaPln = 0;
         const activateNow = document.getElementById('lic-activate-now')?.checked === true;
 
         db.ref('licencje/' + newKey).set(payload).then(async () => {

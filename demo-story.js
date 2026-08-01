@@ -72,7 +72,7 @@
 
             sub: '2 minuty. Jedna historia. Twój turniej może wyglądać tak samo.',
 
-            cta: 'Zobacz finał turnieju',
+            cta: 'Zobacz finał turnieju — DEMO',
 
             ctaSecondary: 'Mam klucz — aktywuj licencję',
 
@@ -1862,9 +1862,11 @@
 
             if (nazywo) nazywo.classList.add('active');
 
-            if (global.renderFilterBar) global.renderFilterBar();
-
-            if (global.filterAndRenderMatches) global.filterAndRenderMatches();
+            /* Całość = mecze grupowe + play-off w harmonogramie przed Halą */
+            if (typeof global.setStatusFilter === 'function') global.setStatusFilter('all');
+            else if (global.renderFilterBar) global.renderFilterBar();
+            if (typeof global.setGroupFilter === 'function') global.setGroupFilter('all');
+            else if (global.filterAndRenderMatches) global.filterAndRenderMatches();
 
             if (global.calcTables) global.calcTables();
 

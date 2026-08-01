@@ -211,9 +211,12 @@
         .pricing-toggle .active { background: var(--accent); color: #fff; }
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr;
             gap: 24px;
             align-items: stretch;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .price-card {
             background: var(--bg-card);
@@ -222,6 +225,19 @@
             padding: 28px 24px;
             display: flex;
             flex-direction: column;
+            scroll-margin-top: 24px;
+        }
+        .pricing-jump {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 0 auto 28px;
+            max-width: 640px;
+        }
+        .pricing-jump .btn {
+            min-width: min(100%, 240px);
+            flex: 1 1 220px;
         }
         .price-card--featured { border-color: #57d9a3; box-shadow: 0 0 0 1px rgba(87,217,163,0.3); }
         .price-label { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #57d9a3; margin-bottom: 8px; }
@@ -397,7 +413,8 @@ SEKCJA 1 — HERO
         </p>
         <div class="btn-row">
             <a href="https://demo.turniejomat.pl" class="btn btn-primary">Zobacz finał turnieju — demo 2 min</a>
-            <a href="#cennik" class="btn btn-outline">Zobacz cennik</a>
+            <a href="#pakiet-weekendowy" class="btn btn-primary">Pakiet weekendowy</a>
+            <a href="#pakiet-miesieczny" class="btn btn-primary">Pakiet miesięczny</a>
         </div>
         <p class="micro">Bez rejestracji · Demo nie wymaga klucza · Cennik obowiązuje do 31.12.2026</p>
     </div>
@@ -505,9 +522,9 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
         <h2>Prosty cennik na sezon 2026</h2>
         <p class="lead">Dwa pakiety. Bez ukrytych opłat. Ceny brutto — dokument potwierdzający zakup na życzenie.</p>
 
-        <div class="pricing-toggle" aria-hidden="true">
-            <span class="active">Płatność za turniej</span>
-            <span>Pakiet miesięczny</span>
+        <div class="pricing-jump" role="navigation" aria-label="Wybór pakietu">
+            <a href="#pakiet-weekendowy" class="btn btn-primary">Pakiet weekendowy</a>
+            <a href="#pakiet-miesieczny" class="btn btn-primary">Pakiet miesięczny</a>
         </div>
 
         <div class="checkout-email-wrap">
@@ -542,7 +559,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
         <div class="pricing-grid">
 
             <!-- PAKIET WEEKENDOWY -->
-            <article class="price-card">
+            <article class="price-card" id="pakiet-weekendowy">
                 <p class="price-label">Pakiet weekendowy</p>
                 <h3 style="margin:0 0 4px;">Single Event</h3>
                 <p class="price-desc">Jeden turniej — pełny dostęp przez cały weekend rozgrywek.</p>
@@ -561,7 +578,7 @@ SEKCJA 6 — CENNIK (79 / 149 zł)
             </article>
 
             <!-- PAKIET MIESIĘCZNY -->
-            <article class="price-card price-card--featured">
+            <article class="price-card price-card--featured" id="pakiet-miesieczny">
                 <p class="price-label">Pakiet miesięczny</p>
                 <h3 style="margin:0 0 4px;">30 dni</h3>
                 <p class="price-desc">Dla lig, hal i organizatorów z regularnym kalendarzem rozgrywek.</p>

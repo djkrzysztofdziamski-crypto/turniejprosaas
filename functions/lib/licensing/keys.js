@@ -4,6 +4,7 @@ const KEY_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function durationMs(typ) {
   if (typ === 'weekend') return 72 * 60 * 60 * 1000;
   if (typ === 'miesiac') return 30 * 24 * 60 * 60 * 1000;
+  if (typ === 'testy') return 90 * 24 * 60 * 60 * 1000;
   if (typ === 'unlimited') return 99 * 365 * 24 * 60 * 60 * 1000;
   return 24 * 60 * 60 * 1000;
 }
