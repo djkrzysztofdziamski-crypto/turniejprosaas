@@ -1088,6 +1088,105 @@
         #view-app .hall-live-panel.is-complete .hall-live-badge { display: none; }
         #view-app .hall-live-panel.is-complete .hall-complete-badge { display: inline-block; }
         #view-app .hall-live-pen-note { text-align: center; font-size: clamp(12px, 1.4vw, 15px); font-weight: 700; color: #64748b; margin-top: 4px; }
+        #view-app .hall-live-dual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(8px, 1.2vw, 14px);
+            align-items: stretch;
+            height: 100%;
+            min-height: 0;
+        }
+        #view-app .hall-live-slot {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            padding: clamp(6px, 1vh, 10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        #view-app .hall-live-slot.is-live {
+            border-color: #fca5a5;
+            box-shadow: 0 0 0 1px rgba(222, 53, 11, 0.1);
+        }
+        #view-app .hall-live-slot.is-score-flash,
+        #view-app .hall-live-stack-row.is-score-flash {
+            animation: hall-live-score-flash 0.7s ease-out;
+        }
+        @keyframes hall-live-score-flash {
+            0% { background-color: #ecfdf5; }
+            100% { background-color: transparent; }
+        }
+        #view-app .hall-live-slot-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 4px; }
+        #view-app .hall-live-slot-badge {
+            display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+            text-transform: uppercase; color: #fff; background: #de350b;
+            padding: 2px 8px; border-radius: 999px;
+        }
+        #view-app .hall-live-slot .hall-next-meta { font-size: clamp(12px, 1.4vw, 16px); margin-bottom: 0; }
+        #view-app .hall-live-slot .hall-live-time { font-size: clamp(11px, 1.2vw, 13px); margin-left: auto; }
+        #view-app .hall-live-slot .hall-live-board { flex: 1; min-height: 0; margin: 4px 0 0; }
+        #view-app .hall-live-layout--dual .hall-live-digit { font-size: clamp(40px, 7vw, 72px); }
+        #view-app .hall-live-layout--dual .hall-live-colon { font-size: clamp(24px, 4vw, 42px); }
+        #view-app .hall-live-layout--dual .hall-live-team-name { font-size: clamp(13px, 1.8vw, 20px); }
+        #view-app .hall-live-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1vh, 10px);
+            height: 100%;
+            min-height: 0;
+            overflow: auto;
+        }
+        #view-app .hall-live-stack-row {
+            display: grid;
+            grid-template-columns: auto auto minmax(0, 0.9fr) minmax(0, 1.6fr);
+            gap: 8px 12px;
+            align-items: center;
+            padding: clamp(8px, 1.2vh, 12px) clamp(8px, 1vw, 12px);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        #view-app .hall-live-stack-row.is-live { border-color: #fca5a5; }
+        #view-app .hall-live-stack-flag { min-width: 1.5em; }
+        #view-app .hall-live-stack-pitch { min-width: 0; }
+        #view-app .hall-live-stack-meta {
+            font-family: var(--font-display); font-weight: 800; font-size: clamp(12px, 1.4vw, 16px);
+            color: #0747a6; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        #view-app .hall-live-stack-meta.hall-next-meta--po { color: #b45309; }
+        #view-app .hall-live-stack-teams {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            gap: 8px 10px;
+            align-items: center;
+            min-width: 0;
+        }
+        #view-app .hall-live-stack-teams .hall-live-team-name:first-child { text-align: right; }
+        #view-app .hall-live-stack-teams .hall-live-team-name:last-child { text-align: left; }
+        #view-app .hall-live-stack-teams .hall-live-team-name {
+            font-size: clamp(13px, 1.7vw, 20px); font-weight: 800; min-width: 0;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        #view-app .hall-live-score-wrap--stack {
+            padding: 4px 8px; border-radius: 10px; gap: 4px 8px;
+        }
+        #view-app .hall-live-layout--stack .hall-live-digit { font-size: clamp(28px, 4.5vw, 48px); }
+        #view-app .hall-live-layout--stack .hall-live-colon { font-size: clamp(18px, 3vw, 28px); margin-top: 0; }
+        #view-app .hall-live-stack--dense .hall-live-stack-row { padding: 6px 8px; }
+        #view-app .hall-live-stack--dense .hall-live-digit { font-size: clamp(22px, 3.5vw, 36px); }
+        #view-app .hall-live-stack--dense .hall-live-stack-teams .hall-live-team-name { font-size: clamp(11px, 1.3vw, 15px); }
+        @media (max-width: 900px) {
+            #view-app .hall-live-dual { grid-template-columns: 1fr; }
+            #view-app .hall-live-stack-row {
+                grid-template-columns: auto auto minmax(0, 1fr);
+                grid-template-rows: auto auto;
+            }
+            #view-app .hall-live-stack-teams { grid-column: 1 / -1; }
+        }
         #view-app .hall-podium-banner { display: grid; gap: 8px; }
         #view-app .hall-podium-wrap { margin-top: 14px; padding-top: 14px; border-top: 2px solid #fcd34d; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(10px, 2vw, 18px); align-items: stretch; }
         #view-app .hall-podium-awards { display: grid; gap: 8px; align-content: center; }
@@ -1234,6 +1333,14 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--dual #hall-live-body,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-layout--stack #hall-live-body {
+            justify-content: flex-start;
+        }
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-dual,
+        body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-stack {
+            flex: 1;
         }
         body.hall-view #view-app .hall-grid.hall-grid--sixteen .hall-live-panel.is-complete #hall-live-body {
             justify-content: flex-start;
@@ -3539,6 +3646,45 @@
         }
         #view-demo-story .demo-hall-embed-host .hall-live-time { font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.04em; }
         #view-demo-story .demo-hall-embed-host .hall-live-empty { font-size: 14px; font-weight: 700; color: #94a3b8; text-align: center; padding: 20px 10px; }
+        #view-demo-story .demo-hall-embed-host .hall-live-dual {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: stretch; min-height: 0; height: 100%;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-slot {
+            display: flex; flex-direction: column; min-width: 0; padding: 6px 8px;
+            border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; box-sizing: border-box;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-slot.is-live { border-color: #fca5a5; }
+        #view-demo-story .demo-hall-embed-host .hall-live-slot-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 2px; }
+        #view-demo-story .demo-hall-embed-host .hall-live-slot-badge {
+            display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+            text-transform: uppercase; color: #fff; background: #de350b; padding: 2px 6px; border-radius: 999px;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-slot .hall-next-meta { font-size: 12px; margin-bottom: 0; }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-digit { font-size: clamp(28px, 5vw, 48px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-colon { font-size: clamp(18px, 3vw, 28px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--dual .hall-live-team-name { font-size: clamp(12px, 1.6vw, 16px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack {
+            display: flex; flex-direction: column; gap: 6px; min-height: 0; overflow: auto; height: 100%;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-row {
+            display: grid; grid-template-columns: auto auto minmax(0, 0.9fr) minmax(0, 1.6fr);
+            gap: 6px 8px; align-items: center; padding: 6px 8px;
+            border: 1px solid #e2e8f0; border-radius: 8px; background: #fff;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-row.is-live { border-color: #fca5a5; }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-meta {
+            font-family: var(--font-display); font-weight: 800; font-size: 11px; color: #0747a6;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-teams {
+            display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center;
+        }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name { font-size: 12px; font-weight: 800; }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name:first-child { text-align: right; }
+        #view-demo-story .demo-hall-embed-host .hall-live-stack-teams .hall-live-team-name:last-child { text-align: left; }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-digit { font-size: clamp(22px, 3.5vw, 32px); }
+        #view-demo-story .demo-hall-embed-host .hall-live-layout--stack .hall-live-colon { font-size: clamp(14px, 2.2vw, 20px); margin-top: 0; }
+        #view-demo-story .demo-hall-embed-host .hall-live-score-wrap--stack { padding: 3px 6px; border-radius: 8px; gap: 3px 6px; }
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-complete { border-color: #fcd34d; background: linear-gradient(180deg, #fffef7 0%, #ffffff 100%); }
         #view-demo-story .demo-hall-embed-host .hall-complete-badge { display: none; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #172b4d; background: linear-gradient(180deg, #ffcc00 0%, #f59e0b 100%); padding: 3px 10px; border-radius: 999px; }
         #view-demo-story .demo-hall-embed-host .hall-live-panel.is-complete .hall-live-badge { display: none; }
@@ -8398,8 +8544,10 @@
     };
 
     window._hallLiveScoreKey = '';
+    window._hallLiveScoreMap = {};
     window._hallLiveRenderSig = '';
     window._hallLiveStructureSig = '';
+    window._hallLiveLayoutSig = '';
     window._hallPlayedSig = '';
     window._hallTablesHtml = '';
     window._hallRulesHtml = '';
@@ -8549,28 +8697,204 @@
         if (!m || m.played) return false;
         const meta = state.meta || {};
         if (meta.liveMatchId === m.id && !!meta.liveMatchIsPo === !!m.isPo) return true;
-        return scores.g1 > 0 || scores.g2 > 0 || (m.s1 && m.s1.length > 0) || (m.s2 && m.s2.length > 0);
+        const sc = scores || window.resolveHallLiveScores(m);
+        return sc.g1 > 0 || sc.g2 > 0 || (m.s1 && m.s1.length > 0) || (m.s2 && m.s2.length > 0);
     }
 
-    function renderHallLiveBoardHTML(m, scores) {
+    function hallLiveMatchKey(m) {
+        if (!m) return '';
+        return String(m.id) + ':' + (m.isPo ? 'po' : 'gr');
+    }
+
+    function sortHallLiveMatches(list) {
+        return (list || []).slice().sort(function (a, b) {
+            const t = String(a.time || '').localeCompare(String(b.time || ''));
+            if (t) return t;
+            const pa = parseInt(a.pitch, 10);
+            const pb = parseInt(b.pitch, 10);
+            const pitchA = Number.isFinite(pa) ? pa : 999;
+            const pitchB = Number.isFinite(pb) ? pb : 999;
+            if (pitchA !== pitchB) return pitchA - pitchB;
+            const na = typeof window.getGlobalMatchNo === 'function' ? window.getGlobalMatchNo(a, !!a.isPo) : (a.id || 0);
+            const nb = typeof window.getGlobalMatchNo === 'function' ? window.getGlobalMatchNo(b, !!b.isPo) : (b.id || 0);
+            return na - nb;
+        });
+    }
+
+    /** Mecze do panelu LIVE: aktywne + równoległe o tej samej godzinie; albo slot bieżący z ≥2 meczami. */
+    window.getHallLiveMatches = function () {
+        const pending = getHallAllMatches().filter(function (m) {
+            return !m.played && m.t1 && m.t1.id !== -99 && m.t2 && m.t2.id !== -99;
+        });
+        if (!pending.length) return [];
+
+        const active = pending.filter(function (m) {
+            return isHallMatchLive(m, window.resolveHallLiveScores(m));
+        });
+
+        if (active.length) {
+            const times = {};
+            active.forEach(function (m) {
+                const t = String(m.time || '');
+                if (t) times[t] = true;
+            });
+            const set = {};
+            const out = [];
+            pending.forEach(function (m) {
+                const key = hallLiveMatchKey(m);
+                const parallel = m.time && times[String(m.time)];
+                const isActive = active.some(function (a) {
+                    return a.id === m.id && !!a.isPo === !!m.isPo;
+                });
+                if ((isActive || parallel) && !set[key]) {
+                    set[key] = true;
+                    out.push(m);
+                }
+            });
+            return sortHallLiveMatches(out);
+        }
+
+        const byTime = {};
+        pending.forEach(function (m) {
+            const t = String(m.time || '');
+            if (!byTime[t]) byTime[t] = [];
+            byTime[t].push(m);
+        });
+        const earliest = Object.keys(byTime).sort(function (a, b) {
+            return a.localeCompare(b);
+        })[0];
+        const slot = byTime[earliest] || [];
+        if (slot.length >= 2) return sortHallLiveMatches(slot);
+        return [];
+    };
+
+    function setHallLiveLayoutClass(panel, layout) {
+        if (!panel) return;
+        panel.classList.remove('hall-live-layout--hero', 'hall-live-layout--dual', 'hall-live-layout--stack');
+        if (layout) panel.classList.add('hall-live-layout--' + layout);
+    }
+
+    function hallBumpDigit(el) {
+        if (!el) return;
+        el.classList.remove('score-bump');
+        void el.offsetWidth;
+        el.classList.add('score-bump');
+    }
+
+    function patchHallMultiLiveScores(rootEl, matches) {
+        if (!rootEl || !matches || !matches.length) return;
+        if (!window._hallLiveScoreMap) window._hallLiveScoreMap = {};
+        matches.forEach(function (m) {
+            const key = hallLiveMatchKey(m);
+            const sc = window.resolveHallLiveScores(m);
+            const next = sc.g1 + ':' + sc.g2;
+            const prev = window._hallLiveScoreMap[key];
+            const scope = rootEl.querySelector('[data-match-key="' + key + '"]');
+            if (!scope) {
+                window._hallLiveScoreMap[key] = next;
+                return;
+            }
+            const g1El = scope.querySelector('.hall-live-digit--home');
+            const g2El = scope.querySelector('.hall-live-digit--away');
+            if (g1El) g1El.textContent = String(sc.g1);
+            if (g2El) g2El.textContent = String(sc.g2);
+            const lead = sc.g1 > sc.g2 ? 't1' : (sc.g2 > sc.g1 ? 't2' : null);
+            const t1 = scope.querySelector('.hall-live-team--home .hall-live-team-name') ||
+                scope.querySelector('.hall-live-stack-teams .hall-live-team-name:first-child');
+            const t2 = scope.querySelector('.hall-live-team--away .hall-live-team-name') ||
+                scope.querySelector('.hall-live-stack-teams .hall-live-team-name:last-child');
+            if (t1) {
+                t1.textContent = m.t1 && m.t1.name ? m.t1.name : '';
+                t1.className = 'hall-live-team-name' + (lead === 't1' ? ' is-leading' : '');
+            }
+            if (t2) {
+                t2.textContent = m.t2 && m.t2.name ? m.t2.name : '';
+                t2.className = 'hall-live-team-name' + (lead === 't2' ? ' is-leading' : '');
+            }
+            if (prev && prev !== next) {
+                const parts = String(prev).split(':');
+                if (parts[0] !== String(sc.g1)) hallBumpDigit(g1El);
+                if (parts[1] !== String(sc.g2)) hallBumpDigit(g2El);
+                scope.classList.remove('is-score-flash');
+                void scope.offsetWidth;
+                scope.classList.add('is-score-flash');
+            }
+            window._hallLiveScoreMap[key] = next;
+            scope.classList.toggle('is-live', isHallMatchLive(m, sc));
+        });
+    }
+
+    function renderHallLiveBoardHTML(m, scores, opts) {
+        opts = opts || {};
+        const useIds = opts.useIds !== false;
+        const matchKey = opts.matchKey || hallLiveMatchKey(m);
         const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
         const t1Cls = lead === 't1' ? ' is-leading' : '';
         const t2Cls = lead === 't2' ? ' is-leading' : '';
         const cards1 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards1, 1) : '';
         const cards2 = (typeof window.formatCardsSideBadgeHTML === 'function') ? window.formatCardsSideBadgeHTML(m.cards2, 2) : '';
-        return '<div class="hall-live-board">' +
+        const g1Attr = useIds
+            ? ' class="hall-live-digit hall-live-digit--home" id="hall-live-g1"'
+            : ' class="hall-live-digit hall-live-digit--home"';
+        const g2Attr = useIds
+            ? ' class="hall-live-digit hall-live-digit--away" id="hall-live-g2"'
+            : ' class="hall-live-digit hall-live-digit--away"';
+        const wrapAttr = useIds ? '' : (' data-match-key="' + escAttr(matchKey) + '"');
+        return '<div class="hall-live-board"' + wrapAttr + '>' +
             '<div class="hall-live-team hall-live-team--home">' +
-            '<div class="hall-live-team-name' + t1Cls + '">' + esc(m.t1.name) + '</div>' +
+            '<div class="hall-live-team-name' + t1Cls + '">' + esc(m.t1 && m.t1.name ? m.t1.name : '') + '</div>' +
             '<div class="hall-live-team-cards">' + (cards1 || '') + '</div>' +
             '</div>' +
             '<div class="hall-live-score-wrap">' +
-            '<span class="hall-live-digit" id="hall-live-g1">' + scores.g1 + '</span>' +
+            '<span' + g1Attr + '>' + scores.g1 + '</span>' +
             '<span class="hall-live-colon">:</span>' +
-            '<span class="hall-live-digit" id="hall-live-g2">' + scores.g2 + '</span>' +
+            '<span' + g2Attr + '>' + scores.g2 + '</span>' +
             '</div>' +
             '<div class="hall-live-team hall-live-team--away">' +
-            '<div class="hall-live-team-name' + t2Cls + '">' + esc(m.t2.name) + '</div>' +
+            '<div class="hall-live-team-name' + t2Cls + '">' + esc(m.t2 && m.t2.name ? m.t2.name : '') + '</div>' +
             '<div class="hall-live-team-cards">' + (cards2 || '') + '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function renderHallLiveSlotHTML(m) {
+        const scores = window.resolveHallLiveScores(m);
+        const live = isHallMatchLive(m, scores);
+        const key = hallLiveMatchKey(m);
+        const base = window.formatHallMatchMeta(m, m.isPo, { skipPitch: true });
+        const badge = window.formatHallPitchBadgeHTML(m);
+        const metaHtml = esc(base) + (badge ? ' · ' + badge : '');
+        return '<div class="hall-live-slot' + (live ? ' is-live' : '') + '" data-match-key="' + escAttr(key) + '">' +
+            '<div class="hall-live-slot-head">' +
+            (live ? '<span class="hall-live-slot-badge">● LIVE</span>' : '') +
+            '<div class="hall-next-meta' + (m.isPo ? ' hall-next-meta--po' : '') + '">' + metaHtml + '</div>' +
+            (m.time ? '<div class="hall-live-time">' + esc(m.time) + '</div>' : '') +
+            '</div>' +
+            renderHallLiveBoardHTML(m, scores, { useIds: false, matchKey: key }) +
+            '</div>';
+    }
+
+    function renderHallLiveStackRowHTML(m) {
+        const scores = window.resolveHallLiveScores(m);
+        const live = isHallMatchLive(m, scores);
+        const key = hallLiveMatchKey(m);
+        const badge = window.formatHallPitchBadgeHTML(m);
+        const base = window.formatHallMatchMeta(m, m.isPo, { skipPitch: true });
+        const t1 = m.t1 && m.t1.name ? m.t1.name : '';
+        const t2 = m.t2 && m.t2.name ? m.t2.name : '';
+        const lead = scores.g1 > scores.g2 ? 't1' : (scores.g2 > scores.g1 ? 't2' : null);
+        return '<div class="hall-live-stack-row' + (live ? ' is-live' : '') + '" data-match-key="' + escAttr(key) + '">' +
+            '<div class="hall-live-stack-flag">' + (live ? '<span class="hall-live-slot-badge">●</span>' : '') + '</div>' +
+            '<div class="hall-live-stack-pitch">' + (badge || '') + '</div>' +
+            '<div class="hall-live-stack-meta' + (m.isPo ? ' hall-next-meta--po' : '') + '">' + esc(base) + '</div>' +
+            '<div class="hall-live-stack-teams">' +
+            '<span class="hall-live-team-name' + (lead === 't1' ? ' is-leading' : '') + '">' + esc(t1) + '</span>' +
+            '<span class="hall-live-score-wrap hall-live-score-wrap--stack">' +
+            '<span class="hall-live-digit hall-live-digit--home">' + scores.g1 + '</span>' +
+            '<span class="hall-live-colon">:</span>' +
+            '<span class="hall-live-digit hall-live-digit--away">' + scores.g2 + '</span>' +
+            '</span>' +
+            '<span class="hall-live-team-name' + (lead === 't2' ? ' is-leading' : '') + '">' + esc(t2) + '</span>' +
             '</div>' +
             '</div>';
     }
@@ -8738,6 +9062,9 @@
 
         panel.classList.remove('is-live');
         panel.classList.add('is-complete');
+        setHallLiveLayoutClass(panel, 'hero');
+        if (metaEl) metaEl.style.display = '';
+        if (timeEl) timeEl.style.display = '';
         if (labelEl) labelEl.textContent = 'Wielki finał — wynik końcowy';
         if (metaEl) {
             const base = window.formatHallMatchMeta(podium.final, true, { skipPitch: true });
@@ -8748,60 +9075,36 @@
         if (timeEl) timeEl.textContent = timeText;
 
         window._hallLiveRenderSig = renderSig;
+        window._hallLiveLayoutSig = 'complete';
         bodyEl.innerHTML = renderHallCompleteBoardHTML(podium);
         window._hallLiveScoreKey = renderSig;
+        window._hallLiveScoreMap = {};
     }
 
-    function renderHallLivePanel(current) {
-        const panel = document.getElementById('hall-live-panel');
-        const metaEl = document.getElementById('hall-live-meta');
-        const bodyEl = document.getElementById('hall-live-body');
-        const timeEl = document.getElementById('hall-live-time');
-        const labelEl = document.getElementById('hall-live-label');
-        if (!panel || !bodyEl) return;
-
-        const podium = window.getHallTournamentPodium();
-        if (podium) {
-            renderHallCompletePanel(podium);
-            return;
-        }
-
-        panel.classList.remove('is-complete');
-
-        if (!current) {
-            const emptySig = 'empty';
-            panel.classList.remove('is-live');
-            if (window._hallLiveRenderSig === emptySig && bodyEl.querySelector('.hall-live-empty')) {
-                window._hallLiveScoreKey = '';
-                return;
-            }
-            window._hallLiveRenderSig = emptySig;
-            if (metaEl) { metaEl.textContent = '—'; metaEl.className = 'hall-next-meta'; }
-            if (labelEl) labelEl.textContent = 'Mecz aktualny';
-            bodyEl.innerHTML = '<div class="hall-live-empty">Brak zaplanowanych meczów</div>';
-            if (timeEl) timeEl.textContent = '';
-            window._hallLiveScoreKey = '';
-            return;
-        }
-
+    function renderHallLivePanelHero(panel, metaEl, bodyEl, timeEl, labelEl, current) {
         const scores = window.resolveHallLiveScores(current);
         const live = isHallMatchLive(current, scores);
-        const scoreKey = current.id + ':' + (current.isPo ? 'po' : 'gr') + ':' + scores.g1 + ':' + scores.g2;
+        const scoreKey = hallLiveMatchKey(current) + ':' + scores.g1 + ':' + scores.g2;
         const structureKey = hallLiveStructureKey(current, live);
-        const renderSig = 'live:' + hallMatchBrief(current) + ':' + scores.g1 + ':' + scores.g2 + ':' + (live ? 1 : 0);
+        const renderSig = 'live:hero:' + hallMatchBrief(current) + ':' + scores.g1 + ':' + scores.g2 + ':' + (live ? 1 : 0);
         const prevKey = window._hallLiveScoreKey || '';
-        const scoreChanged = prevKey && prevKey !== scoreKey && prevKey.startsWith(String(current.id) + ':');
-        const sameMatch = prevKey.startsWith(String(current.id) + ':');
+        const scoreChanged = prevKey && prevKey !== scoreKey && prevKey.startsWith(hallLiveMatchKey(current) + ':');
+        const sameMatch = prevKey.startsWith(hallLiveMatchKey(current) + ':');
         const g1El = document.getElementById('hall-live-g1');
         const g2El = document.getElementById('hall-live-g2');
         const structureSame = window._hallLiveStructureSig === structureKey;
+        const layoutSame = window._hallLiveLayoutSig === 'hero';
 
-        if (g1El && g2El && sameMatch && window._hallLiveRenderSig === renderSig) {
+        if (g1El && g2El && sameMatch && layoutSame && window._hallLiveRenderSig === renderSig) {
             return;
         }
 
+        setHallLiveLayoutClass(panel, 'hero');
+        window._hallLiveLayoutSig = 'hero';
         window._hallLiveScoreKey = scoreKey;
         panel.classList.toggle('is-live', live);
+        if (metaEl) metaEl.style.display = '';
+        if (timeEl) timeEl.style.display = '';
         if (labelEl) labelEl.textContent = live ? 'Mecz na żywo' : 'Mecz aktualny';
         if (metaEl) {
             const base = window.formatHallMatchMeta(current, current.isPo, { skipPitch: true });
@@ -8811,15 +9114,16 @@
         }
         if (timeEl) timeEl.textContent = current.time ? ('Godzina meczu: ' + current.time) : '';
 
-        if (g1El && g2El && sameMatch && structureSame) {
+        if (g1El && g2El && sameMatch && structureSame && layoutSame) {
             window._hallLiveRenderSig = renderSig;
             window._hallLiveStructureSig = structureKey;
             g1El.textContent = String(scores.g1);
             g2El.textContent = String(scores.g2);
             if (scoreChanged) {
-                const bump = (el) => { el.classList.remove('score-bump'); void el.offsetWidth; el.classList.add('score-bump'); };
-                if (prevKey.split(':')[2] !== String(scores.g1)) bump(g1El);
-                if (prevKey.split(':')[3] !== String(scores.g2)) bump(g2El);
+                const parts = String(prevKey).split(':');
+                // key is id:po|gr:g1:g2 — last two are scores
+                if (parts[parts.length - 2] !== String(scores.g1)) hallBumpDigit(g1El);
+                if (parts[parts.length - 1] !== String(scores.g2)) hallBumpDigit(g2El);
             }
             const t1 = bodyEl.querySelector('.hall-live-team--home .hall-live-team-name');
             const t2 = bodyEl.querySelector('.hall-live-team--away .hall-live-team-name');
@@ -8835,8 +9139,101 @@
         } else {
             window._hallLiveRenderSig = renderSig;
             window._hallLiveStructureSig = structureKey;
-            bodyEl.innerHTML = renderHallLiveBoardHTML(current, scores);
+            bodyEl.innerHTML = renderHallLiveBoardHTML(current, scores, { useIds: true });
         }
+        window._hallLiveScoreMap = {};
+        window._hallLiveScoreMap[hallLiveMatchKey(current)] = scores.g1 + ':' + scores.g2;
+    }
+
+    function renderHallLivePanelMulti(panel, metaEl, bodyEl, timeEl, labelEl, liveList, layout) {
+        const listSig = liveList.map(hallMatchBrief).join(',');
+        const layoutSig = layout + ':' + listSig;
+        const anyLive = liveList.some(function (m) {
+            return isHallMatchLive(m, window.resolveHallLiveScores(m));
+        });
+        panel.classList.toggle('is-live', anyLive);
+        setHallLiveLayoutClass(panel, layout);
+        if (metaEl) {
+            metaEl.style.display = 'none';
+            metaEl.textContent = '';
+        }
+        if (timeEl) {
+            timeEl.style.display = 'none';
+            timeEl.textContent = '';
+        }
+        if (labelEl) labelEl.textContent = 'Mecze na żywo';
+
+        if (window._hallLiveLayoutSig === layoutSig && bodyEl.querySelector(layout === 'dual' ? '.hall-live-slot' : '.hall-live-stack-row')) {
+            patchHallMultiLiveScores(bodyEl, liveList);
+            window._hallLiveRenderSig = layoutSig;
+            return;
+        }
+
+        window._hallLiveLayoutSig = layoutSig;
+        window._hallLiveRenderSig = layoutSig;
+        window._hallLiveScoreKey = '';
+        window._hallLiveScoreMap = {};
+        if (layout === 'dual') {
+            bodyEl.innerHTML = '<div class="hall-live-dual">' + liveList.map(renderHallLiveSlotHTML).join('') + '</div>';
+        } else {
+            const dense = liveList.length >= 4 ? ' hall-live-stack--dense' : '';
+            bodyEl.innerHTML = '<div class="hall-live-stack' + dense + '">' + liveList.map(renderHallLiveStackRowHTML).join('') + '</div>';
+        }
+        liveList.forEach(function (m) {
+            const sc = window.resolveHallLiveScores(m);
+            window._hallLiveScoreMap[hallLiveMatchKey(m)] = sc.g1 + ':' + sc.g2;
+        });
+    }
+
+    function renderHallLivePanel() {
+        const panel = document.getElementById('hall-live-panel');
+        const metaEl = document.getElementById('hall-live-meta');
+        const bodyEl = document.getElementById('hall-live-body');
+        const timeEl = document.getElementById('hall-live-time');
+        const labelEl = document.getElementById('hall-live-label');
+        if (!panel || !bodyEl) return;
+
+        const podium = window.getHallTournamentPodium();
+        if (podium) {
+            renderHallCompletePanel(podium);
+            return;
+        }
+
+        panel.classList.remove('is-complete');
+
+        const liveList = typeof window.getHallLiveMatches === 'function' ? window.getHallLiveMatches() : [];
+        if (liveList.length >= 3) {
+            renderHallLivePanelMulti(panel, metaEl, bodyEl, timeEl, labelEl, liveList, 'stack');
+            return;
+        }
+        if (liveList.length === 2) {
+            renderHallLivePanelMulti(panel, metaEl, bodyEl, timeEl, labelEl, liveList, 'dual');
+            return;
+        }
+
+        const current = liveList[0] || window.getHallCurrentMatch();
+        if (!current) {
+            const emptySig = 'empty';
+            panel.classList.remove('is-live');
+            setHallLiveLayoutClass(panel, 'hero');
+            if (metaEl) metaEl.style.display = '';
+            if (timeEl) timeEl.style.display = '';
+            if (window._hallLiveRenderSig === emptySig && bodyEl.querySelector('.hall-live-empty')) {
+                window._hallLiveScoreKey = '';
+                return;
+            }
+            window._hallLiveRenderSig = emptySig;
+            window._hallLiveLayoutSig = 'empty';
+            if (metaEl) { metaEl.textContent = '—'; metaEl.className = 'hall-next-meta'; }
+            if (labelEl) labelEl.textContent = 'Mecz aktualny';
+            bodyEl.innerHTML = '<div class="hall-live-empty">Brak zaplanowanych meczów</div>';
+            if (timeEl) timeEl.textContent = '';
+            window._hallLiveScoreKey = '';
+            window._hallLiveScoreMap = {};
+            return;
+        }
+
+        renderHallLivePanelHero(panel, metaEl, bodyEl, timeEl, labelEl, current);
     }
 
     window.clearHallLiveMatchMeta = function () {
@@ -9029,7 +9426,15 @@
     }
 
     function getHallDemoNextMatches(limit) {
-        const current = window.getHallCurrentMatch();
+        const liveList = typeof window.getHallLiveMatches === 'function' ? window.getHallLiveMatches() : [];
+        const liveKeys = {};
+        liveList.forEach(function (m) {
+            liveKeys[hallLiveMatchKey(m)] = true;
+        });
+        if (!liveList.length) {
+            const current = window.getHallCurrentMatch();
+            if (current) liveKeys[hallLiveMatchKey(current)] = true;
+        }
         const all = getHallAllMatches();
         const pending = all.filter(function (m) {
             return !m.played && m.t1 && m.t1.id !== -99 && m.t2 && m.t2.id !== -99;
@@ -9039,10 +9444,10 @@
             : pending.sort(function (a, b) {
                 return String(a.time || '').localeCompare(String(b.time || ''));
             });
-        const withoutCurrent = current
-            ? sortedPending.filter(function (m) { return !(m.id === current.id && !!m.isPo === !!current.isPo); })
-            : sortedPending;
-        return withoutCurrent.slice(0, limit || 3);
+        const withoutLive = sortedPending.filter(function (m) {
+            return !liveKeys[hallLiveMatchKey(m)];
+        });
+        return withoutLive.slice(0, limit || 3);
     }
 
     function getHallDemoDoneMatches(limit) {
@@ -10751,7 +11156,7 @@
             }
             const allMatches = getHallAllMatches();
             const played = allMatches.filter(m => m.played);
-            renderHallLivePanel(window.getHallCurrentMatch());
+            renderHallLivePanel();
             renderHallPlayedSection(played);
             const hallGridEl = document.getElementById('hall-grid');
             const skipDemoLists = hallGridEl && hallGridEl.classList.contains('hall-grid--demo-compact');
