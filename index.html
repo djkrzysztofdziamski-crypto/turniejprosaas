@@ -1065,6 +1065,7 @@
         @keyframes hall-live-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(222, 53, 11, 0.45); } 50% { box-shadow: 0 0 0 8px rgba(222, 53, 11, 0); } }
         #view-app .hall-next-meta { font-size: clamp(14px, 1.8vw, 20px); font-weight: 800; color: #0747a6; font-family: var(--font-display); margin-bottom: 8px; letter-spacing: 0.02em; }
         #view-app .hall-next-meta.hall-next-meta--po { color: #b45309; }
+        #view-app .hall-next-meta .live-pitch-badge { font-size: clamp(11px, 1.2vw, 14px); min-width: 0; padding: 3px 9px; vertical-align: middle; letter-spacing: 0.04em; }
         #view-app .hall-live-board { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px 16px; margin: 6px 0 8px; }
         #view-app .hall-live-team { min-width: 0; }
         #view-app .hall-live-team--home { text-align: right; }
@@ -6293,14 +6294,24 @@
         return [...(arr || [])].sort((a, b) => rank(a) - rank(b) || (a.id || 0) - (b.id || 0));
     };
 
-    window.formatHallMatchMeta = function (m, isPo) {
+    window.formatHallMatchMeta = function (m, isPo, opts) {
         const po = !!isPo;
         const no = window.getGlobalMatchNo(m, po);
         const label = po ? window.getPlayoffRoundLabel(m) : (m.group ? ('Grupa ' + m.group) : '');
-        const pitch = window.formatPitchLabel(m);
+        const skipPitch = !!(opts && opts.skipPitch);
+        const pitch = skipPitch ? '' : window.formatPitchLabel(m);
         let base = label ? ('Mecz #' + no + ' · ' + label) : ('Mecz #' + no);
         if (pitch) base += ' · ' + pitch;
         return base;
+    };
+
+    /** Hala LIVE: zielona odznaka „BOISKO N” (tylko gdy boiska ≥2). */
+    window.formatHallPitchBadgeHTML = function (m) {
+        if (window.getPitchCount() <= 0) return '';
+        const p = m && m.pitch != null ? parseInt(m.pitch, 10) : NaN;
+        if (!Number.isFinite(p) || p < 1) return '';
+        const label = 'BOISKO ' + p;
+        return '<span class="live-pitch-badge" title="' + escAttr(label) + '">' + esc(label) + '</span>';
     };
 
     window.getPitchCount = function () {
@@ -8721,7 +8732,6 @@
             return;
         }
 
-        const metaText = window.formatHallMatchMeta(podium.final, true);
         const timeText = podium.final.time
             ? ('Godzina finału: ' + podium.final.time)
             : 'Gratulacje dla wszystkich drużyn!';
@@ -8730,7 +8740,9 @@
         panel.classList.add('is-complete');
         if (labelEl) labelEl.textContent = 'Wielki finał — wynik końcowy';
         if (metaEl) {
-            metaEl.textContent = metaText;
+            const base = window.formatHallMatchMeta(podium.final, true, { skipPitch: true });
+            const badge = window.formatHallPitchBadgeHTML(podium.final);
+            metaEl.innerHTML = esc(base) + (badge ? ' · ' + badge : '');
             metaEl.className = 'hall-next-meta hall-next-meta--po';
         }
         if (timeEl) timeEl.textContent = timeText;
@@ -8792,7 +8804,9 @@
         panel.classList.toggle('is-live', live);
         if (labelEl) labelEl.textContent = live ? 'Mecz na żywo' : 'Mecz aktualny';
         if (metaEl) {
-            metaEl.textContent = window.formatHallMatchMeta(current, current.isPo);
+            const base = window.formatHallMatchMeta(current, current.isPo, { skipPitch: true });
+            const badge = window.formatHallPitchBadgeHTML(current);
+            metaEl.innerHTML = esc(base) + (badge ? ' · ' + badge : '');
             metaEl.className = 'hall-next-meta' + (current.isPo ? ' hall-next-meta--po' : '');
         }
         if (timeEl) timeEl.textContent = current.time ? ('Godzina meczu: ' + current.time) : '';
