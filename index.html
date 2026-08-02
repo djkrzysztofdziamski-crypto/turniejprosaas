@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Turniejomat — panel organizatora</title>
-    <meta name="app-build-id" content="856628d">
-    <meta name="app-version" content="1.0.98">
+    <meta name="app-build-id" content="e7581c4">
+    <meta name="app-version" content="1.1.110">
     <meta name="description" content="Turniejomat — wyniki live, tabele i podium. Demo 2 min bez rejestracji: demo.turniejomat.pl">
     <!-- OG wspólne dla app / demo / admin (ten sam index.html). og:url celowo bez stałego hosta — FB bierze URL udostępniony. -->
     <script>
@@ -72,18 +72,15 @@
     <meta name="twitter:title" content="Turniejomat — spokój w dniu turnieju">
     <meta name="twitter:description" content="Wyniki live, tabele i podium. Demo 2 min bez rejestracji.">
     <meta name="twitter:image" content="https://app.turniejomat.pl/og-share.png">
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="stylesheet" href="css/brand-tokens.css?v=856628d">
+    <link rel="icon" type="image/png" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=e7581c4">
 
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="demo-story-scenario.bundle.js?v=856628d"></script>
-    <script src="demo-story.js?v=856628d"></script>
-    <script src="captain.js?v=856628d"></script>
+    <!-- html2pdf / demo-story / captain: lazy-load on demand (see loadScriptOnce) -->
     
     <style>
         /* --- ZARZĄDZENIE WIDOKAMI (ROUTER) --- */
@@ -4697,7 +4694,7 @@
         }
     </style>
     <!-- Responsywność: telefon / tablet / laptop / monitor · po inline CSS, żeby nadpisać bazę -->
-    <link rel="stylesheet" href="css/responsive.css?v=856628d">
+    <link rel="stylesheet" href="css/responsive.css?v=e7581c4">
 </head>
 <body>
 
@@ -6007,8 +6004,50 @@
 
     setInterval(updateLastSaveInfo, 1000);
 
+    // --- Lazy script loader (html2pdf / demo-story / captain) ---
+    const _scriptLoadPromises = Object.create(null);
+    function assetUrl(path) {
+        const meta = document.querySelector('meta[name="app-build-id"]');
+        const id = meta && meta.getAttribute('content');
+        if (!id || id === '__APP_BUILD_ID__') return path;
+        return path + (path.indexOf('?') >= 0 ? '&' : '?') + 'v=' + encodeURIComponent(id);
+    }
+    function loadScriptOnce(src) {
+        if (_scriptLoadPromises[src]) return _scriptLoadPromises[src];
+        _scriptLoadPromises[src] = new Promise(function (resolve, reject) {
+            const existing = document.querySelector('script[data-lazy-src="' + src.replace(/"/g, '') + '"]');
+            if (existing) {
+                if (existing.getAttribute('data-lazy-loaded') === '1') { resolve(); return; }
+                existing.addEventListener('load', function () { resolve(); });
+                existing.addEventListener('error', function () { reject(new Error('Script load failed: ' + src)); });
+                return;
+            }
+            const s = document.createElement('script');
+            s.src = src;
+            s.setAttribute('data-lazy-src', src);
+            s.onload = function () {
+                s.setAttribute('data-lazy-loaded', '1');
+                resolve();
+            };
+            s.onerror = function () {
+                delete _scriptLoadPromises[src];
+                reject(new Error('Script load failed: ' + src));
+            };
+            document.head.appendChild(s);
+        });
+        return _scriptLoadPromises[src];
+    }
+    async function ensureDemoStoryScripts() {
+        await loadScriptOnce(assetUrl('demo-story-scenario.bundle.js'));
+        await loadScriptOnce(assetUrl('demo-story.js'));
+    }
+    async function ensureCaptainScript() {
+        await loadScriptOnce(assetUrl('captain.js'));
+    }
+    const HTML2PDF_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+
     // --- 3. SYSTEM CENTRALNEGO ROUTERA ---
-    function executeRouter() {
+    async function executeRouter() {
         if (redirectLegacyApexTraffic()) return;
 
         if (!isDemoStoryHost && urlParams.get('demo') === 'story') {
@@ -6027,6 +6066,11 @@
         const localDemoStory = localDemoHost && urlParams.get('demo') === 'story';
 
         if (urlParams.get('id') === 'DEMO-2026' || isDemoStoryHost || localDemoStory) {
+            try {
+                await ensureDemoStoryScripts();
+            } catch (err) {
+                console.error(err);
+            }
             if (window.DemoStoryController) {
                 if (!DemoStoryController.tryRestoreSession()) {
                     DemoStoryController.showEntry();
@@ -6048,6 +6092,11 @@
         } else if (isCaptainMode && activeKey) {
             document.body.classList.add('captain-view');
             document.getElementById('view-captain').classList.add('active');
+            try {
+                await ensureCaptainScript();
+            } catch (err) {
+                console.error(err);
+            }
             if (window.CaptainView && typeof window.CaptainView.init === 'function') {
                 window.CaptainView.init();
             }
@@ -12820,7 +12869,18 @@
             window.filterAndRenderMatches();
         };
 
-        window.exportToPDF = function() {
+        window.exportToPDF = async function() {
+            try {
+                await loadScriptOnce(HTML2PDF_CDN);
+            } catch (err) {
+                console.error(err);
+                alert('Nie udało się załadować generatora PDF. Sprawdź połączenie i spróbuj ponownie.');
+                return;
+            }
+            if (typeof html2pdf !== 'function') {
+                alert('Generator PDF niedostępny.');
+                return;
+            }
             const s = window.calcStats();
             const f = window.findGrandFinalMatch();
             const m3 = (state.playoffs || []).find(m => m.n && m.n.includes('3. MIEJSCE'));
