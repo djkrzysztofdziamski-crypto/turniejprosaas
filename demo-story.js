@@ -1387,7 +1387,9 @@
 
         return '<p class="demo-fan-rules-tip">Podium i statystyki wyliczone automatycznie po zapisie finału</p>' +
 
-            '<div id="demo-podium-embed-host" class="demo-embed-app"></div>';
+            '<div id="demo-podium-embed-host" class="demo-embed-app"></div>' +
+
+            '<div id="demo-ranking-host" class="demo-embed-app" style="margin-top:16px;"></div>';
 
     }
 
@@ -1923,6 +1925,11 @@
         mountNodes(EMBED_NODES.podium, hostEl);
 
         if (global.renderPodium) global.renderPodium();
+
+        const rankingHost = document.getElementById('demo-ranking-host');
+        if (rankingHost && typeof global.renderFinalRankingHTML === 'function') {
+            rankingHost.innerHTML = global.renderFinalRankingHTML() || '';
+        }
 
         demoPodiumViewedAt = Date.now();
 

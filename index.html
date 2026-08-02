@@ -3319,7 +3319,12 @@
         #view-demo-story .demo-screen[data-step="3"] .demo-sub {
             text-align: center;
         }
-        #view-demo-story .demo-embed-app #btn-start-po { display: none !important; }
+        #view-demo-story .demo-embed-app #btn-start-po,
+        #view-demo-story .demo-embed-app #btn-start-po-live,
+        #view-demo-story .demo-embed-app .live-po-actions,
+        #view-demo-story .demo-live-embed-host #btn-start-po-live,
+        #view-demo-story .demo-live-embed-host .live-po-actions,
+        #view-demo-story .demo-live-embed-host .live-pitches-back-bar { display: none !important; }
         #view-demo-story .demo-live-embed-host #nazywo { display: block !important; }
         /* Udostępnij / Drukuj — widoczne i spójne z .live-btn-secondary */
         #view-demo-story .demo-live-embed-host .live-toolbar-actions {
@@ -4059,7 +4064,16 @@
             #view-demo-story .demo-phase-final-pulse,
             #view-demo-story .demo-phase-final-label { animation: none; }
         }
-        #view-demo-story .demo-final-teams { text-align: center; margin: 20px 0; font-size: 16px; font-weight: bold; }
+        #view-demo-story .demo-final-teams {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin: 12px 0;
+            font-size: 16px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
         #view-demo-story .demo-final-vs { color: #bcccdc; font-size: 13px; margin: 8px 0; }
         #view-demo-story .demo-cta-zone { margin-top: 28px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
         #view-demo-story .demo-btn-primary { width: 100%; background: #0052cc; color: #fff; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,82,204,0.35); }
@@ -4417,10 +4431,48 @@
         #view-demo-story .demo-embed-app .dashboard-stat { background: #f4f8ff; border: 1px solid var(--color-app-border); border-radius: 8px; padding: 10px; overflow: hidden; }
         #view-demo-story .demo-embed-app .dashboard-stat-label { font-size: 10px; font-weight: 700; color: #42526e; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
         #view-demo-story .demo-embed-app .dashboard-stat-value { font-size: 13px; font-weight: 800; color: #172b4d; white-space: nowrap; word-break: normal; font-family: var(--font-display); }
-        #view-demo-story .demo-final-card { background: #19354f; border: 2px solid #ffcc00; border-radius: 10px; padding: 20px; margin: 20px 0; text-align: center; }
-        #view-demo-story .demo-final-inputs { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0; }
-        #view-demo-story .demo-final-inputs input { width: 64px; height: 48px; text-align: center; font-size: 22px; font-weight: bold; border: 2px solid #486581; border-radius: 8px; background: #102a43; color: #fff; }
-        #view-demo-story .demo-final-team { font-size: 15px; font-weight: bold; flex: 1; min-width: 0; }
+        #view-demo-story .demo-final-card {
+            background: #19354f;
+            border: 2px solid #ffcc00;
+            border-radius: 10px;
+            padding: 16px 12px;
+            margin: 16px 0;
+            text-align: center;
+            width: 100%;
+            max-width: none;
+            box-sizing: border-box;
+        }
+        #view-demo-story .demo-final-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        #view-demo-story .demo-final-inputs input {
+            width: 52px;
+            height: 44px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #486581;
+            border-radius: 8px;
+            background: #102a43;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        #view-demo-story .demo-final-team {
+            flex: 1;
+            min-width: 0;
+            font-size: clamp(11px, 3.2vw, 15px);
+            font-weight: bold;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+            color: #fff;
+        }
+        #view-demo-story .demo-final-teams > .demo-final-team:first-child { text-align: right; }
+        #view-demo-story .demo-final-teams > .demo-final-team:last-child { text-align: left; }
         #view-demo-story .demo-final-penalty { display: none; margin-top: 16px; padding: 16px; background: rgba(255, 249, 196, 0.12); border: 2px dashed #ff8b00; border-radius: 8px; }
         #view-demo-story .demo-final-penalty-title { color: #ffcc00; font-size: 14px; font-weight: bold; margin-bottom: 6px; }
         #view-demo-story .demo-final-penalty-hint { font-size: 12px; color: #bcccdc; margin-bottom: 12px; display: block; }
@@ -12142,7 +12194,7 @@
             ['btn-start-po', 'btn-start-po-live'].forEach(btnId => {
                 const poBtn = document.getElementById(btnId);
                 if(!poBtn) return;
-                if (isDemoMode || window._demoStoryFanEmbed) { poBtn.style.display = 'none'; return; }
+                if (isDemoMode || window._demoStoryFanEmbed || window._demoStoryOrganizerEmbed) { poBtn.style.display = 'none'; return; }
                 poBtn.style.display = '';
                 if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 START PLAY-OFF - ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
                 else { poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer'; poBtn.innerText = "START PLAY-OFF"; }
