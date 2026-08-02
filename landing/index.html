@@ -105,6 +105,13 @@
             gap: 20px;
             margin-top: 36px;
         }
+        /* 6 kart stresu: 1 → 2 → 3 kolumny (kontrolowane breakpointy w responsive.css) */
+        .grid-features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 36px;
+        }
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -419,13 +426,13 @@ SEKCJA 1 — HERO
 </header>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
-SEKCJA 2 — PROBLEMY (3 karty)
+SEKCJA 2 — PROBLEMY (6 kart)
 ═══════════════════════════════════════════════════════════════════════════ -->
 <section class="section">
     <div class="wrap center">
         <h2>Organizacja turnieju nie musi oznaczać stresu</h2>
         <p class="lead">Zobacz, jak Turniejomat rozwiązuje najczęstsze problemy w dniu turnieju.</p>
-        <div class="grid-3">
+        <div class="grid-features">
             <article class="card">
                 <div class="card-icon">📱</div>
                 <h3>Kolejka przy stoliku?</h3>
@@ -445,6 +452,16 @@ SEKCJA 2 — PROBLEMY (3 karty)
                 <div class="card-icon">🏟️</div>
                 <h3>Kilka boisk naraz?</h3>
                 <p>Przydzielasz mecze do boisk (2–99). Numer widać u sędziego, kibica, asystenta i na hali — bez pomyłki, które spotkanie gdzie gra.</p>
+            </article>
+            <article class="card">
+                <div class="card-icon">🤝</div>
+                <h3>Asystent przy boisku?</h3>
+                <p>Osobny telefon lub tablet asystenta przy boisku — wynik i status meczu bez kolejki przy jednym stole organizatora.</p>
+            </article>
+            <article class="card">
+                <div class="card-icon">📋</div>
+                <h3>Gdzie jesteśmy w klasyfikacji?</h3>
+                <p>Klasyfikacja turnieju buduje się w trakcie zawodów (miejsca po grupach i w play-off). Po finale masz klasyfikację końcową — bez liczenia na kartce.</p>
             </article>
         </div>
     </div>
@@ -483,31 +500,41 @@ SEKCJA 4 — DEMO (przycisk, bez embedu)
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
-SEKCJA 5 — 3 KROKI (dzień turnieju)
+SEKCJA 5 — WAŻNE KROKI (dzień turnieju)
 ═══════════════════════════════════════════════════════════════════════════ -->
 <section class="section">
     <div class="wrap center">
-        <h2>Trzy kroki w dniu turnieju</h2>
-        <p class="lead">Nie musisz uczyć się systemu na tydzień przed startem. W dniu zawodów liczy się każda minuta.</p>
+        <h2>Ważne kroki w dniu turnieju</h2>
         <div class="steps">
             <article>
                 <div class="step-num">01</div>
+                <h3>Kapitanowie wpisują składy</h3>
+                <p>Zaproszenie dla kapitana — skład drużyny z telefonu, bez zbierania kartek na boisku.</p>
+            </article>
+            <article>
+                <div class="step-num">02</div>
                 <h3>Wpisujesz wynik po meczu</h3>
                 <p>Jeden klik na laptopie lub tablecie przy stole sędziowskim. Tabela i play-off aktualizują się same.</p>
             </article>
             <article>
-                <div class="step-num">02</div>
+                <div class="step-num">03</div>
+                <h3>Turniej na wielu boiskach z asystentem</h3>
+                <p>Przydzielasz mecze do boisk; asystent(ci) obsługują boisko z własnego urządzenia — bez biegania z jednym laptopem.</p>
+            </article>
+            <article>
+                <div class="step-num">04</div>
                 <h3>Rodzice widzą live</h3>
                 <p>QR na plakacie przy boisku, lub na dodatkowym ekranie z bieżącym statusem turnieju i aktualnym meczem. Bez aplikacji, bez konta — terminarz, wyniki i tabele na smartfonie u rodzica czy kibica.</p>
             </article>
             <article>
-                <div class="step-num">03</div>
+                <div class="step-num">05</div>
                 <h3>Po finałe — podium gotowe</h3>
                 <p>Wpisujesz wynik finału. Klasyfikacja, statystyki i raport PDF — bez liczenia na kartce.</p>
             </article>
         </div>
         <p class="micro" style="margin-top:28px;">
             Przed startem: konfigurujesz drużyny, losujesz grupy i generujesz terminarz — raz, na spokojnie.
+            Kapitanowie zgłaszają składy zdalnie — Ty je zatwierdzasz w panelu organizatora przed pierwszym gwizdkiem.
         </p>
     </div>
 </section>
