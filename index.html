@@ -635,6 +635,107 @@
         #view-app .standings-group-card h4 { font-size: 12px; margin: 0 0 6px; line-height: 1.2; }
         #view-app .tab-content { display: none; }
         #view-app .tab-content.active { display: block; }
+
+        /* --- Tor turnieju + słowo + moduły Start (tylko sędzia) --- */
+        #view-app #tournament-rail {
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 10px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--color-app-border);
+            position: sticky;
+            top: calc(var(--header-h, 52px) + 44px);
+            z-index: 998;
+        }
+        body:not(.fan-view):not(.assistant-view):not(.hall-view):not(.captain-view) #view-app #tournament-rail { display: flex; }
+        body:has(#view-demo-story.active) #view-app #tournament-rail,
+        #view-demo-story.active ~ * #tournament-rail { display: none !important; }
+        #view-app #tournament-rail .rail-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+            color: var(--color-app-text-muted); margin-right: 4px;
+        }
+        #view-app #tournament-rail .rail-chip {
+            border: 1px solid var(--color-app-border);
+            background: #fff;
+            color: var(--color-app-text);
+            font: 700 12px/1.2 var(--font-display);
+            padding: 6px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+        #view-app #tournament-rail .rail-chip:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        #view-app #tournament-rail .rail-chip.is-active { background: #e8f0fe; border-color: var(--color-accent); color: var(--color-accent); }
+        #view-app #tournament-rail .rail-chip.is-done { border-color: #57d9a3; color: #006644; }
+        #view-app #tournament-rail .rail-chip.is-locked { opacity: 0.45; cursor: not-allowed; }
+        #view-app #tournament-word {
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            background: #f4f8ff;
+            border: 1px solid #d0e0ff;
+            border-radius: var(--radius-md, 8px);
+        }
+        #view-app #tournament-word .tw-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--color-accent); margin: 0 0 4px;
+        }
+        #view-app #tournament-word .tw-line {
+            font: 650 14px/1.45 var(--font-display);
+            color: var(--color-app-text);
+            margin: 0;
+        }
+        #view-app #tournament-word .tw-line--muted {
+            font: 500 12px/1.4 var(--font-body);
+            color: var(--color-app-text-muted);
+            margin: 4px 0 0;
+        }
+        #view-app #tournament-word .tw-seg {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            text-underline-offset: 2px;
+        }
+        #view-app #tournament-word .tw-seg:hover { color: var(--color-accent); text-decoration-color: currentColor; }
+        #view-app #tournament-word .tw-sep { color: #94a3b8; font-weight: 500; margin: 0 0.15em; }
+        #view-app .setup-module {
+            border: 1px solid var(--color-app-border);
+            border-radius: 8px;
+            margin: 0 0 8px;
+            background: #fff;
+        }
+        #view-app .setup-module > summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 10px 12px;
+            font: 700 13px/1.3 var(--font-display);
+            color: #0747a6;
+            user-select: none;
+        }
+        #view-app .setup-module > summary::-webkit-details-marker { display: none; }
+        #view-app .setup-module > summary::after {
+            content: '▾';
+            float: right;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        #view-app .setup-module:not([open]) > summary::after { content: '▸'; }
+        #view-app .setup-module .setup-module-body {
+            padding: 0 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #view-app #losowania .los-step { display: none; }
+        #view-app #losowania .los-step.is-active { display: block; }
+        #view-app #losowania .los-brief {
+            font-size: 13px; color: var(--color-app-text-muted); line-height: 1.45; margin: 0 0 12px;
+        }
+        #view-app #grupy-time-summary {
+            font-size: 12px; color: var(--color-app-text-muted); line-height: 1.4; margin: 0 0 10px;
+        }
+        #view-app #grupy-time-summary a { color: var(--color-accent); font-weight: 700; cursor: pointer; }
         #view-app table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: var(--font-size-table, 12px); }
         #view-app .standings-table,
         #view-demo-story .demo-embed-app .standings-table { table-layout: fixed; width: 100%; }
@@ -2915,6 +3016,28 @@
             align-items: center;
             justify-content: center;
         }
+        #view-app #walkoverModal .wo-modal-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 1;
+            color: #94a3b8;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: color 0.12s, background 0.12s;
+        }
+        #view-app #walkoverModal .wo-modal-close:hover {
+            color: #475569;
+            background: #f1f5f9;
+        }
         #view-app #matchModal .match-modal-title {
             margin: 0 28px 14px 0;
             text-align: center;
@@ -5104,6 +5227,13 @@
         <button class="nav-btn" onclick="switchTab('archiwum')" style="color:#00875a;">Archiwum</button>
     </div>
 
+    <div id="tournament-rail" aria-label="Losowanie">
+        <span class="rail-label">Losowanie</span>
+        <button type="button" class="rail-chip" data-rail-step="1" onclick="openLosowaniaStep(1)">1 · Grupy</button>
+        <button type="button" class="rail-chip" data-rail-step="2" onclick="openLosowaniaStep(2)">2 · Terminarz</button>
+        <button type="button" class="rail-chip" data-rail-step="3" onclick="openLosowaniaStep(3)">3 · Play-off</button>
+    </div>
+
     <div id="fan-rules-box" class="rules-box" aria-hidden="true">
         <div class="rules-box-title">Regulamin punktacji</div>
         <div id="fan-rules-content"></div>
@@ -5119,52 +5249,84 @@
         <div id="start" class="tab-content active">
             <div class="card" id="setup-view">
                 <h3>Konfiguracja turnieju</h3>
-                <div style="display:flex; flex-direction:column; gap:5px;">
-                    <div class="time-setting"><span style="font-weight:bold;">Nazwa turnieju:</span> <input type="text" id="tournament-name" placeholder="np. Turniej szkoły podstawowej" onchange="syncTournamentMeta('tournamentName', this.value)" style="flex:1; max-width:320px; text-align:left; font-weight:600; padding:8px 10px;"></div>
-                    <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <input type="number" id="team-count" value="0"></div>
-                    <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <input type="number" id="group-count" value="0"></div>
-                    
-                    <div class="time-setting"><span style="font-weight:bold;">Szablon drabinki Playoff:</span> 
-                        <select id="bracket-size">
-                            <option value="16">Playoff 1/8 Finału (16 miejsc)</option>
-                            <option value="8">Playoff Ćwierćfinał (8 miejsc)</option>
-                            <option value="4" selected>Playoff Półfinał (4 miejsca)</option>
-                        </select>
-                    </div>
-                    <div class="time-setting" style="align-items:flex-start; flex-direction:column; gap:6px;">
-                        <span style="font-weight:bold;">Mecze o miejsca w play-off:</span>
-                        <select id="playoff-placement-mode" onchange="syncPlayoffPlacementModeFromForm()" style="width:100%; max-width:100%; text-align:left; white-space:normal; height:auto; min-height:40px; padding:8px;">
-                            <option value="third_and_final">Play-off z meczem o 3. miejsce i finałem — przegrani półfinałów grają o brąz, zwycięzcy o tytuł (domyślnie, jak dotychczas)</option>
-                            <option value="final_only">Play-off tylko z finałem — bez meczu o 3. miejsce; przegrani półfinałów kończą udział, miejsca 3 i 4 to ex aequo 3. miejsce</option>
-                            <option value="full_places">Play-off z meczami o wszystkie miejsca drabinki i finałem — przy 8/16: mecz o 3., mecze o 5–8; przy 16 miejsca 9–16 z formy grupowej; przy 4 miejscach jak opcja z meczem o 3.</option>
-                        </select>
-                    </div>
-                    <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
-                    <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–99):</span> <input type="number" id="pitch-count" min="0" max="99" value="0" title="0 lub 1 = wyłączone; 2–99 = przydział boisk" onchange="syncPitchCountFromForm()"></div>
-
-                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Losowanie grup</div>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="seeding-enabled" onchange="syncSeedingEnabledFromForm()"> <span>Rozstawiaj zespoły</span></label>
-                    <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Po włączeniu w karcie Składy oznaczysz rozstawione drużyny i kolejność siły (1 = najmocniejsza, max 10). Wyłączone = klasyczne losowanie wszystkich.</p>
-
-                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry drużyny</div>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz (w karcie Składy)</span></label>
-                    <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Przy włączonych zawodnikach Kapitan i Bramkarz są wymagane. Formularz kapitana zawsze wymaga wyboru obu ról.</p>
-                    <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
-                        <span style="font-weight:bold;">Format gry:</span>
-                        <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
-                            <input type="radio" name="tp-squad-size" id="tp-squad-size-6" value="6" onchange="syncTeamParamsFromForm()"> 6-osobowy
-                        </label>
-                        <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
-                            <input type="radio" name="tp-squad-size" id="tp-squad-size-7" value="7" checked onchange="syncTeamParamsFromForm()"> 7-osobowy
-                        </label>
-                    </div>
-
-                    <div style="margin-top:14px; margin-bottom:4px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Parametry meczowe</div>
-                    <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
-                    <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
-                    
+                <div id="tournament-word" aria-live="polite">
+                    <div class="tw-label">Słowo turnieju</div>
+                    <p class="tw-line" id="tournament-word-main">Uzupełnij skalę turnieju (drużyny i grupy), żeby zobaczyć plan.</p>
+                    <p class="tw-line tw-line--muted" id="tournament-word-sub"></p>
+                </div>
+                <div id="setup-form" style="display:flex; flex-direction:column; gap:5px;">
+                    <details class="setup-module" id="setup-mod-identity" open>
+                        <summary>Tożsamość</summary>
+                        <div class="setup-module-body">
+                            <div class="time-setting"><span style="font-weight:bold;">Nazwa turnieju:</span> <input type="text" id="tournament-name" placeholder="np. Turniej szkoły podstawowej" onchange="syncTournamentMeta('tournamentName', this.value)" style="flex:1; max-width:320px; text-align:left; font-weight:600; padding:8px 10px;"></div>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-scale" open>
+                        <summary>Skala</summary>
+                        <div class="setup-module-body">
+                            <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <input type="number" id="team-count" value="0"></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <input type="number" id="group-count" value="0"></div>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-title" open>
+                        <summary>Droga do tytułu</summary>
+                        <div class="setup-module-body">
+                            <div class="time-setting"><span style="font-weight:bold;">Szablon drabinki Playoff:</span>
+                                <select id="bracket-size">
+                                    <option value="16">Playoff 1/8 Finału (16 miejsc)</option>
+                                    <option value="8">Playoff Ćwierćfinał (8 miejsc)</option>
+                                    <option value="4" selected>Playoff Półfinał (4 miejsca)</option>
+                                </select>
+                            </div>
+                            <div class="time-setting" style="align-items:flex-start; flex-direction:column; gap:6px;">
+                                <span style="font-weight:bold;">Mecze o miejsca w play-off:</span>
+                                <select id="playoff-placement-mode" onchange="syncPlayoffPlacementModeFromForm()" style="width:100%; max-width:100%; text-align:left; white-space:normal; height:auto; min-height:40px; padding:8px;">
+                                    <option value="third_and_final">Play-off z meczem o 3. miejsce i finałem — przegrani półfinałów grają o brąz, zwycięzcy o tytuł (domyślnie, jak dotychczas)</option>
+                                    <option value="final_only">Play-off tylko z finałem — bez meczu o 3. miejsce; przegrani półfinałów kończą udział, miejsca 3 i 4 to ex aequo 3. miejsce</option>
+                                    <option value="full_places">Play-off z meczami o wszystkie miejsca drabinki i finałem — przy 8/16: mecz o 3., mecze o 5–8; przy 16 miejsca 9–16 z formy grupowej; przy 4 miejscach jak opcja z meczem o 3.</option>
+                                </select>
+                            </div>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-advance" open>
+                        <summary>Awans i boiska</summary>
+                        <div class="setup-module-body">
+                            <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–99):</span> <input type="number" id="pitch-count" min="0" max="99" value="0" title="0 lub 1 = wyłączone; 2–99 = przydział boisk" onchange="syncPitchCountFromForm()"></div>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-seeding" open>
+                        <summary>Losowanie grup</summary>
+                        <div class="setup-module-body">
+                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="seeding-enabled" onchange="syncSeedingEnabledFromForm()"> <span>Rozstawiaj zespoły</span></label>
+                            <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Po włączeniu w karcie Składy oznaczysz rozstawione drużyny i kolejność siły (1 = najmocniejsza, max 10). Wyłączone = klasyczne losowanie wszystkich. Samo losowanie: Tor → 1 · Grupy.</p>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-team" open>
+                        <summary>Parametry drużyny</summary>
+                        <div class="setup-module-body">
+                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
+                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
+                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz (w karcie Składy)</span></label>
+                            <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Przy włączonych zawodnikach Kapitan i Bramkarz są wymagane. Formularz kapitana zawsze wymaga wyboru obu ról.</p>
+                            <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
+                                <span style="font-weight:bold;">Format gry:</span>
+                                <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                                    <input type="radio" name="tp-squad-size" id="tp-squad-size-6" value="6" onchange="syncTeamParamsFromForm()"> 6-osobowy
+                                </label>
+                                <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                                    <input type="radio" name="tp-squad-size" id="tp-squad-size-7" value="7" checked onchange="syncTeamParamsFromForm()"> 7-osobowy
+                                </label>
+                            </div>
+                        </div>
+                    </details>
+                    <details class="setup-module" id="setup-mod-match" open>
+                        <summary>Parametry meczowe</summary>
+                        <div class="setup-module-body">
+                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
+                            <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
+                        </div>
+                    </details>
                     <button class="btn-main" onclick="generateInputs()" style="margin-top:15px;">UTWÓRZ DRUŻYNY</button>
                 </div>
             </div>
@@ -5175,8 +5337,60 @@
                 <h3 style="margin-top:0;">Składy drużyn</h3>
                 <p id="sklady-help" style="font-size:12px; color:#666;">Wpisz nazwy drużyn. Opcje składu, kapitana i bramkarza zależą od ustawień na karcie Start. Zmiany zapisują się automatycznie.</p>
                 <div id="inputs-container">Brak drużyn. Wróć do karty "Start", aby wygenerować formularz.</div>
-                <div id="demo-lock-btn-container">
-                    <button class="btn-main" onclick="losujGrupy()" style="margin-top:15px; background:#172b4d;">LOSUJ GRUPY</button>
+                <p style="margin:12px 0 0; font-size:13px;">
+                    <button type="button" class="btn-main" style="background:#172b4d; width:auto; display:inline-block; padding:8px 14px;" onclick="openLosowaniaStep(1)">Przejdź do losowania grup</button>
+                </p>
+            </div>
+        </div>
+
+        <div id="losowania" class="tab-content">
+            <div class="card">
+                <div class="los-step is-active" data-los-step="1" id="los-step-1">
+                    <h3 style="margin-top:0;">1 · Losowanie grup</h3>
+                    <p class="los-brief">Rozlosuj drużyny do grup według ustawień ze Startu (liczba grup, rozstawienie). Po zatwierdzeniu zobaczysz wynik w karcie Grupy.</p>
+                    <div id="demo-lock-btn-container">
+                        <button class="btn-main" onclick="losujGrupy()" style="background:#172b4d;">LOSUJ GRUPY</button>
+                    </div>
+                </div>
+                <div class="los-step" data-los-step="2" id="los-step-2">
+                    <h3 style="margin-top:0;">2 · Terminarz</h3>
+                    <p class="los-brief">Ustaw godzinę startu i czasy meczów, potem wygeneruj terminarz grupowy.</p>
+                    <div id="schedule-factory">
+                        <h4>Harmonogram i Czas</h4>
+                        <div class="time-setting"><span>Start Turnieju:</span>
+                            <div class="time-24h">
+                                <input type="text" id="t-start" class="time-24h-text" value="09:00" maxlength="5" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Godzina startu (24h)" placeholder="09:00" oninput="normalizeStartTimeInput(this)" onblur="commitStartTimeInput(this)" onchange="syncStartTimePicker()">
+                                <button type="button" class="time-24h-clock" id="t-start-clock" title="Wybierz godzinę" aria-label="Wybierz godzinę" onclick="openStartTimePicker()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                                </button>
+                                <input type="time" id="t-start-picker" class="time-24h-picker" value="09:00" step="60" tabindex="-1" aria-hidden="true" onchange="applyStartTimeFromPicker()">
+                            </div>
+                        </div>
+                        <div style="margin-top:15px; margin-bottom:5px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Czas trwania (min):</div>
+                        <div class="time-setting"><span>Mecz grupowy:</span> <input type="number" id="t-g-dur" value="0"></div>
+                        <div class="time-setting"><span>Przerwa (etap grupowy):</span> <input type="number" id="t-g-break" value="0"></div>
+                        <div class="time-setting"><span>Przerwa (po meczach grupowych):</span> <input type="number" id="t-after-g" value="0"></div>
+                        <div class="time-setting"><span>Mecz faza PLAY-OFF:</span> <input type="number" id="t-po-dur" value="0"></div>
+                        <div class="time-setting"><span>Finał:</span> <input type="number" id="t-fin-dur" value="0"></div>
+                        <label id="final-after-third-row" class="time-setting" style="align-items:flex-start; gap:8px; cursor:pointer;">
+                            <input type="checkbox" id="t-final-after-third" style="margin-top:3px; flex-shrink:0;" onchange="syncFinalAfterThirdSetting(this.checked)">
+                            <span style="font-weight:600; line-height:1.35;">Finał po meczu o 3. miejsce<br><span style="font-weight:500; color:#64748b; font-size:11px;">Przy 2+ boiskach finał nie startuje równolegle z meczem o brąz — czeka na jego zakończenie.</span></span>
+                        </label>
+                        <div class="time-setting" style="margin-top:10px;"><span>Tryb układania drabinki:</span>
+                            <select id="schedule-mode">
+                                <option value="block">Blokowy</option>
+                                <option value="random">Mieszany</option>
+                            </select>
+                        </div>
+                        <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach: fale grup (jedna grupa równolegle na boiskach, potem następna). Żadna drużyna nie gra w dwóch kolejnych slotach. Play-off: najwcześniejsze wolne boisko.</p>
+                        <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
+                    </div>
+                </div>
+                <div class="los-step" data-los-step="3" id="los-step-3">
+                    <h3 style="margin-top:0;">3 · Play-off</h3>
+                    <p class="los-brief">Gdy faza grupowa jest domknięta, wygeneruj drabinkę play-off według szablonu ze Startu. Wynik zobaczysz w karcie Play-Off i Na żywo.</p>
+                    <ul id="los-po-checklist" style="font-size:13px; line-height:1.5; color:#334155; padding-left:18px; margin:0 0 12px;"></ul>
+                    <button class="btn-main" id="btn-start-po-los" onclick="generujPlayoff()" style="background:#00875a;">START PLAY-OFF</button>
                 </div>
             </div>
         </div>
@@ -5184,37 +5398,9 @@
         <div id="grupy" class="tab-content">
             <div id="groups-list-display"></div>
             <div class="card">
-                <h4>Harmonogram i Czas</h4>
-                <div class="time-setting"><span>Start Turnieju:</span>
-                    <div class="time-24h">
-                        <input type="text" id="t-start" class="time-24h-text" value="09:00" maxlength="5" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Godzina startu (24h)" placeholder="09:00" oninput="normalizeStartTimeInput(this)" onblur="commitStartTimeInput(this)" onchange="syncStartTimePicker()">
-                        <button type="button" class="time-24h-clock" id="t-start-clock" title="Wybierz godzinę" aria-label="Wybierz godzinę" onclick="openStartTimePicker()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-                        </button>
-                        <input type="time" id="t-start-picker" class="time-24h-picker" value="09:00" step="60" tabindex="-1" aria-hidden="true" onchange="applyStartTimeFromPicker()">
-                    </div>
-                </div>
-                
-                <div style="margin-top:15px; margin-bottom:5px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Czas trwania (min):</div>
-                <div class="time-setting"><span>Mecz grupowy:</span> <input type="number" id="t-g-dur" value="0"></div>
-                <div class="time-setting"><span>Przerwa (etap grupowy):</span> <input type="number" id="t-g-break" value="0"></div>
-                <div class="time-setting"><span>Przerwa (po meczach grupowych):</span> <input type="number" id="t-after-g" value="0"></div>
-                <div class="time-setting"><span>Mecz faza PLAY-OFF:</span> <input type="number" id="t-po-dur" value="0"></div>
-                <div class="time-setting"><span>Finał:</span> <input type="number" id="t-fin-dur" value="0"></div>
-                <label id="final-after-third-row" class="time-setting" style="align-items:flex-start; gap:8px; cursor:pointer;">
-                    <input type="checkbox" id="t-final-after-third" style="margin-top:3px; flex-shrink:0;" onchange="syncFinalAfterThirdSetting(this.checked)">
-                    <span style="font-weight:600; line-height:1.35;">Finał po meczu o 3. miejsce<br><span style="font-weight:500; color:#64748b; font-size:11px;">Przy 2+ boiskach finał nie startuje równolegle z meczem o brąz — czeka na jego zakończenie.</span></span>
-                </label>
-                
-                <div class="time-setting" style="margin-top:10px;"><span>Tryb układania drabinki:</span> 
-                    <select id="schedule-mode">
-                        <option value="block">Blokowy</option>
-                        <option value="random">Mieszany</option>
-                    </select>
-                </div>
-                <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach: fale grup (jedna grupa równolegle na boiskach, potem następna). Żadna drużyna nie gra w dwóch kolejnych slotach. Play-off: najwcześniejsze wolne boisko.</p>
-                <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
-                <button type="button" class="btn-main" onclick="openWalkoverWizard()" style="margin-top:10px; background:#64748b;">WALKOVER / DYSKWALIFIKACJA</button>
+                <h4 style="margin-top:0;">Harmonogram</h4>
+                <p id="grupy-time-summary">Brak terminarza — ustaw czas i wygeneruj w Tor → 2 · Terminarz.</p>
+                <button type="button" class="btn-main" style="background:#172b4d;" onclick="openLosowaniaStep(2)">Edytuj w terminarzu</button>
             </div>
         </div>
 
@@ -5235,6 +5421,7 @@
                         <button type="button" id="live-boiska-btn" class="live-btn-secondary" onclick="openLivePitchesView()">Boiska</button>
                         <button type="button" class="live-btn-secondary" onclick="showShareModal('fan')">Udostępnij</button>
                         <button type="button" class="live-btn-secondary" onclick="window.printLiveView()">Drukuj</button>
+                        <button type="button" class="live-btn-secondary" onclick="openWalkoverWizard()" style="background:#64748b; color:#fff; border-color:#64748b;">Walkover</button>
                     </div>
                 </div>
                 <div id="live-workspace-matches">
@@ -5293,13 +5480,14 @@
 
     <div id="walkoverModal" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:560px;">
-            <span class="match-modal-close" onclick="closeModal('walkoverModal')" aria-label="Zamknij">&times;</span>
+            <span class="match-modal-close wo-modal-close" onclick="closeModal('walkoverModal')" aria-label="Zamknij">&times;</span>
             <h4 style="margin-top:0;">Walkower / dyskwalifikacja</h4>
             <p style="font-size:12px; color:#64748b; margin-top:0;">Pary meczów bez zmian. Wynik 3:0 WO dla przeciwnika; pending mecze mogą zostać przełożone.</p>
             <div class="time-setting" style="margin-bottom:10px;">
                 <span style="font-weight:700;">Drużyna:</span>
                 <select id="wo-team-select" style="flex:1; min-width:180px; padding:6px;"></select>
             </div>
+            <p style="font-size:11px; color:#64748b; margin:-4px 0 12px; line-height:1.4;">W nawiasie: mecze do WO / już WO do cofnięcia.</p>
             <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:12px; font-size:13px;">
                 <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="no_show" checked> Przed startem / nieobecność (tylko niedokończone)</label>
                 <label style="cursor:pointer;"><input type="radio" name="wo-mode" value="dq"> W trakcie / dyskwalifikacja (tylko niedokończone)</label>
@@ -11018,7 +11206,11 @@
             const fbClass = fbOffline ? 'dash-fb-offline' : 'dash-fb-online';
             const tourName = state.meta && state.meta.tournamentName ? String(state.meta.tournamentName) : '';
             const sig = [teams.length, playedMatches, totalMatches, phase, poStatus, lastSave, fbOffline ? 1 : 0, tourName].join('|');
-            if (sig === window._dashSig && el.querySelector('[data-dash="fb"]')) return;
+            if (sig === window._dashSig && el.querySelector('[data-dash="fb"]')) {
+                if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+                if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+                return;
+            }
 
             el.innerHTML = `
                 <div class="tournament-dashboard-card">
@@ -11033,6 +11225,9 @@
                     </div>
                 </div>`;
             window._dashSig = sig;
+            if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+            if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+            if (typeof window.syncGrupyTimeSummary === 'function') window.syncGrupyTimeSummary();
         };
 
         window.getGroupSizeInfo = () => {
@@ -11620,7 +11815,183 @@
             }
             if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
+            if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+            if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+            if (typeof window.syncGrupyTimeSummary === 'function') window.syncGrupyTimeSummary();
         };
+
+        window.playoffPlacementShortLabel = function (mode) {
+            if (mode === 'final_only') return 'PO tylko finał (3.–4. ex aequo)';
+            if (mode === 'full_places') return 'PO pełna drabinka';
+            return 'PO półfinał + mecz o 3.';
+        };
+
+        window.bracketSizeShortLabel = function (n) {
+            const v = parseInt(n, 10) || 4;
+            if (v >= 16) return '1/8 (16)';
+            if (v >= 8) return 'ćwierćfinał (8)';
+            return 'półfinał (4)';
+        };
+
+        window.syncTournamentWord = function () {
+            const mainEl = document.getElementById('tournament-word-main');
+            const subEl = document.getElementById('tournament-word-sub');
+            if (!mainEl) return;
+            const teams = parseInt((document.getElementById('team-count') || {}).value, 10) || 0;
+            const groups = parseInt((document.getElementById('group-count') || {}).value, 10) || 0;
+            const pitches = parseInt((document.getElementById('pitch-count') || {}).value, 10) || 0;
+            const adv = parseInt((document.getElementById('advancing-count') || {}).value, 10) || 0;
+            const bracket = (document.getElementById('bracket-size') || {}).value || '4';
+            const poMode = (document.getElementById('playoff-placement-mode') || {}).value || 'third_and_final';
+            const seeding = !!(document.getElementById('seeding-enabled') || {}).checked;
+            const squad7 = !!(document.getElementById('tp-squad-size-7') || {}).checked;
+            const cards = !!(document.getElementById('mp-cards') || {}).checked;
+            const hasGroups = !!(state.groups && Object.keys(state.groups).length);
+            const hasMatches = !!(state.matches && state.matches.length);
+            const hasPo = !!(state.playoffs && state.playoffs.length);
+
+            if (teams < 1 && groups < 1) {
+                mainEl.textContent = 'Uzupełnij skalę turnieju (drużyny i grupy), żeby zobaczyć plan.';
+                if (subEl) subEl.textContent = '';
+                return;
+            }
+
+            function seg(label, target) {
+                return '<span class="tw-seg" data-tw-target="' + target + '" role="link" tabindex="0">' + label + '</span>';
+            }
+            const pitchLabel = pitches >= 2 ? (pitches + ' boiska') : (pitches === 1 ? '1 boisko' : 'boiska: wyłączone');
+            const parts = [];
+            parts.push(seg((teams || '—') + ' drużyn', 'setup-mod-scale'));
+            parts.push(seg((groups || '—') + ' grup', 'setup-mod-scale'));
+            parts.push(seg(pitchLabel, 'setup-mod-advance'));
+            parts.push(seg(window.bracketSizeShortLabel(bracket) + ' · ' + window.playoffPlacementShortLabel(poMode), 'setup-mod-title'));
+            if (adv > 0) parts.push(seg('Awans: ' + adv, 'setup-mod-advance'));
+            const statusBits = [];
+            if (hasGroups) statusBits.push('grupy: wylosowane');
+            if (hasMatches) statusBits.push('terminarz: gotowy');
+            if (hasPo) statusBits.push('play-off: gotowy');
+            mainEl.innerHTML = parts.join('<span class="tw-sep">·</span>') +
+                (statusBits.length ? '<span class="tw-sep">·</span><span style="color:#006644;font-weight:700;">' + statusBits.join(' · ') + '</span>' : '');
+
+            const subParts = [];
+            subParts.push(squad7 ? 'skład 7-os.' : 'skład 6-os.');
+            subParts.push(cards ? 'kartki włączone' : 'kartki wyłączone');
+            if (seeding) subParts.push('rozstawienie włączone');
+            if (subEl) subEl.textContent = subParts.join(' · ');
+
+            mainEl.querySelectorAll('.tw-seg').forEach(function (el) {
+                el.onclick = function () {
+                    const id = el.getAttribute('data-tw-target');
+                    const mod = id && document.getElementById(id);
+                    if (mod) {
+                        mod.open = true;
+                        mod.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                };
+            });
+        };
+
+        window.syncGrupyTimeSummary = function () {
+            const el = document.getElementById('grupy-time-summary');
+            if (!el) return;
+            const s = state.settings || {};
+            const start = s.start || ((document.getElementById('t-start') || {}).value) || '—';
+            const gDur = s.gDur != null ? s.gDur : ((document.getElementById('t-g-dur') || {}).value || '—');
+            const hasMatches = !!(state.matches && state.matches.length);
+            if (!hasMatches) {
+                el.innerHTML = 'Brak terminarza — ustaw czas i wygeneruj w <a onclick="openLosowaniaStep(2)">Tor → 2 · Terminarz</a>.';
+                return;
+            }
+            el.innerHTML = 'Start <b>' + String(start) + '</b> · mecz grupowy <b>' + String(gDur) + '</b> min · ' +
+                (state.matches.length) + ' meczów · <a onclick="openLosowaniaStep(2)">Edytuj w terminarzu</a>';
+        };
+
+        window.syncTournamentRail = function () {
+            const rail = document.getElementById('tournament-rail');
+            if (!rail) return;
+            const demoOn = !!(window.DemoStoryController && window.DemoStoryController.isActive && window.DemoStoryController.isActive())
+                || !!document.getElementById('view-demo-story')?.classList.contains('active');
+            if (isFanMode || isAssistantMode || isHallMode || isCaptainMode || demoOn) {
+                rail.style.display = 'none';
+                return;
+            }
+            rail.style.display = '';
+            const hasTeams = !!(state.teams && state.teams.length);
+            const hasGroups = !!(state.groups && Object.keys(state.groups).length);
+            const hasMatches = !!(state.matches && state.matches.length);
+            const hasPo = !!(state.playoffs && state.playoffs.length);
+            rail.querySelectorAll('.rail-chip').forEach(function (chip) {
+                const step = parseInt(chip.getAttribute('data-rail-step'), 10);
+                chip.classList.remove('is-done', 'is-locked', 'is-active');
+                if (step === 1) {
+                    if (hasGroups) chip.classList.add('is-done');
+                    if (!hasTeams) chip.classList.add('is-locked');
+                } else if (step === 2) {
+                    if (hasMatches) chip.classList.add('is-done');
+                    if (!hasGroups) chip.classList.add('is-locked');
+                } else if (step === 3) {
+                    if (hasPo) chip.classList.add('is-done');
+                    if (!hasMatches) chip.classList.add('is-locked');
+                }
+            });
+            if (typeof window.syncLosPoChecklist === 'function') window.syncLosPoChecklist();
+        };
+
+        window.syncLosPoChecklist = function () {
+            const ul = document.getElementById('los-po-checklist');
+            if (!ul) return;
+            const hasGroups = !!(state.groups && Object.keys(state.groups).length);
+            const hasMatches = !!(state.matches && state.matches.length);
+            const groupDone = hasMatches && (state.matches || []).every(function (m) { return m.played; });
+            const items = [
+                [hasGroups, 'Grupę wylosowano'],
+                [hasMatches, 'Terminarz wygenerowany'],
+                [groupDone || hasMatches, groupDone ? 'Faza grupowa domknięta (wszystkie mecze)' : 'Faza grupowa — możesz startować PO gdy tabele gotowe']
+            ];
+            ul.innerHTML = items.map(function (it) {
+                return '<li style="color:' + (it[0] ? '#006644' : '#94a3b8') + ';">' + (it[0] ? '✓ ' : '○ ') + it[1] + '</li>';
+            }).join('');
+        };
+
+        window.openLosowaniaStep = function (step) {
+            const n = parseInt(step, 10) || 1;
+            if (n === 1 && !(state.teams && state.teams.length)) {
+                alert('Najpierw utwórz drużyny na karcie Start.');
+                if (typeof window.switchTab === 'function') window.switchTab('start');
+                return;
+            }
+            if (n === 2 && !(state.groups && Object.keys(state.groups).length)) {
+                alert('Najpierw wylosuj grupy (Tor → 1).');
+                return;
+            }
+            if (n === 3 && !(state.matches && state.matches.length)) {
+                alert('Najpierw wygeneruj terminarz (Tor → 2).');
+                return;
+            }
+            if (typeof window.switchTab === 'function') window.switchTab('losowania');
+            document.querySelectorAll('#losowania .los-step').forEach(function (el) {
+                el.classList.toggle('is-active', parseInt(el.getAttribute('data-los-step'), 10) === n);
+            });
+            document.querySelectorAll('#tournament-rail .rail-chip').forEach(function (chip) {
+                chip.classList.toggle('is-active', parseInt(chip.getAttribute('data-rail-step'), 10) === n);
+            });
+            if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+            if (typeof window.syncLosPoChecklist === 'function') window.syncLosPoChecklist();
+            const activeChip = document.querySelector('#tournament-rail .rail-chip[data-rail-step="' + n + '"]');
+            if (activeChip) activeChip.classList.add('is-active');
+        };
+
+        (function bindSetupWordListeners() {
+            const root = document.getElementById('setup-form');
+            if (!root) return;
+            root.addEventListener('input', function () {
+                if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+            });
+            root.addEventListener('change', function () {
+                if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+                if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+            });
+        })();
 
         window.renderFanRulesBox = () => {
             const box = document.getElementById('fan-rules-content');
@@ -12434,7 +12805,7 @@
                 cont.innerHTML = infoBanner + fullBody + finalRankHTML;
             });
 
-            ['btn-start-po', 'btn-start-po-live'].forEach(btnId => {
+            ['btn-start-po', 'btn-start-po-live', 'btn-start-po-los'].forEach(btnId => {
                 const poBtn = document.getElementById(btnId);
                 if(!poBtn) return;
                 if (isDemoMode || window._demoStoryFanEmbed || window._demoStoryOrganizerEmbed) { poBtn.style.display = 'none'; return; }
@@ -13145,7 +13516,17 @@
                 window.calcTables();
                 if (typeof window.closeLivePitchesView === 'function') window.closeLivePitchesView();
             }
-            if(t==='grupy') window.renderGroupsList();
+            if(t==='grupy') {
+                window.renderGroupsList();
+                if (typeof window.syncGrupyTimeSummary === 'function') window.syncGrupyTimeSummary();
+            }
+            if(t==='losowania') {
+                if (typeof window.syncLosPoChecklist === 'function') window.syncLosPoChecklist();
+                if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
+            }
+            if(t==='start') {
+                if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+            }
             if(t==='podium') window.renderPodium();
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
             if(t==='boiska') { window.renderPitchesView(); }
@@ -13154,6 +13535,7 @@
             if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
             if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
+            if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
         };
 
         window.openMatch = (id, isPo=false) => {
