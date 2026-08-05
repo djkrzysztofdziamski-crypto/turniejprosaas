@@ -217,10 +217,28 @@ async function auditViewport(browser, vp) {
     add(area, `${vp.label}: kibic — tabela meczów (nie karty PO)`, fan.hasTable && fan.tableRows > 0, `rows=${fan.tableRows}, poCards=${fan.poCards}`);
     add(area, `${vp.label}: kibic — brak horizontal overflow`, !fan.overflowX, `scrollW vs vw=${fan.vw}`);
 
+    // Soft-dismiss Demo rotate gate if it blocks portrait interactions
+    await page.evaluate(() => {
+      if (typeof window.dismissDemoOrientationGateSoft === 'function') {
+        window.dismissDemoOrientationGateSoft();
+      } else {
+        const gate = document.getElementById('demo-rotate-gate');
+        const btn = document.getElementById('demo-rotate-continue');
+        if (btn) btn.click();
+        else if (gate) {
+          gate.setAttribute('hidden', '');
+          gate.setAttribute('data-soft-dismissed', '1');
+          document.getElementById('view-demo-story')?.classList.remove('demo-need-landscape');
+          try { sessionStorage.setItem('demo_rotate_soft_dismiss', '1'); } catch (_) {}
+        }
+      }
+    });
+    await page.waitForTimeout(200);
+
     // Switch Play-Off tab
     const poTab = page.locator('.demo-fan-tab[data-demo-fan-tab="playoff"]').first();
     if (await poTab.count()) {
-      await poTab.click();
+      await poTab.click({ timeout: 8000 });
       await page.waitForTimeout(500);
       const poView = await page.evaluate(() => {
         const host = document.getElementById('demo-fan-embed-host') || document.body;

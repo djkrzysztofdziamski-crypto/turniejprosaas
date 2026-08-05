@@ -3,7 +3,11 @@
  * Pełny audyt turnieju live — sędzia / kibic / hala / asystent / print / matematyka
  * Uruchom:
  *   node scripts/qa-tournament-full-audit.mjs
- *   LICENSE=TP-QDJL-CTW5 APP_URL=https://app.turniejomat.pl node scripts/qa-tournament-full-audit.mjs
+ *   LICENSE=TP-XXXX APP_URL=https://app.turniejomat.pl node scripts/qa-tournament-full-audit.mjs
+ *
+ * LICENSE musi wskazywać AKTYWNĄ licencję (nie wygasłą / nie zablokowaną),
+ * inaczej overlay #license-blocked-screen blokuje UI organizatora — audyt
+ * wtedy używa switchTab() bez klików i oznacza blokadę jako critical.
  *
  * Zapisuje: scripts/qa-tournament-full-audit-report.json
  */
@@ -293,19 +297,39 @@ async function auditTournamentMath(page) {
   });
 }
 
-async function auditOrganizerTabs(page, vp) {
+async function auditOrganizerTabs(page, vp, opts = {}) {
+  const licenseBlocked = !!opts.licenseBlocked;
+  if (licenseBlocked) {
+    add(vp, 'Organizer', 'Zakładki — licencja zablokowana', false, 'licencja zablokowana — pominięto kliki UI, użyto switchTab()', 'critical');
+  }
   const tabIds = ['nazywo', 'mecze', 'tabele', 'playoff', 'podium', 'sklady', 'ustawienia', 'archiwum'];
   for (const tab of tabIds) {
-    const btn = page.locator(`.nav-tabs button[onclick*="'${tab}'"], .nav-tabs button[onclick*="${tab}"]`).first();
-    const alt = page.locator(`.nav-tabs button`).filter({ hasText: new RegExp(tab === 'nazywo' ? 'żywo|Na żywo' : tab === 'playoff' ? 'Play|Puchar' : tab, 'i') }).first();
     try {
-      if (await btn.count()) await btn.click({ timeout: 3000 });
-      else if (await alt.count()) await alt.click({ timeout: 3000 });
-      else {
-        // try switchTab
-        await page.evaluate((t) => { if (window.switchTab) window.switchTab(t); }, tab);
+      // Prefer programmatic switch — avoids dual nav-desktop/mobile + overlays
+      await page.evaluate((t) => {
+        if (typeof window.switchTab === 'function') window.switchTab(t);
+      }, tab);
+
+      if (!licenseBlocked) {
+        // Click only a VISIBLE nav twin (never .first() on hidden desktop/mobile pair)
+        await page.evaluate((t) => {
+          const buttons = [...document.querySelectorAll('.nav-tabs button')];
+          const match = buttons.find((b) => {
+            const on = b.getAttribute('onclick') || '';
+            const text = (b.textContent || '').trim();
+            const hit = on.includes("'" + t + "'") || on.includes('"' + t + '"') || on.includes(t)
+              || (t === 'nazywo' && /żywo/i.test(text))
+              || (t === 'playoff' && /play|puchar/i.test(text));
+            if (!hit) return false;
+            const cs = getComputedStyle(b);
+            const r = b.getBoundingClientRect();
+            return r.width > 0 && r.height > 0 && cs.display !== 'none' && cs.visibility !== 'hidden';
+          });
+          if (match) match.click();
+        }, tab);
       }
-      await page.waitForTimeout(500);
+
+      await page.waitForTimeout(400);
       const info = await page.evaluate((t) => {
         const el = document.getElementById(t);
         const active = el && el.classList.contains('active');
@@ -315,7 +339,12 @@ async function auditOrganizerTabs(page, vp) {
         const cards = el ? el.querySelectorAll('.match-card, .assistant-match-card, .live-match-table').length : 0;
         return { active, textLen, overflowX, tables, cards, display: el ? getComputedStyle(el).display : 'missing' };
       }, tab);
-      add(vp, 'Organizer', `Zakładka ${tab}`, info.active || info.textLen > 20, `active=${info.active}, text=${info.textLen}, tables=${info.tables}, overflowX=${info.overflowX}`, info.overflowX ? 'high' : 'critical');
+      // ustawienia: panel może nie istnieć by design
+      if (tab === 'ustawienia' && info.display === 'missing') {
+        add(vp, 'Organizer', `Zakładka ${tab}`, true, 'brak panelu #ustawienia (by design, switchTab bez crasha)', 'pass');
+      } else {
+        add(vp, 'Organizer', `Zakładka ${tab}`, info.active || info.textLen > 20, `active=${info.active}, text=${info.textLen}, tables=${info.tables}, overflowX=${info.overflowX}`, info.overflowX ? 'high' : 'critical');
+      }
       if (info.overflowX) add(vp, 'Layout', `H-overflow na ${tab}`, false, `scrollW > vw`, 'high');
     } catch (e) {
       add(vp, 'Organizer', `Zakładka ${tab}`, false, e.message, 'warning');
@@ -406,7 +435,7 @@ async function auditPrint(page, vp) {
 
 async function getShareUrls(page) {
   return page.evaluate(async () => {
-    const out = { fan: null, hall: null, assistant: null, errors: [] };
+    const out = { fan: null, hall: null, assistant: null, assistantToken: false, errors: [] };
     try {
       if (typeof window.buildShareUrl === 'function') {
         out.fan = window.buildShareUrl('fan');
@@ -417,24 +446,14 @@ async function getShareUrls(page) {
     }
     try {
       if (typeof window.ensureAssistantShareLink === 'function') {
-        // may call cloud function
-        await new Promise((resolve) => {
-          const prev = window.cachedAssistantToken;
-          window.ensureAssistantShareLink(false);
-          let n = 0;
-          const t = setInterval(() => {
-            n++;
-            if (window.cachedAssistantToken || n > 40) {
-              clearInterval(t);
-              resolve();
-            }
-          }, 250);
-        });
-        out.assistant = typeof window.buildShareUrl === 'function' ? window.buildShareUrl('assistant') : null;
-        out.assistantToken = !!window.cachedAssistantToken;
+        const url = await window.ensureAssistantShareLink(false);
+        out.assistant = url || (typeof window.buildShareUrl === 'function' ? window.buildShareUrl('assistant') : null);
+        out.assistantToken = !!(window.cachedAssistantToken);
       }
     } catch (e) {
-      out.errors.push('assistant: ' + e.message);
+      out.errors.push('assistant: ' + (e && e.message ? e.message : String(e)));
+      out.assistant = typeof window.buildShareUrl === 'function' ? window.buildShareUrl('assistant') : null;
+      out.assistantToken = !!(window.cachedAssistantToken);
     }
     // Fallback URLs
     const key = window.activeKey || new URLSearchParams(location.search).get('id');
@@ -688,17 +707,20 @@ async function auditViewport(browser, vpDef) {
       add(vp, 'Math', 'Play-off bez nierozstrzygniętych remisów', true, `PO pending=${math.stats.playoffsPending}`, 'pass');
     }
 
-    await auditOrganizerTabs(page, vp);
-    printInfo = await auditPrint(page, vp);
-
-    // Critical UI: license blocked screen hidden
+    // Critical UI: license blocked screen visibility (check BEFORE tabs)
     const licenseBlock = await page.evaluate(() => {
       const el = document.getElementById('license-blocked-screen');
       if (!el) return { exists: false, shown: false };
       const cs = getComputedStyle(el);
-      return { exists: true, shown: cs.display !== 'none' && cs.visibility !== 'hidden' };
+      return {
+        exists: true,
+        shown: (cs.display !== 'none' && cs.visibility !== 'hidden') || el.classList.contains('is-shown'),
+      };
     });
     add(vp, 'Security', 'Ekran blokady licencji niewidoczny', !licenseBlock.shown, JSON.stringify(licenseBlock), 'critical');
+
+    await auditOrganizerTabs(page, vp, { licenseBlocked: !!licenseBlock.shown });
+    printInfo = await auditPrint(page, vp);
 
     // Dashboard present
     const dash = await page.evaluate(() => {

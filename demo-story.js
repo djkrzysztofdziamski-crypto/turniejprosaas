@@ -840,6 +840,40 @@
 
     var demoOrientationMq = null;
 
+    var DEMO_ROTATE_DISMISS_KEY = 'demo_rotate_soft_dismiss';
+
+
+
+    function isDemoRotateSoftDismissed() {
+
+        try {
+
+            return global.sessionStorage && global.sessionStorage.getItem(DEMO_ROTATE_DISMISS_KEY) === '1';
+
+        } catch (_) {
+
+            return false;
+
+        }
+
+    }
+
+
+
+    function setDemoRotateSoftDismissed(on) {
+
+        try {
+
+            if (!global.sessionStorage) return;
+
+            if (on) global.sessionStorage.setItem(DEMO_ROTATE_DISMISS_KEY, '1');
+
+            else global.sessionStorage.removeItem(DEMO_ROTATE_DISMISS_KEY);
+
+        } catch (_) {}
+
+    }
+
 
 
     function isDemoPhoneViewport() {
@@ -866,19 +900,57 @@
 
         if (!root || !gate) return;
 
-        const need = !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport() && isDemoPortrait());
+        const softDismissed = isDemoRotateSoftDismissed();
+
+        const need = !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport() && isDemoPortrait() && !softDismissed);
 
         root.classList.toggle('demo-need-landscape', need);
 
         root.classList.toggle('demo-force-landscape', !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport()));
 
-        if (need) gate.removeAttribute('hidden');
+        if (need) {
 
-        else gate.setAttribute('hidden', '');
+            gate.removeAttribute('hidden');
+
+            gate.removeAttribute('data-soft-dismissed');
+
+        } else {
+
+            gate.setAttribute('hidden', '');
+
+            if (softDismissed) gate.setAttribute('data-soft-dismissed', '1');
+
+        }
 
         document.body.classList.toggle('demo-force-landscape', !!(DEMO_LANDSCAPE_STEP_IDS[stepId] && isDemoPhoneViewport()));
 
     }
+
+
+
+    function dismissDemoOrientationGateSoft() {
+
+        setDemoRotateSoftDismissed(true);
+
+        const gate = document.getElementById('demo-rotate-gate');
+
+        if (gate) {
+
+            gate.setAttribute('hidden', '');
+
+            gate.setAttribute('data-soft-dismissed', '1');
+
+        }
+
+        const root = document.getElementById('view-demo-story');
+
+        if (root) root.classList.remove('demo-need-landscape');
+
+        syncDemoOrientationGate(demoStoryStep);
+
+    }
+
+    global.dismissDemoOrientationGateSoft = dismissDemoOrientationGateSoft;
 
 
 
@@ -894,7 +966,13 @@
 
         }
 
-        if (gate) gate.setAttribute('hidden', '');
+        if (gate) {
+
+            gate.setAttribute('hidden', '');
+
+            gate.removeAttribute('data-soft-dismissed');
+
+        }
 
         document.body.classList.remove('demo-force-landscape');
 
@@ -925,6 +1003,22 @@
         global.addEventListener('orientationchange', onChange);
 
         global.addEventListener('resize', onChange);
+
+        const contBtn = document.getElementById('demo-rotate-continue');
+
+        if (contBtn && !contBtn._demoRotateBound) {
+
+            contBtn._demoRotateBound = true;
+
+            contBtn.addEventListener('click', function (e) {
+
+                e.preventDefault();
+
+                dismissDemoOrientationGateSoft();
+
+            });
+
+        }
 
     }
 

@@ -3311,7 +3311,23 @@
         #view-app .filter-separator { width: 1px; background: #c1c7d0; margin: 0 4px; }
         #view-app .log-container { background: #111; color: #22c55e; font-family: monospace; font-size: 11px; padding: 12px; border-radius: 6px; height: 150px; overflow-y: auto; border: 1px solid #333; margin-top: 10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5); }
         #view-app .log-line { margin-bottom: 4px; border-bottom: 1px dashed #222; padding-bottom: 2px; }
-        #view-app #license-blocked-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(16,42,67,0.98); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; text-align: center; color: white; }
+        #view-app #license-blocked-screen {
+            display: none;
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(16,42,67,0.98);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+        #view-app #license-blocked-screen.is-shown {
+            display: flex;
+            pointer-events: auto;
+        }
 
         #view-app #tournament-dashboard { max-width: 1100px; margin: 8px auto 0; padding: 0 10px; box-sizing: border-box; }
         #view-app .tournament-dashboard-card { background: #fff; border-radius: 10px; padding: 10px 12px; border: 1px solid #c1c7d0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
@@ -3379,10 +3395,25 @@
             font-family: var(--font-display, sans-serif);
         }
         #view-demo-story .demo-rotate-gate-sub {
-            margin: 0;
+            margin: 0 0 16px;
             font-size: 13px;
             color: #94a3b8;
             line-height: 1.45;
+        }
+        #view-demo-story .demo-rotate-continue-btn {
+            margin-top: 4px;
+            background: #57d9a3;
+            color: #102a43;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        #view-demo-story .demo-rotate-gate[data-soft-dismissed="1"] {
+            display: none !important;
+            pointer-events: none !important;
         }
         /* Bramka landscape: kibic + Mecze/Tabele/Play-Off/Podium (viewport < 1366) */
         #app-rotate-gate {
@@ -4933,6 +4964,7 @@
             <div class="demo-rotate-gate-icon" aria-hidden="true">↻</div>
             <p class="demo-rotate-gate-title">Obróć telefon poziomo</p>
             <p class="demo-rotate-gate-sub">Ten ekran Demo Story działa najlepiej w orientacji landscape.</p>
+            <button type="button" id="demo-rotate-continue" class="demo-rotate-continue-btn">Kontynuuj w pionie</button>
         </div>
     </div>
     <div id="demo-screen-entry" class="demo-screen" data-step="0"></div>
@@ -5090,7 +5122,7 @@
             <p class="app-rotate-gate-sub">Karty turnieju organizatora (m.in. Mecze, Tabele, Play-Off, Podium) są czytelne w orientacji poziomej. Widok kibica działa też pionowo.</p>
         </div>
     </div>
-    <div id="license-blocked-screen">
+    <div id="license-blocked-screen" aria-hidden="true">
         <h1 id="license-blocked-title" style="color:#de350b; font-size: 42px; margin-bottom: 10px;">⚠️ LICENCJA WYGASŁA LUB ZOSTAŁA ZABLOKOWANA</h1>
         <p id="license-blocked-msg" style="font-size: 18px; color: #bcccdc; max-width: 500px; line-height: 1.5;">Czas trwania tego turnieju dobiegł końca lub klucz został zawieszony przez administratora. Wyniki live dla kibiców są nadal dostępne.</p>
         <button onclick="window.location.search=''" style="background:#0052cc; color:white; border:none; padding:12px 30px; font-size:16px; font-weight:bold; border-radius:6px; cursor:pointer; margin-top:20px;">POWRÓT DO EKRANU LOGOWANIA</button>
@@ -5606,6 +5638,7 @@
             <div id="share-panel-assistant" class="share-panel">
                 <p style="font-size:12px; color:#64748b; margin:0 0 10px;">Drugi sędzia wpisuje wyniki bez klucza licencyjnego.</p>
                 <div id="share-assistant-loading" style="display:none; font-size:12px; color:#64748b;">Generowanie linku…</div>
+                <div id="share-assistant-error" style="display:none; font-size:12px; color:#de350b; margin:0 0 8px;"></div>
                 <div id="share-assistant-ready" style="display:none;">
                     <div id="share-qr-assistant" style="margin:12px auto;"></div>
                     <p id="share-url-assistant" style="font-size:11px; word-break:break-all; color:#0747a6; font-weight:bold;"></p>
@@ -5778,6 +5811,7 @@
     const rejectCaptainRosterCallable = cloudFunctions.httpsCallable('rejectCaptainRoster');
     window._captainTokenCache = window._captainTokenCache || {};
     let cachedAssistantToken = null;
+    window.cachedAssistantToken = null;
     let tableOrderDrawerGroup = null;
     window.inlineScoreDrafts = window.inlineScoreDrafts || {};
 
@@ -5886,7 +5920,21 @@
         window.licenseWriteAllowed = false;
         const cd = document.getElementById('license-countdown');
         if (cd) cd.innerText = copy.badge;
-        if (screen) screen.style.display = 'flex';
+        if (screen) {
+            screen.style.display = 'flex';
+            screen.style.pointerEvents = 'auto';
+            screen.classList.add('is-shown');
+            screen.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    function hideLicenseBlockedScreen() {
+        const blockedScreen = document.getElementById('license-blocked-screen');
+        if (!blockedScreen) return;
+        blockedScreen.style.display = 'none';
+        blockedScreen.style.pointerEvents = 'none';
+        blockedScreen.classList.remove('is-shown');
+        blockedScreen.setAttribute('aria-hidden', 'true');
     }
 
     function resolveLicenseBlockReason(lic) {
@@ -5916,8 +5964,7 @@
             return;
         }
         window.licenseWriteAllowed = true;
-        const blockedScreen = document.getElementById('license-blocked-screen');
-        if (blockedScreen) blockedScreen.style.display = 'none';
+        hideLicenseBlockedScreen();
         if (isFanMode) return;
         clearInterval(window.licenseInterval);
         window.licenseInterval = setInterval(() => {
@@ -13394,9 +13441,10 @@
 
         window.buildShareUrl = (kind) => {
             const base = window.location.href.split('?')[0];
+            const assistantTok = cachedAssistantToken || window.cachedAssistantToken;
             if (kind === 'hall') return `${base}?view=hall&id=${encodeURIComponent(activeKey)}`;
-            if (kind === 'assistant' && cachedAssistantToken) {
-                return `${base}?view=assistant&id=${encodeURIComponent(activeKey)}&token=${encodeURIComponent(cachedAssistantToken)}`;
+            if (kind === 'assistant' && assistantTok) {
+                return `${base}?view=assistant&id=${encodeURIComponent(activeKey)}&token=${encodeURIComponent(assistantTok)}`;
             }
             return `${base}?view=fan&id=${encodeURIComponent(activeKey)}`;
         };
@@ -13440,38 +13488,53 @@
         };
 
         window.ensureAssistantShareLink = (forceNew) => {
-            if (!activeKey) return;
             const loading = document.getElementById('share-assistant-loading');
             const ready = document.getElementById('share-assistant-ready');
+            const errEl = document.getElementById('share-assistant-error');
             const genBtn = document.getElementById('share-generate-assistant-btn');
-            if (cachedAssistantToken && !forceNew) {
-                const url = window.buildShareUrl('assistant');
+            const showReady = (url) => {
+                if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
                 if (ready) ready.style.display = 'block';
                 if (loading) loading.style.display = 'none';
-                if (genBtn) genBtn.style.display = 'none';
+                if (genBtn) { genBtn.style.display = 'none'; genBtn.disabled = false; }
                 const urlEl = document.getElementById('share-url-assistant');
                 if (urlEl) urlEl.textContent = url;
                 window.renderShareQr('share-qr-assistant', url);
-                return;
+            };
+            if (!activeKey) {
+                return Promise.reject(new Error('Brak aktywnego klucza turnieju'));
+            }
+            if ((cachedAssistantToken || window.cachedAssistantToken) && !forceNew) {
+                if (!cachedAssistantToken && window.cachedAssistantToken) cachedAssistantToken = window.cachedAssistantToken;
+                const url = window.buildShareUrl('assistant');
+                showReady(url);
+                return Promise.resolve(url);
             }
             if (loading) loading.style.display = 'block';
             if (ready) ready.style.display = 'none';
-            if (genBtn) genBtn.disabled = true;
-            generateAssistantTokenCallable({ key: activeKey })
+            if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+            if (genBtn) { genBtn.style.display = 'inline-block'; genBtn.disabled = true; }
+            return generateAssistantTokenCallable({ key: activeKey })
                 .then(res => {
-                    cachedAssistantToken = res.data.token;
+                    const token = res && res.data && res.data.token;
+                    if (!token) throw new Error('Serwer nie zwrócił tokenu');
+                    cachedAssistantToken = token;
+                    window.cachedAssistantToken = token;
                     const url = window.buildShareUrl('assistant');
-                    if (loading) loading.style.display = 'none';
-                    if (ready) ready.style.display = 'block';
-                    if (genBtn) { genBtn.style.display = 'none'; genBtn.disabled = false; }
-                    const urlEl = document.getElementById('share-url-assistant');
-                    if (urlEl) urlEl.textContent = url;
-                    window.renderShareQr('share-qr-assistant', url);
+                    showReady(url);
+                    return url;
                 })
                 .catch(err => {
                     if (loading) loading.style.display = 'none';
-                    if (genBtn) genBtn.disabled = false;
-                    alert('❌ Nie udało się wygenerować linku asystenta: ' + ((err && err.message) || 'błąd serwera'));
+                    if (genBtn) { genBtn.style.display = 'inline-block'; genBtn.disabled = false; }
+                    const msg = (err && err.message) ? err.message : 'błąd serwera';
+                    if (errEl) {
+                        errEl.textContent = 'Nie udało się wygenerować linku asystenta: ' + msg;
+                        errEl.style.display = 'block';
+                    } else {
+                        alert('❌ Nie udało się wygenerować linku asystenta: ' + msg);
+                    }
+                    return Promise.reject(err);
                 });
         };
 
