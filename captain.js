@@ -12,6 +12,18 @@
   let players = [];
   let photoUrl = null;
   let busy = false;
+  let photoUploadBusy = false;
+  let photoSelectedAwaitingUrl = false;
+
+  function isValidPhotoUrl(url) {
+    return !!(url && /^https:\/\//i.test(String(url)));
+  }
+
+  function syncSubmitState() {
+    const btn = qs('#captain-submit');
+    if (!btn) return;
+    btn.disabled = !!(busy || photoUploadBusy);
+  }
 
   function qs(sel) {
     return document.querySelector(sel);
@@ -172,7 +184,8 @@
     qs('#captain-team-name').value = src.name || '';
     qs('#captain-team-note').value = src.teamNote || '';
     qs('#captain-bio').value = src.captainBio || '';
-    photoUrl = src.photoUrl || null;
+    photoUrl = isValidPhotoUrl(src.photoUrl) ? src.photoUrl : null;
+    photoSelectedAwaitingUrl = false;
     updatePhotoPreview();
     players = Array.isArray(src.players)
       ? src.players.map(function (p) {
@@ -195,7 +208,16 @@
     const img = qs('#captain-photo-preview');
     const clearBtn = qs('#captain-photo-clear');
     if (!img) return;
-    if (photoUrl) {
+    img.onerror = function () {
+      photoUrl = null;
+      photoSelectedAwaitingUrl = true;
+      img.removeAttribute('src');
+      img.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'none';
+      setStatus('Nie udało się wyświetlić zdjęcia — wybierz plik ponownie.', 'err');
+      syncSubmitState();
+    };
+    if (isValidPhotoUrl(photoUrl)) {
       img.src = photoUrl;
       img.style.display = 'block';
       if (clearBtn) clearBtn.style.display = '';
@@ -255,6 +277,9 @@
 
   async function onPhotoSelected(file) {
     const params = getParams();
+    photoUploadBusy = true;
+    photoSelectedAwaitingUrl = true;
+    syncSubmitState();
     setStatus('Kompresja zdjęcia…');
     try {
       const dataUrl = await compressImageFile(file);
@@ -265,11 +290,21 @@
         token: params.token,
         dataUrl: dataUrl,
       });
-      photoUrl = res.data && res.data.photoUrl;
+      const url = res.data && res.data.photoUrl;
+      if (!isValidPhotoUrl(url)) {
+        throw new Error('Serwer nie zwrócił poprawnego adresu zdjęcia.');
+      }
+      photoUrl = url;
+      photoSelectedAwaitingUrl = false;
       updatePhotoPreview();
       setStatus('Zdjęcie zapisane.', 'ok');
     } catch (err) {
+      photoUrl = null;
+      updatePhotoPreview();
       setStatus((err && err.message) || 'Błąd uploadu zdjęcia.', 'err');
+    } finally {
+      photoUploadBusy = false;
+      syncSubmitState();
     }
   }
 
@@ -326,7 +361,10 @@
   }
 
   async function submit() {
-    if (busy) return;
+    if (busy || photoUploadBusy) {
+      setStatus('Poczekaj na zakończenie wysyłki zdjęcia.', 'warn');
+      return;
+    }
     syncPlayersFromDom();
     const params = getParams();
     const name = (qs('#captain-team-name') && qs('#captain-team-name').value) || '';
@@ -342,7 +380,12 @@
       setStatus('Wybierz kapitana spośród zawodników.', 'err');
       return;
     }
+    if (photoSelectedAwaitingUrl && !isValidPhotoUrl(photoUrl)) {
+      setStatus('Zdjęcie nie zostało zapisane — wybierz plik ponownie lub usuń zdjęcie.', 'err');
+      return;
+    }
     busy = true;
+    syncSubmitState();
     setStatus('Wysyłanie…');
     try {
       await callables().submitCaptainRoster({
@@ -363,6 +406,7 @@
       setStatus((err && err.message) || 'Nie udało się wysłać.', 'err');
     } finally {
       busy = false;
+      syncSubmitState();
     }
   }
 
@@ -397,7 +441,9 @@
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {
         photoUrl = null;
+        photoSelectedAwaitingUrl = false;
         updatePhotoPreview();
+        setStatus('');
       });
     }
     const note = qs('#captain-team-note');
@@ -418,6 +464,7 @@
   global.CaptainView = {
     init: function () {
       bind();
+      syncSubmitState();
       loadForm();
     },
   };
