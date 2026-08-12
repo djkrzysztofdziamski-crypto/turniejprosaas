@@ -933,7 +933,7 @@
             border-bottom: 1px solid #f0c78a;
         }
         #view-app .live-match-table th { font-family: var(--font-display); font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #172b4d; padding: 5px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2; }
-        #view-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
+        #view-app .live-match-table th.col-teams { text-align: center; padding-left: 6px; padding-right: 6px; }
         #view-app .live-match-table td { padding: 3px 6px; vertical-align: middle; border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2; }
         #view-app .live-match-table tbody tr:last-child td { border-bottom: none; }
         #view-app .live-match-row { border-left: 3px solid #cbd5e1; transition: background 0.12s ease; }
@@ -955,7 +955,7 @@
         #view-app .live-match-table th.col-pitch,
         #view-app .live-match-table td.col-pitch { text-align: center; max-width: 56px; overflow: hidden; padding-left: 3px; padding-right: 3px; }
         #view-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
-        #view-app .live-match-teams { text-align: left; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; min-width: 0; max-width: 100%; overflow: hidden; }
+        #view-app .live-match-teams { text-align: center; font-weight: 700; font-size: 12px; color: #172b4d; line-height: 1.2; padding-left: 2px; padding-right: 2px; min-width: 0; max-width: 100%; overflow: hidden; }
         #view-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
         #view-app .live-match-teams .live-team-name { display: inline; overflow-wrap: anywhere; word-break: break-word; }
         #view-app .live-cards-badge {
@@ -4427,7 +4427,7 @@
             padding: 6px 6px; text-align: center; border: none; white-space: nowrap; line-height: 1.2;
             background: transparent;
         }
-        #view-demo-story .demo-embed-app .live-match-table th.col-teams { text-align: left; padding-left: 10px; }
+        #view-demo-story .demo-embed-app .live-match-table th.col-teams { text-align: center; padding-left: 6px; padding-right: 6px; }
         #view-demo-story .demo-embed-app .live-match-table td {
             padding: 4px 6px; vertical-align: middle;
             border-bottom: 1px solid #e8ecf1; text-align: center; line-height: 1.2;
@@ -4449,8 +4449,8 @@
         #view-demo-story .demo-embed-app .live-group-badge--po { background: #fff7ed; color: #b45309; }
         #view-demo-story .demo-embed-app .live-time { font-weight: 700; font-variant-numeric: tabular-nums; color: #64748b; font-size: 11px; white-space: nowrap; }
         #view-demo-story .demo-embed-app .live-match-teams {
-            text-align: left; font-weight: 700; font-size: 12px; color: #172b4d;
-            line-height: 1.25; padding-left: 2px; max-width: 220px;
+            text-align: center; font-weight: 700; font-size: 12px; color: #172b4d;
+            line-height: 1.25; padding-left: 2px; padding-right: 2px; max-width: 220px;
         }
         #view-demo-story .demo-embed-app .live-match-teams .live-teams-vs { color: #94a3b8; font-weight: 600; font-size: 9px; margin: 0 4px; letter-spacing: 0.03em; text-transform: uppercase; }
         #view-demo-story .demo-embed-app .live-score-display {
@@ -5296,8 +5296,8 @@
                     <details class="setup-module" id="setup-mod-scale" open>
                         <summary>Skala</summary>
                         <div class="setup-module-body">
-                            <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <input type="number" id="team-count" value="0"></div>
-                            <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <input type="number" id="group-count" value="0"></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Ilość drużyn:</span> <select id="team-count"><option value="0" selected>0</option></select></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Ilość grup:</span> <select id="group-count"><option value="0" selected>0</option></select></div>
                         </div>
                     </details>
                     <details class="setup-module" id="setup-mod-title" open>
@@ -5323,8 +5323,8 @@
                     <details class="setup-module" id="setup-mod-advance" open>
                         <summary>Awans i boiska</summary>
                         <div class="setup-module-body">
-                            <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <input type="number" id="advancing-count" value="0"></div>
-                            <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–99):</span> <input type="number" id="pitch-count" min="0" max="99" value="0" title="0 lub 1 = wyłączone; 2–99 = przydział boisk" onchange="syncPitchCountFromForm()"></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <select id="advancing-count"><option value="0" selected>0</option></select></div>
+                            <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–20):</span> <select id="pitch-count" title="0 lub 1 = wyłączone; 2–20 = przydział boisk" onchange="syncPitchCountFromForm()"><option value="0" selected>0</option></select></div>
                         </div>
                     </details>
                     <details class="setup-module" id="setup-mod-seeding" open>
@@ -5399,11 +5399,11 @@
                             </div>
                         </div>
                         <div style="margin-top:15px; margin-bottom:5px; font-weight:bold; font-size:13px; color:#0052cc; text-transform:uppercase;">Czas trwania (min):</div>
-                        <div class="time-setting"><span>Mecz grupowy:</span> <input type="number" id="t-g-dur" value="0"></div>
-                        <div class="time-setting"><span>Przerwa (etap grupowy):</span> <input type="number" id="t-g-break" value="0"></div>
-                        <div class="time-setting"><span>Przerwa (po meczach grupowych):</span> <input type="number" id="t-after-g" value="0"></div>
-                        <div class="time-setting"><span>Mecz faza PLAY-OFF:</span> <input type="number" id="t-po-dur" value="0"></div>
-                        <div class="time-setting"><span>Finał:</span> <input type="number" id="t-fin-dur" value="0"></div>
+                        <div class="time-setting"><span>Mecz grupowy:</span> <select id="t-g-dur"><option value="0" selected>0</option></select></div>
+                        <div class="time-setting"><span>Przerwa (etap grupowy):</span> <select id="t-g-break"><option value="0" selected>0</option></select></div>
+                        <div class="time-setting"><span>Przerwa (po meczach grupowych):</span> <select id="t-after-g"><option value="0" selected>0</option></select></div>
+                        <div class="time-setting"><span>Mecz faza PLAY-OFF:</span> <select id="t-po-dur"><option value="0" selected>0</option></select></div>
+                        <div class="time-setting"><span>Finał:</span> <select id="t-fin-dur"><option value="0" selected>0</option></select></div>
                         <label id="final-after-third-row" class="time-setting" style="align-items:flex-start; gap:8px; cursor:pointer;">
                             <input type="checkbox" id="t-final-after-third" style="margin-top:3px; flex-shrink:0;" onchange="syncFinalAfterThirdSetting(this.checked)">
                             <span style="font-weight:600; line-height:1.35;">Finał po meczu o 3. miejsce<br><span style="font-weight:500; color:#64748b; font-size:11px;">Przy 2+ boiskach finał nie startuje równolegle z meczem o brąz — czeka na jego zakończenie.</span></span>
@@ -5657,7 +5657,7 @@
                 <h3 style="margin:0; font-size:16px;" id="table-order-drawer-title">Edytuj kolejność</h3>
                 <button type="button" onclick="closeTableOrderDrawer()" style="border:none; background:none; font-size:22px; cursor:pointer;">&times;</button>
             </div>
-            <p style="font-size:12px; color:#64748b; margin:0 0 12px;">Remis absolutny (kryteria 1–7 wyczerpane, w tym Fair Play). Wybierz metodę rozstrzygnięcia poza systemem, potem ułóż kolejność i zatwierdź.</p>
+            <p style="font-size:12px; color:#64748b; margin:0 0 12px;">Remis absolutny (kryteria 1–7 wyczerpane, w tym Fair Play). Wybierz metodę rozstrzygnięcia poza systemem (losowanie lub krótka seria rzutów karnych), ułóż kolejność i zatwierdź — przy nazwach drużyn w tabeli pojawi się czerwona kropka 🔴.</p>
             <div style="margin-bottom:12px; display:flex; flex-direction:column; gap:6px; font-size:13px;">
                 <span style="font-weight:700; color:#172b4d;">Metoda rozstrzygnięcia</span>
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="absolute-remis-method" value="draw" checked> Losowanie</label>
@@ -7010,10 +7010,35 @@
 
     window.getPitchCount = function () {
         const n = parseInt(state.settings && state.settings.pitchCount, 10);
-        // 0 i 1 = funkcja boisk wyłączona; aktywna od 2
         if (!Number.isFinite(n) || n < 2) return 0;
-        return Math.min(99, n);
+        return Math.min(20, n);
     };
+
+    window.fillSelectRange = function (id, min, max) {
+        const el = document.getElementById(id);
+        if (!el || el.tagName !== 'SELECT') return;
+        const cur = parseInt(el.value, 10) || 0;
+        while (el.options.length > 1) el.remove(1);
+        for (let i = min; i <= max; i++) {
+            const o = document.createElement('option');
+            o.value = String(i); o.textContent = String(i);
+            el.appendChild(o);
+        }
+        const clamped = Math.max(0, Math.min(max, cur));
+        el.value = String(clamped);
+    };
+
+    (function initFormSelects() {
+        window.fillSelectRange('team-count', 1, 40);
+        window.fillSelectRange('group-count', 1, 10);
+        window.fillSelectRange('advancing-count', 1, 16);
+        window.fillSelectRange('pitch-count', 1, 20);
+        window.fillSelectRange('t-g-dur', 1, 30);
+        window.fillSelectRange('t-g-break', 1, 15);
+        window.fillSelectRange('t-after-g', 1, 15);
+        window.fillSelectRange('t-po-dur', 1, 30);
+        window.fillSelectRange('t-fin-dur', 1, 30);
+    })();
 
     /** Minuty od 00:00 dla "HH:MM". */
     window.timeToMinutes = function (t) {
@@ -8067,7 +8092,7 @@
         const el = document.getElementById('pitch-count');
         let n = el ? parseInt(el.value, 10) : 0;
         if (!Number.isFinite(n) || n < 0) n = 0;
-        if (n > 99) n = 99;
+        if (n > 20) n = 20;
         if (el) el.value = String(n);
         const prevEnabled = window.getPitchCount() > 0;
         state.settings.pitchCount = n;
@@ -8089,7 +8114,7 @@
         if (!el) return;
         const raw = parseInt(state.settings && state.settings.pitchCount, 10);
         let n = Number.isFinite(raw) && raw >= 0 ? raw : 0;
-        if (n > 99) n = 99;
+        if (n > 20) n = 20;
         el.value = String(n);
     };
 
@@ -9942,7 +9967,7 @@
             const ex = r.exAequo ? ' <span class="final-rank-ex">ex aequo</span>' : '';
             const name = r.empty
                 ? '<span class="final-rank-slot">—</span>'
-                : esc(r.team && r.team.name ? r.team.name : '—');
+                : esc(r.team && r.team.name ? r.team.name : '—') + (r.team && r.team.id != null ? window.formatTeamWoBadgeHTML(r.team.id, { inline: true }) : '');
             body += '<tr class="final-rank-row' + placeCls + emptyCls + '">' +
                 '<td class="final-rank-place">' + esc(String(r.place)) + ex + '</td>' +
                 '<td class="final-rank-team">' + name + '</td>' +
@@ -11303,7 +11328,8 @@
                 const seed = t && t.seeded && t.seedRank != null
                     ? ' <span style="font-size:10px;font-weight:800;color:#067647;">(seed ' + esc(String(t.seedRank)) + ')</span>'
                     : '';
-                return '<li>' + esc(t.name) + seed + '</li>';
+                const woBadge = window.formatTeamWoBadgeHTML(t && t.id, { inline: true });
+                return '<li>' + esc(t.name) + seed + woBadge + '</li>';
             }).join('')}</ul></div>`).join('');
         };
 
@@ -11348,6 +11374,7 @@
 
             saveLastSnapshot();
             if (!state.settings) state.settings = {};
+            state.settings.teamCount = c; state.settings.groupCount = nG;
             state.settings.bracketSize = bSize; state.settings.advCount = advC;
             const placementEl = document.getElementById('playoff-placement-mode');
             if (placementEl) {
@@ -11786,7 +11813,7 @@
             if (pitchEl) {
                 let pc = parseInt(pitchEl.value, 10);
                 if (!Number.isFinite(pc) || pc < 0) pc = 0;
-                if (pc > 99) pc = 99;
+                if (pc > 20) pc = 20;
                 state.settings.pitchCount = pc;
                 if (pc < 2) window.clearPendingMatchPitches();
             }
@@ -11853,6 +11880,19 @@
             if (typeof window.syncPitchCountToForm === 'function' && document.activeElement !== pitchEl) {
                 window.syncPitchCountToForm();
             }
+            const s = state.settings || {};
+            const scaleMap = { 'team-count': s.teamCount, 'group-count': s.groupCount, 'advancing-count': s.advCount };
+            Object.keys(scaleMap).forEach(function (id) {
+                const el = document.getElementById(id);
+                if (el && scaleMap[id] != null && document.activeElement !== el) el.value = String(scaleMap[id]);
+            });
+            const timeMap = { 't-g-dur': s.gDur, 't-g-break': s.gBreak, 't-after-g': s.afterG, 't-po-dur': s.poDur, 't-fin-dur': s.finDur };
+            Object.keys(timeMap).forEach(function (id) {
+                const el = document.getElementById(id);
+                if (el && timeMap[id] != null && document.activeElement !== el) el.value = String(timeMap[id]);
+            });
+            const startEl = document.getElementById('t-start');
+            if (startEl && s.start && document.activeElement !== startEl) startEl.value = s.start;
             const finalAfterEl = document.getElementById('t-final-after-third');
             if (finalAfterEl && document.activeElement !== finalAfterEl) {
                 finalAfterEl.checked = !!(state.settings && state.settings.finalAfterThird);
@@ -12739,6 +12779,20 @@
 
         const STANDINGS_TABLE_COLGROUP = '<colgroup><col class="col-team"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-stat"><col class="col-goals"><col class="col-stat"><col class="col-pkt"></colgroup>';
 
+        window.formatTeamWoBadgeHTML = function (teamId, opts) {
+            opts = opts || {};
+            if (teamId == null) return '';
+            const teamSt = state.meta && state.meta.teamStatus && state.meta.teamStatus[teamId];
+            const inline = opts.inline ? 'display:inline; float:none; margin-left:6px;' : 'float:right;';
+            if (teamSt === 'no_show') {
+                return ' <span style="' + inline + ' font-size:10px; font-weight:800; color:#b45309;">WO nieobecność</span>';
+            }
+            if (teamSt === 'disqualified') {
+                return ' <span style="' + inline + ' font-size:10px; font-weight:800; color:#de350b;">WO dyscyplinarny</span>';
+            }
+            return '';
+        };
+
         window.formatStandingsGoalsHTML = function (s) {
             const bz = parseInt(s && s.bz, 10);
             const bs = parseInt(s && s.bs, 10);
@@ -12763,7 +12817,7 @@
                 if (typeof window.syncDemoStoryState === 'function') window.syncDemoStoryState();
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
-            const infoBanner = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki →' + (window.isCardsEnabled() ? ' Fair Play →' : '') + ' remis absolutny (decyzja sędziego).</div>';
+            const infoBanner = '<div style="margin-bottom:15px; font-size:11px; background:#e3fcef; color:#00875a; padding:8px; border-radius:4px; border-left:4px solid #00875a; font-weight:bold;">🟩 Na zielono zaznaczono drużyny premiowane awansem.<br>⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki →' + (window.isCardsEnabled() ? ' Fair Play →' : '') + ' remis absolutny (decyzja sędziego: losowanie lub krótka seria rzutów karnych).<br>🔴 Przy nazwie drużyny — ręcznie ustalona kolejność w grupie po rozstrzygnięciu remisu absolutnego.<br>WO nieobecność / WO dyscyplinarny — walkower przy nazwie drużyny (np. nieprzyjazd).</div>';
 
             let advIds = window.getAdvancingTeamsFull().map(t => t.id); let numGroups = Object.keys(state.groups || {}).length;
             let advCount = state.settings.advCount || 4; let anyUnconfirmedAbsoluteRemis = false;
@@ -12799,11 +12853,8 @@
                                 <button class="table-order-btn" onclick="moveTableTeam('${gn}', ${idx}, 1)">↓</button>
                             </div>`;
 
-                        let woBadge = '';
-                        const teamSt = state.meta && state.meta.teamStatus && state.meta.teamStatus[s.t.id];
-                        if (teamSt === 'no_show') woBadge = ' <span style="float:right; font-size:10px; font-weight:800; color:#b45309;">WO nieobecność</span>';
-                        else if (teamSt === 'disqualified') woBadge = ' <span style="float:right; font-size:10px; font-weight:800; color:#de350b;">WO dyscyplinarny</span>';
-                        let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span style="display:block;"><b>${esc(s.t.name)}</b> <span style="color:#de350b;">🔴</span>${woBadge}</span>` : `<span style="display:block;"><b>${esc(s.t.name)}</b>${woBadge}</span>`;
+                        let woBadge = window.formatTeamWoBadgeHTML(s.t.id);
+                        let teamLabelHTML = (isConfirmed || hasLocalCorrection) ? `<span style="display:block;"><b>${esc(s.t.name)}</b> <span style="color:#de350b;" title="Ręcznie ustalona kolejność w grupie">🔴</span>${woBadge}</span>` : `<span style="display:block;"><b>${esc(s.t.name)}</b>${woBadge}</span>`;
                         const remisClick = (detectRemisAlert && (idx === cutoffIndex || idx === cutoffIndex + 1) && !hideControls && !fanRo)
                             ? ' style="cursor:pointer;" onclick="openTableOrderDrawer(\'' + gn + '\')" title="Kliknij, aby rozstrzygnąć remis absolutny"'
                             : '';

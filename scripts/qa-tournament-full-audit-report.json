@@ -1,9 +1,9 @@
 {
-  "startedAt": "2026-08-05T09:55:39.583Z",
-  "finishedAt": "2026-08-05T09:59:21.449Z",
+  "startedAt": "2026-08-12T08:48:51.111Z",
+  "finishedAt": "2026-08-12T08:57:08.335Z",
   "app": "https://app.turniejomat.pl",
-  "license": "TP-QDJL-CTW5",
-  "orgUrl": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
+  "license": "TP-MNHX-7RBV",
+  "orgUrl": "https://app.turniejomat.pl/?id=TP-MNHX-7RBV",
   "viewports": [
     {
       "id": "galaxy-a56",
@@ -25,21 +25,21 @@
     }
   ],
   "totals": {
-    "all": 132,
-    "pass": 93,
-    "fail": 39,
-    "criticalFail": 8,
-    "highFail": 6,
-    "warningFail": 25
+    "all": 153,
+    "pass": 129,
+    "fail": 24,
+    "criticalFail": 14,
+    "highFail": 3,
+    "warningFail": 7
   },
   "findings": [
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Turniej załadowany (state.matches)",
-      "ok": true,
-      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
-      "severity": "pass"
+      "ok": false,
+      "detail": "https://app.turniejomat.pl/?id=TP-MNHX-7RBV",
+      "severity": "critical"
     },
     {
       "viewport": "galaxy-a56",
@@ -62,7 +62,7 @@
       "area": "Organizer",
       "label": "Badge zapisu widoczny",
       "ok": false,
-      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 375 h temu\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "warning"
     },
     {
@@ -78,7 +78,7 @@
       "area": "Badges",
       "label": "Organizer: badge’e nie nachodzą na siebie",
       "ok": true,
-      "detail": "overlap=false area=0 gapPx=null placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 375 h temu\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "overlap=false area=0 gapPx=null placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "pass"
     },
     {
@@ -110,24 +110,32 @@
       "area": "Math",
       "label": "Grupy równe (lub 1 grupa)",
       "ok": true,
-      "detail": "{\"A\":4,\"B\":4,\"C\":4}",
+      "detail": "{}",
       "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Math",
       "label": "Drużyny i mecze obecne",
-      "ok": true,
-      "detail": "{\"teams\":12,\"groups\":3,\"matchesTotal\":18,\"matchesPlayed\":0,\"matchesPending\":18,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
-      "severity": "pass"
+      "ok": false,
+      "detail": "{\"teams\":0,\"groups\":0,\"matchesTotal\":0,\"matchesPlayed\":0,\"matchesPending\":0,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
+      "severity": "critical"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Math",
       "label": "Tabele spójne (pkt / M)",
-      "ok": true,
+      "ok": false,
       "detail": "ok",
-      "severity": "pass"
+      "severity": "critical"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Math",
+      "label": "Brak getSortedGroupStats lub grup",
+      "ok": false,
+      "detail": "{}",
+      "severity": "warning"
     },
     {
       "viewport": "galaxy-a56",
@@ -139,67 +147,75 @@
     },
     {
       "viewport": "galaxy-a56",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka nazywo",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'nazywo\\'\"], .nav-tabs button[onclick*=\"nazywo\"]').first()\n    - locator resolved to <button class=\"nav-btn nav-tab-live\" onclick=\"switchTab('nazywo')\">Na żywo</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=1038, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka mecze",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'mecze\\'\"], .nav-tabs button[onclick*=\"mecze\"]').first()\n    - locator resolved to <button onclick=\"switchTab('mecze')\" class=\"nav-btn nav-desktop-only\">Mecze</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=false, text=99, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka tabele",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'tabele\\'\"], .nav-tabs button[onclick*=\"tabele\"]').first()\n    - locator resolved to <button onclick=\"switchTab('tabele')\" class=\"nav-btn nav-mobile-only\">Tabele</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=182, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka playoff",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'playoff\\'\"], .nav-tabs button[onclick*=\"playoff\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('playoff')\">Play-Off</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=140, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka podium",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'podium\\'\"], .nav-tabs button[onclick*=\"podium\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('podium')\">Podium</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=142, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka sklady",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'sklady\\'\"], .nav-tabs button[onclick*=\"sklady\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('sklady')\">Składy</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=297, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka ustawienia",
-      "ok": false,
-      "detail": "active=null, text=0, tables=0, overflowX=false",
-      "severity": "critical"
+      "ok": true,
+      "detail": "brak panelu #ustawienia (by design, switchTab bez crasha)",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Zakładka archiwum",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'archiwum\\'\"], .nav-tabs button[onclick*=\"archiwum\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('archiwum')\">Archiwum</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=612, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
@@ -222,7 +238,7 @@
       "area": "Print",
       "label": "Na żywo ma harmonogram do druku",
       "ok": true,
-      "detail": "textLen=2531",
+      "detail": "textLen=1038",
       "severity": "pass"
     },
     {
@@ -238,31 +254,23 @@
       "area": "Print",
       "label": "Print media: treść #nazywo niepusta",
       "ok": true,
-      "detail": "textLen=1847 tables=4 rows=27",
+      "detail": "textLen=353 tables=0 rows=0",
       "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Print",
       "label": "Print media: wygląda na harmonogram/tabele",
-      "ok": true,
-      "detail": "Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupow",
-      "severity": "pass"
-    },
-    {
-      "viewport": "galaxy-a56",
-      "area": "Security",
-      "label": "Ekran blokady licencji niewidoczny",
       "ok": false,
-      "detail": "{\"exists\":true,\"shown\":true}",
-      "severity": "critical"
+      "detail": "Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wy",
+      "severity": "high"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Organizer",
       "label": "Dashboard turnieju",
       "ok": true,
-      "detail": "Dashboard · TESTY\n                    \n                        Drużyny12\n                        Mec",
+      "detail": "Dashboard\n                    \n                        Drużyny0\n                        Mecze0/0\n   ",
       "severity": "pass"
     },
     {
@@ -270,7 +278,7 @@
       "area": "Share",
       "label": "URL kibica",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
@@ -278,16 +286,16 @@
       "area": "Share",
       "label": "URL hali",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
       "area": "Share",
       "label": "URL asystenta (token)",
-      "ok": false,
-      "detail": "brak tokenu",
-      "severity": "high"
+      "ok": true,
+      "detail": "token OK",
+      "severity": "pass"
     },
     {
       "viewport": "galaxy-a56",
@@ -326,7 +334,7 @@
       "area": "Fan",
       "label": "Lista meczów widoczna",
       "ok": true,
-      "detail": "rows=18 tables=11",
+      "detail": "rows=0 tables=2",
       "severity": "pass"
     },
     {
@@ -342,7 +350,7 @@
       "area": "Hall",
       "label": "Tryb hall-view",
       "ok": true,
-      "detail": "TESTY",
+      "detail": "",
       "severity": "pass"
     },
     {
@@ -350,7 +358,7 @@
       "area": "Hall",
       "label": "Panel LIVE widoczny",
       "ok": true,
-      "detail": "Boisko 1\nMecz #3 · Grupa A\n1\n0\n:\n0\nDrużyna 4\nBoisko 2\nMecz #1 · Grupa B\nDrużyna 10\n0\n:\n0\nDrużyna 12\nBoisko 3\nMecz #2 · G",
+      "detail": "Brak zaplanowanych meczów",
       "severity": "pass"
     },
     {
@@ -358,7 +366,7 @@
       "area": "Hall",
       "label": "Tytuł ≠ generyczny „Turniej”",
       "ok": true,
-      "detail": "title=\"TESTY\"",
+      "detail": "title=\"\"",
       "severity": "pass"
     },
     {
@@ -380,18 +388,66 @@
     {
       "viewport": "galaxy-a56",
       "area": "Assistant",
-      "label": "Link asystenta z tokenem",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=412",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
       "ok": false,
-      "detail": "brak tokenu — pominięto głęboki test",
-      "severity": "high"
+      "detail": "cards/rows=0 inputs=0",
+      "severity": "critical"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"⏳ Oczekiwanie na pierwszy zapis\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "galaxy-a56",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Turniej załadowany (state.matches)",
-      "ok": true,
-      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
-      "severity": "pass"
+      "ok": false,
+      "detail": "https://app.turniejomat.pl/?id=TP-MNHX-7RBV",
+      "severity": "critical"
     },
     {
       "viewport": "tablet-11",
@@ -414,7 +470,7 @@
       "area": "Organizer",
       "label": "Badge zapisu widoczny",
       "ok": false,
-      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 375 h temu\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "warning"
     },
     {
@@ -430,7 +486,7 @@
       "area": "Badges",
       "label": "Organizer: badge’e nie nachodzą na siebie",
       "ok": true,
-      "detail": "overlap=false area=0 gapPx=null placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 375 h temu\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "overlap=false area=0 gapPx=null placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":0,\"right\":0,\"bottom\":0,\"left\":0,\"width\":0,\"height\":0,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":false,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "pass"
     },
     {
@@ -462,24 +518,32 @@
       "area": "Math",
       "label": "Grupy równe (lub 1 grupa)",
       "ok": true,
-      "detail": "{\"A\":4,\"B\":4,\"C\":4}",
+      "detail": "{}",
       "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Math",
       "label": "Drużyny i mecze obecne",
-      "ok": true,
-      "detail": "{\"teams\":12,\"groups\":3,\"matchesTotal\":18,\"matchesPlayed\":0,\"matchesPending\":18,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
-      "severity": "pass"
+      "ok": false,
+      "detail": "{\"teams\":0,\"groups\":0,\"matchesTotal\":0,\"matchesPlayed\":0,\"matchesPending\":0,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
+      "severity": "critical"
     },
     {
       "viewport": "tablet-11",
       "area": "Math",
       "label": "Tabele spójne (pkt / M)",
-      "ok": true,
+      "ok": false,
       "detail": "ok",
-      "severity": "pass"
+      "severity": "critical"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Math",
+      "label": "Brak getSortedGroupStats lub grup",
+      "ok": false,
+      "detail": "{}",
+      "severity": "warning"
     },
     {
       "viewport": "tablet-11",
@@ -491,67 +555,75 @@
     },
     {
       "viewport": "tablet-11",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka nazywo",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'nazywo\\'\"], .nav-tabs button[onclick*=\"nazywo\"]').first()\n    - locator resolved to <button class=\"nav-btn nav-tab-live\" onclick=\"switchTab('nazywo')\">Na żywo</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    6 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=1038, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka mecze",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'mecze\\'\"], .nav-tabs button[onclick*=\"mecze\"]').first()\n    - locator resolved to <button onclick=\"switchTab('mecze')\" class=\"nav-btn nav-desktop-only\">Mecze</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=false, text=99, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka tabele",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'tabele\\'\"], .nav-tabs button[onclick*=\"tabele\"]').first()\n    - locator resolved to <button onclick=\"switchTab('tabele')\" class=\"nav-btn nav-mobile-only\">Tabele</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=182, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka playoff",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'playoff\\'\"], .nav-tabs button[onclick*=\"playoff\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('playoff')\">Play-Off</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=140, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka podium",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'podium\\'\"], .nav-tabs button[onclick*=\"podium\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('podium')\">Podium</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=142, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka sklady",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'sklady\\'\"], .nav-tabs button[onclick*=\"sklady\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('sklady')\">Składy</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=297, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka ustawienia",
-      "ok": false,
-      "detail": "active=null, text=0, tables=0, overflowX=false",
-      "severity": "critical"
+      "ok": true,
+      "detail": "brak panelu #ustawienia (by design, switchTab bez crasha)",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Zakładka archiwum",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'archiwum\\'\"], .nav-tabs button[onclick*=\"archiwum\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('archiwum')\">Archiwum</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=612, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
@@ -574,7 +646,7 @@
       "area": "Print",
       "label": "Na żywo ma harmonogram do druku",
       "ok": true,
-      "detail": "textLen=2536",
+      "detail": "textLen=1038",
       "severity": "pass"
     },
     {
@@ -590,31 +662,23 @@
       "area": "Print",
       "label": "Print media: treść #nazywo niepusta",
       "ok": true,
-      "detail": "textLen=1852 tables=5 rows=45",
+      "detail": "textLen=353 tables=0 rows=0",
       "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Print",
       "label": "Print media: wygląda na harmonogram/tabele",
-      "ok": true,
-      "detail": "Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupow",
-      "severity": "pass"
-    },
-    {
-      "viewport": "tablet-11",
-      "area": "Security",
-      "label": "Ekran blokady licencji niewidoczny",
       "ok": false,
-      "detail": "{\"exists\":true,\"shown\":true}",
-      "severity": "critical"
+      "detail": "Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wy",
+      "severity": "high"
     },
     {
       "viewport": "tablet-11",
       "area": "Organizer",
       "label": "Dashboard turnieju",
       "ok": true,
-      "detail": "Dashboard · TESTY\n                    \n                        Drużyny12\n                        Mec",
+      "detail": "Dashboard\n                    \n                        Drużyny0\n                        Mecze0/0\n   ",
       "severity": "pass"
     },
     {
@@ -622,7 +686,7 @@
       "area": "Share",
       "label": "URL kibica",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
@@ -630,16 +694,16 @@
       "area": "Share",
       "label": "URL hali",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
       "viewport": "tablet-11",
       "area": "Share",
       "label": "URL asystenta (token)",
-      "ok": false,
-      "detail": "brak tokenu",
-      "severity": "high"
+      "ok": true,
+      "detail": "token OK",
+      "severity": "pass"
     },
     {
       "viewport": "tablet-11",
@@ -678,7 +742,7 @@
       "area": "Fan",
       "label": "Lista meczów widoczna",
       "ok": true,
-      "detail": "rows=18 tables=11",
+      "detail": "rows=0 tables=2",
       "severity": "pass"
     },
     {
@@ -694,7 +758,7 @@
       "area": "Hall",
       "label": "Tryb hall-view",
       "ok": true,
-      "detail": "TESTY",
+      "detail": "",
       "severity": "pass"
     },
     {
@@ -702,7 +766,7 @@
       "area": "Hall",
       "label": "Panel LIVE widoczny",
       "ok": true,
-      "detail": "Boisko 1\nMecz #3 · Grupa A\n1\n0\n:\n0\nDrużyna 4\nBoisko 2\nMecz #1 · Grupa B\nDrużyna 10\n0\n:\n0\nDrużyna 12\nBoisko 3\nMecz #2 · G",
+      "detail": "Brak zaplanowanych meczów",
       "severity": "pass"
     },
     {
@@ -710,7 +774,7 @@
       "area": "Hall",
       "label": "Tytuł ≠ generyczny „Turniej”",
       "ok": true,
-      "detail": "title=\"TESTY\"",
+      "detail": "title=\"\"",
       "severity": "pass"
     },
     {
@@ -732,18 +796,66 @@
     {
       "viewport": "tablet-11",
       "area": "Assistant",
-      "label": "Link asystenta z tokenem",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=834",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
       "ok": false,
-      "detail": "brak tokenu — pominięto głęboki test",
-      "severity": "high"
+      "detail": "cards/rows=0 inputs=0",
+      "severity": "critical"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"⏳ Oczekiwanie na pierwszy zapis\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "tablet-11",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Turniej załadowany (state.matches)",
-      "ok": true,
-      "detail": "https://app.turniejomat.pl/?id=TP-QDJL-CTW5",
-      "severity": "pass"
+      "ok": false,
+      "detail": "https://app.turniejomat.pl/?id=TP-MNHX-7RBV",
+      "severity": "critical"
     },
     {
       "viewport": "laptop-14",
@@ -766,7 +878,7 @@
       "area": "Organizer",
       "label": "Badge zapisu widoczny",
       "ok": true,
-      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 376 h temu\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":803,\"width\":143,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "{\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":755,\"width\":191,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "pass"
     },
     {
@@ -774,7 +886,7 @@
       "area": "Organizer",
       "label": "Status Firebase widoczny",
       "ok": true,
-      "detail": "{\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":795,\"bottom\":42,\"left\":705,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "{\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":747,\"bottom\":42,\"left\":657,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "pass"
     },
     {
@@ -782,7 +894,7 @@
       "area": "Badges",
       "label": "Organizer: badge’e nie nachodzą na siebie",
       "ok": true,
-      "detail": "overlap=false area=0 gapPx=0 placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":795,\"bottom\":42,\"left\":705,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"✅ Zapisano 376 h temu\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":803,\"width\":143,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
+      "detail": "overlap=false area=0 gapPx=0 placement=header fb={\"id\":\"firebase-status\",\"display\":\"block\",\"position\":\"static\",\"text\":\"🟢 Połączono\",\"top\":16,\"right\":747,\"bottom\":42,\"left\":657,\"width\":90,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false} save={\"id\":\"last-save-info\",\"display\":\"block\",\"position\":\"static\",\"text\":\"⏳ Oczekiwanie na pierwszy zapis\",\"top\":16,\"right\":946,\"bottom\":42,\"left\":755,\"width\":191,\"height\":26,\"cssBottom\":\"auto\",\"cssRight\":\"auto\",\"visible\":true,\"parentId\":\"header-status-badges\",\"inHeader\":true,\"inHome\":false}",
       "severity": "pass"
     },
     {
@@ -814,24 +926,32 @@
       "area": "Math",
       "label": "Grupy równe (lub 1 grupa)",
       "ok": true,
-      "detail": "{\"A\":4,\"B\":4,\"C\":4}",
+      "detail": "{}",
       "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Math",
       "label": "Drużyny i mecze obecne",
-      "ok": true,
-      "detail": "{\"teams\":12,\"groups\":3,\"matchesTotal\":18,\"matchesPlayed\":0,\"matchesPending\":18,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
-      "severity": "pass"
+      "ok": false,
+      "detail": "{\"teams\":0,\"groups\":0,\"matchesTotal\":0,\"matchesPlayed\":0,\"matchesPending\":0,\"playoffsTotal\":0,\"playoffsPlayed\":0,\"playoffsPending\":0}",
+      "severity": "critical"
     },
     {
       "viewport": "laptop-14",
       "area": "Math",
       "label": "Tabele spójne (pkt / M)",
-      "ok": true,
+      "ok": false,
       "detail": "ok",
-      "severity": "pass"
+      "severity": "critical"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Math",
+      "label": "Brak getSortedGroupStats lub grup",
+      "ok": false,
+      "detail": "{}",
+      "severity": "warning"
     },
     {
       "viewport": "laptop-14",
@@ -843,67 +963,75 @@
     },
     {
       "viewport": "laptop-14",
+      "area": "Security",
+      "label": "Ekran blokady licencji niewidoczny",
+      "ok": true,
+      "detail": "{\"exists\":true,\"shown\":false}",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka nazywo",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'nazywo\\'\"], .nav-tabs button[onclick*=\"nazywo\"]').first()\n    - locator resolved to <button class=\"nav-btn nav-tab-live\" onclick=\"switchTab('nazywo')\">Na żywo</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=329, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka mecze",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'mecze\\'\"], .nav-tabs button[onclick*=\"mecze\"]').first()\n    - locator resolved to <button onclick=\"switchTab('mecze')\" class=\"nav-btn nav-desktop-only\">Mecze</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=false, text=99, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka tabele",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'tabele\\'\"], .nav-tabs button[onclick*=\"tabele\"]').first()\n    - locator resolved to <button onclick=\"switchTab('tabele')\" class=\"nav-btn nav-mobile-only\">Tabele</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=171, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka playoff",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'playoff\\'\"], .nav-tabs button[onclick*=\"playoff\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('playoff')\">Play-Off</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=83, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka podium",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'podium\\'\"], .nav-tabs button[onclick*=\"podium\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('podium')\">Podium</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=143, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka sklady",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'sklady\\'\"], .nav-tabs button[onclick*=\"sklady\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('sklady')\">Składy</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=231, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka ustawienia",
-      "ok": false,
-      "detail": "active=null, text=0, tables=0, overflowX=false",
-      "severity": "critical"
+      "ok": true,
+      "detail": "brak panelu #ustawienia (by design, switchTab bez crasha)",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Zakładka archiwum",
-      "ok": false,
-      "detail": "locator.click: Timeout 3000ms exceeded.\nCall log:\n  - waiting for locator('.nav-tabs button[onclick*=\"\\'archiwum\\'\"], .nav-tabs button[onclick*=\"archiwum\"]').first()\n    - locator resolved to <button class=\"nav-btn\" onclick=\"switchTab('archiwum')\">Archiwum</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    5 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"license-blocked-screen\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 500ms\n",
-      "severity": "warning"
+      "ok": true,
+      "detail": "active=true, text=491, tables=0, overflowX=false",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
@@ -926,7 +1054,7 @@
       "area": "Print",
       "label": "Na żywo ma harmonogram do druku",
       "ok": true,
-      "detail": "textLen=2302",
+      "detail": "textLen=329",
       "severity": "pass"
     },
     {
@@ -942,31 +1070,23 @@
       "area": "Print",
       "label": "Print media: treść #nazywo niepusta",
       "ok": true,
-      "detail": "textLen=2090 tables=5 rows=45",
+      "detail": "textLen=263 tables=0 rows=0",
       "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Print",
       "label": "Print media: wygląda na harmonogram/tabele",
-      "ok": true,
-      "detail": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA BOISKO GODZ. MECZ WYNIK STRZELCY/KARTKI 1 B — 2 09:00 ↑ ↓ Drużyna 10VSDrużyna ",
-      "severity": "pass"
-    },
-    {
-      "viewport": "laptop-14",
-      "area": "Security",
-      "label": "Ekran blokady licencji niewidoczny",
       "ok": false,
-      "detail": "{\"exists\":true,\"shown\":true}",
-      "severity": "critical"
+      "detail": "Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono dru",
+      "severity": "high"
     },
     {
       "viewport": "laptop-14",
       "area": "Organizer",
       "label": "Dashboard turnieju",
       "ok": true,
-      "detail": "Dashboard · TESTY\nDrużyny\n12\nMecze\n0/18\nFaza\nFaza grupowa\nPlay-Off\nnie\nZapis\n376 h temu\nFirebase\nOnl",
+      "detail": "Dashboard\nDrużyny\n0\nMecze\n0/0\nFaza\nBrak turnieju\nPlay-Off\nnie\nZapis\noczekiwanie\nFirebase\nOnline",
       "severity": "pass"
     },
     {
@@ -974,7 +1094,7 @@
       "area": "Share",
       "label": "URL kibica",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
@@ -982,16 +1102,16 @@
       "area": "Share",
       "label": "URL hali",
       "ok": true,
-      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
+      "detail": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
       "severity": "pass"
     },
     {
       "viewport": "laptop-14",
       "area": "Share",
       "label": "URL asystenta (token)",
-      "ok": false,
-      "detail": "brak tokenu",
-      "severity": "high"
+      "ok": true,
+      "detail": "token OK",
+      "severity": "pass"
     },
     {
       "viewport": "laptop-14",
@@ -1030,7 +1150,7 @@
       "area": "Fan",
       "label": "Lista meczów widoczna",
       "ok": true,
-      "detail": "rows=18 tables=11",
+      "detail": "rows=0 tables=2",
       "severity": "pass"
     },
     {
@@ -1046,7 +1166,7 @@
       "area": "Hall",
       "label": "Tryb hall-view",
       "ok": true,
-      "detail": "TESTY",
+      "detail": "",
       "severity": "pass"
     },
     {
@@ -1054,7 +1174,7 @@
       "area": "Hall",
       "label": "Panel LIVE widoczny",
       "ok": true,
-      "detail": "Boisko 1\nMecz #3 · Grupa A\n1\n0\n:\n0\nDrużyna 4\nBoisko 2\nMecz #1 · Grupa B\nDrużyna 10\n0\n:\n0\nDrużyna 12\nBoisko 3\nMecz #2 · G",
+      "detail": "Brak zaplanowanych meczów",
       "severity": "pass"
     },
     {
@@ -1062,7 +1182,7 @@
       "area": "Hall",
       "label": "Tytuł ≠ generyczny „Turniej”",
       "ok": true,
-      "detail": "title=\"TESTY\"",
+      "detail": "title=\"\"",
       "severity": "pass"
     },
     {
@@ -1084,73 +1204,87 @@
     {
       "viewport": "laptop-14",
       "area": "Assistant",
-      "label": "Link asystenta z tokenem",
+      "label": "Tryb asystenta",
+      "ok": true,
+      "detail": "Turniejomat 🧑‍⚖️ TRYB ASYSTENTA",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Brak H-overflow",
+      "ok": true,
+      "detail": "scrollW=1366",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Lista meczów asystenta",
       "ok": false,
-      "detail": "brak tokenu — pominięto głęboki test",
-      "severity": "high"
+      "detail": "cards/rows=0 inputs=0",
+      "severity": "critical"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Badge statusu w belce (header)",
+      "ok": true,
+      "detail": "fb=true save=true",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Badges",
+      "label": "Asystent (wzorzec): badge’e nie nachodzą",
+      "ok": true,
+      "detail": "gapPx=8 fbPos=static savePos=static fb=\"🟢 Połączono\" save=\"⏳ Oczekiwanie na pierwszy zapis\"",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Ukryte akcje organizatora (RESET/ZAMRÓŹ)",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
+    },
+    {
+      "viewport": "laptop-14",
+      "area": "Assistant",
+      "label": "Brak pageerror",
+      "ok": true,
+      "detail": "",
+      "severity": "pass"
     }
   ],
   "perViewport": {
     "galaxy-a56": {
       "share": {
-        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
-        "assistant": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "errors": [],
-        "assistantToken": false
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-MNHX-7RBV&token=9a68cfa73f6a0e32324684601fdc4ab7",
+        "assistantToken": true,
+        "errors": []
       },
       "mathStats": {
-        "teams": 12,
-        "groups": 3,
-        "matchesTotal": 18,
+        "teams": 0,
+        "groups": 0,
+        "matchesTotal": 0,
         "matchesPlayed": 0,
-        "matchesPending": 18,
+        "matchesPending": 0,
         "playoffsTotal": 0,
         "playoffsPlayed": 0,
         "playoffsPending": 0
       },
-      "mathIssues": [],
-      "standingsSample": [
+      "mathIssues": [
         {
-          "group": "A",
-          "rank": 1,
-          "team": "Drużyna 8",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 2,
-          "team": "Drużyna 4",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 3,
-          "team": "Drużyna 11",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
+          "sev": "warning",
+          "msg": "Brak getSortedGroupStats lub grup"
         }
       ],
-      "settings": {
-        "advCount": 4
-      },
+      "standingsSample": [],
+      "settings": {},
       "print": {
         "before": false,
         "printRules": 24,
@@ -1159,8 +1293,8 @@
         "hasStandings": true,
         "printBtnFound": true,
         "hasPrintFn": true,
-        "liveTextLen": 2531,
-        "sample": " Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupowa#1B—209:00↑↓⚽ Strzelcy/Kartki:✓Drużyna 10 - Drużyna 12#2C—309:00↑↓⚽ Strzelcy/Kartki:✓Drużyna 6 - Drużyna 7#3A—109:00↑↓⚽ Strzelcy/Kartki:✓1 - Drużyna 4#4A—109:",
+        "liveTextLen": 1038,
+        "sample": " Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem.⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair P",
         "printMedia": {
           "hidden": [
             {
@@ -1198,75 +1332,41 @@
               "visibility": "visible"
             }
           ],
-          "textLen": 1847,
-          "tables": 4,
-          "matchRows": 27,
-          "sample": "Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupowa#1B—209:00↑↓⚽ Strzelcy/Kartki:✓Drużyna 10 - Drużyna 12#2C—309:00↑↓⚽ Strzelcy/Kartki:✓Drużyna 6 - Drużyna 7#3A—109:00↑↓⚽ Strzelcy/Kartki:✓1 - Drużyna 4#4A—109:06↑↓⚽ Strzelcy/Kartki:✓Drużyna 4 - Drużyna 11#5C—309:06↑↓⚽ Strzelcy/Kartki:✓Drużyna 5 - Drużyna 7#8B—209:06↑↓⚽ Strzelcy/K",
-          "hasGroupWord": true,
-          "hasScoreLike": true
+          "textLen": 353,
+          "tables": 0,
+          "matchRows": 0,
+          "sample": "Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem.⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair Play → remis absolutny (decyzja sędziego). START PLAY-OFF ← Wróć do Na żywo",
+          "hasGroupWord": false,
+          "hasScoreLike": false
         }
       }
     },
     "tablet-11": {
       "share": {
-        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
-        "assistant": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "errors": [],
-        "assistantToken": false
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-MNHX-7RBV&token=999da1cc00a5d2d6f8ced36c22740149",
+        "assistantToken": true,
+        "errors": []
       },
       "mathStats": {
-        "teams": 12,
-        "groups": 3,
-        "matchesTotal": 18,
+        "teams": 0,
+        "groups": 0,
+        "matchesTotal": 0,
         "matchesPlayed": 0,
-        "matchesPending": 18,
+        "matchesPending": 0,
         "playoffsTotal": 0,
         "playoffsPlayed": 0,
         "playoffsPending": 0
       },
-      "mathIssues": [],
-      "standingsSample": [
+      "mathIssues": [
         {
-          "group": "A",
-          "rank": 1,
-          "team": "Drużyna 8",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 2,
-          "team": "Drużyna 4",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 3,
-          "team": "Drużyna 11",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
+          "sev": "warning",
+          "msg": "Brak getSortedGroupStats lub grup"
         }
       ],
-      "settings": {
-        "advCount": 4
-      },
+      "standingsSample": [],
+      "settings": {},
       "print": {
         "before": false,
         "printRules": 24,
@@ -1275,8 +1375,8 @@
         "hasStandings": true,
         "printBtnFound": true,
         "hasPrintFn": true,
-        "liveTextLen": 2536,
-        "sample": " Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupowa#GrupaBoiskoGodz.MeczWynikStrzelcy/Kartki1B—209:00↑↓Drużyna 10vsDrużyna 12:✓⚽ Strzelcy/Kartki2C—309:00↑↓Drużyna 6vsDrużyna 7:✓⚽ Strzelcy/Kartki3A—109:00↑↓1vsD",
+        "liveTextLen": 1038,
+        "sample": " Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem.⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair P",
         "printMedia": {
           "hidden": [
             {
@@ -1314,75 +1414,41 @@
               "visibility": "visible"
             }
           ],
-          "textLen": 1852,
-          "tables": 5,
-          "matchRows": 45,
-          "sample": "Wszystkie Oczekujące Zakończone CałośćGr. AGr. BGr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ Faza grupowa#GrupaBoiskoGodz.MeczWynikStrzelcy/Kartki1B—209:00↑↓Drużyna 10vsDrużyna 12:✓⚽ Strzelcy/Kartki2C—309:00↑↓Drużyna 6vsDrużyna 7:✓⚽ Strzelcy/Kartki3A—109:00↑↓1vsDrużyna 4:✓⚽ Strzelcy/Kartki4A—109:06↑↓Drużyna 4vsDrużyna 11:✓⚽ Strzelcy/Kartki5C—309:06↑↓Drużyna 5vsDrużyna 7:✓⚽ Strzelcy",
-          "hasGroupWord": true,
-          "hasScoreLike": true
+          "textLen": 353,
+          "tables": 0,
+          "matchRows": 0,
+          "sample": "Wszystkie Oczekujące Zakończone Całość Boiska Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem.⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair Play → remis absolutny (decyzja sędziego). START PLAY-OFF ← Wróć do Na żywo",
+          "hasGroupWord": false,
+          "hasScoreLike": false
         }
       }
     },
     "laptop-14": {
       "share": {
-        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-QDJL-CTW5",
-        "assistant": "https://app.turniejomat.pl/?view=fan&id=TP-QDJL-CTW5",
-        "errors": [],
-        "assistantToken": false
+        "fan": "https://app.turniejomat.pl/?view=fan&id=TP-MNHX-7RBV",
+        "hall": "https://app.turniejomat.pl/?view=hall&id=TP-MNHX-7RBV",
+        "assistant": "https://app.turniejomat.pl/?view=assistant&id=TP-MNHX-7RBV&token=d4b69e9377170be948305ea25a4e27b9",
+        "assistantToken": true,
+        "errors": []
       },
       "mathStats": {
-        "teams": 12,
-        "groups": 3,
-        "matchesTotal": 18,
+        "teams": 0,
+        "groups": 0,
+        "matchesTotal": 0,
         "matchesPlayed": 0,
-        "matchesPending": 18,
+        "matchesPending": 0,
         "playoffsTotal": 0,
         "playoffsPlayed": 0,
         "playoffsPending": 0
       },
-      "mathIssues": [],
-      "standingsSample": [
+      "mathIssues": [
         {
-          "group": "A",
-          "rank": 1,
-          "team": "Drużyna 8",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 2,
-          "team": "Drużyna 4",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
-        },
-        {
-          "group": "A",
-          "rank": 3,
-          "team": "Drużyna 11",
-          "m": 0,
-          "w": 0,
-          "r": 0,
-          "p": 0,
-          "pkt": 0,
-          "bz": 0,
-          "bs": 0
+          "sev": "warning",
+          "msg": "Brak getSortedGroupStats lub grup"
         }
       ],
-      "settings": {
-        "advCount": 4
-      },
+      "standingsSample": [],
+      "settings": {},
       "print": {
         "before": false,
         "printRules": 24,
@@ -1391,8 +1457,8 @@
         "hasStandings": true,
         "printBtnFound": true,
         "hasPrintFn": true,
-        "liveTextLen": 2302,
-        "sample": "Wszystkie Oczekujące Zakończone Całość Gr. A Gr. B Gr. C Boiska Udostępnij Drukuj Walkover Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA BOISKO GODZ. MECZ WYNIK STRZELCY/KARTKI 1 B — 2 09:00 ↑ ↓ Drużyna 10VSDrużyna 12 : ✓ ⚽ Strzelcy/Kartki 2 C — 3 09:00 ↑ ↓ Drużyna 6VSDrużyna 7 : ✓ ⚽",
+        "liveTextLen": 329,
+        "sample": "Wszystkie Oczekujące Zakończone Całość Udostępnij Drukuj Walkover Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem. ⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair Play → r",
         "printMedia": {
           "hidden": [
             {
@@ -1430,12 +1496,12 @@
               "visibility": "visible"
             }
           ],
-          "textLen": 2090,
-          "tables": 5,
-          "matchRows": 45,
-          "sample": "Harmonogram meczów ⚽ FAZA GRUPOWA # GRUPA BOISKO GODZ. MECZ WYNIK STRZELCY/KARTKI 1 B — 2 09:00 ↑ ↓ Drużyna 10VSDrużyna 12 : ✓ ⚽ Strzelcy/Kartki 2 C — 3 09:00 ↑ ↓ Drużyna 6VSDrużyna 7 : ✓ ⚽ Strzelcy/Kartki 3 A — 1 09:00 ↑ ↓ 1VSDrużyna 4 : ✓ ⚽ Strzelcy/Kartki 4 A — 1 09:06 ↑ ↓ Drużyna 4VSDrużyna 11 : ✓ ⚽ Strzelcy/Kartki 5 C — 3 09:06 ↑ ↓ Drużyna 5VSDrużyna 7 : ✓ ⚽ Strzelcy/Kartki 8 B — 2 09:06 ↑ ↓ ",
-          "hasGroupWord": true,
-          "hasScoreLike": true
+          "textLen": 263,
+          "tables": 0,
+          "matchRows": 0,
+          "sample": "Harmonogram meczów Brak meczów spełniających wybrane kryteria filtrów. Tabele fazy grupowej 🟩 Na zielono zaznaczono drużyny premiowane awansem. ⚖️ Przy remisie: mecze bezpośrednie → bilans → bramki → Fair Play → remis absolutny (decyzja sędziego). START PLAY-OFF",
+          "hasGroupWord": false,
+          "hasScoreLike": false
         }
       }
     }
