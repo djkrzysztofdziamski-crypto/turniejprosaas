@@ -8066,10 +8066,8 @@
         return !isFanMode && !isHallMode && !isAssistantMode && window.getPitchCount() > 0;
     };
 
-    window.clearMatchPitchOnFinish = function (m) {
-        if (!m) return;
-        m.pitch = null;
-    };
+    /* Zostaw pitch po zakończeniu — historia w kolumnie Boisko; wolne boiska i tak liczą tylko !played. */
+    window.clearMatchPitchOnFinish = function () {};
 
     window.clearPendingMatchPitches = function () {
         const clear = (list) => {
