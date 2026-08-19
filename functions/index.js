@@ -40,7 +40,16 @@ const {
   getStripeWebhookSecret,
 } = require('./lib/params');
 
-admin.initializeApp();
+function resolveDatabaseUrl() {
+  const explicit = process.env.FIREBASE_DATABASE_URL || process.env.DATABASE_URL;
+  if (explicit) return explicit;
+  const projectId = process.env.GCLOUD_PROJECT || process.env.PROJECT_ID || 'turniejprosaas';
+  return `https://${projectId}-default-rtdb.europe-west1.firebasedatabase.app`;
+}
+
+admin.initializeApp({
+  databaseURL: resolveDatabaseUrl(),
+});
 const db = admin.database();
 
 const region = 'europe-west1';
