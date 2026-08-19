@@ -45,7 +45,7 @@ function buildStartHash({ serviceID, orderID, amount, customerEmail, description
   return autopayHash(fields, getAutopaySharedKey());
 }
 
-async function createAutopayPayment(db, { productId, customerEmail, termsVersion, termsAccepted, withdrawalConsent }) {
+async function createAutopayPayment(db, { productId, app, customerEmail, termsVersion, termsAccepted, withdrawalConsent }) {
   const serviceID = getAutopayServiceId();
   const sharedKey = getAutopaySharedKey();
   const gatewayUrl = getAutopayGatewayUrl();
@@ -63,6 +63,13 @@ async function createAutopayPayment(db, { productId, customerEmail, termsVersion
     throw err;
   }
 
+  const targetApp = String(app || product.app || 'turniejomat').toLowerCase();
+  if (product.app && product.app !== targetApp) {
+    const err = new Error('Produkt nie należy do wskazanej aplikacji.');
+    err.code = 'invalid-argument';
+    throw err;
+  }
+
   const orderID = generateOrderId();
   const amount = formatAmountPln(product.priceGrosze);
   const description = sanitizeAutopayDescription('Turniejomat - ' + (product.label || product.id));
@@ -76,6 +83,7 @@ async function createAutopayPayment(db, { productId, customerEmail, termsVersion
   });
 
   await savePendingCheckout(db, orderID, {
+    app: targetApp,
     productId: product.id,
     customerEmail: customerEmail || null,
     amount,
@@ -88,6 +96,7 @@ async function createAutopayPayment(db, { productId, customerEmail, termsVersion
   });
 
   return {
+    app: targetApp,
     provider: 'autopay',
     method: 'POST',
     url: gatewayUrl.replace(/\/$/, ''),
@@ -188,6 +197,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
   }
 
   const expectedAmount = pending.amount;
+  const pendingApp = pending.app || 'turniejomat';
   const amountOk = !expectedAmount || String(tx.amount) === String(expectedAmount) ||
     String(tx.startAmount) === String(expectedAmount);
 
@@ -203,6 +213,7 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
         : `Autopay: ${product?.label || pending.productId}`;
 
       const result = await fulfillOrder(db, {
+        app: pendingApp,
         productId: pending.productId,
         notatka,
         source: 'autopay',
@@ -228,7 +239,10 @@ async function handleAutopayItn(db, req, fulfillOrder, handlePaymentFailure) {
         await handlePaymentFailure(db, {
           id: tx.orderID,
           customer_email: pending.customerEmail,
-          metadata: { productId: pending.productId },
+          metadata: {
+            app: pendingApp,
+            productId: pending.productId,
+          },
         });
       }
     } else {

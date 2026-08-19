@@ -19,7 +19,10 @@ async function handlePaymentFailure(db, session) {
   });
 
   if (order.licenseKey) {
-    const licRef = db.ref('licencje/' + order.licenseKey);
+    const app = order.app || session?.metadata?.app || 'turniejomat';
+    const licRef = app === 'setka'
+      ? db.ref('licencje_setka/' + paymentId)
+      : db.ref('licencje/' + order.licenseKey);
     const licSnap = await licRef.once('value');
     if (licSnap.val()) {
       const prev = licSnap.val().notatka || '';

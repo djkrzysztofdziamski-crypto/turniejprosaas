@@ -82,8 +82,11 @@ exports.activateLicense = functions.region(region).https.onCall(async (data, con
   }
 });
 
-exports.getProductCatalog = functions.region(region).https.onCall(async () => {
-  return { products: getActiveProducts().map(productToPublic) };
+exports.getProductCatalog = functions.region(region).https.onCall(async (data) => {
+  const app = String(data?.app || '').trim().toLowerCase();
+  const all = getActiveProducts();
+  const products = app ? all.filter((p) => (p.app || 'turniejomat') === app) : all;
+  return { products: products.map(productToPublic) };
 });
 
 exports.createCheckoutSession = functions
@@ -91,10 +94,14 @@ exports.createCheckoutSession = functions
   .region(region)
   .https.onCall(async (data) => {
     const productId = String(data?.productId || '').trim();
+    const app = String(data?.app || '').trim().toLowerCase() || undefined;
     const customerEmail = String(data?.email || data?.customerEmail || '').trim() || undefined;
 
     if (!productId) {
       throw new functions.https.HttpsError('invalid-argument', 'Wymagane productId.');
+    }
+    if (app && app !== 'turniejomat' && app !== 'setka') {
+      throw new functions.https.HttpsError('invalid-argument', 'Nieobsługiwane app. Użyj: turniejomat lub setka.');
     }
 
     requireCheckoutConsent(data);
@@ -107,14 +114,58 @@ exports.createCheckoutSession = functions
         termsVersion: String(data?.termsVersion || '').trim() || null,
       };
       if (provider === 'stripe') {
-        return await createStripeCheckoutSession({ productId, customerEmail, ...consent });
+        return await createStripeCheckoutSession({ productId, app, customerEmail, ...consent });
       }
-      return await createAutopayPayment(db, { productId, customerEmail, ...consent });
+      return await createAutopayPayment(db, { productId, app, customerEmail, ...consent });
     } catch (err) {
       console.error('createCheckoutSession error:', err.type || err.code, err.message);
       throw toHttpsError(err);
     }
   });
+
+exports.getCheckoutStatus = functions.region(region).https.onCall(async (data) => {
+  const orderId = String(data?.orderId || '').trim();
+  const paymentId = String(data?.paymentId || '').trim() || orderId;
+  if (!paymentId) {
+    throw new functions.https.HttpsError('invalid-argument', 'Wymagane orderId lub paymentId.');
+  }
+
+  const orderSnap = await db.ref('zamowienia/' + paymentId).once('value');
+  const order = orderSnap.val();
+  if (!order) {
+    const pendingSnap = await db.ref('platnosci_oczekujace/' + paymentId).once('value');
+    const pending = pendingSnap.val();
+    if (!pending) {
+      return { found: false, status: 'unknown' };
+    }
+    return {
+      found: true,
+      app: pending.app || null,
+      status: pending.status || 'pending',
+      paymentStatus: pending.paymentStatus || null,
+      productId: pending.productId || null,
+      completed: false,
+    };
+  }
+
+  const isSetka = (order.app === 'setka') || String(order.productId || '').startsWith('setka-');
+  const response = {
+    found: true,
+    app: order.app || (isSetka ? 'setka' : 'turniejomat'),
+    status: order.status || 'completed',
+    productId: order.productId || null,
+    customerEmail: order.customerEmail || null,
+    paymentId,
+    completed: order.status === 'completed',
+    emailSent: order.emailSent === true,
+    until: order.until || null,
+  };
+  if (isSetka && order.status === 'completed') {
+    response.licenseKey = order.licenseKey || null;
+    response.licenseKeyMasked = order.licenseKeyMasked || null;
+  }
+  return response;
+});
 
 exports.resendOrderEmail = functions
   .runWith({ secrets: emailSecrets })

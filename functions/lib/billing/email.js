@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const { getEmailConfig } = require('../params');
 
 const APP_URL = 'https://app.turniejomat.pl';
+const DEFAULT_SUPPORT_EMAIL = 'admin@turniejomat.pl';
 
 function getTransporter() {
   const cfg = getEmailConfig();
@@ -23,43 +24,55 @@ function getTransporter() {
   });
 }
 
-function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt }) {
+function appConfigFromInput(appInput) {
+  const app = appInput || {};
+  return {
+    name: app.name || 'Turniejomat',
+    appUrl: app.appUrl || APP_URL,
+    supportEmail: app.supportEmail || DEFAULT_SUPPORT_EMAIL,
+    ctaLabel: app.ctaLabel || 'Wejdź do turnieju',
+  };
+}
+
+function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
+  const cfg = appConfigFromInput(app);
   const expiryStr = expiresAt
     ? new Date(expiresAt).toLocaleString('pl-PL')
     : '—';
-  const appLink = `${APP_URL}/?id=${encodeURIComponent(licenseKey)}`;
+  const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
 
   return `
 <!DOCTYPE html>
 <html lang="pl">
 <body style="font-family: Arial, sans-serif; color: #1e293b; line-height: 1.5; max-width: 560px;">
-  <h2 style="color: #0052cc;">Turniejomat — Twój klucz licencyjny</h2>
+  <h2 style="color: #0052cc;">${cfg.name} — Twój klucz licencyjny</h2>
   <p>Dziękujemy za zakup <strong>${productLabel}</strong>.</p>
   <p style="font-size: 16px;">Twój klucz licencyjny:</p>
   <p style="font-size: 22px; font-weight: bold; font-family: ui-monospace, monospace; background: #f1f5f9; padding: 14px 18px; border-radius: 8px; letter-spacing: 0.04em;">${licenseKey}</p>
   <p>Licencja ważna do: <strong>${expiryStr}</strong></p>
   <p style="margin: 24px 0;">
     <a href="${appLink}" style="display:inline-block;background:#137333;color:#fff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;">
-      Wejdź do turnieju
+      ${cfg.ctaLabel}
     </a>
   </p>
   <p style="font-size: 13px; color: #64748b;">
-    Możesz też wpisać klucz ręcznie na <a href="${APP_URL}">${APP_URL}</a><br>
-    Pytania: <a href="mailto:admin@turniejomat.pl">admin@turniejomat.pl</a>
+    Możesz też wpisać klucz ręcznie na <a href="${cfg.appUrl}">${cfg.appUrl}</a><br>
+    Pytania: <a href="mailto:${cfg.supportEmail}">${cfg.supportEmail}</a>
   </p>
   <p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">Turniejomat © 2026 · powered by TurniejPro</p>
 </body>
 </html>`;
 }
 
-function buildLicenseEmailText({ licenseKey, productLabel, expiresAt }) {
+function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, app }) {
+  const cfg = appConfigFromInput(app);
   const expiryStr = expiresAt
     ? new Date(expiresAt).toLocaleString('pl-PL')
     : '—';
-  const appLink = `${APP_URL}/?id=${encodeURIComponent(licenseKey)}`;
+  const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
 
   return [
-    'Turniejomat — Twój klucz licencyjny',
+    `${cfg.name} — Twój klucz licencyjny`,
     '',
     `Dziękujemy za zakup ${productLabel}.`,
     '',
@@ -68,11 +81,11 @@ function buildLicenseEmailText({ licenseKey, productLabel, expiresAt }) {
     '',
     `Wejdź do aplikacji: ${appLink}`,
     '',
-    'Pytania: admin@turniejomat.pl',
+    `Pytania: ${cfg.supportEmail}`,
   ].join('\n');
 }
 
-async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt }) {
+async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, app }) {
   if (!to) {
     return { sent: false, reason: 'no_recipient' };
   }
@@ -85,18 +98,19 @@ async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt }) {
   }
 
   const from = cfg.from || 'Turniejomat <noreply@turniejomat.pl>';
-  const payload = { licenseKey, productLabel, expiresAt };
+  const payload = { licenseKey, productLabel, expiresAt, app };
+  const appCfg = appConfigFromInput(app);
 
   try {
     await transporter.sendMail({
       from,
       to,
-      replyTo: cfg.reply_to || 'admin@turniejomat.pl',
-      subject: `Turniejomat — klucz licencyjny ${licenseKey}`,
+      replyTo: cfg.reply_to || appCfg.supportEmail,
+      subject: `${appCfg.name} — klucz licencyjny ${licenseKey}`,
       text: buildLicenseEmailText(payload),
       html: buildLicenseEmailHtml(payload),
     });
-    console.log('License email sent to', to, licenseKey);
+    console.log('License email sent to', to);
     return { sent: true };
   } catch (err) {
     console.error('sendLicenseEmail error:', err.message);

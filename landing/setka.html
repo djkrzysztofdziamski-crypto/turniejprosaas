@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SETKA — zakup licencji</title>
+    <meta name="description" content="Kup licencję SETKA online: wybierz okres, zapłać przez Autopay i odbierz kod aktywacyjny.">
+    <meta name="robots" content="noindex,follow">
+    <link rel="stylesheet" href="css/brand-tokens.css?v=20260819-setka">
+    <style>
+        :root {
+            --bg: #070d18;
+            --panel: #101b30;
+            --panel2: #13223d;
+            --gold: #ffcc00;
+            --text: #f2f6ff;
+            --muted: #b7c6e1;
+            --line: rgba(255,255,255,.14);
+            --ok: #57d9a3;
+            --danger: #fca5a5;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+            background: radial-gradient(1200px 600px at 50% -20%, #1a335f 0%, var(--bg) 55%);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .wrap {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 28px 18px 44px;
+        }
+        .panel {
+            background: linear-gradient(180deg, var(--panel), var(--panel2));
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 22px 18px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(26px, 6vw, 36px);
+            color: var(--gold);
+            letter-spacing: .02em;
+            text-align: center;
+        }
+        .lead {
+            margin: 0 auto 22px;
+            max-width: 680px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255,255,255,.02);
+            display: grid;
+            gap: 10px;
+        }
+        .label {
+            color: var(--ok);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .price {
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .price small {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+        .desc {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            min-height: 38px;
+        }
+        .buy {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            min-height: 44px;
+            font: 800 14px/1 "Segoe UI", sans-serif;
+            background: var(--gold);
+            color: #0b1220;
+            cursor: pointer;
+        }
+        .buy:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .form {
+            margin-top: 16px;
+            display: grid;
+            gap: 10px;
+        }
+        .form label {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ok);
+        }
+        .form input[type="email"] {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: #0d182c;
+            color: #fff;
+            font: inherit;
+        }
+        .consent {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .consent input { margin-top: 2px; }
+        .consent a { color: var(--ok); font-weight: 700; }
+        .hint {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+        .error {
+            display: none;
+            margin: 12px 0 0;
+            border: 1px solid rgba(248,113,113,.45);
+            background: rgba(248,113,113,.12);
+            color: var(--danger);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+        .toplinks {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 13px;
+        }
+        .toplinks a { color: var(--ok); font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="panel">
+        <h1>SETKA</h1>
+        <p class="lead">Wybierz okres licencji, zapłać bezpiecznie przez <strong>Autopay</strong> i odbierz kod aktywacyjny do aplikacji SETKA.</p>
+
+        <div class="form">
+            <label for="checkout-email">Email do wysyłki kodu</label>
+            <input id="checkout-email" type="email" autocomplete="email" inputmode="email" placeholder="np. dj@email.pl">
+
+            <label class="consent" for="checkout-terms">
+                <input type="checkbox" id="checkout-terms">
+                <span>Akceptuję <a href="/legal/regulamin-uslug-platnych.html" target="_blank" rel="noopener">Regulamin Usług Płatnych</a>, <a href="/legal/regulamin-serwisu.html" target="_blank" rel="noopener">Regulamin Serwisu</a> i <a href="/legal/polityka-prywatnosci.html" target="_blank" rel="noopener">Politykę Prywatności</a>.</span>
+            </label>
+            <label class="consent" for="checkout-withdrawal">
+                <input type="checkbox" id="checkout-withdrawal">
+                <span>Żądam rozpoczęcia świadczenia usługi przed upływem 14 dni i przyjmuję do wiadomości skutki utraty prawa odstąpienia zgodnie z regulaminem.</span>
+            </label>
+        </div>
+
+        <div class="grid">
+            <article class="card">
+                <p class="label">Weekend</p>
+                <p class="price">89 zł <small>/ 3 dni</small></p>
+                <p class="desc">Na jedną imprezę lub weekendowy cykl grania.</p>
+                <button class="buy" data-checkout-product="setka-weekend" disabled onclick="startSetkaCheckout('setka-weekend', this)">Kup licencję weekendową</button>
+            </article>
+            <article class="card">
+                <p class="label">Miesiąc</p>
+                <p class="price">199 zł <small>/ 30 dni</small></p>
+                <p class="desc">Dla DJ-ów i prowadzących grających regularnie.</p>
+                <button class="buy" data-checkout-product="setka-month" disabled onclick="startSetkaCheckout('setka-month', this)">Kup licencję miesięczną</button>
+            </article>
+            <article class="card">
+                <p class="label">Rok</p>
+                <p class="price">999 zł <small>/ 365 dni</small></p>
+                <p class="desc">Najlepsza opcja dla stałej pracy z SETKĄ.</p>
+                <button class="buy" data-checkout-product="setka-year" disabled onclick="startSetkaCheckout('setka-year', this)">Kup licencję roczną</button>
+            </article>
+        </div>
+
+        <p id="checkout-error" class="error" role="alert"></p>
+        <p class="hint">Po opłaceniu pokażemy kod na stronie podziękowania i wyślemy go też na podany adres email.</p>
+        <p class="toplinks"><a href="https://setka.turniejomat.pl/">Wróć do aplikacji SETKA</a></p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
+<script>
+(function () {
+    const firebaseConfig = {
+        apiKey: 'AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU',
+        authDomain: 'turniejprosaas.firebaseapp.com',
+        projectId: 'turniejprosaas',
+        appId: '1:141555836771:web:d5f17180a21fded3d09556'
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const checkoutFn = firebase.app().functions('europe-west1').httpsCallable('createCheckoutSession');
+    const TERMS_VERSION = 'SETKA-RUP-1.0';
+
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+    }
+
+    function showError(message) {
+        const el = document.getElementById('checkout-error');
+        if (!el) return;
+        el.textContent = message || 'Nie udało się rozpocząć płatności.';
+        el.style.display = 'block';
+    }
+
+    function clearError() {
+        const el = document.getElementById('checkout-error');
+        if (!el) return;
+        el.style.display = 'none';
+        el.textContent = '';
+    }
+
+    function isReady() {
+        return isValidEmail(document.getElementById('checkout-email')?.value)
+            && !!document.getElementById('checkout-terms')?.checked
+            && !!document.getElementById('checkout-withdrawal')?.checked;
+    }
+
+    function updateButtons() {
+        const ready = isReady();
+        document.querySelectorAll('[data-checkout-product]').forEach(function (btn) {
+            if (btn.textContent.indexOf('Przekierowanie') === -1) {
+                btn.disabled = !ready;
+            }
+        });
+    }
+
+    function submitPaymentForm(payload) {
+        const form = document.createElement('form');
+        form.method = payload.method || 'POST';
+        form.action = payload.url;
+        form.acceptCharset = 'UTF-8';
+        Object.keys(payload.fields || {}).forEach(function (name) {
+            const value = payload.fields[name];
+            if (value == null || value === '') return;
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = String(value);
+            form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    ['checkout-email', 'checkout-terms', 'checkout-withdrawal'].forEach(function (id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', updateButtons);
+        el.addEventListener('change', updateButtons);
+    });
+    updateButtons();
+
+    window.startSetkaCheckout = async function (productId, btn) {
+        clearError();
+        const emailEl = document.getElementById('checkout-email');
+        const email = emailEl ? emailEl.value.trim() : '';
+        if (!isValidEmail(email)) {
+            showError('Podaj poprawny adres email.');
+            if (emailEl) emailEl.focus();
+            return;
+        }
+        if (!document.getElementById('checkout-terms')?.checked || !document.getElementById('checkout-withdrawal')?.checked) {
+            showError('Zaznacz wymagane zgody przed płatnością.');
+            return;
+        }
+
+        const buttons = document.querySelectorAll('[data-checkout-product]');
+        buttons.forEach(function (b) { b.disabled = true; });
+        if (btn) btn.textContent = 'Przekierowanie…';
+
+        try {
+            const result = await checkoutFn({
+                app: 'setka',
+                productId: productId,
+                email: email,
+                termsAccepted: true,
+                withdrawalConsent: true,
+                termsVersion: TERMS_VERSION,
+            });
+            const data = result.data || {};
+            if (data.provider === 'autopay' && data.url && data.fields) {
+                try {
+                    sessionStorage.setItem('setka_checkout_email', email);
+                    sessionStorage.setItem('setka_checkout_product', productId);
+                    if (data.orderId) sessionStorage.setItem('setka_checkout_order', data.orderId);
+                } catch (_) {}
+                submitPaymentForm(data);
+                return;
+            }
+            throw new Error('Brak danych płatności.');
+        } catch (err) {
+            buttons.forEach(function (b) {
+                b.disabled = !isReady();
+            });
+            if (btn) {
+                if (productId === 'setka-weekend') btn.textContent = 'Kup licencję weekendową';
+                if (productId === 'setka-month') btn.textContent = 'Kup licencję miesięczną';
+                if (productId === 'setka-year') btn.textContent = 'Kup licencję roczną';
+            }
+            showError('Płatność online chwilowo niedostępna. Spróbuj ponownie za chwilę.');
+        }
+    };
+})();
+</script>
+</body>
+</html>

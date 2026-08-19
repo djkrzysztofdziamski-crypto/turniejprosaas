@@ -4,6 +4,7 @@ const {
   getStripeWebhookSecret,
   getPaymentMethodTypes,
   getAppUrls,
+  getSetkaUrls,
 } = require('../../params');
 
 function getStripeClient() {
@@ -16,6 +17,7 @@ function parseCheckoutSession(session) {
   const productId = resolveProductId({
     productId: session.metadata?.productId,
     package: session.metadata?.package,
+    app: session.metadata?.app,
   });
   const email = session.customer_email || session.customer_details?.email || '';
   const product = getProduct(productId);
@@ -24,6 +26,7 @@ function parseCheckoutSession(session) {
     : `Stripe: ${product?.label || productId}`;
 
   return {
+    app: session.metadata?.app || product?.app || 'turniejomat',
     productId,
     notatka,
     source: 'stripe',
@@ -37,7 +40,7 @@ function isSessionPaid(session) {
   return session.payment_status === 'paid';
 }
 
-async function createCheckoutSession({ productId, customerEmail }) {
+async function createCheckoutSession({ productId, app, customerEmail }) {
   const stripe = getStripeClient();
   if (!stripe) {
     const err = new Error('Stripe nie jest skonfigurowany.');
@@ -52,7 +55,24 @@ async function createCheckoutSession({ productId, customerEmail }) {
     throw err;
   }
 
+  const targetApp = String(app || product.app || 'turniejomat').toLowerCase();
+  if (product.app && product.app !== targetApp) {
+    const err = new Error('Produkt nie należy do wskazanej aplikacji.');
+    err.code = 'invalid-argument';
+    throw err;
+  }
+
   const { appUrl, landingUrl } = getAppUrls();
+  const setkaUrls = getSetkaUrls();
+  const setkaThankYouUrl = setkaUrls.landingUrl.endsWith('.html')
+    ? setkaUrls.landingUrl.replace(/\.html$/i, '-dziekujemy.html')
+    : setkaUrls.landingUrl.replace(/\/$/, '') + '/dziekujemy.html';
+  const successUrl = targetApp === 'setka'
+    ? setkaThankYouUrl
+    : `${appUrl}/?checkout=success`;
+  const cancelUrl = targetApp === 'setka'
+    ? `${setkaUrls.landingUrl}`
+    : `${landingUrl}/#cennik`;
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -69,9 +89,10 @@ async function createCheckoutSession({ productId, customerEmail }) {
       },
       quantity: 1,
     }],
-    success_url: `${appUrl}/?checkout=success`,
-    cancel_url: `${landingUrl}/#cennik`,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
     metadata: {
+      app: targetApp,
       productId: product.id,
       package: product.duration === 'miesiac' ? 'miesiac' : 'weekend',
     },

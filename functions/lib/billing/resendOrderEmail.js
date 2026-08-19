@@ -24,9 +24,15 @@ async function resendOrderEmail(db, paymentId) {
     throw err;
   }
 
+  const app = order.app || 'turniejomat';
   let wygasa = null;
-  const licSnap = await db.ref('licencje/' + licenseKey).once('value');
-  if (licSnap.val()?.wygasa) wygasa = licSnap.val().wygasa;
+  if (app === 'setka') {
+    const licSnap = await db.ref('licencje_setka/' + paymentId).once('value');
+    if (licSnap.val()?.until) wygasa = Date.parse(licSnap.val().until + 'T23:59:59.999Z');
+  } else {
+    const licSnap = await db.ref('licencje/' + licenseKey).once('value');
+    if (licSnap.val()?.wygasa) wygasa = licSnap.val().wygasa;
+  }
 
   const product = getProduct(order.productId);
   const productLabel = product?.label || order.productId || order.typ || 'Turniejomat';
@@ -36,6 +42,15 @@ async function resendOrderEmail(db, paymentId) {
     licenseKey,
     productLabel,
     expiresAt: wygasa,
+    app: app === 'setka'
+      ? {
+        id: 'setka',
+        name: 'SETKA',
+        appUrl: 'https://setka.turniejomat.pl',
+        supportEmail: 'admin@turniejomat.pl',
+        ctaLabel: 'Uruchom SETKĘ',
+      }
+      : null,
   });
 
   await db.ref('zamowienia/' + paymentId).update({

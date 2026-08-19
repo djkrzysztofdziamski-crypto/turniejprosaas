@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SETKA — dziękujemy za zakup</title>
+    <meta name="description" content="Podsumowanie zakupu licencji SETKA i odbiór kodu aktywacyjnego.">
+    <meta name="robots" content="noindex,nofollow">
+    <style>
+        :root {
+            --bg: #070d18;
+            --panel: #101b30;
+            --line: rgba(255,255,255,.14);
+            --text: #f2f6ff;
+            --muted: #b7c6e1;
+            --ok: #57d9a3;
+            --gold: #ffcc00;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+            color: var(--text);
+            background: radial-gradient(1200px 600px at 50% -20%, #1a335f 0%, var(--bg) 55%);
+        }
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 26px 18px 42px;
+        }
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: linear-gradient(180deg, #101b30, #13223d);
+            padding: 22px 18px;
+            display: grid;
+            gap: 14px;
+        }
+        h1 {
+            margin: 0;
+            text-align: center;
+            color: var(--gold);
+            font-size: clamp(24px, 6vw, 34px);
+        }
+        .lead {
+            margin: 0;
+            color: var(--muted);
+            text-align: center;
+        }
+        .status {
+            margin: 0;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(87,217,163,.12);
+            border: 1px solid rgba(87,217,163,.35);
+            color: var(--ok);
+            font-size: 14px;
+            text-align: center;
+        }
+        .codebox {
+            display: none;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px;
+            background: rgba(11,17,33,.6);
+        }
+        .codebox p {
+            margin: 0 0 8px;
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        .code {
+            margin: 0;
+            font-size: 14px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            word-break: break-all;
+            line-height: 1.45;
+            color: #fff;
+            background: #0b1220;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            min-height: 44px;
+            padding: 10px 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-primary { background: var(--gold); color: #0b1220; }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+        .meta {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="panel">
+        <h1>SETKA</h1>
+        <p class="lead">Dziękujemy za zakup. Poniżej sprawdzamy status płatności i przygotowujemy Twój kod licencyjny.</p>
+        <p id="status" class="status">Czekam na potwierdzenie płatności od operatora…</p>
+
+        <div id="codebox" class="codebox">
+            <p>Twój kod licencji</p>
+            <pre id="licenseCode" class="code"></pre>
+            <div class="row" style="margin-top:10px;">
+                <button id="copyCodeBtn" class="btn btn-primary" type="button">Kopiuj kod</button>
+                <a class="btn btn-ghost" href="https://setka.turniejomat.pl/">Przejdź do SETKI</a>
+            </div>
+        </div>
+
+        <p id="meta" class="meta">Jeżeli strona nie pokaże kodu od razu, odczekaj chwilę. Kod wysyłamy także na email podany podczas zakupu.</p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
+<script>
+(function () {
+    const PRODUCT_LABELS = {
+        'setka-weekend': 'Pakiet weekendowy',
+        'setka-month': 'Pakiet miesięczny',
+        'setka-year': 'Pakiet roczny'
+    };
+    const firebaseConfig = {
+        apiKey: 'AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU',
+        authDomain: 'turniejprosaas.firebaseapp.com',
+        projectId: 'turniejprosaas',
+        appId: '1:141555836771:web:d5f17180a21fded3d09556'
+    };
+    firebase.initializeApp(firebaseConfig);
+    const statusFn = firebase.app().functions('europe-west1').httpsCallable('getCheckoutStatus');
+
+    const statusEl = document.getElementById('status');
+    const metaEl = document.getElementById('meta');
+    const codeWrap = document.getElementById('codebox');
+    const codeEl = document.getElementById('licenseCode');
+
+    function readStore(key) {
+        try { return sessionStorage.getItem(key) || ''; } catch (_) { return ''; }
+    }
+
+    function clearStore() {
+        try {
+            sessionStorage.removeItem('setka_checkout_order');
+            sessionStorage.removeItem('setka_checkout_product');
+        } catch (_) {}
+    }
+
+    function setStatus(text) {
+        if (statusEl) statusEl.textContent = text;
+    }
+
+    function showCode(token, details) {
+        if (codeEl) codeEl.textContent = token || '';
+        if (codeWrap) codeWrap.style.display = 'block';
+        const productText = PRODUCT_LABELS[details.productId] || details.productId || 'Licencja SETKA';
+        const untilText = details.until ? (' · ważna do: ' + details.until) : '';
+        const emailText = details.customerEmail ? (' · email: ' + details.customerEmail) : '';
+        if (metaEl) metaEl.textContent = productText + untilText + emailText;
+        setStatus('Płatność potwierdzona. Kod jest gotowy.');
+        clearStore();
+    }
+
+    async function copyCode() {
+        const code = codeEl ? codeEl.textContent : '';
+        if (!code) return;
+        try {
+            await navigator.clipboard.writeText(code);
+            setStatus('Skopiowano kod do schowka.');
+        } catch (_) {
+            setStatus('Nie udało się skopiować automatycznie. Zaznacz kod i skopiuj ręcznie.');
+        }
+    }
+    const copyBtn = document.getElementById('copyCodeBtn');
+    if (copyBtn) copyBtn.addEventListener('click', copyCode);
+
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('OrderID') || params.get('orderId') || params.get('order') || readStore('setka_checkout_order');
+    const fallbackProduct = params.get('product') || readStore('setka_checkout_product');
+
+    if (!orderId) {
+        setStatus('Brak numeru zamówienia. Otwórz stronę z linku powrotu po płatności albo napisz na admin@turniejomat.pl.');
+        if (metaEl) metaEl.textContent = 'Nie udało się odczytać orderId.';
+        return;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 18; // około 90 sekund
+
+    async function pollStatus() {
+        attempts++;
+        try {
+            const res = await statusFn({ orderId: orderId });
+            const data = res.data || {};
+            if (data.found && data.app === 'setka' && data.completed && data.licenseKey) {
+                showCode(data.licenseKey, data);
+                return;
+            }
+            if (data.found) {
+                const productText = PRODUCT_LABELS[data.productId] || fallbackProduct || data.productId || 'SETKA';
+                setStatus('Status: ' + (data.status || 'pending') + ' · ' + productText);
+                if (data.status === 'payment_failed') {
+                    setStatus('Płatność nie została potwierdzona. Spróbuj ponownie lub skontaktuj się z supportem.');
+                    return;
+                }
+            } else {
+                setStatus('Czekam na zapis zamówienia…');
+            }
+        } catch (_) {
+            setStatus('Sprawdzam status płatności…');
+        }
+
+        if (attempts < maxAttempts) {
+            setTimeout(pollStatus, 5000);
+            return;
+        }
+        setStatus('Płatność może być jeszcze w trakcie potwierdzania. Sprawdź email albo wróć za chwilę.');
+        if (metaEl) {
+            metaEl.textContent = 'OrderID: ' + orderId + ' · jeśli kod nie dotrze, napisz na admin@turniejomat.pl';
+        }
+    }
+
+    pollStatus();
+})();
+</script>
+</body>
+</html>

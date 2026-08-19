@@ -61,6 +61,7 @@ async function createAndActivateLicense(db, options) {
 
   if (paymentId) {
     await db.ref('zamowienia/' + paymentId).set({
+      app: 'turniejomat',
       provider: source || 'stripe',
       paymentId,
       licenseKey: key,

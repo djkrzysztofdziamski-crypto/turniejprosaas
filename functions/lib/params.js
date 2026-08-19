@@ -8,6 +8,7 @@ const { defineSecret, defineString } = require('firebase-functions/params');
 const stripeSecretKey = defineSecret('STRIPE_SECRET_KEY');
 const stripeWebhookSecret = defineSecret('STRIPE_WEBHOOK_SECRET');
 const smtpPass = defineSecret('SMTP_PASS');
+const setkaLicensePrivateKeyPem = defineSecret('SETKA_LICENSE_PRIVATE_KEY_PEM');
 
 const stripePaymentMethodTypes = defineString('STRIPE_PAYMENT_METHOD_TYPES', {
   default: 'card,blik',
@@ -20,6 +21,14 @@ const appUrl = defineString('APP_URL', {
 
 const appLandingUrl = defineString('APP_LANDING_URL', {
   default: 'https://turniejomat.pl',
+});
+
+const setkaAppUrl = defineString('SETKA_APP_URL', {
+  default: 'https://setka.turniejomat.pl',
+});
+
+const setkaLandingUrl = defineString('SETKA_LANDING_URL', {
+  default: 'https://turniejomat.pl/setka.html',
 });
 
 const smtpHost = defineString('SMTP_HOST', {
@@ -64,7 +73,7 @@ const autopayGatewayUrl = defineString('AUTOPAY_GATEWAY_URL', {
 });
 
 /** Sekrety wymagane przy checkout + webhook + email (Stripe legacy) */
-const billingSecrets = [stripeSecretKey, stripeWebhookSecret, smtpPass, autopaySharedKey];
+const billingSecrets = [stripeSecretKey, stripeWebhookSecret, smtpPass, autopaySharedKey, setkaLicensePrivateKeyPem];
 
 /** Sekrety wymagane przy wysyłce maili */
 const emailSecrets = [smtpPass];
@@ -73,10 +82,10 @@ const emailSecrets = [smtpPass];
 const stripeSecrets = [stripeSecretKey];
 
 /** Sekrety wymagane przy checkout / ITN Autopay */
-const autopaySecrets = [autopaySharedKey];
+const autopaySecrets = [autopaySharedKey, setkaLicensePrivateKeyPem];
 
 /** ITN Autopay + email z kluczem */
-const autopayWebhookSecrets = [autopaySharedKey, smtpPass];
+const autopayWebhookSecrets = [autopaySharedKey, smtpPass, setkaLicensePrivateKeyPem];
 
 function getPaymentMethodTypes() {
   const raw = stripePaymentMethodTypes.value();
@@ -134,11 +143,23 @@ function getAutopayGatewayUrl() {
   return url;
 }
 
+function getSetkaLicensePrivateKeyPem() {
+  return setkaLicensePrivateKeyPem.value() || '';
+}
+
+function getSetkaUrls() {
+  return {
+    appUrl: setkaAppUrl.value(),
+    landingUrl: setkaLandingUrl.value(),
+  };
+}
+
 module.exports = {
   stripeSecretKey,
   stripeWebhookSecret,
   smtpPass,
   autopaySharedKey,
+  setkaLicensePrivateKeyPem,
   billingSecrets,
   emailSecrets,
   stripeSecrets,
@@ -153,4 +174,6 @@ module.exports = {
   getAutopayServiceId,
   getAutopaySharedKey,
   getAutopayGatewayUrl,
+  getSetkaLicensePrivateKeyPem,
+  getSetkaUrls,
 };
