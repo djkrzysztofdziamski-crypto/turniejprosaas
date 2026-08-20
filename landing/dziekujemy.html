@@ -287,10 +287,48 @@
         return app === 'setka' || String(pid).indexOf('setka-') === 0;
     }
 
+    function looksLikeSetkaHint() {
+        return String(productId).indexOf('setka-') === 0 ||
+            String(readStore('setka_checkout_product')).indexOf('setka-') === 0 ||
+            !!readStore('setka_checkout_order');
+    }
+
     function redirectToSetka(orderId) {
         var target = '/setka-dziekujemy.html';
         if (orderId) target += '?OrderID=' + encodeURIComponent(orderId);
         window.location.replace(target);
+    }
+
+    function showSetkaFailedUi(opts) {
+        opts = opts || {};
+        var badgeText = document.getElementById('status-badge-text');
+        var leadEl = document.getElementById('lead-copy');
+        var productEl = document.getElementById('meta-product');
+        var emailEl = document.getElementById('meta-email');
+        var orderEl = document.getElementById('meta-order');
+        var steps = document.getElementById('steps-box');
+        var cta = document.getElementById('cta-box');
+        var footnote = document.getElementById('footnote-box');
+
+        if (badgeText) badgeText.textContent = 'Płatność niepotwierdzona';
+        if (productEl) productEl.textContent = 'Licencja SETKA';
+        if (emailEl) emailEl.textContent = opts.email || 'adres podany przy zakupie';
+        if (orderEl) orderEl.textContent = opts.orderId || '—';
+        if (leadEl) {
+            leadEl.textContent = 'Płatność SETKA nie została potwierdzona. Spróbuj ponownie albo napisz na admin@turniejomat.pl z numerem zamówienia.';
+        }
+        if (steps) steps.hidden = true;
+        if (cta) {
+            cta.hidden = false;
+            cta.innerHTML =
+                '<a class="btn btn-primary" href="/setka.html">Wróć do zakupu SETKA</a>' +
+                '<a class="btn btn-ghost" href="https://setka.turniejomat.pl/">Otwórz aplikację SETKA</a>';
+        }
+        if (footnote) {
+            footnote.hidden = false;
+            footnote.innerHTML =
+                'Pomoc: <a href="mailto:admin@turniejomat.pl?subject=SETKA%20—%20płatność">admin@turniejomat.pl</a>';
+        }
     }
 
     function showTpUi(opts) {
@@ -325,26 +363,46 @@
             }
         }
         if (steps) steps.hidden = !!opts.failed;
-        if (cta) cta.hidden = false;
-        if (footnote) footnote.hidden = false;
+        if (cta) {
+            cta.hidden = false;
+            cta.innerHTML =
+                '<a class="btn btn-primary" href="https://app.turniejomat.pl/">Zaloguj się do aplikacji</a>' +
+                '<a class="btn btn-ghost" href="/#cennik">Wróć do cennika</a>';
+        }
+        if (footnote) {
+            footnote.hidden = false;
+            footnote.innerHTML =
+                'Brak maila? Napisz na ' +
+                '<a href="mailto:admin@turniejomat.pl?subject=Brak%20klucza%20po%20zakupie%20%E2%80%94%20Turniejomat">admin@turniejomat.pl</a> ' +
+                'i podaj numer zamówienia.';
+        }
         clearTpStore();
     }
 
     var params = new URLSearchParams(window.location.search);
     var orderId = params.get('OrderID') || params.get('orderId') || params.get('order') ||
         readStore('tp_checkout_order') || readStore('setka_checkout_order') || '';
-    var email = params.get('email') || readStore('tp_checkout_email') || '';
+    var email = params.get('email') || readStore('tp_checkout_email') || readStore('setka_checkout_email') || '';
     var productId = params.get('product') || readStore('tp_checkout_product') || readStore('setka_checkout_product') || '';
     var orderElInit = document.getElementById('meta-order');
+    var leadInit = document.getElementById('lead-copy');
     if (orderElInit) orderElInit.textContent = orderId || '—';
+    if (leadInit) leadInit.textContent = 'Turniejomat — finalizujemy zakup…';
 
     // Szybka ścieżka: session już wie, że to SETKA (np. przed zapisem w RTDB).
-    if (orderId && String(productId).indexOf('setka-') === 0) {
+    if (orderId && looksLikeSetkaHint()) {
         redirectToSetka(orderId);
         return;
     }
 
     if (!orderId) {
+        if (looksLikeSetkaHint()) {
+            showSetkaFailedUi({ email: email, orderId: '' });
+            if (leadInit) {
+                leadInit.textContent = 'Brak numeru zamówienia SETKA w adresie powrotu. Sprawdź e-mail albo napisz na admin@turniejomat.pl.';
+            }
+            return;
+        }
         showTpUi({ email: email, productId: productId, orderId: '' });
         var leadEl = document.getElementById('lead-copy');
         if (leadEl) {
@@ -354,6 +412,10 @@
     }
 
     if (typeof firebase === 'undefined') {
+        if (looksLikeSetkaHint()) {
+            redirectToSetka(orderId);
+            return;
+        }
         showTpUi({ email: email, productId: productId, orderId: orderId });
         return;
     }
@@ -364,8 +426,7 @@
     var maxAttempts = 12; // ~36 s
 
     function decideFallback() {
-        if (String(readStore('setka_checkout_product')).indexOf('setka-') === 0 ||
-            String(productId).indexOf('setka-') === 0) {
+        if (looksLikeSetkaHint()) {
             redirectToSetka(orderId);
             return;
         }
@@ -378,10 +439,24 @@
             .then(function (res) {
                 var data = (res && res.data) || {};
                 if (isSetkaPayload(data, productId)) {
+                    if (data.status === 'payment_failed' || data.paymentStatus === 'FAILURE') {
+                        showSetkaFailedUi({
+                            email: data.customerEmail || email,
+                            orderId: orderId
+                        });
+                        return;
+                    }
                     redirectToSetka(orderId);
                     return;
                 }
                 if (data.found && (data.status === 'payment_failed' || data.paymentStatus === 'FAILURE')) {
+                    if (looksLikeSetkaHint()) {
+                        showSetkaFailedUi({
+                            email: data.customerEmail || email,
+                            orderId: orderId
+                        });
+                        return;
+                    }
                     showTpUi({
                         failed: true,
                         email: data.customerEmail || email,

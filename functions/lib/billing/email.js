@@ -40,6 +40,10 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
     ? new Date(expiresAt).toLocaleString('pl-PL')
     : '—';
   const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
+  const isSetka = cfg.name === 'SETKA';
+  const footer = isSetka
+    ? 'SETKA © 2026 · powered by Turniejomat'
+    : 'Turniejomat © 2026 · powered by TurniejPro';
 
   return `
 <!DOCTYPE html>
@@ -59,7 +63,7 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
     Możesz też wpisać klucz ręcznie na <a href="${cfg.appUrl}">${cfg.appUrl}</a><br>
     Pytania: <a href="mailto:${cfg.supportEmail}">${cfg.supportEmail}</a>
   </p>
-  <p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">Turniejomat © 2026 · powered by TurniejPro</p>
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">${footer}</p>
 </body>
 </html>`;
 }
@@ -106,7 +110,7 @@ async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, app }
       from,
       to,
       replyTo: cfg.reply_to || appCfg.supportEmail,
-      subject: `${appCfg.name} — klucz licencyjny ${licenseKey}`,
+      subject: `${appCfg.name} — Twój klucz licencyjny`,
       text: buildLicenseEmailText(payload),
       html: buildLicenseEmailHtml(payload),
     });

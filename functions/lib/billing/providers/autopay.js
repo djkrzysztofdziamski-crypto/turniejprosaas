@@ -72,7 +72,16 @@ async function createAutopayPayment(db, { productId, app, customerEmail, termsVe
 
   const orderID = generateOrderId();
   const amount = formatAmountPln(product.priceGrosze);
-  const description = sanitizeAutopayDescription('Turniejomat - ' + (product.label || product.id));
+  const setkaShort = {
+    'setka-weekend': 'pakiet weekendowy',
+    'setka-month': 'pakiet miesieczny',
+    'setka-year': 'pakiet roczny',
+  };
+  const description = sanitizeAutopayDescription(
+    targetApp === 'setka'
+      ? ('SETKA - ' + (setkaShort[product.id] || product.label || product.id))
+      : ('Turniejomat - ' + (product.label || product.id))
+  );
   const hash = buildStartHash({
     serviceID,
     orderID,

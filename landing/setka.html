@@ -156,13 +156,35 @@
             font-size: 13px;
         }
         .toplinks a { color: var(--ok); font-weight: 700; }
+        .steps {
+            margin: 18px 0 0;
+            padding: 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255,255,255,.03);
+        }
+        .steps h2 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ok);
+        }
+        .steps ol {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .steps li { margin: 0 0 6px; }
+        .steps li:last-child { margin-bottom: 0; }
     </style>
 </head>
 <body>
 <div class="wrap">
     <div class="panel">
         <h1>SETKA</h1>
-        <p class="lead">Wybierz okres licencji, zapłać bezpiecznie przez <strong>Autopay</strong> i odbierz kod aktywacyjny do aplikacji SETKA.</p>
+        <p class="lead">Gra eventowa w stylu familiady dla DJ-ów i prowadzących. Wybierz okres licencji, zapłać bezpiecznie przez <strong>Autopay</strong> i odbierz kod aktywacyjny do aplikacji SETKA.</p>
 
         <div class="form">
             <label for="checkout-email">Email do wysyłki kodu</label>
@@ -181,26 +203,36 @@
         <div class="grid">
             <article class="card">
                 <p class="label">Weekend</p>
-                <p class="price">89 zł <small>/ 3 dni</small></p>
+                <p class="price">89 zł <small>/ 72 h od aktywacji</small></p>
                 <p class="desc">Na jedną imprezę lub weekendowy cykl grania.</p>
                 <button class="buy" data-checkout-product="setka-weekend" disabled onclick="startSetkaCheckout('setka-weekend', this)">Kup licencję weekendową</button>
             </article>
             <article class="card">
                 <p class="label">Miesiąc</p>
-                <p class="price">199 zł <small>/ 30 dni</small></p>
+                <p class="price">199 zł <small>/ 30 dni od aktywacji</small></p>
                 <p class="desc">Dla DJ-ów i prowadzących grających regularnie.</p>
                 <button class="buy" data-checkout-product="setka-month" disabled onclick="startSetkaCheckout('setka-month', this)">Kup licencję miesięczną</button>
             </article>
             <article class="card">
                 <p class="label">Rok</p>
-                <p class="price">999 zł <small>/ 365 dni</small></p>
+                <p class="price">999 zł <small>/ 365 dni od aktywacji</small></p>
                 <p class="desc">Najlepsza opcja dla stałej pracy z SETKĄ.</p>
                 <button class="buy" data-checkout-product="setka-year" disabled onclick="startSetkaCheckout('setka-year', this)">Kup licencję roczną</button>
             </article>
         </div>
 
         <p id="checkout-error" class="error" role="alert"></p>
-        <p class="hint">Po opłaceniu pokażemy kod na stronie podziękowania i wyślemy go też na podany adres email.</p>
+        <p class="hint">Okres licencji liczy się od aktywacji kodu w aplikacji, nie od momentu płatności. Po opłaceniu pokażemy kod na stronie podziękowania i wyślemy go też na podany adres email.</p>
+
+        <div class="steps" aria-label="Po zakupie">
+            <h2>Po zakupie</h2>
+            <ol>
+                <li>Zapłać bezpiecznie przez Autopay.</li>
+                <li>Odbierz kod na stronie podziękowania oraz w mailu.</li>
+                <li>Otwórz link aktywacyjny albo wklej kod w aplikacji SETKA.</li>
+            </ol>
+        </div>
+
         <p class="toplinks"><a href="https://setka.turniejomat.pl/">Wróć do aplikacji SETKA</a></p>
     </div>
 </div>
@@ -218,7 +250,7 @@
     firebase.initializeApp(firebaseConfig);
 
     const checkoutFn = firebase.app().functions('europe-west1').httpsCallable('createCheckoutSession');
-    const TERMS_VERSION = 'SETKA-RUP-1.0';
+    const TERMS_VERSION = 'SETKA-RUP-2.2';
 
     function isValidEmail(value) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
@@ -326,7 +358,21 @@
                 if (productId === 'setka-month') btn.textContent = 'Kup licencję miesięczną';
                 if (productId === 'setka-year') btn.textContent = 'Kup licencję roczną';
             }
-            showError('Płatność online chwilowo niedostępna. Spróbuj ponownie za chwilę.');
+            var msg = (err && err.message) ? String(err.message) : '';
+            var code = (err && err.code) ? String(err.code) : '';
+            if (/invalid-argument/i.test(code) && msg) {
+                showError(msg.replace(/^Firebase:\s*/i, '').replace(/\s*\([^)]*\)\.?\s*$/, '').trim() || msg);
+            } else if (/email|e-mail/i.test(msg)) {
+                showError('Sprawdź adres email i spróbuj ponownie.');
+            } else if (/produkt|product|nieaktywny/i.test(msg)) {
+                showError('Wybrany pakiet jest chwilowo niedostępny. Wybierz inny lub napisz na admin@turniejomat.pl.');
+            } else if (/Autopay|skonfigurowany|failed-precondition/i.test(msg + code)) {
+                showError('Płatność online chwilowo niedostępna. Spróbuj ponownie za chwilę.');
+            } else if (msg && msg.length < 160 && msg.indexOf('Firebase') === -1) {
+                showError(msg);
+            } else {
+                showError('Płatność online chwilowo niedostępna. Sprawdź email, zgody i spróbuj ponownie.');
+            }
         }
     };
 })();
