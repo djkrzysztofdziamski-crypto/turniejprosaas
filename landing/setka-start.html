@@ -19,7 +19,7 @@
     <meta name="twitter:title" content="SETKA — show na imprezie">
     <meta name="twitter:description" content="Dwie drużyny, tablica, finał. Demo 24h. Licencja od 89 zł.">
     <meta name="twitter:image" content="https://setka.turniejomat.pl/og-setka.png">
-    <link rel="icon" type="image/webp" href="icon.webp">
+    <link rel="icon" type="image/png" href="assets/setka-logo.png">
     <style>
         :root {
             --bg: #070d18;
@@ -47,12 +47,13 @@
             width: min(440px, 100%);
             text-align: center;
         }
-        h1 {
-            margin: 0 0 10px;
-            font-size: clamp(40px, 12vw, 56px);
-            letter-spacing: .04em;
-            color: var(--gold);
-            line-height: 1;
+        .brand-logo {
+            display: block;
+            width: min(148px, 42vw);
+            height: auto;
+            margin: 0 auto 16px;
+            border-radius: 22px;
+            box-shadow: 0 0 0 1px rgba(255, 204, 0, .28), 0 12px 36px rgba(0, 0, 0, .45);
         }
         .lead {
             margin: 0 0 28px;
@@ -95,24 +96,32 @@
             color: var(--muted);
             line-height: 1.45;
         }
-        .foot {
+        .brand-footer {
             margin-top: 28px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(183, 198, 225, .18);
             font-size: 12px;
-            color: rgba(183,198,225,.7);
+            line-height: 1.5;
+            letter-spacing: .3px;
+            color: rgba(183, 198, 225, .75);
         }
-        .foot a { color: var(--ok); font-weight: 700; text-decoration: none; }
+        .brand-footer-author {
+            font-weight: 800;
+            letter-spacing: .6px;
+            color: var(--gold);
+        }
     </style>
 </head>
 <body>
 <div class="shell">
-    <h1>SETKA</h1>
+    <img class="brand-logo" src="assets/setka-logo.png" width="148" height="148" alt="SETKA">
     <p class="lead">Show jak z telewizji. Na Twojej imprezie.<br>Demo 24h · potem szybki podgląd 2h.</p>
     <div class="actions">
         <a class="btn btn-primary" href="https://setka.turniejomat.pl/">Uruchom grę (demo)</a>
         <a class="btn btn-ghost" href="/setka.html">Kup licencję online</a>
     </div>
     <p class="note">Weekend od 89&nbsp;zł · 72&nbsp;h od aktywacji. Kod dostajesz od razu po płatności.</p>
-    <p class="foot"><a href="/">Turniejomat.pl</a></p>
+    <p class="brand-footer">SETKA © 2026 · powered by TurniejPro · <span class="brand-footer-author">Kris Dziamsky</span></p>
 </div>
 </body>
 </html>
