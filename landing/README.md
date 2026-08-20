@@ -15,6 +15,16 @@ Repo: ten sam co aplikacja (`turniejprosaas`), branch `main`.
 
 Po pushu na `main` Netlify powinien sam zdeployować landing, jeśli site ma ustawiony base directory `landing`.
 
+## SETKA (dystrybucja)
+
+| Link | URL |
+|------|-----|
+| Hub bio | https://turniejomat.pl/start |
+| Zakup | https://turniejomat.pl/setka.html |
+| Gra | https://setka.turniejomat.pl/ |
+
+Teksty FB/bio: repo SETKA → `tools/DYSTRYBUCJA.md`.
+
 ## Checkout (Autopay)
 
 1. Wejdź na https://turniejomat.pl/#cennik

@@ -12,4 +12,9 @@
   status = 301
   force = true
 
-# Uwaga: pliki statyczne (np. /legal/*.html) mają pierwszeństwo przed regułami poniżej.
+# Krótki link do hubu SETKA (bio / FB)
+[[redirects]]
+  from = "/start"
+  to = "/setka-start.html"
+  status = 302
+

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SETKA — gra na imprezę</title>
+    <meta name="description" content="SETKA: show jak z telewizji na Twojej imprezie. Demo 24h, potem szybki podgląd 2h. Kup licencję online.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://turniejomat.pl/setka-start.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pl_PL">
+    <meta property="og:url" content="https://turniejomat.pl/setka-start.html">
+    <meta property="og:title" content="SETKA — show na imprezie">
+    <meta property="og:description" content="Dwie drużyny, tablica, finał. Demo 24h. Licencja od 89 zł.">
+    <meta property="og:image" content="https://setka.turniejomat.pl/og-setka.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SETKA — show na imprezie">
+    <meta name="twitter:description" content="Dwie drużyny, tablica, finał. Demo 24h. Licencja od 89 zł.">
+    <meta name="twitter:image" content="https://setka.turniejomat.pl/og-setka.png">
+    <link rel="icon" type="image/webp" href="icon.webp">
+    <style>
+        :root {
+            --bg: #070d18;
+            --gold: #ffcc00;
+            --text: #f2f6ff;
+            --muted: #b7c6e1;
+            --ok: #57d9a3;
+            --line: rgba(255,255,255,.14);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100dvh;
+            font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(900px 480px at 50% -15%, #1a335f 0%, transparent 55%),
+                var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 18px;
+        }
+        .shell {
+            width: min(440px, 100%);
+            text-align: center;
+        }
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(40px, 12vw, 56px);
+            letter-spacing: .04em;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .lead {
+            margin: 0 0 28px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.45;
+        }
+        .actions {
+            display: grid;
+            gap: 12px;
+        }
+        a.btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--gold);
+            color: #0b1220;
+        }
+        .btn-primary:hover { filter: brightness(1.05); }
+        .btn-ghost {
+            border: 1px solid var(--line);
+            color: var(--text);
+            background: rgba(255,255,255,.03);
+        }
+        .btn-ghost:hover {
+            border-color: var(--ok);
+            color: #fff;
+        }
+        .note {
+            margin: 22px 0 0;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+        .foot {
+            margin-top: 28px;
+            font-size: 12px;
+            color: rgba(183,198,225,.7);
+        }
+        .foot a { color: var(--ok); font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="shell">
+    <h1>SETKA</h1>
+    <p class="lead">Show jak z telewizji. Na Twojej imprezie.<br>Demo 24h · potem szybki podgląd 2h.</p>
+    <div class="actions">
+        <a class="btn btn-primary" href="https://setka.turniejomat.pl/">Uruchom grę (demo)</a>
+        <a class="btn btn-ghost" href="/setka.html">Kup licencję online</a>
+    </div>
+    <p class="note">Weekend od 89&nbsp;zł · 72&nbsp;h od aktywacji. Kod dostajesz od razu po płatności.</p>
+    <p class="foot"><a href="/">Turniejomat.pl</a></p>
+</div>
+</body>
+</html>
