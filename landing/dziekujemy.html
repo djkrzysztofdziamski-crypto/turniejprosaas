@@ -207,17 +207,17 @@
         <a href="/"><img src="logo.webp" alt="Turniejomat"></a>
     </div>
 
-    <main class="panel" role="status">
-        <div class="badge"><span class="badge-dot" aria-hidden="true"></span> Płatność przyjęta</div>
-        <h1>Dziękujemy za zakup</h1>
+    <main class="panel" role="status" id="thankyou-panel">
+        <div class="badge" id="status-badge"><span class="badge-dot" aria-hidden="true"></span> <span id="status-badge-text">Sprawdzam płatność</span></div>
+        <h1 id="page-title">Dziękujemy za zakup</h1>
         <p class="lead" id="lead-copy">
-            Licencja Turniejomat jest gotowa. Klucz dostępowy właśnie wysłaliśmy na Twój e-mail.
+            Sprawdzam status płatności…
         </p>
 
-        <div class="meta-box" aria-label="Podsumowanie zakupu">
+        <div class="meta-box" aria-label="Podsumowanie zakupu" id="meta-box">
             <div class="meta-row">
                 <div class="meta-label">Pakiet</div>
-                <div class="meta-value" id="meta-product">Licencja Turniejomat</div>
+                <div class="meta-value" id="meta-product">—</div>
             </div>
             <div class="meta-row">
                 <div class="meta-label">E-mail</div>
@@ -229,18 +229,18 @@
             </div>
         </div>
 
-        <ol class="steps">
+        <ol class="steps" id="steps-box" hidden>
             <li data-n="1">Sprawdź skrzynkę (także folder Spam / Oferty).</li>
             <li data-n="2">Skopiuj klucz licencyjny z wiadomości.</li>
             <li data-n="3">Zaloguj się w aplikacji i wklej klucz.</li>
         </ol>
 
-        <div class="cta">
+        <div class="cta" id="cta-box" hidden>
             <a class="btn btn-primary" href="https://app.turniejomat.pl/">Zaloguj się do aplikacji</a>
             <a class="btn btn-ghost" href="/#cennik">Wróć do cennika</a>
         </div>
 
-        <p class="footnote">
+        <p class="footnote" id="footnote-box" hidden>
             Brak maila? Napisz na
             <a href="mailto:admin@turniejomat.pl?subject=Brak%20klucza%20po%20zakupie%20%E2%80%94%20Turniejomat">admin@turniejomat.pl</a>
             i podaj numer zamówienia.
@@ -254,6 +254,8 @@
     </footer>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-functions-compat.js"></script>
 <script>
 (function () {
     var PRODUCT_LABELS = {
@@ -261,38 +263,165 @@
         'football-month': 'Pakiet miesięczny — 149 zł'
     };
 
+    var firebaseConfig = {
+        apiKey: 'AIzaSyB2k_QY4MWoic2tnqEklW641k_nRb79gOU',
+        authDomain: 'turniejprosaas.firebaseapp.com',
+        projectId: 'turniejprosaas',
+        appId: '1:141555836771:web:d5f17180a21fded3d09556'
+    };
+
     function readStore(key) {
         try { return sessionStorage.getItem(key) || ''; } catch (_) { return ''; }
     }
 
+    function clearTpStore() {
+        try {
+            sessionStorage.removeItem('tp_checkout_product');
+            sessionStorage.removeItem('tp_checkout_order');
+        } catch (_) {}
+    }
+
+    function isSetkaPayload(data, fallbackProduct) {
+        var app = data && data.app;
+        var pid = (data && data.productId) || fallbackProduct || '';
+        return app === 'setka' || String(pid).indexOf('setka-') === 0;
+    }
+
+    function redirectToSetka(orderId) {
+        var target = '/setka-dziekujemy.html';
+        if (orderId) target += '?OrderID=' + encodeURIComponent(orderId);
+        window.location.replace(target);
+    }
+
+    function showTpUi(opts) {
+        opts = opts || {};
+        var badgeText = document.getElementById('status-badge-text');
+        var leadEl = document.getElementById('lead-copy');
+        var productEl = document.getElementById('meta-product');
+        var emailEl = document.getElementById('meta-email');
+        var orderEl = document.getElementById('meta-order');
+        var steps = document.getElementById('steps-box');
+        var cta = document.getElementById('cta-box');
+        var footnote = document.getElementById('footnote-box');
+
+        if (badgeText) badgeText.textContent = opts.failed ? 'Płatność niepotwierdzona' : 'Płatność przyjęta';
+        if (productEl) {
+            productEl.textContent = PRODUCT_LABELS[opts.productId] || opts.productLabel || 'Licencja Turniejomat';
+        }
+        if (emailEl) {
+            emailEl.textContent = opts.email || 'adres podany przy zakupie';
+        }
+        if (orderEl) {
+            orderEl.textContent = opts.orderId || 'potwierdzone przez Autopay';
+        }
+        if (leadEl) {
+            if (opts.failed) {
+                leadEl.textContent = 'Płatność nie została potwierdzona. Spróbuj ponownie albo napisz na admin@turniejomat.pl z numerem zamówienia.';
+            } else if (opts.email) {
+                leadEl.innerHTML = 'Licencja Turniejomat jest gotowa. Klucz dostępowy wysłaliśmy na <strong style="color:#fff;">' +
+                    String(opts.email).replace(/</g, '&lt;') + '</strong>.';
+            } else {
+                leadEl.textContent = 'Licencja Turniejomat jest gotowa. Klucz dostępowy właśnie wysłaliśmy na Twój e-mail.';
+            }
+        }
+        if (steps) steps.hidden = !!opts.failed;
+        if (cta) cta.hidden = false;
+        if (footnote) footnote.hidden = false;
+        clearTpStore();
+    }
+
     var params = new URLSearchParams(window.location.search);
-    var orderId = params.get('OrderID') || params.get('orderId') || params.get('order') || readStore('tp_checkout_order') || '';
+    var orderId = params.get('OrderID') || params.get('orderId') || params.get('order') ||
+        readStore('tp_checkout_order') || readStore('setka_checkout_order') || '';
     var email = params.get('email') || readStore('tp_checkout_email') || '';
-    var productId = params.get('product') || readStore('tp_checkout_product') || '';
+    var productId = params.get('product') || readStore('tp_checkout_product') || readStore('setka_checkout_product') || '';
+    var orderElInit = document.getElementById('meta-order');
+    if (orderElInit) orderElInit.textContent = orderId || '—';
 
-    var productEl = document.getElementById('meta-product');
-    var emailEl = document.getElementById('meta-email');
-    var orderEl = document.getElementById('meta-order');
-    var leadEl = document.getElementById('lead-copy');
-
-    if (productEl) {
-        productEl.textContent = PRODUCT_LABELS[productId] || 'Licencja Turniejomat';
-    }
-    if (emailEl) {
-        emailEl.textContent = email || 'adres podany przy zakupie';
-    }
-    if (orderEl) {
-        orderEl.textContent = orderId || 'potwierdzone przez Autopay';
-    }
-    if (leadEl && email) {
-        leadEl.innerHTML = 'Licencja Turniejomat jest gotowa. Klucz dostępowy wysłaliśmy na <strong style="color:#fff;">' +
-            email.replace(/</g, '&lt;') + '</strong>.';
+    // Szybka ścieżka: session już wie, że to SETKA (np. przed zapisem w RTDB).
+    if (orderId && String(productId).indexOf('setka-') === 0) {
+        redirectToSetka(orderId);
+        return;
     }
 
-    try {
-        sessionStorage.removeItem('tp_checkout_product');
-        sessionStorage.removeItem('tp_checkout_order');
-    } catch (_) {}
+    if (!orderId) {
+        showTpUi({ email: email, productId: productId, orderId: '' });
+        var leadEl = document.getElementById('lead-copy');
+        if (leadEl) {
+            leadEl.textContent = 'Brak numeru zamówienia w adresie powrotu. Sprawdź e-mail albo napisz na admin@turniejomat.pl.';
+        }
+        return;
+    }
+
+    if (typeof firebase === 'undefined') {
+        showTpUi({ email: email, productId: productId, orderId: orderId });
+        return;
+    }
+
+    firebase.initializeApp(firebaseConfig);
+    var statusFn = firebase.app().functions('europe-west1').httpsCallable('getCheckoutStatus');
+    var attempts = 0;
+    var maxAttempts = 12; // ~36 s
+
+    function decideFallback() {
+        if (String(readStore('setka_checkout_product')).indexOf('setka-') === 0 ||
+            String(productId).indexOf('setka-') === 0) {
+            redirectToSetka(orderId);
+            return;
+        }
+        showTpUi({ email: email, productId: productId, orderId: orderId });
+    }
+
+    function pollStatus() {
+        attempts += 1;
+        statusFn({ orderId: orderId })
+            .then(function (res) {
+                var data = (res && res.data) || {};
+                if (isSetkaPayload(data, productId)) {
+                    redirectToSetka(orderId);
+                    return;
+                }
+                if (data.found && (data.status === 'payment_failed' || data.paymentStatus === 'FAILURE')) {
+                    showTpUi({
+                        failed: true,
+                        email: data.customerEmail || email,
+                        productId: data.productId || productId,
+                        orderId: orderId
+                    });
+                    return;
+                }
+                if (data.found && data.app && data.app !== 'setka') {
+                    showTpUi({
+                        email: data.customerEmail || email,
+                        productId: data.productId || productId,
+                        orderId: orderId
+                    });
+                    return;
+                }
+                if (data.found && data.completed && !isSetkaPayload(data, productId)) {
+                    showTpUi({
+                        email: data.customerEmail || email,
+                        productId: data.productId || productId,
+                        orderId: orderId
+                    });
+                    return;
+                }
+                if (attempts < maxAttempts) {
+                    setTimeout(pollStatus, 3000);
+                    return;
+                }
+                decideFallback();
+            })
+            .catch(function () {
+                if (attempts < maxAttempts) {
+                    setTimeout(pollStatus, 3000);
+                    return;
+                }
+                decideFallback();
+            });
+    }
+
+    pollStatus();
 })();
 </script>
 </body>

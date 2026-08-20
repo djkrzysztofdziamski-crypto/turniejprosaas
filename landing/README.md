@@ -21,7 +21,8 @@ Po pushu na `main` Netlify powinien sam zdeployować landing, jeśli site ma ust
 2. Wpisz email → **Zamów pakiet weekendowy**
 3. Przekierowanie na bramkę Autopay (test: `testpay.autopay.eu` jeśli skonfigurowane)
 4. Po płatności → powrót na `https://turniejomat.pl/dziekujemy.html` (ustaw w panelu Autopay jako adres powrotu)
-5. Klucz w **admin** → Zamówienia online + Licencje (auto-aktywny po ITN)
+5. Hub `/dziekujemy.html` rozpoznaje produkt (`getCheckoutStatus`): SETKA → redirect na `/setka-dziekujemy.html?OrderID=…`; Turniejomat → UI TP (mail z kluczem)
+6. Klucz w **admin** → Zamówienia online + Licencje (auto-aktywny po ITN)
 
 Smoke test z CLI (z root repo):
 
