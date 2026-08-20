@@ -192,13 +192,173 @@
         }
         .steps li { margin: 0 0 6px; }
         .steps li:last-child { margin-bottom: 0; }
+        .proof {
+            margin: 0 0 18px;
+            border: 1px solid rgba(255, 204, 0, .28);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(22, 40, 68, .95), rgba(10, 22, 40, .98));
+            padding: 14px 12px 16px;
+        }
+        .proof-kicker {
+            margin: 0 0 10px;
+            text-align: center;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+        .proof-teams {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .proof-team {
+            border-radius: 10px;
+            padding: 8px 6px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+        .proof-team.blue {
+            background: rgba(47, 107, 255, .22);
+            color: #c9d8ff;
+            border: 1px solid rgba(47, 107, 255, .45);
+        }
+        .proof-team.red {
+            background: rgba(226, 59, 59, .2);
+            color: #ffd0d0;
+            border: 1px solid rgba(226, 59, 59, .45);
+        }
+        .proof-pool {
+            color: var(--gold);
+            font-weight: 800;
+            font-size: 18px;
+            font-variant-numeric: tabular-nums;
+            text-align: center;
+        }
+        .proof-q {
+            margin: 0 0 12px;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: clamp(15px, 3.6vw, 18px);
+            line-height: 1.35;
+        }
+        .proof-tiles {
+            display: grid;
+            gap: 8px;
+        }
+        .proof-tile {
+            min-height: 44px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 204, 0, .35);
+            background: linear-gradient(90deg, #243b66, #1a2f52);
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+        }
+        .proof-tile .pts {
+            color: var(--gold);
+            font-variant-numeric: tabular-nums;
+            min-width: 2em;
+            text-align: right;
+        }
+        .proof-note {
+            margin: 12px 0 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .proof-actions {
+            margin-top: 12px;
+            display: grid;
+            gap: 8px;
+        }
+        .proof-actions a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            border-radius: 10px;
+            font: 800 14px/1 "Segoe UI", sans-serif;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px 12px;
+        }
+        .proof-actions .primary {
+            background: var(--gold);
+            color: #0b1220;
+        }
+        .proof-actions .ghost {
+            border: 1px solid var(--line);
+            color: var(--text);
+            background: rgba(255, 255, 255, .03);
+        }
+        .night h2 { color: var(--gold); }
+        .buy-heading {
+            margin: 22px 0 0;
+            font-size: 14px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ok);
+        }
+        .buy-lead {
+            margin: 8px 0 0;
+            max-width: none;
+            text-align: left;
+            color: var(--muted);
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
 <div class="wrap">
     <div class="panel">
         <img class="brand-logo" src="assets/setka-logo.png" width="112" height="112" alt="SETKA">
-        <p class="lead">Gra eventowa w stylu familiady dla DJ-ów i prowadzących. Wybierz okres licencji, zapłać bezpiecznie przez <strong>Autopay</strong> i odbierz kod aktywacyjny do aplikacji SETKA.</p>
+        <p class="lead">Show jak z telewizji — na weselu, firmówce, urodzinach. Zobacz tablicę, potem kup kod Autopay i graj w dniu imprezy.</p>
+
+        <div class="proof" aria-label="Jak wygląda SETKA">
+            <p class="proof-kicker">Tak wygląda tablica na sali</p>
+            <div class="proof-teams">
+                <div class="proof-team blue">Stoły VIP<br>78</div>
+                <div class="proof-pool">0</div>
+                <div class="proof-team red">Pan młody<br>22</div>
+            </div>
+            <p class="proof-q">Co ludzie robią na weselu po 2 w nocy?</p>
+            <div class="proof-tiles">
+                <div class="proof-tile"><span>Tańczą</span><span class="pts">36</span></div>
+                <div class="proof-tile"><span>Jedzą tort</span><span class="pts">24</span></div>
+                <div class="proof-tile"><span>Śpiewają</span><span class="pts">18</span></div>
+                <div class="proof-tile"><span>Rozmawiają</span><span class="pts">14</span></div>
+                <div class="proof-tile"><span>Robią zdjęcia</span><span class="pts">8</span></div>
+            </div>
+            <p class="proof-note">Animowany podgląd nie zużywa demo 24h. Pełna gra: demo albo kod płatny.</p>
+            <div class="proof-actions">
+                <a class="primary" href="https://setka.turniejomat.pl/?preview=1">Zobacz animację show</a>
+                <a class="ghost" href="https://setka.turniejomat.pl/">Uruchom demo 24h</a>
+            </div>
+        </div>
+
+        <div class="steps night" aria-label="Noc imprezy">
+            <h2>Noc imprezy — 3 kroki</h2>
+            <ol>
+                <li>Otwórz SETKĘ w <strong>Chrome</strong> na laptopie (panel DJ).</li>
+                <li>Kliknij widok TV / skopiuj link TV — druga karta lub drugi ekran na salę.</li>
+                <li>Wyświetl kartę TV na projektor / Smart TV (Cast, HDMI, Smart View).</li>
+            </ol>
+        </div>
+
+        <h2 class="buy-heading">Kup licencję</h2>
+        <p class="buy-lead">Wybierz okres, zapłać Autopay, odbierz kod. Zegar licencji startuje przy <strong>pierwszej aktywacji</strong> w aplikacji.</p>
 
         <div class="form">
             <label for="checkout-email">Email do wysyłki kodu</label>
@@ -247,7 +407,13 @@
             </ol>
         </div>
 
-        <p class="toplinks"><a href="https://setka.turniejomat.pl/">Wróć do aplikacji SETKA</a></p>
+        <p class="toplinks">
+            <a href="https://setka.turniejomat.pl/?preview=1">Podgląd show</a>
+            ·
+            <a href="https://setka.turniejomat.pl/">Aplikacja SETKA</a>
+            ·
+            <a href="/start">Hub BIO</a>
+        </p>
     </div>
 </div>
 
