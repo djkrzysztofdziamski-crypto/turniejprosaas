@@ -1,6 +1,10 @@
 const { createPrivateKey, sign } = require('crypto');
 const { getProduct, resolveProductId } = require('../billing/catalog');
 
+/** Ile dni od zakupu klient ma na pierwszą aktywację kodu. */
+const SETKA_REDEEM_WITHIN_DAYS = 365;
+const SETKA_PAID_MAX_HOURS = 365 * 24;
+
 function b64url(buf) {
   return Buffer.from(buf)
     .toString('base64')
@@ -30,6 +34,16 @@ function maskToken(token) {
   const raw = String(token || '');
   if (raw.length < 20) return raw;
   return raw.slice(0, 12) + '…' + raw.slice(-8);
+}
+
+function formatHoursLabel(hours) {
+  const h = Number(hours) || 0;
+  if (h === 72) return '72 godzin od pierwszej aktywacji';
+  if (h % 24 === 0) {
+    const days = h / 24;
+    return days + (days === 1 ? ' dzień' : ' dni') + ' od pierwszej aktywacji';
+  }
+  return h + ' godzin od pierwszej aktywacji';
 }
 
 async function createAndActivateSetkaLicense(db, options) {
@@ -64,6 +78,9 @@ async function createAndActivateSetkaLicense(db, options) {
       productId: existingOrder.productId,
       typ: existingOrder.typ || null,
       until: existingOrder.until || null,
+      hours: existingOrder.hours || null,
+      redeemBy: existingOrder.redeemBy || null,
+      validityText: existingOrder.validityText || null,
       customerEmail: existingOrder.customerEmail || null,
       app: 'setka',
     };
@@ -78,17 +95,21 @@ async function createAndActivateSetkaLicense(db, options) {
   }
 
   const days = Number(product.days || 0);
-  if (!Number.isFinite(days) || days < 1) {
-    const err = new Error('Produkt SETKA nie ma poprawnie ustawionego czasu licencji.');
+  const hours = Number(product.hours || (days > 0 ? days * 24 : 0));
+  if (!Number.isFinite(hours) || hours < 1 || hours > SETKA_PAID_MAX_HOURS) {
+    const err = new Error('Produkt SETKA nie ma poprawnie ustawionego czasu licencji (hours).');
     err.code = 'failed-precondition';
     throw err;
   }
 
   const now = Date.now();
-  const until = ymdPlusDays(days);
+  const redeemBy = ymdPlusDays(SETKA_REDEEM_WITHIN_DAYS);
+  const validityText = formatHoursLabel(hours) + ' (aktywuj kod do ' + redeemBy + ')';
   const payloadObj = {
-    v: 1,
-    until: until,
+    v: 2,
+    kind: 'paid',
+    hours: hours,
+    redeemBy: redeemBy,
     id: String(paymentId).slice(0, 64),
     iat: Math.floor(now / 1000),
   };
@@ -103,7 +124,9 @@ async function createAndActivateSetkaLicense(db, options) {
     productId: product.id,
     typ: product.typ,
     days,
-    until,
+    hours,
+    redeemBy,
+    validityText,
     token,
     tokenMasked: maskToken(token),
     customerEmail: customerEmail || null,
@@ -122,7 +145,10 @@ async function createAndActivateSetkaLicense(db, options) {
     productId: product.id,
     typ: product.typ,
     sports: product.sports,
-    until,
+    days,
+    hours,
+    redeemBy,
+    validityText,
     status: 'completed',
     createdAt: now,
     notatka: note,
@@ -138,9 +164,13 @@ async function createAndActivateSetkaLicense(db, options) {
     sports: product.sports,
     customerEmail: customerEmail || null,
     typ: product.typ,
-    until,
+    days,
+    hours,
+    redeemBy,
+    validityText,
+    until: null,
     app: 'setka',
   };
 }
 
-module.exports = { createAndActivateSetkaLicense, maskToken };
+module.exports = { createAndActivateSetkaLicense, maskToken, formatHoursLabel };

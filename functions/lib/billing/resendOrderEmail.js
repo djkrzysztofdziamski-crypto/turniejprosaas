@@ -26,9 +26,17 @@ async function resendOrderEmail(db, paymentId) {
 
   const app = order.app || 'turniejomat';
   let wygasa = null;
+  let validityText = null;
   if (app === 'setka') {
     const licSnap = await db.ref('licencje_setka/' + paymentId).once('value');
-    if (licSnap.val()?.until) wygasa = Date.parse(licSnap.val().until + 'T23:59:59.999Z');
+    const lic = licSnap.val() || {};
+    validityText = order.validityText || lic.validityText || null;
+    if (!validityText && lic.until) {
+      wygasa = Date.parse(lic.until + 'T23:59:59.999Z');
+    }
+    if (!validityText && order.until) {
+      wygasa = Date.parse(order.until + 'T23:59:59.999Z');
+    }
   } else {
     const licSnap = await db.ref('licencje/' + licenseKey).once('value');
     if (licSnap.val()?.wygasa) wygasa = licSnap.val().wygasa;
@@ -42,6 +50,7 @@ async function resendOrderEmail(db, paymentId) {
     licenseKey,
     productLabel,
     expiresAt: wygasa,
+    validityText,
     app: app === 'setka'
       ? {
         id: 'setka',

@@ -34,11 +34,12 @@ function appConfigFromInput(appInput) {
   };
 }
 
-function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
+function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, validityText, app }) {
   const cfg = appConfigFromInput(app);
-  const expiryStr = expiresAt
-    ? new Date(expiresAt).toLocaleString('pl-PL')
-    : '—';
+  const expiryStr = validityText
+    ? validityText
+    : (expiresAt ? new Date(expiresAt).toLocaleString('pl-PL') : '—');
+  const expiryLabel = validityText ? 'Okres licencji' : 'Licencja ważna do';
   const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
   const isSetka = cfg.name === 'SETKA';
   const footer = isSetka
@@ -53,7 +54,7 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
   <p>Dziękujemy za zakup <strong>${productLabel}</strong>.</p>
   <p style="font-size: 16px;">Twój klucz licencyjny:</p>
   <p style="font-size: 22px; font-weight: bold; font-family: ui-monospace, monospace; background: #f1f5f9; padding: 14px 18px; border-radius: 8px; letter-spacing: 0.04em;">${licenseKey}</p>
-  <p>Licencja ważna do: <strong>${expiryStr}</strong></p>
+  <p>${expiryLabel}: <strong>${expiryStr}</strong></p>
   <p style="margin: 24px 0;">
     <a href="${appLink}" style="display:inline-block;background:#137333;color:#fff;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;">
       ${cfg.ctaLabel}
@@ -68,11 +69,12 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, app }) {
 </html>`;
 }
 
-function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, app }) {
+function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, validityText, app }) {
   const cfg = appConfigFromInput(app);
-  const expiryStr = expiresAt
-    ? new Date(expiresAt).toLocaleString('pl-PL')
-    : '—';
+  const expiryStr = validityText
+    ? validityText
+    : (expiresAt ? new Date(expiresAt).toLocaleString('pl-PL') : '—');
+  const expiryLabel = validityText ? 'Okres licencji' : 'Ważny do';
   const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
 
   return [
@@ -81,7 +83,7 @@ function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, app }) {
     `Dziękujemy za zakup ${productLabel}.`,
     '',
     `Klucz: ${licenseKey}`,
-    `Ważny do: ${expiryStr}`,
+    `${expiryLabel}: ${expiryStr}`,
     '',
     `Wejdź do aplikacji: ${appLink}`,
     '',
@@ -89,7 +91,7 @@ function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, app }) {
   ].join('\n');
 }
 
-async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, app }) {
+async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, validityText, app }) {
   if (!to) {
     return { sent: false, reason: 'no_recipient' };
   }
@@ -102,7 +104,7 @@ async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, app }
   }
 
   const from = cfg.from || 'Turniejomat <noreply@turniejomat.pl>';
-  const payload = { licenseKey, productLabel, expiresAt, app };
+  const payload = { licenseKey, productLabel, expiresAt, validityText, app };
   const appCfg = appConfigFromInput(app);
 
   try {

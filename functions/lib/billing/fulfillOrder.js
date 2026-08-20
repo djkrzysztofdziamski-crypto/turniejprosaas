@@ -51,7 +51,8 @@ async function fulfillOrder(db, order) {
         to: customerEmail,
         licenseKey: result.key,
         productLabel,
-        expiresAt: result.wygasa || result.until || null,
+        expiresAt: result.wygasa || (result.until ? Date.parse(result.until + 'T23:59:59.999Z') : null),
+        validityText: result.validityText || null,
         app: isSetka ? {
           id: 'setka',
           name: 'SETKA',

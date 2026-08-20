@@ -168,6 +168,9 @@ exports.getCheckoutStatus = functions.region(region).https.onCall(async (data) =
     completed: order.status === 'completed',
     emailSent: order.emailSent === true,
     until: order.until || null,
+    hours: order.hours || null,
+    redeemBy: order.redeemBy || null,
+    validityText: order.validityText || null,
   };
   if (isSetka && order.status === 'completed') {
     response.licenseKey = order.licenseKey || null;

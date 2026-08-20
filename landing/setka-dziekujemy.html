@@ -181,9 +181,11 @@
         if (codeEl) codeEl.textContent = token || '';
         if (codeWrap) codeWrap.style.display = 'block';
         const productText = PRODUCT_LABELS[details.productId] || details.productId || 'Licencja SETKA';
-        const untilText = details.until ? (' · ważna do: ' + details.until) : '';
+        const validityText = details.validityText
+            ? (' · ' + details.validityText)
+            : (details.until ? (' · ważna do: ' + details.until) : (details.hours ? (' · ' + details.hours + ' h od aktywacji') : ''));
         const emailText = details.customerEmail ? (' · email: ' + details.customerEmail) : '';
-        if (metaEl) metaEl.textContent = productText + untilText + emailText;
+        if (metaEl) metaEl.textContent = productText + validityText + emailText;
         setStatus('Płatność potwierdzona. Kod jest gotowy.');
         clearStore();
     }
