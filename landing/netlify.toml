@@ -12,9 +12,9 @@
   status = 301
   force = true
 
-# Krótki link do hubu SETKA (bio / FB)
+# Krótki link do hubu SETKA (bio / FB) — rewrite 200, żeby FB widział OG pod /start
 [[redirects]]
   from = "/start"
   to = "/setka-start.html"
-  status = 302
+  status = 200
 
