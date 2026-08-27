@@ -46,7 +46,7 @@ function buildTurniejomatOnboardingBlock(licenseKey, app) {
     'Masz klucz licencyjny Turniejomat. Demo pokazuje finał i emocje — teraz ustawiasz swój turniej. Cel: ok. 15 minut do pierwszego wyniku.',
     '',
     `1. Wejdź na ${appLink} i wklej klucz.`,
-    '2. Na Start ustaw turniej (np. 8 drużyn) — kolejność: „Zrób to w tej kolejności” w Archiwum → Pomoc.',
+    '2. Na Start ustaw turniej (np. 8 drużyn) — kolejność: „Zrób to w tej kolejności” w Archiwum → przycisk POMOC.',
     '3. Utwórz drużyny → Tor → 1 · Grupy → Tor → 2 · Terminarz.',
     '4. Udostępnij QR / link kibica.',
     '5. W Na żywo wpisz 1 testowy wynik (potem możesz poprawić).',
@@ -54,7 +54,7 @@ function buildTurniejomatOnboardingBlock(licenseKey, app) {
     '',
     'Nie zaczynaj od seed, kartek ani kapitana — to zaawansowane.',
     'RESET tylko gdy nie ma żadnego rozegranego meczu.',
-    'CHECKLISTA START i Pomoc: w aplikacji → Archiwum.',
+    'CHECKLISTA START i Pomoc: w aplikacji → Archiwum → przycisk POMOC.',
   ].join('\n');
 }
 

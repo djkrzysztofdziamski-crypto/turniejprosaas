@@ -721,6 +721,64 @@
             font-weight: 400;
         }
         #view-app .setup-module:not([open]) > summary::after { content: '▸'; }
+        #view-app .setup-module.setup-module--advanced {
+            border-color: #c7d2fe;
+            background: #f8fafc;
+        }
+        #view-app .setup-module.setup-module--advanced > summary {
+            color: #1e3a8a;
+            font-weight: 800;
+        }
+        #view-app .setup-module.setup-module--advanced .setup-adv-block {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        #view-app .setup-module.setup-module--advanced .setup-adv-block:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        #view-app .setup-module.setup-module--advanced .setup-adv-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #64748b;
+            margin: 0 0 8px;
+        }
+        #view-app .archive-help-module {
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border: 1px solid #c7d2fe;
+            border-radius: 10px;
+            background: #eef2ff;
+        }
+        #view-app .archive-help-toggle {
+            background: #1e3a8a;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+        }
+        #view-app .archive-help-toggle[aria-expanded="true"] {
+            background: #312e81;
+        }
+        #view-app .archive-help-panel {
+            display: none;
+            margin-top: 12px;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+        #view-app .archive-help-panel.is-open {
+            display: block;
+        }
         #view-app .setup-module .setup-module-body {
             padding: 0 12px 12px;
             display: flex;
@@ -3291,9 +3349,6 @@
         #view-app .archive-close-panel.is-pending { background: #f8fafc; border-color: #e2e8f0; }
         #view-app .archive-close-panel h4 { margin: 0 0 6px; font-size: 14px; color: #102a43; }
         #view-app .archive-close-panel p { margin: 0 0 10px; font-size: 12px; color: #64748b; line-height: 1.45; }
-        #view-app .archive-help-panel { margin-bottom: 16px; border: 1px solid #c7d2fe; border-radius: 10px; background: #f8fafc; overflow: hidden; }
-        #view-app .archive-help-panel summary { cursor: pointer; font-weight: 800; font-size: 14px; color: #1e3a8a; padding: 12px 16px; background: #eef2ff; list-style: none; }
-        #view-app .archive-help-panel summary::-webkit-details-marker { display: none; }
         #view-app .archive-help-body { padding: 12px 16px 16px; font-size: 12px; color: #334155; line-height: 1.5; }
         #view-app .archive-help-body h4 { margin: 14px 0 6px; font-size: 13px; color: #102a43; }
         #view-app .archive-help-body h4:first-child { margin-top: 0; }
@@ -5321,62 +5376,67 @@
                         </div>
                     </details>
                     <details class="setup-module" id="setup-mod-title" open>
-                        <summary>Droga do tytułu</summary>
+                        <summary>Szablon drabinki</summary>
                         <div class="setup-module-body">
                             <div class="time-setting"><span style="font-weight:bold;">Szablon drabinki Playoff:</span>
-                                <select id="bracket-size">
+                                <select id="bracket-size" onchange="syncAdvCountFromBracket()">
                                     <option value="16">Playoff 1/8 Finału (16 miejsc)</option>
                                     <option value="8">Playoff Ćwierćfinał (8 miejsc)</option>
                                     <option value="4" selected>Playoff Półfinał (4 miejsca)</option>
                                 </select>
                             </div>
-                            <div class="time-setting" style="align-items:flex-start; flex-direction:column; gap:6px;">
-                                <span style="font-weight:bold;">Mecze o miejsca w play-off:</span>
-                                <select id="playoff-placement-mode" onchange="syncPlayoffPlacementModeFromForm()" style="width:100%; max-width:100%; text-align:left; white-space:normal; height:auto; min-height:40px; padding:8px;">
-                                    <option value="third_and_final">Play-off z meczem o 3. miejsce i finałem — przegrani półfinałów grają o brąz, zwycięzcy o tytuł (domyślnie, jak dotychczas)</option>
-                                    <option value="final_only">Play-off tylko z finałem — bez meczu o 3. miejsce; przegrani półfinałów kończą udział, miejsca 3 i 4 to ex aequo 3. miejsce</option>
-                                    <option value="full_places">Play-off z meczami o wszystkie miejsca drabinki i finałem — przy 8/16: mecz o 3., mecze o 5–8; przy 16 miejsca 9–16 z formy grupowej; przy 4 miejscach jak opcja z meczem o 3.</option>
-                                </select>
-                            </div>
+                            <p style="font-size:11px; color:#64748b; margin:0; line-height:1.4;">Liczba awansujących ustawia się automatycznie na rozmiar drabinki. Korektę znajdziesz w opcjach zaawansowanych.</p>
                         </div>
                     </details>
-                    <details class="setup-module" id="setup-mod-advance" open>
-                        <summary>Awans i boiska</summary>
+                    <details class="setup-module" id="setup-mod-pitches" open>
+                        <summary>Boiska</summary>
                         <div class="setup-module-body">
-                            <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <select id="advancing-count"><option value="0" selected>0</option></select></div>
                             <div class="time-setting"><span style="font-weight:bold;">Liczba boisk (0–20):</span> <select id="pitch-count" title="0 lub 1 = wyłączone; 2–20 = przydział boisk" onchange="syncPitchCountFromForm()"><option value="0" selected>0</option></select></div>
                         </div>
                     </details>
-                    <details class="setup-module" id="setup-mod-seeding" open>
-                        <summary>Losowanie grup</summary>
+                    <details class="setup-module setup-module--advanced" id="setup-mod-advanced">
+                        <summary>Opcje zaawansowane (seed, kartki, kapitan…)</summary>
                         <div class="setup-module-body">
-                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="seeding-enabled" onchange="syncSeedingEnabledFromForm()"> <span>Rozstawiaj zespoły</span></label>
-                            <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Po włączeniu w karcie Składy oznaczysz rozstawione drużyny i kolejność siły (1 = najmocniejsza, max 10). Wyłączone = klasyczne losowanie wszystkich. Samo losowanie: Tor → 1 · Grupy.</p>
-                        </div>
-                    </details>
-                    <details class="setup-module" id="setup-mod-team" open>
-                        <summary>Parametry drużyny</summary>
-                        <div class="setup-module-body">
-                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
-                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
-                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz (w karcie Składy)</span></label>
-                            <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Przy włączonych zawodnikach Kapitan i Bramkarz są wymagane. Formularz kapitana zawsze wymaga wyboru obu ról.</p>
-                            <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
-                                <span style="font-weight:bold;">Format gry:</span>
-                                <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
-                                    <input type="radio" name="tp-squad-size" id="tp-squad-size-6" value="6" onchange="syncTeamParamsFromForm()"> 6-osobowy
-                                </label>
-                                <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
-                                    <input type="radio" name="tp-squad-size" id="tp-squad-size-7" value="7" checked onchange="syncTeamParamsFromForm()"> 7-osobowy
-                                </label>
+                            <div class="setup-adv-block" id="setup-mod-advance">
+                                <div class="setup-adv-label">Awans</div>
+                                <div class="time-setting"><span style="font-weight:bold;">Realna ilość awansujących:</span> <select id="advancing-count"><option value="0" selected>0</option></select></div>
                             </div>
-                        </div>
-                    </details>
-                    <details class="setup-module" id="setup-mod-match" open>
-                        <summary>Parametry meczowe</summary>
-                        <div class="setup-module-body">
-                            <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
-                            <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
+                            <div class="setup-adv-block">
+                                <div class="setup-adv-label">Mecze o miejsca w play-off</div>
+                                <div class="time-setting" style="align-items:flex-start; flex-direction:column; gap:6px;">
+                                    <select id="playoff-placement-mode" onchange="syncPlayoffPlacementModeFromForm()" style="width:100%; max-width:100%; text-align:left; white-space:normal; height:auto; min-height:40px; padding:8px;">
+                                        <option value="third_and_final">Play-off z meczem o 3. miejsce i finałem — przegrani półfinałów grają o brąz, zwycięzcy o tytuł (domyślnie, jak dotychczas)</option>
+                                        <option value="final_only">Play-off tylko z finałem — bez meczu o 3. miejsce; przegrani półfinałów kończą udział, miejsca 3 i 4 to ex aequo 3. miejsce</option>
+                                        <option value="full_places">Play-off z meczami o wszystkie miejsca drabinki i finałem — przy 8/16: mecz o 3., mecze o 5–8; przy 16 miejsca 9–16 z formy grupowej; przy 4 miejscach jak opcja z meczem o 3.</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="setup-adv-block" id="setup-mod-seeding">
+                                <div class="setup-adv-label">Losowanie grup</div>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="seeding-enabled" onchange="syncSeedingEnabledFromForm()"> <span>Rozstawiaj zespoły</span></label>
+                                <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Po włączeniu w karcie Składy oznaczysz rozstawione drużyny i kolejność siły (1 = najmocniejsza, max 10). Wyłączone = klasyczne losowanie wszystkich. Samo losowanie: Tor → 1 · Grupy.</p>
+                            </div>
+                            <div class="setup-adv-block" id="setup-mod-team">
+                                <div class="setup-adv-label">Parametry drużyny</div>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-players" onchange="syncTeamParamsFromForm()"> <span>Podaj dane zawodników</span></label>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-captain" onchange="syncTeamParamsFromForm()"> <span>Kapitan (w karcie Składy)</span></label>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="tp-gk" onchange="syncTeamParamsFromForm()"> <span>Bramkarz (w karcie Składy)</span></label>
+                                <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Przy włączonych zawodnikach Kapitan i Bramkarz są wymagane. Formularz kapitana zawsze wymaga wyboru obu ról.</p>
+                                <div class="time-setting" style="align-items:center; gap:12px; flex-wrap:wrap;">
+                                    <span style="font-weight:bold;">Format gry:</span>
+                                    <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                                        <input type="radio" name="tp-squad-size" id="tp-squad-size-6" value="6" onchange="syncTeamParamsFromForm()"> 6-osobowy
+                                    </label>
+                                    <label style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-weight:600;">
+                                        <input type="radio" name="tp-squad-size" id="tp-squad-size-7" value="7" checked onchange="syncTeamParamsFromForm()"> 7-osobowy
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="setup-adv-block" id="setup-mod-match">
+                                <div class="setup-adv-label">Parametry meczowe</div>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
+                                <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
+                            </div>
                         </div>
                     </details>
                     <button class="btn-main" onclick="generateInputs()" style="margin-top:15px;">UTWÓRZ DRUŻYNY</button>
@@ -5516,10 +5576,12 @@
         </div>
 
         <div id="archiwum" class="tab-content">
-            <details id="archive-help-panel" class="archive-help-panel" open>
-                <summary>Pomoc — Turniejomat (sędzia / asystent)</summary>
-                <div id="archive-help-body" class="archive-help-body"></div>
-            </details>
+            <div id="archive-help-module" class="archive-help-module">
+                <button type="button" id="archive-help-toggle" class="archive-help-toggle" aria-expanded="false" aria-controls="archive-help-panel" onclick="toggleArchiveHelp()">POMOC</button>
+                <div id="archive-help-panel" class="archive-help-panel" hidden>
+                    <div id="archive-help-body" class="archive-help-body"></div>
+                </div>
+            </div>
             <div class="card">
                 <h3 style="margin-top:0;">Centrum Zapisów</h3>
                 <p style="font-size:12px; color:#666;">Zarządzaj wstrzymanymi sesjami oraz przeglądaj dawne wyniki.</p>
@@ -7064,6 +7126,43 @@
         window.fillSelectRange('t-po-dur', 1, 30);
         window.fillSelectRange('t-fin-dur', 1, 30);
     })();
+
+    window.syncAdvCountFromBracket = function () {
+        const bracketEl = document.getElementById('bracket-size');
+        const advEl = document.getElementById('advancing-count');
+        if (!bracketEl || !advEl) return;
+        const bSize = parseInt(bracketEl.value, 10);
+        if (!Number.isFinite(bSize) || bSize < 1) return;
+        const opt = Array.prototype.find.call(advEl.options, function (o) { return parseInt(o.value, 10) === bSize; });
+        if (opt) advEl.value = String(bSize);
+        if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+    };
+
+    window.initSetupAdvancedUi = function () {
+        const adv = document.getElementById('setup-mod-advanced');
+        if (!adv) return;
+        const demoOn = !!(typeof isDemoMode !== 'undefined' && isDemoMode);
+        if (demoOn) {
+            adv.open = true;
+            return;
+        }
+        try {
+            adv.open = sessionStorage.getItem('tp_setup_advanced_open') === '1';
+        } catch (_) {
+            adv.open = false;
+        }
+        if (adv.dataset.advToggleBound === '1') return;
+        adv.dataset.advToggleBound = '1';
+        adv.addEventListener('toggle', function () {
+            if (typeof isDemoMode !== 'undefined' && isDemoMode) return;
+            try {
+                sessionStorage.setItem('tp_setup_advanced_open', adv.open ? '1' : '0');
+            } catch (_) {}
+        });
+    };
+
+    window.syncAdvCountFromBracket();
+    window.initSetupAdvancedUi();
 
     /** Minuty od 00:00 dla "HH:MM". */
     window.timeToMinutes = function (t) {
@@ -10827,24 +10926,45 @@
         el.hidden = !show;
     };
 
+    window.setArchiveHelpOpen = function (open) {
+        const panel = document.getElementById('archive-help-panel');
+        const btn = document.getElementById('archive-help-toggle');
+        if (!panel || !btn) return;
+        const on = !!open;
+        panel.classList.toggle('is-open', on);
+        if (on) panel.removeAttribute('hidden');
+        else panel.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    };
+
+    window.toggleArchiveHelp = function () {
+        const panel = document.getElementById('archive-help-panel');
+        if (!panel) return;
+        const next = !panel.classList.contains('is-open');
+        if (next && typeof window.renderArchiveHelpPanel === 'function') window.renderArchiveHelpPanel();
+        window.setArchiveHelpOpen(next);
+    };
+
     window.renderArchiveHelpPanel = function () {
+        const moduleEl = document.getElementById('archive-help-module');
         const panel = document.getElementById('archive-help-panel');
         const body = document.getElementById('archive-help-body');
-        if (!panel || !body) return;
+        if (!moduleEl || !panel || !body) return;
         if ((typeof isFanMode !== 'undefined' && isFanMode)
             || (typeof isAssistantMode !== 'undefined' && isAssistantMode)
             || (typeof isHallMode !== 'undefined' && isHallMode)) {
-            panel.style.display = 'none';
+            moduleEl.style.display = 'none';
+            window.setArchiveHelpOpen(false);
             return;
         }
-        panel.style.display = '';
+        moduleEl.style.display = '';
         if (body.dataset.rendered === '1') return;
         body.dataset.rendered = '1';
         const dictRows = [
             ['Tor / Losowanie', 'Pasek kroków przygotowania: 1 · Grupy → 2 · Terminarz → 3 · Play-off.', 'Zanim zaczniesz wpisywać wyniki dnia; gdy budujesz lub przebudowujesz grafik.'],
-            ['Start', 'Zakładka konfiguracji turnieju (nazwa, skala, boiska, parametry drużyn/meczów, utwórz drużyny).', 'Przygotowania; gdy zmieniasz ustawienia, nie gdy wpisujesz wyniki.'],
+            ['Start', 'Zakładka konfiguracji turnieju: podstawowe (nazwa, skala, drabinka, boiska) oraz Opcje zaawansowane (seed, kartki, kapitan…).', 'Przygotowania; gdy zmieniasz ustawienia, nie gdy wpisujesz wyniki.'],
             ['Na żywo', 'Główne miejsce wpisywania wyników i przeglądu harmonogramu w trakcie turnieju.', 'Gdy jest terminarz (≥1 mecz) — tu pracujesz dzień turnieju (sędzia/asystent).'],
-            ['Seed / rozstawienie', 'Oznaczenie silniejszych drużyn i kolejności siły przed losowaniem grup.', 'Tylko gdy w Start włączysz rozstawianie; przed Tor → 1 · Grupy.'],
+            ['Seed / rozstawienie', 'Oznaczenie silniejszych drużyn i kolejności siły przed losowaniem grup.', 'Tylko gdy w Start → Opcje zaawansowane włączysz rozstawianie; przed Tor → 1 · Grupy.'],
             ['Walkover (WO)', 'Wynik walkowerem (np. 3:0) bez rozegrania meczu; w terminarzu WO przy drużynie z walkoverTeamId; w tabelach: „WO nieobecność” / „WO dyscyplinarny”.', 'Nieobecność, dyskwalifikacja, brak drużyny na meczu — przez narzędzie Walkover, nie „ręczny 3:0” bez WO.'],
             ['Remis absolutny', 'Remis w tabeli grupowej po wszystkich kryteriach (bezpośrednie, bilans, bramki, Fair Play) — sędzia rozstrzyga losowaniem lub serią karnych.', 'Gdy system pokazuje nierozstrzygnięty remis o awans/kolejność w grupie.'],
             ['Zamroź', 'Zapisuje punkt przywracania (snapshot) stanu turnieju.', 'Przed ryzykowną zmianą lub jako bezpieczny punkt w trakcie dnia.'],
@@ -10871,13 +10991,13 @@
             return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>';
         }).join('');
         body.innerHTML =
-            '<p class="archive-help-intro">Gdy masz terminarz: wyniki → „Na żywo”. Start i Tor → tylko gdy zmieniasz grafik lub składy.</p>' +
+            '<p class="archive-help-intro">Gdy masz terminarz: wyniki → „Na żywo”. Start i Tor → tylko gdy zmieniasz grafik lub składy. Ta Pomoc otwierasz przyciskiem <b>POMOC</b> w Archiwum.</p>' +
             '<h4>Słownik</h4>' +
             '<table class="archive-help-table"><thead><tr><th>Hasło</th><th>Znaczenie</th><th>Kiedy używać</th></tr></thead><tbody>' + dictRows + '</tbody></table>' +
             '<h4>Legenda statusów</h4>' +
             '<p>Status: kropka szara = mecz nierozgrany · kropka zielona = zakończony.<br>Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przydziału / wolne.</p>' +
             '<h4>Pierwszy turniej — Zrób to w tej kolejności</h4>' +
-            '<pre>1. Start: nazwa turnieju + liczba drużyn\n2. Start: liczba grup (+ awanse, jeśli potrzeba)\n3. Start: boiska — 0 (wyłączone) albo 2+\n4. Start / Tor: godzina startu i czasy meczów\n5. Start → Utwórz drużyny → Składy (nazwy) → Tor → 1 · Grupy → Tor → 2 · Terminarz\n\nPotem: Na żywo (wyniki). CHECKLISTA START — poniżej.\n\nNa start NIE ruszaj (zaawansowane):\nseed/rozstawienie, szczegółowe tryby play-off, kartki, format 6/7,\nremis absolutny, kapitan/zdjęcia, WO.</pre>' +
+            '<pre>1. Start: nazwa turnieju + liczba drużyn\n2. Start: liczba grup\n3. Start: szablon drabinki (awans = rozmiar drabinki; korekta w Opcjach zaawansowanych)\n4. Start: boiska — 0 (wyłączone) albo 2+\n5. Start / Tor: godzina startu i czasy meczów\n6. Start → Utwórz drużyny → Składy (nazwy) → Tor → 1 · Grupy → Tor → 2 · Terminarz\n\nPotem: Na żywo (wyniki). CHECKLISTA START — poniżej.\n\nNa start NIE ruszaj (Opcje zaawansowane):\nseed/rozstawienie, szczegółowe tryby play-off, kartki, format 6/7,\nremis absolutny, kapitan/zdjęcia, WO.</pre>' +
             '<h4>Pierwsze 15 minut (po kluczu)</h4>' +
             '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
             '<li>Wejdź na https://app.turniejomat.pl i wklej klucz.</li>' +
@@ -10908,7 +11028,7 @@
             '</ol>' +
             '<h4>Procedura kapitana</h4>' +
             '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
-            '<li>W Start: włącz „Podaj dane zawodników” (+ kapitan/gk jeśli potrzeba).</li>' +
+            '<li>W Start → Opcje zaawansowane: włącz „Podaj dane zawodników” (+ kapitan/gk jeśli potrzeba).</li>' +
             '<li>Składy: drużyny istnieją.</li>' +
             '<li>„Link kapitana” → wyślij WhatsApp/mail.</li>' +
             '<li>Kapitan: skład + (opcjonalnie) zdjęcie; czeka na „Zdjęcie zapisane”.</li>' +
@@ -12128,9 +12248,10 @@
             const parts = [];
             parts.push(seg((teams || '—') + ' drużyn', 'setup-mod-scale'));
             parts.push(seg((groups || '—') + ' grup', 'setup-mod-scale'));
-            parts.push(seg(pitchLabel, 'setup-mod-advance'));
-            parts.push(seg(window.bracketSizeShortLabel(bracket) + ' · ' + window.playoffPlacementShortLabel(poMode), 'setup-mod-title'));
-            if (adv > 0) parts.push(seg('Awans: ' + adv, 'setup-mod-advance'));
+            parts.push(seg(pitchLabel, 'setup-mod-pitches'));
+            parts.push(seg(window.bracketSizeShortLabel(bracket), 'setup-mod-title'));
+            parts.push(seg(window.playoffPlacementShortLabel(poMode), 'setup-mod-advanced'));
+            if (adv > 0) parts.push(seg('Awans: ' + adv, 'setup-mod-advanced'));
             const statusBits = [];
             if (hasGroups) statusBits.push('grupy: wylosowane');
             if (hasMatches) statusBits.push('terminarz: gotowy');
@@ -12150,6 +12271,8 @@
                     const mod = id && document.getElementById(id);
                     if (mod) {
                         mod.open = true;
+                        const advWrap = document.getElementById('setup-mod-advanced');
+                        if (advWrap && (mod === advWrap || advWrap.contains(mod))) advWrap.open = true;
                         mod.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
                 };
@@ -13835,7 +13958,13 @@
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
             if(t==='boiska') { window.renderPitchesView(); }
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
-            if(t==='archiwum') { window.renderArchiveHelpPanel(); window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
+            if(t==='archiwum') {
+                if (typeof window.setArchiveHelpOpen === 'function') window.setArchiveHelpOpen(false);
+                window.renderArchiveHelpPanel();
+                window.renderArchiveClosePanel();
+                window.renderArchiveAndFrozen();
+                window.renderLogs();
+            }
             if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
             if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();

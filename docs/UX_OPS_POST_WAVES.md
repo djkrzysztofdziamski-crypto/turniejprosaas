@@ -26,7 +26,9 @@ Skrypt z `docs/UX_TOP10_2WEEKS.md` (#2):
 
 ## 3. Smoke po wdrożeniu (sędzia)
 
-- [ ] Archiwum → Pomoc: czytelne na desktop + telefon  
+- [ ] Archiwum → przycisk **POMOC** (toggle): czytelne na desktop + telefon  
+- [ ] Start: podstawowe otwarte; Opcje zaawansowane domyślnie zamknięte  
+- [ ] Zmiana drabinki ustawia awanse (= rozmiar)  
 - [ ] Na żywo: legenda nad harmonogramem (sędzia)  
 - [ ] Asystent: baner kanoniczny (#6)  
 - [ ] Terminarz: czerwone WO przy `walkoverTeamId`  

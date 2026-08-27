@@ -272,14 +272,15 @@ Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przy
 PIERWSZY TURNIEJ — Zrób to w tej kolejności
 
 1. Start: nazwa turnieju + liczba drużyn
-2. Start: liczba grup (+ awanse, jeśli potrzeba)
-3. Start: boiska — 0 (wyłączone) albo 2+
-4. Start / Tor: godzina startu i czasy meczów
-5. Start → Utwórz drużyny → Składy (nazwy) → Tor → 1 · Grupy → Tor → 2 · Terminarz
+2. Start: liczba grup
+3. Start: szablon drabinki (awans = rozmiar drabinki; korekta w Opcjach zaawansowanych)
+4. Start: boiska — 0 (wyłączone) albo 2+
+5. Start / Tor: godzina startu i czasy meczów
+6. Start → Utwórz drużyny → Składy (nazwy) → Tor → 1 · Grupy → Tor → 2 · Terminarz
 
-Potem: Na żywo (wyniki). CHECKLISTA START — w Pomoc.
+Potem: Na żywo (wyniki). CHECKLISTA START — w Archiwum → przycisk POMOC.
 
-Na start NIE ruszaj (zaawansowane):
+Na start NIE ruszaj (Opcje zaawansowane):
 seed/rozstawienie, szczegółowe tryby play-off, kartki, format 6/7,
 remis absolutny, kapitan/zdjęcia, WO.
 ```
@@ -316,7 +317,7 @@ Masz klucz licencyjny Turniejomat. Demo pokazuje finał i emocje —
 teraz ustawiasz swój turniej. Cel: ok. 15 minut do pierwszego wyniku.
 
 1. Wejdź na https://app.turniejomat.pl i wklej klucz.
-2. Na Start ustaw turniej (np. 8 drużyn) — kolejność: „Zrób to w tej kolejności” w Archiwum → Pomoc.
+2. Na Start ustaw turniej (np. 8 drużyn) — kolejność: „Zrób to w tej kolejności” w Archiwum → przycisk POMOC.
 3. Utwórz drużyny → Tor → 1 · Grupy → Tor → 2 · Terminarz.
 4. Udostępnij QR / link kibica.
 5. W Na żywo wpisz 1 testowy wynik (potem możesz poprawić).
