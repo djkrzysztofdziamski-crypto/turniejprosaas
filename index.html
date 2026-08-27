@@ -5461,7 +5461,7 @@
                     <h3 style="margin-top:0;">1 · Losowanie grup</h3>
                     <p class="los-brief">Rozlosuj drużyny do grup według ustawień ze Startu (liczba grup, rozstawienie). Po zatwierdzeniu zobaczysz wynik w karcie Grupy.</p>
                     <div id="demo-lock-btn-container">
-                        <button class="btn-main" onclick="losujGrupy()" style="background:#172b4d;">LOSUJ GRUPY</button>
+                        <button class="btn-main" id="btn-losuj-grupy" onclick="losujGrupy()" style="background:#172b4d;">LOSUJ GRUPY</button>
                     </div>
                 </div>
                 <div class="los-step" data-los-step="2" id="los-step-2">
@@ -5495,7 +5495,7 @@
                             </select>
                         </div>
                         <p id="pitch-schedule-hint" style="display:none; font-size:12px; color:#64748b; margin:8px 0 0; line-height:1.4;">Przy 2+ boiskach: fale grup (jedna grupa równolegle na boiskach, potem następna). Żadna drużyna nie gra w dwóch kolejnych slotach. Play-off: najwcześniejsze wolne boisko.</p>
-                        <button class="btn-main" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
+                        <button class="btn-main" id="btn-generuj-terminarz" onclick="generujTerminarz()">GENERUJ TERMINARZ</button>
                     </div>
                 </div>
                 <div class="los-step" data-los-step="3" id="los-step-3">
@@ -11026,6 +11026,9 @@
             '<li>Chcesz zacząć od zera i nie ma żadnego rozegranego meczu → <b>RESET</b> (2 potwierdzenia + nazwa).</li>' +
             '<li>Jest choć jeden wynik → <b>RESET zabroniony</b>; popraw wynik albo Zamroź.</li>' +
             '</ol>' +
+            '<h4>Ponowne losowanie faz (awaryjne)</h4>' +
+            '<p>Gdy istnieje drabinka play-off: <b>GENERUJ TERMINARZ</b> i <b>LOSUJ GRUPY</b> są zablokowane.</p>' +
+            '<p>Ponowne <b>START PLAY-OFF</b> / regeneracja terminarza (bez drabinki) / ponowne losowanie grup: ścieżka awaryjna — ostrzeżenie + wpis nazwy turnieju. Przy wynikach play-off copy ostrzega o skasowaniu wyników.</p>' +
             '<h4>Procedura kapitana</h4>' +
             '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
             '<li>W Start → Opcje zaawansowane: włącz „Podaj dane zawodników” (+ kapitan/gk jeśli potrzeba).</li>' +
@@ -11973,9 +11976,74 @@
                 });
         };
 
+        window.getTournamentConfirmName = function () {
+            return ((document.getElementById('tournament-name') && document.getElementById('tournament-name').value) || '').trim()
+                || (state.meta && state.meta.tournamentName ? String(state.meta.tournamentName).trim() : '')
+                || (state._meta_name ? String(state._meta_name).trim() : '');
+        };
+
+        /**
+         * Ścieżka awaryjna faz: confirm (1/2) + wpis nazwy turnieju (2/2).
+         * @param {{ actionLabel: string, warnStep1: string }} opts
+         * @returns {boolean}
+         */
+        window.confirmDestructivePhaseAction = function (opts) {
+            const label = (opts && opts.actionLabel) ? String(opts.actionLabel) : 'operację';
+            const warn = (opts && opts.warnStep1) ? String(opts.warnStep1) : ('Kontynuować ' + label + ' (krok 1/2)?');
+            if (!confirm(warn)) return false;
+            const tourName = window.getTournamentConfirmName();
+            if (!tourName) {
+                alert('Ustaw nazwę turnieju na karcie Start przed tą operacją.');
+                return false;
+            }
+            const typed = prompt('Wpisz nazwę turnieju, aby potwierdzić ' + label + ' (krok 2/2):', '');
+            if (typed === null) return false;
+            if (typed.trim() !== tourName) {
+                alert(label + ' anulowane — nazwa turnieju nie pasuje.');
+                return false;
+            }
+            return true;
+        };
+
+        window.hasPlayoffResultsPlayed = function () {
+            return (state.playoffs || []).some(function (m) {
+                if (!m || !m.played) return false;
+                const id1 = m.t1 && m.t1.id;
+                const id2 = m.t2 && m.t2.id;
+                if (id1 === -99 || id2 === -99) return false;
+                return true;
+            });
+        };
+
+        window.syncPhaseDestructiveButtons = function () {
+            const hasPo = !!(state.playoffs && state.playoffs.length);
+            const termBtn = document.getElementById('btn-generuj-terminarz');
+            if (termBtn) {
+                termBtn.disabled = hasPo;
+                termBtn.title = hasPo
+                    ? 'Zablokowane — istnieje drabinka play-off. Nie regeneruj terminarza grupowego w fazie pucharowej.'
+                    : '';
+                termBtn.style.opacity = hasPo ? '0.55' : '';
+                termBtn.style.cursor = hasPo ? 'not-allowed' : '';
+            }
+            const grupBtn = document.getElementById('btn-losuj-grupy');
+            if (grupBtn) {
+                grupBtn.disabled = hasPo;
+                grupBtn.title = hasPo
+                    ? 'Zablokowane — istnieje drabinka play-off.'
+                    : '';
+                grupBtn.style.opacity = hasPo ? '0.55' : '';
+                grupBtn.style.cursor = hasPo ? 'not-allowed' : '';
+            }
+        };
+
         window.losujGrupy = () => {
             if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
                 window.alertTournamentWriteLocked();
+                return;
+            }
+            if (state.playoffs && state.playoffs.length > 0) {
+                alert('Losowanie grup zablokowane — istnieje już drabinka play-off.\n\nNie wracaj do losowania grup w fazie pucharowej. Aby zmienić pary play-off, użyj awaryjnego START PLAY-OFF (z potwierdzeniem nazwy).');
                 return;
             }
             const teams = (state.teams || []).slice();
@@ -12002,11 +12070,17 @@
                     'Nadwyżka (' + extra + ') trafi do grup, które już mają rozstawionego — niektóre grupy będą miały po 2 (lub więcej) rozstawionych.\n\nKontynuować?'
                 )) return;
             }
-            if (state.groups && Object.keys(state.groups).length > 0) {
-                if (!confirm('UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. Kontynuować?')) return;
+            const hasGroups = !!(state.groups && Object.keys(state.groups).length);
+            const hasMatches = !!(state.matches && state.matches.length);
+            if (hasGroups) {
+                const warn = hasMatches
+                    ? 'UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje przypisania do grup ORAZ terminarz grupowy (w tym wyniki). To ścieżka awaryjna.\nJeśli chcesz cofnąć ostatnią zmianę, użyj Przywróć ostatni stan (gdy snapshot jeszcze ważny).\n\nKontynuować (krok 1/2)?'
+                    : 'UWAGA! Grupy są już wylosowane. Ponowne losowanie skasuje obecne przypisania. To ścieżka awaryjna.\n\nKontynuować (krok 1/2)?';
+                if (!window.confirmDestructivePhaseAction({ actionLabel: 'ponowne LOSUJ GRUPY', warnStep1: warn })) return;
             }
 
             saveLastSnapshot();
+            if (hasMatches) state.matches = [];
             const names = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').slice(0, nG);
 
             if (seedingOn && seeds.length > 0) {
@@ -12089,6 +12163,10 @@
 
         window.generujTerminarz = function() {
             if(!state.groups || Object.keys(state.groups).length === 0) { alert("Najpierw wylosuj grupy!"); return; }
+            if (state.playoffs && state.playoffs.length > 0) {
+                alert('Terminarz zablokowany — istnieje już drabinka play-off.\n\nNie regeneruj terminarza grupowego w fazie pucharowej. Aby zmienić pary play-off, użyj awaryjnego START PLAY-OFF (z potwierdzeniem nazwy).');
+                return;
+            }
             window.commitStartTimeInput(document.getElementById('t-start'));
             const gDur = parseInt(document.getElementById('t-g-dur').value) || 0;
             const gBreak = parseInt(document.getElementById('t-g-break').value) || 0;
@@ -12097,8 +12175,12 @@
             const finDur = parseInt(document.getElementById('t-fin-dur').value) || 0;
 
             if (gDur === 0 || gBreak === 0 || afterG === 0 || poDur === 0 || finDur === 0) { alert("❌ BŁĄD! Ustal czas trwania meczów oraz przerw."); return; }
-            if(state.matches && state.matches.length > 0) { if(!confirm("UWAGA! Terminarz już istnieje. Wygenerowanie nowego skasuje wszystkie wyniki fazy grupowej. Kontynuować?")) return; }
-            if(state.playoffs && state.playoffs.length > 0) { if(!confirm("Wygenerowanie nowego terminarza może pozostawić nieaktualną drabinkę play-off.")) return; }
+            if (state.matches && state.matches.length > 0) {
+                if (!window.confirmDestructivePhaseAction({
+                    actionLabel: 'ponowne GENERUJ TERMINARZ',
+                    warnStep1: 'UWAGA! Terminarz już istnieje. Wygenerowanie nowego skasuje wszystkie wyniki fazy grupowej. To ścieżka awaryjna.\nJeśli chcesz cofnąć ostatnią zmianę, użyj Przywróć ostatni stan (gdy snapshot jeszcze ważny).\n\nKontynuować (krok 1/2)?'
+                })) return;
+            }
 
             saveLastSnapshot();
             const mode = document.getElementById('schedule-mode').value;
@@ -12323,6 +12405,7 @@
                 }
             });
             if (typeof window.syncLosPoChecklist === 'function') window.syncLosPoChecklist();
+            if (typeof window.syncPhaseDestructiveButtons === 'function') window.syncPhaseDestructiveButtons();
         };
 
         window.syncLosPoChecklist = function () {
@@ -13221,7 +13304,13 @@
                 if (isDemoMode || window._demoStoryFanEmbed || window._demoStoryOrganizerEmbed) { poBtn.style.display = 'none'; return; }
                 poBtn.style.display = '';
                 if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 START PLAY-OFF - ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
-                else { poBtn.disabled = false; poBtn.style.background = '#00875a'; poBtn.style.cursor = 'pointer'; poBtn.innerText = "START PLAY-OFF"; }
+                else {
+                    poBtn.disabled = false;
+                    poBtn.style.background = '#00875a';
+                    poBtn.style.cursor = 'pointer';
+                    const hasPo = !!(state.playoffs && state.playoffs.length);
+                    poBtn.innerText = hasPo ? 'START PLAY-OFF (awaryjnie)' : 'START PLAY-OFF';
+                }
             });
 
             const remisGroups = [];
@@ -13370,7 +13459,13 @@
         };
 
         window.generujPlayoff = function() {
-            if(state.playoffs && state.playoffs.length > 0) { if(!confirm("UWAGA! Drabinka już istnieje. Kontynuować?")) return; }
+            if (state.playoffs && state.playoffs.length > 0) {
+                const poPlayed = typeof window.hasPlayoffResultsPlayed === 'function' && window.hasPlayoffResultsPlayed();
+                const warn = poPlayed
+                    ? 'UWAGA: są już zapisane wyniki play-off. Ponowne START PLAY-OFF wyzeruje wyniki, strzelców i całą drabinkę. To nie poprawia pojedynczego meczu — ścieżka awaryjna.\nJeśli chcesz cofnąć ostatnią zmianę, użyj Przywróć ostatni stan (gdy snapshot jeszcze ważny).\n\nKontynuować (krok 1/2)?'
+                    : 'Drabinka już istnieje. Ponowne START PLAY-OFF skasuje pary, terminy i awanse w drzewie. To ścieżka awaryjna.\nJeśli chcesz cofnąć ostatnią zmianę, użyj Przywróć ostatni stan (gdy snapshot jeszcze ważny).\n\nKontynuować (krok 1/2)?';
+                if (!window.confirmDestructivePhaseAction({ actionLabel: 'ponowne START PLAY-OFF', warnStep1: warn })) return;
+            }
             const sizeInfo = window.getGroupSizeInfo();
             if (sizeInfo.uneven) {
                 if (!confirm('⚠ ' + window.formatUnevenGroupsMessage(sizeInfo) + '\n\nCzy na pewno chcesz wygenerować play-off?')) return;
@@ -13706,11 +13801,17 @@
                 if (gkWinners.length > 1) gkLine += ' · ex aequo';
             }
 
-            const pdfScorers = function (m) {
-                const a = (m.s1 || []).map(function (x) { return x && x.name ? String(x.name).trim() : ''; }).filter(Boolean).join(', ');
-                const b = (m.s2 || []).map(function (x) { return x && x.name ? String(x.name).trim() : ''; }).filter(Boolean).join(', ');
-                if (!a && !b) return '—';
-                return (a || '—') + ' / ' + (b || '—');
+            const pdfScorersHtml = function (m) {
+                const names = function (arr) {
+                    return (arr || []).map(function (x) { return x && x.name ? String(x.name).trim() : ''; }).filter(Boolean).join(', ');
+                };
+                const a = names(m.s1);
+                const b = names(m.s2);
+                const home = m.t1 && m.t1.name ? String(m.t1.name) : 'Gospodarze';
+                const away = m.t2 && m.t2.name ? String(m.t2.name) : 'Goście';
+                if (!a && !b) return '<span class="pdf-scorer-line">—</span>';
+                return '<span class="pdf-scorer-line"><b>' + esc(home) + ':</b> ' + esc(a || '—') + '</span>' +
+                    '<span class="pdf-scorer-line"><b>' + esc(away) + ':</b> ' + esc(b || '—') + '</span>';
             };
 
             const matchRows = [];
@@ -13718,20 +13819,42 @@
                 matchRows.push({
                     label: (m.t1 && m.t1.name ? m.t1.name : '—') + ' - ' + (m.t2 && m.t2.name ? m.t2.name : '—'),
                     score: String(m.g1) + ':' + String(m.g2),
-                    scorers: pdfScorers(m),
+                    scorersHtml: pdfScorersHtml(m),
                     po: false
                 });
             });
-            (state.playoffs || []).filter(function (m) { return m && m.played; }).forEach(function (m) {
+
+            const playoffSeen = {};
+            const playoffList = (state.playoffs || []).slice().filter(function (m) { return m && m.played; });
+            const gf = (typeof window.findGrandFinalMatch === 'function') ? window.findGrandFinalMatch() : null;
+            if (gf && gf.played && !playoffList.some(function (m) { return m.id === gf.id; })) {
+                playoffList.push(gf);
+            }
+            playoffList.sort(function (a, b) {
+                const rank = function (m) {
+                    if (m && m.isDemoFinal) return 90;
+                    const n = (m && m.n) ? String(m.n) : '';
+                    if (/WIELKI/i.test(n) && /FINAŁ|FINAL/i.test(n)) return 90;
+                    if (/FINAŁ|FINAL/i.test(n) && !/PÓŁ|POL/i.test(n)) return 80;
+                    if (/3\.?\s*MIEJSCE|BRĄZ|BRONZE/i.test(n)) return 70;
+                    if (/PÓŁ|POL/i.test(n)) return 50;
+                    if (/ĆWIERĆ|CWIER|QF/i.test(n)) return 30;
+                    return 10;
+                };
+                return rank(a) - rank(b);
+            });
+            playoffList.forEach(function (m) {
+                if (!m || playoffSeen[m.id]) return;
+                playoffSeen[m.id] = true;
                 matchRows.push({
                     label: (m.n ? m.n + ': ' : '') + (m.t1 && m.t1.name ? m.t1.name : '—') + ' - ' + (m.t2 && m.t2.name ? m.t2.name : '—'),
                     score: String(m.g1) + ':' + String(m.g2) + (m.pen1 != null ? ' (k. ' + m.pen1 + ':' + m.pen2 + ')' : ''),
-                    scorers: pdfScorers(m),
+                    scorersHtml: pdfScorersHtml(m),
                     po: true
                 });
             });
 
-            const chunkSize = 14;
+            const chunkSize = 10;
             let protocolHTML = '';
             if (!matchRows.length) {
                 protocolHTML = '<p style="font-size:12px;color:#64748b;">Brak zakończonych meczów.</p>';
@@ -13746,7 +13869,7 @@
                             return '<tr' + (row.po ? ' style="background:#fff9c4;"' : '') + '>' +
                                 '<td>' + esc(row.label) + '</td>' +
                                 '<td>' + esc(row.score) + '</td>' +
-                                '<td>' + esc(row.scorers) + '</td></tr>';
+                                '<td class="pdf-scorers">' + row.scorersHtml + '</td></tr>';
                         }).join('') +
                         '</tbody></table>';
                 }
@@ -13759,11 +13882,14 @@
                 '<style>' +
                 '.pdf-break{page-break-before:always;break-before:page;height:0;margin:0;padding:0;}' +
                 '.pdf-match-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;margin:0 0 8px;}' +
-                '.pdf-match-table th,.pdf-match-table td{padding:5px 6px;border:1px solid #102a43;vertical-align:middle;line-height:1.3;word-break:break-word;}' +
-                '.pdf-match-table th{background:#e8eef5;font-size:9px;text-transform:uppercase;letter-spacing:0.04em;text-align:center;}' +
-                '.pdf-match-table td:nth-child(1){text-align:left;width:48%;}' +
-                '.pdf-match-table td:nth-child(2){text-align:center;font-weight:800;width:14%;}' +
-                '.pdf-match-table td:nth-child(3){text-align:left;width:38%;}' +
+                '.pdf-match-table th,.pdf-match-table td{padding:6px 6px;border:1px solid #102a43;vertical-align:top;line-height:1.45;overflow-wrap:anywhere;word-wrap:break-word;}' +
+                '.pdf-match-table th{background:#e8eef5;font-size:9px;text-transform:uppercase;letter-spacing:0.04em;text-align:center;vertical-align:middle;}' +
+                '.pdf-match-table td:nth-child(1){text-align:left;width:42%;}' +
+                '.pdf-match-table td:nth-child(2){text-align:center;font-weight:800;width:14%;vertical-align:middle;}' +
+                '.pdf-match-table td:nth-child(3){text-align:left;width:44%;}' +
+                '.pdf-scorers{display:block;}' +
+                '.pdf-scorer-line{display:block;margin:0 0 4px;line-height:1.45;white-space:normal;}' +
+                '.pdf-scorer-line:last-child{margin-bottom:0;}' +
                 '.pdf-match-table thead{display:table-header-group;}' +
                 '.pdf-match-table tr{page-break-inside:avoid;break-inside:avoid;}' +
                 '.pdf-section-title{margin:14px 0 8px;border-bottom:2px solid #0747a6;padding-bottom:4px;font-size:14px;color:#0747a6;}' +
@@ -13787,14 +13913,15 @@
                 '<span style="font-size:14px;font-weight:800;color:#ffffff;">' + esc(scorerLine) + '</span></div>' +
                 '<div style="color:#ffffff;font-size:11px;">🧤 ZŁOTA RĘKAWICA<br>' +
                 '<span style="font-size:14px;font-weight:800;color:#ffffff;">' + esc(gkLine) + '</span></div></div>' +
+                '<div class="pdf-break"></div>' +
                 '<h3 class="pdf-section-title">PROTOKÓŁ MECZOWY</h3>' +
                 protocolHTML +
                 '</div>';
 
             html2pdf().from(el).set({
                 filename: 'Raport_Turnieju.pdf',
-                margin: [8, 8, 10, 8],
-                pagebreak: { mode: ['css', 'legacy'], before: '.pdf-break', avoid: ['tr', '.pdf-nobreak', 'thead'] },
+                margin: [8, 8, 12, 8],
+                pagebreak: { mode: ['css', 'legacy'], before: '.pdf-break', avoid: ['tr', '.pdf-nobreak', 'thead', '.pdf-scorer-line'] },
                 html2canvas: { scale: 2, useCORS: true, logging: false },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save();
@@ -14280,20 +14407,10 @@
                 alert('RESET zabroniony — jest już co najmniej jeden rozegrany mecz.\n\nWolno tylko, gdy żaden mecz nie został jeszcze rozegrany (brak wyników zakończonych).\n\nPopraw wynik albo użyj Zamroź.');
                 return;
             }
-            if (!confirm("RESET kasuje aktywny turniej (drużyny, grupy, mecze, ustawienia). Archiwum i Wstrzymane zostają. Tego nie cofniesz przyciskiem Cofnij.\n\nKontynuować (krok 1/2)?")) return;
-            const tourName = ((document.getElementById('tournament-name') && document.getElementById('tournament-name').value) || '').trim()
-                || (state.meta && state.meta.tournamentName ? String(state.meta.tournamentName).trim() : '')
-                || (state._meta_name ? String(state._meta_name).trim() : '');
-            if (!tourName) {
-                alert('Ustaw nazwę turnieju na karcie Start przed RESET.');
-                return;
-            }
-            const typed = prompt('Wpisz nazwę turnieju, aby potwierdzić RESET (krok 2/2):', '');
-            if (typed === null) return;
-            if (typed.trim() !== tourName) {
-                alert('RESET anulowany — nazwa turnieju nie pasuje.');
-                return;
-            }
+            if (!window.confirmDestructivePhaseAction({
+                actionLabel: 'RESET',
+                warnStep1: 'RESET kasuje aktywny turniej (drużyny, grupy, mecze, ustawienia). Archiwum i Wstrzymane zostają. Tego nie cofniesz przyciskiem Cofnij.\n\nKontynuować (krok 1/2)?'
+            })) return;
             saveLastSnapshot();
             const base = 'turnieje_uzytkownikow/' + activeKey;
             db.ref(base).update({
