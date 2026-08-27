@@ -917,9 +917,63 @@
         #view-app .final-rank-row--3 { background: #fff7ed; }
         #view-demo-story .demo-embed-app .final-rank-row--1 { background: #fffbeb; }
         #view-demo-story .demo-embed-app .final-rank-row--2 { background: #f8fafc; }
+        #view-app .scorers-ranking-card,
+        #view-demo-story .demo-embed-app .scorers-ranking-card {
+            margin-top: 14px;
+        }
+        #view-app .scorers-ranking-title,
+        #view-demo-story .demo-embed-app .scorers-ranking-title {
+            font-size: 12px;
+            margin: 0 0 8px;
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #172b4d;
+        }
+        #view-app .scorers-ranking-table,
+        #view-demo-story .demo-embed-app .scorers-ranking-table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+            font-size: var(--font-size-table, 12px);
+        }
+        #view-app .scorers-ranking-table col.col-scorer-place { width: 48px; }
+        #view-app .scorers-ranking-table col.col-scorer-goals { width: 52px; }
+        #view-app .scorers-ranking-table th,
+        #view-app .scorers-ranking-table td,
+        #view-demo-story .demo-embed-app .scorers-ranking-table th,
+        #view-demo-story .demo-embed-app .scorers-ranking-table td {
+            box-sizing: border-box;
+            padding: 5px 8px;
+            border: 1px solid var(--color-app-border);
+            vertical-align: middle;
+        }
+        #view-app .scorers-ranking-table th,
+        #view-demo-story .demo-embed-app .scorers-ranking-table th {
+            background: var(--color-table-head-bg, #eef2ff);
+            color: var(--color-table-head-text, #334155);
+            font-weight: 800;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: left;
+        }
+        #view-app .scorer-rank-place,
+        #view-app .scorer-rank-goals {
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: #475569;
+        }
+        #view-app .scorer-rank-goals { text-align: center; }
+        #view-app .scorer-rank-player { font-weight: 700; color: #172b4d; word-break: break-word; }
+        #view-app .scorer-rank-team { color: #64748b; font-size: 11px; }
         #view-demo-story .demo-embed-app .final-rank-row--3 { background: #fff7ed; }
         #view-app .tables-render-target[data-compact="true"] .final-ranking-card { margin-top: 8px; padding: 6px 8px; }
         #view-app .tables-render-target[data-compact="true"] .final-ranking-title { font-size: 10px; margin-bottom: 4px; }
+        #view-app .tables-render-target[data-compact="true"] .scorers-ranking-card { margin-top: 8px; padding: 6px 8px; }
+        #view-app .tables-render-target[data-compact="true"] .scorers-ranking-title { font-size: 10px; margin-bottom: 4px; }
         #view-app th { background: var(--color-table-head-bg, #eef2ff); color: var(--color-table-head-text, #334155); padding: 5px 7px; border: 1px solid var(--color-app-border-strong, #cbd5e1); font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
         #view-app td { padding: 4px 7px; border: 1px solid var(--color-app-border); text-align: center; min-height: var(--row-height-table, 30px); box-sizing: border-box; line-height: 1.25; font-size: var(--font-size-table, 12px); }
         #view-app tr:nth-child(even) { background-color: var(--color-app-surface-muted, #f1f5f9); }
@@ -5437,6 +5491,12 @@
                                 <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="mp-cards" checked onchange="syncMatchParamsFromForm()"> <span>Żółte / czerwone kartki</span></label>
                                 <label class="time-setting" id="mp-cards-name-row" style="align-items:center; gap:8px; cursor:pointer; margin-left:18px;"><input type="checkbox" id="mp-cards-name" onchange="syncMatchParamsFromForm()"> <span>Wymagaj nazwiska napomnianego / wykluczonego</span></label>
                             </div>
+                            <div class="setup-adv-block" id="setup-mod-live-classifications">
+                                <div class="setup-adv-label">Klasyfikacje (Na żywo / kibic)</div>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="show-tournament-ranking" onchange="syncLiveClassificationsFromForm()"> <span>Pokaż klasyfikację turnieju</span></label>
+                                <label class="time-setting" style="align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="show-scorers-ranking" onchange="syncLiveClassificationsFromForm()"> <span>Pokaż klasyfikację strzelców</span></label>
+                                <p style="font-size:11px; color:#64748b; margin:0 0 8px; line-height:1.4;">Domyślnie wyłączone. Widoczne tylko w Na żywo (sędzia) oraz u kibica — nie w Hali i nie w PDF.</p>
+                            </div>
                         </div>
                     </details>
                     <button class="btn-main" onclick="generateInputs()" style="margin-top:15px;">UTWÓRZ DRUŻYNY</button>
@@ -8558,9 +8618,51 @@
         if (nameEl) nameEl.checked = mp.cardsRequireName;
         if (nameRow) nameRow.style.display = mp.cardsEnabled ? '' : 'none';
         if (typeof window.syncSeedingEnabledToForm === 'function') window.syncSeedingEnabledToForm();
+        if (typeof window.syncLiveClassificationsToForm === 'function') window.syncLiveClassificationsToForm();
         if (typeof window.applyTournamentWriteLockToStartUi === 'function') {
             window.applyTournamentWriteLockToStartUi();
         }
+    };
+
+    window.isTournamentRankingVisible = function () {
+        return !!(state && state.settings && state.settings.showTournamentRanking);
+    };
+
+    window.isScorersRankingVisible = function () {
+        return !!(state && state.settings && state.settings.showScorersRanking);
+    };
+
+    window.syncLiveClassificationsFromForm = function () {
+        if (typeof isFanMode !== 'undefined' && isFanMode) return;
+        if (typeof isHallMode !== 'undefined' && isHallMode) return;
+        if (typeof isAssistantMode !== 'undefined' && isAssistantMode) return;
+        if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+            if (typeof window.syncLiveClassificationsToForm === 'function') window.syncLiveClassificationsToForm();
+            if (typeof window.alertTournamentWriteLocked === 'function') window.alertTournamentWriteLocked();
+            return;
+        }
+        if (!state.settings) state.settings = {};
+        const tourEl = document.getElementById('show-tournament-ranking');
+        const scEl = document.getElementById('show-scorers-ranking');
+        state.settings.showTournamentRanking = !!(tourEl && tourEl.checked);
+        state.settings.showScorersRanking = !!(scEl && scEl.checked);
+        if (typeof window.save === 'function') window.save();
+        if (typeof window.calcTables === 'function') window.calcTables();
+    };
+
+    window.syncLiveClassificationsToForm = function () {
+        const tourEl = document.getElementById('show-tournament-ranking');
+        const scEl = document.getElementById('show-scorers-ranking');
+        if (tourEl) tourEl.checked = window.isTournamentRankingVisible();
+        if (scEl) scEl.checked = window.isScorersRankingVisible();
+    };
+
+    window.containerShowsOptionalClassifications = function (cont) {
+        if (!cont) return false;
+        if (cont.id === 'live-tables-container') return true;
+        const fanRo = (typeof isFanMode !== 'undefined' && isFanMode) || !!window._demoStoryFanEmbed;
+        if (fanRo && cont.id === 'tables-container') return true;
+        return false;
     };
 
     window.SEED_MAX = 10;
@@ -8732,7 +8834,7 @@
         const ids = [
             'tournament-name', 'team-count', 'group-count', 'bracket-size', 'playoff-placement-mode', 'advancing-count',
             'pitch-count', 'seeding-enabled', 'tp-players', 'tp-captain', 'tp-gk', 'tp-squad-size-6', 'tp-squad-size-7',
-            'mp-cards', 'mp-cards-name'
+            'mp-cards', 'mp-cards-name', 'show-tournament-ranking', 'show-scorers-ranking'
         ];
         ids.forEach(function (id) {
             const el = document.getElementById(id);
@@ -10105,6 +10207,60 @@
             '<tbody>' + body + '</tbody></table></div>';
     };
 
+    window.getTournamentScorersList = function () {
+        const sc = {};
+        const allPlayed = [...(state.matches || []), ...(state.playoffs || [])].filter(function (m) { return m && m.played; });
+        allPlayed.forEach(function (m) {
+            (m.s1 || []).forEach(function (s) {
+                if (s && s.name && String(s.name).trim()) {
+                    const key = String(s.name).trim().toUpperCase() + ' (' + ((m.t1 && m.t1.name) || '—') + ')';
+                    sc[key] = (sc[key] || 0) + 1;
+                }
+            });
+            (m.s2 || []).forEach(function (s) {
+                if (s && s.name && String(s.name).trim()) {
+                    const key = String(s.name).trim().toUpperCase() + ' (' + ((m.t2 && m.t2.name) || '—') + ')';
+                    sc[key] = (sc[key] || 0) + 1;
+                }
+            });
+        });
+        return Object.entries(sc).sort(function (a, b) {
+            return b[1] - a[1] || a[0].localeCompare(b[0], 'pl');
+        }).map(function (entry, idx) {
+            const key = entry[0];
+            const goals = entry[1];
+            const m = key.match(/^(.*) \((.*)\)\s*$/);
+            return {
+                place: idx + 1,
+                name: m ? m[1] : key,
+                team: m ? m[2] : '',
+                goals: goals
+            };
+        });
+    };
+
+    window.renderScorersRankingHTML = function () {
+        if (!window.isScorersRankingVisible || !window.isScorersRankingVisible()) return '';
+        const rows = typeof window.getTournamentScorersList === 'function' ? window.getTournamentScorersList() : [];
+        if (!rows.length) return '';
+        let body = '';
+        rows.forEach(function (r) {
+            body += '<tr>' +
+                '<td class="scorer-rank-place">' + esc(String(r.place)) + '</td>' +
+                '<td class="scorer-rank-player">' + esc(r.name) +
+                (r.team ? '<div class="scorer-rank-team">' + esc(r.team) + '</div>' : '') +
+                '</td>' +
+                '<td class="scorer-rank-goals">' + esc(String(r.goals)) + '</td>' +
+                '</tr>';
+        });
+        return '<div class="card scorers-ranking-card">' +
+            '<h4 class="scorers-ranking-title">Klasyfikacja strzelców</h4>' +
+            '<table class="scorers-ranking-table">' +
+            '<colgroup><col class="col-scorer-place"><col class="col-scorer-player"><col class="col-scorer-goals"></colgroup>' +
+            '<thead><tr><th>#</th><th>Zawodnik</th><th>Gole</th></tr></thead>' +
+            '<tbody>' + body + '</tbody></table></div>';
+    };
+
     function renderHallGkAwardCard(s) {
         const winners = (typeof window.buildGoalkeepersTopRanked === 'function')
             ? window.buildGoalkeepersTopRanked(s.allGk || [], 1)
@@ -11029,6 +11185,8 @@
             '<h4>Ponowne losowanie faz (awaryjne)</h4>' +
             '<p>Gdy istnieje drabinka play-off: <b>GENERUJ TERMINARZ</b> i <b>LOSUJ GRUPY</b> są zablokowane.</p>' +
             '<p>Ponowne <b>START PLAY-OFF</b> / regeneracja terminarza (bez drabinki) / ponowne losowanie grup: ścieżka awaryjna — ostrzeżenie + wpis nazwy turnieju. Przy wynikach play-off copy ostrzega o skasowaniu wyników.</p>' +
+            '<h4>Klasyfikacje (Na żywo / kibic)</h4>' +
+            '<p>W Start → Opcje zaawansowane: osobno włączasz klasyfikację turnieju i klasyfikację strzelców (domyślnie obie wyłączone). Widok tylko w Na żywo i u kibica; Hala i PDF bez zmian.</p>' +
             '<h4>Procedura kapitana</h4>' +
             '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
             '<li>W Start → Opcje zaawansowane: włącz „Podaj dane zawodników” (+ kapitan/gk jeśli potrzeba).</li>' +
@@ -13273,29 +13431,38 @@
             const fullBody = buildTablesBody(fanRo);
             const fanLikeBody = buildTablesBody(true);
             const compactBody = fanLikeBody;
-            const finalRankHTML = (typeof window.renderFinalRankingHTML === 'function')
-                ? window.renderFinalRankingHTML()
-                : '';
 
             containers.forEach(cont => {
                 const compact = cont.getAttribute('data-compact') === 'true';
                 const fanLayout = fanRo || cont.getAttribute('data-layout') === 'fan' || cont.id === 'live-tables-container';
+                const showOpt = typeof window.containerShowsOptionalClassifications === 'function'
+                    && window.containerShowsOptionalClassifications(cont);
+                let optHTML = '';
+                if (showOpt) {
+                    if (window.isTournamentRankingVisible && window.isTournamentRankingVisible()
+                        && typeof window.renderFinalRankingHTML === 'function') {
+                        optHTML += window.renderFinalRankingHTML();
+                    }
+                    if (typeof window.renderScorersRankingHTML === 'function') {
+                        optHTML += window.renderScorersRankingHTML();
+                    }
+                }
                 // Na żywo / demo: w fazie pucharowej ZOSTAW tabele grup (zielona strefa awansu).
                 if (compact && window.isPlayoffPhase()) {
                     cont.innerHTML = (compactBody || '<p style="color:#64748b;font-size:12px;margin:8px 0;">Brak tabel grupowych.</p>') +
-                        finalRankHTML;
+                        optHTML;
                     return;
                 }
                 if (compact) {
-                    cont.innerHTML = compactBody + finalRankHTML;
+                    cont.innerHTML = compactBody + optHTML;
                     return;
                 }
                 // Kibic + Na żywo Tabele (sędzia): te same proporcje i treść bez strzałek ↑↓
                 if (fanLayout) {
-                    cont.innerHTML = infoBanner + fanLikeBody + finalRankHTML;
+                    cont.innerHTML = infoBanner + fanLikeBody + optHTML;
                     return;
                 }
-                cont.innerHTML = infoBanner + fullBody + finalRankHTML;
+                cont.innerHTML = infoBanner + fullBody + optHTML;
             });
 
             ['btn-start-po', 'btn-start-po-live', 'btn-start-po-los'].forEach(btnId => {
