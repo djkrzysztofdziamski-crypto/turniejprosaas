@@ -34,11 +34,16 @@ function appConfigFromInput(appInput) {
   };
 }
 
-function buildOnboardingBlock(licenseKey, app) {
+/** UX TOP 10 #8 — tylko Turniejomat (nie SETKA). */
+function isTurniejomatOnboarding(app) {
+  return appConfigFromInput(app).name !== 'SETKA';
+}
+
+function buildTurniejomatOnboardingBlock(licenseKey, app) {
   const cfg = appConfigFromInput(app);
   const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
   return [
-    `Masz klucz licencyjny ${cfg.name}. Demo pokazuje finał i emocje — teraz ustawiasz swój turniej. Cel: ok. 15 minut do pierwszego wyniku.`,
+    'Masz klucz licencyjny Turniejomat. Demo pokazuje finał i emocje — teraz ustawiasz swój turniej. Cel: ok. 15 minut do pierwszego wyniku.',
     '',
     `1. Wejdź na ${appLink} i wklej klucz.`,
     '2. Na Start ustaw turniej (np. 8 drużyn) — kolejność: „Zrób to w tej kolejności” w Archiwum → Pomoc.',
@@ -64,14 +69,23 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, validityTe
   const footer = isSetka
     ? 'SETKA © 2026 · powered by Turniejomat'
     : 'Turniejomat © 2026 · powered by TurniejPro';
-  const onboarding = buildOnboardingBlock(licenseKey, app);
+  const withOnboarding = isTurniejomatOnboarding(app);
+  const title = withOnboarding
+    ? 'Turniejomat — Pierwsze 15 minut z kluczem'
+    : `${cfg.name} — Twój klucz licencyjny`;
+  const onboardingHtml = withOnboarding
+    ? `<p style="font-size: 14px; white-space: pre-line;">${buildTurniejomatOnboardingBlock(licenseKey, app).replace(/\n/g, '<br>')}</p>`
+    : '';
+  const closingHtml = withOnboarding
+    ? `<p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">Powodzenia,<br>Turniejomat<br>${footer}</p>`
+    : `<p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">${footer}</p>`;
 
   return `
 <!DOCTYPE html>
 <html lang="pl">
 <body style="font-family: Arial, sans-serif; color: #1e293b; line-height: 1.5; max-width: 560px;">
-  <h2 style="color: #0052cc;">${cfg.name} — Pierwsze 15 minut z kluczem</h2>
-  <p>Cześć,</p>
+  <h2 style="color: #0052cc;">${title}</h2>
+  ${withOnboarding ? '<p>Cześć,</p>' : ''}
   <p>Dziękujemy za zakup <strong>${productLabel}</strong>.</p>
   <p style="font-size: 16px;">Twój klucz licencyjny:</p>
   <p style="font-size: 22px; font-weight: bold; font-family: ui-monospace, monospace; background: #f1f5f9; padding: 14px 18px; border-radius: 8px; letter-spacing: 0.04em;">${licenseKey}</p>
@@ -81,12 +95,12 @@ function buildLicenseEmailHtml({ licenseKey, productLabel, expiresAt, validityTe
       ${cfg.ctaLabel}
     </a>
   </p>
-  <p style="font-size: 14px; white-space: pre-line;">${onboarding.replace(/\n/g, '<br>')}</p>
+  ${onboardingHtml}
   <p style="font-size: 13px; color: #64748b;">
     Możesz też wpisać klucz ręcznie na <a href="${cfg.appUrl}">${cfg.appUrl}</a><br>
     Pytania: <a href="mailto:${cfg.supportEmail}">${cfg.supportEmail}</a>
   </p>
-  <p style="font-size: 12px; color: #94a3b8; margin-top: 24px;">Powodzenia,<br>${cfg.name}<br>${footer}</p>
+  ${closingHtml}
 </body>
 </html>`;
 }
@@ -98,26 +112,42 @@ function buildLicenseEmailText({ licenseKey, productLabel, expiresAt, validityTe
     : (expiresAt ? new Date(expiresAt).toLocaleString('pl-PL') : '—');
   const expiryLabel = validityText ? 'Okres licencji' : 'Ważny do';
   const appLink = `${cfg.appUrl}/?id=${encodeURIComponent(licenseKey)}`;
+  const withOnboarding = isTurniejomatOnboarding(app);
 
-  return [
-    `${cfg.name} — Pierwsze 15 minut z kluczem`,
-    '',
-    'Cześć,',
-    '',
-    `Dziękujemy za zakup ${productLabel}.`,
-    '',
-    `Klucz: ${licenseKey}`,
-    `${expiryLabel}: ${expiryStr}`,
-    '',
-    `Wejdź do aplikacji: ${appLink}`,
-    '',
-    buildOnboardingBlock(licenseKey, app),
-    '',
-    'Powodzenia,',
-    cfg.name,
-    '',
-    `Pytania: ${cfg.supportEmail}`,
-  ].join('\n');
+  const lines = withOnboarding
+    ? [
+      'Turniejomat — Pierwsze 15 minut z kluczem',
+      '',
+      'Cześć,',
+      '',
+      `Dziękujemy za zakup ${productLabel}.`,
+      '',
+      `Klucz: ${licenseKey}`,
+      `${expiryLabel}: ${expiryStr}`,
+      '',
+      `Wejdź do aplikacji: ${appLink}`,
+      '',
+      buildTurniejomatOnboardingBlock(licenseKey, app),
+      '',
+      'Powodzenia,',
+      'Turniejomat',
+      '',
+      `Pytania: ${cfg.supportEmail}`,
+    ]
+    : [
+      `${cfg.name} — Twój klucz licencyjny`,
+      '',
+      `Dziękujemy za zakup ${productLabel}.`,
+      '',
+      `Klucz: ${licenseKey}`,
+      `${expiryLabel}: ${expiryStr}`,
+      '',
+      `Wejdź do aplikacji: ${appLink}`,
+      '',
+      `Pytania: ${cfg.supportEmail}`,
+    ];
+
+  return lines.join('\n');
 }
 
 async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, validityText, app }) {
@@ -135,13 +165,16 @@ async function sendLicenseEmail({ to, licenseKey, productLabel, expiresAt, valid
   const from = cfg.from || 'Turniejomat <noreply@turniejomat.pl>';
   const payload = { licenseKey, productLabel, expiresAt, validityText, app };
   const appCfg = appConfigFromInput(app);
+  const withOnboarding = isTurniejomatOnboarding(app);
 
   try {
     await transporter.sendMail({
       from,
       to,
       replyTo: cfg.reply_to || appCfg.supportEmail,
-      subject: `${appCfg.name} — Pierwsze 15 minut z kluczem`,
+      subject: withOnboarding
+        ? 'Turniejomat — Pierwsze 15 minut z kluczem'
+        : `${appCfg.name} — Twój klucz licencyjny`,
       text: buildLicenseEmailText(payload),
       html: buildLicenseEmailHtml(payload),
     });
