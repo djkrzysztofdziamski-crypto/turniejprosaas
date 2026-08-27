@@ -314,7 +314,7 @@
     if (!root) return;
     if (!params.key || params.teamId == null || params.teamId === '' || !params.token) {
       root.innerHTML =
-        '<div class="captain-shell"><h1>Link niepełny</h1><p>Poproś organizatora o pełny link zaproszenia kapitana.</p></div>';
+        '<div class="captain-shell"><h1>Link niepełny</h1><p>Ten adres nie zawiera pełnego zaproszenia.</p><p class="captain-empty">Poproś organizatora o pełny link</p></div>';
       return;
     }
     setStatus('Ładowanie…');

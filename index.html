@@ -3291,6 +3291,25 @@
         #view-app .archive-close-panel.is-pending { background: #f8fafc; border-color: #e2e8f0; }
         #view-app .archive-close-panel h4 { margin: 0 0 6px; font-size: 14px; color: #102a43; }
         #view-app .archive-close-panel p { margin: 0 0 10px; font-size: 12px; color: #64748b; line-height: 1.45; }
+        #view-app .archive-help-panel { margin-bottom: 16px; border: 1px solid #c7d2fe; border-radius: 10px; background: #f8fafc; overflow: hidden; }
+        #view-app .archive-help-panel summary { cursor: pointer; font-weight: 800; font-size: 14px; color: #1e3a8a; padding: 12px 16px; background: #eef2ff; list-style: none; }
+        #view-app .archive-help-panel summary::-webkit-details-marker { display: none; }
+        #view-app .archive-help-body { padding: 12px 16px 16px; font-size: 12px; color: #334155; line-height: 1.5; }
+        #view-app .archive-help-body h4 { margin: 14px 0 6px; font-size: 13px; color: #102a43; }
+        #view-app .archive-help-body h4:first-child { margin-top: 0; }
+        #view-app .archive-help-body pre { white-space: pre-wrap; font-family: inherit; font-size: 11px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin: 6px 0 10px; line-height: 1.45; }
+        #view-app .archive-help-table { width: 100%; border-collapse: collapse; font-size: 11px; margin: 8px 0 12px; }
+        #view-app .archive-help-table th, #view-app .archive-help-table td { border: 1px solid #e2e8f0; padding: 6px 8px; text-align: left; vertical-align: top; }
+        #view-app .archive-help-table th { background: #f1f5f9; font-weight: 700; }
+        #view-app .archive-help-intro { margin: 0 0 10px; font-size: 12px; color: #475569; }
+        #view-app .live-status-legend { font-size: 11px; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; margin: 0 0 8px; line-height: 1.4; }
+        #view-app .live-wo-badge { display: inline; margin-left: 4px; font-size: 9px; font-weight: 800; color: #fff; background: #de350b; padding: 1px 4px; border-radius: 3px; vertical-align: middle; letter-spacing: 0.02em; }
+        #view-app .empty-state { text-align: center; padding: 24px 16px !important; }
+        #view-app .empty-state-head { margin: 0 0 8px; font-size: 15px; color: #102a43; }
+        #view-app .empty-state-body { margin: 0 0 12px; font-size: 13px; color: #64748b; line-height: 1.45; }
+        #view-app .empty-state-cta { margin: 0; }
+        #view-app .empty-state-btn { display: inline-block; width: auto; padding: 8px 16px; font-size: 12px; margin: 0; }
+        #view-app .empty-state-cta--text { font-size: 12px; color: #94a3b8; font-weight: 600; }
         #view-app .archive-close-actions { display: flex; flex-wrap: wrap; gap: 8px; }
         #view-app .archive-close-actions .btn-main { margin: 0; flex: 1 1 200px; }
         #view-app .advancing-row { background-color: #e3fcef !important; }
@@ -5149,9 +5168,9 @@
         </div>
         <div id="header-status-badges" class="header-status-badges" hidden aria-hidden="true"></div>
         <div style="display:flex; gap:5px;" class="header-organizer-actions">
-            <button id="btn-freeze" onclick="freezeTournament()" style="background:#ff8b00; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">❄️ ZAMROŹ</button>
-            <button id="btn-restore" onclick="restoreLastSnapshot()" disabled style="background:#0052cc; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">↩ PRZYWRÓĆ OSTATNI STAN</button>
-            <button id="btn-reset" onclick="resetData()" style="background:#de350b; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">RESET</button>
+            <button id="btn-freeze" onclick="freezeTournament()" title="Zapisuje kopię turnieju w Wstrzymanych sesjach i czyści aktywny turniej." style="background:#ff8b00; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">❄️ ZAMROŹ</button>
+            <button id="btn-restore" onclick="restoreLastSnapshot()" disabled title="Cofa ostatnią zmianę w tej sesji przeglądarki (lokalny punkt przywracania)." style="background:#0052cc; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">↩ PRZYWRÓĆ OSTATNI STAN</button>
+            <button id="btn-reset" onclick="resetData()" title="RESET kasuje aktywny turniej. Wolno tylko gdy żaden mecz nie został rozegrany." style="background:#de350b; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">RESET</button>
         </div>
     </header>
 
@@ -5236,7 +5255,7 @@
     </div>
 
         <div id="assistant-screen" aria-hidden="true">
-        <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.</div>
+        <div class="assistant-banner" id="assistant-banner">🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju. Boiska ustawia sędzia — asystent ich nie zmienia. Status: kropka szara = mecz nierozgrany · kropka zielona = zakończony. Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przydziału / wolne.</div>
         <div id="assistant-pitches-toolbar" class="fan-subnav" style="display:none; margin: 0 0 8px;">
             <button type="button" class="fan-subnav-btn fan-subnav-btn--primary" id="assistant-tab-matches" onclick="openAssistantMatchesView()">Mecze</button>
             <button type="button" class="fan-subnav-btn" id="assistant-tab-pitches" onclick="openAssistantPitchesView()">Boiska</button>
@@ -5369,7 +5388,7 @@
             <div class="card">
                 <h3 style="margin-top:0;">Składy drużyn</h3>
                 <p id="sklady-help" style="font-size:12px; color:#666;">Wpisz nazwy drużyn. Opcje składu, kapitana i bramkarza zależą od ustawień na karcie Start. Zmiany zapisują się automatycznie.</p>
-                <div id="inputs-container">Brak drużyn. Wróć do karty "Start", aby wygenerować formularz.</div>
+                <div id="inputs-container"></div>
                 <p style="margin:12px 0 0; font-size:13px;">
                     <button type="button" class="btn-main" style="background:#172b4d; width:auto; display:inline-block; padding:8px 14px;" onclick="openLosowaniaStep(1)">Przejdź do losowania grup</button>
                 </p>
@@ -5461,6 +5480,7 @@
                     <div class="live-split">
                         <div class="live-split-schedule card">
                             <h4 class="live-panel-head">Harmonogram meczów<span class="live-panel-head-meta" id="live-schedule-print-meta" hidden></span></h4>
+                            <div id="live-status-legend" class="live-status-legend" hidden>Status: kropka szara = mecz nierozgrany · kropka zielona = zakończony. Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przydziału / wolne.</div>
                             <div id="live-matches-container" class="matches-render-target"></div>
                         </div>
                         <div class="live-split-standings card">
@@ -5496,6 +5516,10 @@
         </div>
 
         <div id="archiwum" class="tab-content">
+            <details id="archive-help-panel" class="archive-help-panel" open>
+                <summary>Pomoc — Turniejomat (sędzia / asystent)</summary>
+                <div id="archive-help-body" class="archive-help-body"></div>
+            </details>
             <div class="card">
                 <h3 style="margin-top:0;">Centrum Zapisów</h3>
                 <p style="font-size:12px; color:#666;">Zarządzaj wstrzymanymi sesjami oraz przeglądaj dawne wyniki.</p>
@@ -10726,9 +10750,9 @@
         const scoreStyle = opts.scoreStyle ? ' style="' + opts.scoreStyle + '"' : '';
         const extraAlert = opts.extraAlert || '';
         return '<div class="match-po-inline-line">' +
-            '<span class="match-po-team" title="' + escAttr(m.t1.name) + '">' + esc(m.t1.name) + '</span>' +
+            '<span class="match-po-team" title="' + escAttr(m.t1.name) + '">' + esc(m.t1.name) + window.formatMatchScheduleWoBadgeHTML(m, 1) + '</span>' +
             '<span class="match-po-sep"> — </span>' +
-            '<span class="match-po-team" title="' + escAttr(m.t2.name) + '">' + esc(m.t2.name) + '</span>' +
+            '<span class="match-po-team" title="' + escAttr(m.t2.name) + '">' + esc(m.t2.name) + window.formatMatchScheduleWoBadgeHTML(m, 2) + '</span>' +
             ' <span class="match-score"' + scoreStyle + '>' + scoreDisplay + '</span>' +
             extraAlert +
             '</div>';
@@ -10765,6 +10789,136 @@
     function renderMatchSectionHead(icon, label, extraClass) {
         return '<h3 class="match-section-head' + (extraClass ? ' ' + extraClass : '') + '">' + icon + ' ' + label + '</h3>';
     }
+
+    window.ASSISTANT_BANNER_DEFAULT = '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju. Boiska ustawia sędzia — asystent ich nie zmienia. Status: kropka szara = mecz nierozgrany · kropka zielona = zakończony. Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przydziału / wolne.';
+
+    window.renderEmptyStateHTML = function (cfg) {
+        cfg = cfg || {};
+        let cta = '';
+        if (cfg.ctaAction) {
+            cta = '<p class="empty-state-cta"><button type="button" class="btn-main empty-state-btn" onclick="' + escAttr(cfg.ctaAction) + '">' + esc(cfg.ctaLabel || 'Dalej') + '</button></p>';
+        } else if (cfg.ctaText) {
+            cta = '<p class="empty-state-cta empty-state-cta--text">' + esc(cfg.ctaText) + '</p>';
+        }
+        return '<div class="empty-state card">' +
+            '<h4 class="empty-state-head">' + esc(cfg.heading || '') + '</h4>' +
+            '<p class="empty-state-body">' + esc(cfg.sentence || '') + '</p>' + cta + '</div>';
+    };
+
+    window.formatMatchScheduleWoBadgeHTML = function (m, teamSide) {
+        if (!m || m.resultType !== 'walkover' || m.walkoverTeamId == null) return '';
+        const tid = teamSide === 1 ? (m.t1 && m.t1.id) : (m.t2 && m.t2.id);
+        if (parseInt(m.walkoverTeamId, 10) !== parseInt(tid, 10)) return '';
+        return ' <span class="live-wo-badge">WO</span>';
+    };
+
+    window.formatLiveTeamNameHTML = function (m, team, side) {
+        return '<span class="live-team-name">' + esc(team && team.name ? team.name : '') + window.formatMatchScheduleWoBadgeHTML(m, side) + '</span>';
+    };
+
+    window.syncLiveStatusLegend = function () {
+        const el = document.getElementById('live-status-legend');
+        if (!el) return;
+        const nazywo = document.getElementById('nazywo');
+        const show = !!(nazywo && nazywo.classList.contains('active')
+            && typeof isFanMode !== 'undefined' && !isFanMode
+            && typeof isAssistantMode !== 'undefined' && !isAssistantMode
+            && typeof isHallMode !== 'undefined' && !isHallMode);
+        el.hidden = !show;
+    };
+
+    window.renderArchiveHelpPanel = function () {
+        const panel = document.getElementById('archive-help-panel');
+        const body = document.getElementById('archive-help-body');
+        if (!panel || !body) return;
+        if ((typeof isFanMode !== 'undefined' && isFanMode)
+            || (typeof isAssistantMode !== 'undefined' && isAssistantMode)
+            || (typeof isHallMode !== 'undefined' && isHallMode)) {
+            panel.style.display = 'none';
+            return;
+        }
+        panel.style.display = '';
+        if (body.dataset.rendered === '1') return;
+        body.dataset.rendered = '1';
+        const dictRows = [
+            ['Tor / Losowanie', 'Pasek kroków przygotowania: 1 · Grupy → 2 · Terminarz → 3 · Play-off.', 'Zanim zaczniesz wpisywać wyniki dnia; gdy budujesz lub przebudowujesz grafik.'],
+            ['Start', 'Zakładka konfiguracji turnieju (nazwa, skala, boiska, parametry drużyn/meczów, utwórz drużyny).', 'Przygotowania; gdy zmieniasz ustawienia, nie gdy wpisujesz wyniki.'],
+            ['Na żywo', 'Główne miejsce wpisywania wyników i przeglądu harmonogramu w trakcie turnieju.', 'Gdy jest terminarz (≥1 mecz) — tu pracujesz dzień turnieju (sędzia/asystent).'],
+            ['Seed / rozstawienie', 'Oznaczenie silniejszych drużyn i kolejności siły przed losowaniem grup.', 'Tylko gdy w Start włączysz rozstawianie; przed Tor → 1 · Grupy.'],
+            ['Walkover (WO)', 'Wynik walkowerem (np. 3:0) bez rozegrania meczu; w terminarzu WO przy drużynie z walkoverTeamId; w tabelach: „WO nieobecność” / „WO dyscyplinarny”.', 'Nieobecność, dyskwalifikacja, brak drużyny na meczu — przez narzędzie Walkover, nie „ręczny 3:0” bez WO.'],
+            ['Remis absolutny', 'Remis w tabeli grupowej po wszystkich kryteriach (bezpośrednie, bilans, bramki, Fair Play) — sędzia rozstrzyga losowaniem lub serią karnych.', 'Gdy system pokazuje nierozstrzygnięty remis o awans/kolejność w grupie.'],
+            ['Zamroź', 'Zapisuje punkt przywracania (snapshot) stanu turnieju.', 'Przed ryzykowną zmianą lub jako bezpieczny punkt w trakcie dnia.'],
+            ['Przywróć ostatni stan', 'Wraca do ostatnio zamrożonego snapshota (wyniki i ustawienia z tego momentu).', 'Tylko po Zamroź; gdy chcesz cofnąć późniejsze zmiany do tego punktu.'],
+            ['RESET', 'Kasuje dane turnieju (operacja destrukcyjna).', 'Nie w dniu turnieju na żywej licencji „żeby poprawić jedną rzecz”; polityka szczegółowa poniżej.'],
+            ['Write-lock / turniej zamknięty', 'Stan, w którym zapis/edycja wyniku i ustawień jest zablokowana (turniej zamknięty / zarchiwizowany).', 'Po zakończeniu i zamknięciu turnieju; wtedy tylko podgląd, bez edycji.'],
+            ['Asystent', 'Osobny widok (link/QR) do wpisywania wyniku przy boisku — bez ustawień turnieju i bez zmiany boisk.', 'Gdy ktoś wpisuje wynik na telefonie/tablecie przy boisku, a sędzia trzyma konfigurację.'],
+            ['Hala', 'Widok prezentacyjny na TV/projektor (wyniki live, nie panel edycji sędziego).', 'Ekran hali / orlika dla publiczności — nie do wpisywania wyników.']
+        ].map(function (r) {
+            return '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>';
+        }).join('');
+        const emptyRows = [
+            ['Składy — brak drużyn', 'Brak drużyn', 'Najpierw utwórz skład turnieju w konfiguracji.', '→ Start → Utwórz drużyny'],
+            ['Grupy — brak losowania', 'Brak grup', 'Rozlosuj drużyny, żeby zobaczyć grupy.', '→ Tor → 1 · Grupy'],
+            ['Na żywo — brak meczów', 'Brak meczów', 'Harmonogram jeszcze nie istnieje.', '→ Tor → 2 · Terminarz'],
+            ['Play-Off — pusto', 'Brak drabinki', 'Play-off generujesz po domknięciu fazy grupowej.', '→ Tor → 3 · Play-off'],
+            ['Podium — pusto', 'Brak podium', 'Podium pojawi się po zakończeniu finału.', 'Dokończ finał w Na żywo / Play-Off'],
+            ['Archiwum — pusto', 'Brak archiwum', 'Tu trafią zakończone turnieje po zamknięciu.', 'Zakończ i zarchiwizuj po turnieju'],
+            ['Kapitan — link niepełny', 'Link niepełny', 'Ten adres nie zawiera pełnego zaproszenia.', 'Poproś organizatora o pełny link'],
+            ['Asystent — brak tokenu', 'Brak dostępu', 'Link asystenta jest niekompletny lub wygasł.', 'Poproś sędziego o nowy link / QR'],
+            ['Boiska — wyłączone', 'Boiska wyłączone', 'Numeracja boisk działa od 2 boisk w górę.', 'Ustaw liczbę boisk ≥2 w Start'],
+            ['Kibic — turniej pusty', 'Brak wyników', 'Turniej jeszcze nie ma meczów do pokazania.', 'Wyniki pojawią się po pierwszym meczu']
+        ].map(function (r) {
+            return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>';
+        }).join('');
+        body.innerHTML =
+            '<p class="archive-help-intro">Gdy masz terminarz: wyniki → „Na żywo”. Start i Tor → tylko gdy zmieniasz grafik lub składy.</p>' +
+            '<h4>Słownik</h4>' +
+            '<table class="archive-help-table"><thead><tr><th>Hasło</th><th>Znaczenie</th><th>Kiedy używać</th></tr></thead><tbody>' + dictRows + '</tbody></table>' +
+            '<h4>Legenda statusów</h4>' +
+            '<p>Status: kropka szara = mecz nierozgrany · kropka zielona = zakończony.<br>Boisko: szara cyfra = planowane · zielona cyfra = zakończony · — = bez przydziału / wolne.</p>' +
+            '<h4>Pierwszy turniej — Zrób to w tej kolejności</h4>' +
+            '<pre>1. Start: nazwa turnieju + liczba drużyn\n2. Start: liczba grup (+ awanse, jeśli potrzeba)\n3. Start: boiska — 0 (wyłączone) albo 2+\n4. Start / Tor: godzina startu i czasy meczów\n5. Start → Utwórz drużyny → Składy (nazwy) → Tor → 1 · Grupy → Tor → 2 · Terminarz\n\nPotem: Na żywo (wyniki). CHECKLISTA START — poniżej.\n\nNa start NIE ruszaj (zaawansowane):\nseed/rozstawienie, szczegółowe tryby play-off, kartki, format 6/7,\nremis absolutny, kapitan/zdjęcia, WO.</pre>' +
+            '<h4>Pierwsze 15 minut (po kluczu)</h4>' +
+            '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
+            '<li>Wejdź na https://app.turniejomat.pl i wklej klucz.</li>' +
+            '<li>Na Start ustaw turniej (np. 8 drużyn) — kolejność jak wyżej.</li>' +
+            '<li>Utwórz drużyny → Tor → 1 · Grupy → Tor → 2 · Terminarz.</li>' +
+            '<li>Udostępnij QR / link kibica.</li>' +
+            '<li>W Na żywo wpisz 1 testowy wynik (potem możesz poprawić).</li>' +
+            '<li>Opcja: link asystenta na telefon przy boisku.</li>' +
+            '</ol>' +
+            '<h4>CHECKLISTA START</h4>' +
+            '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
+            '<li>Terminarz OK</li><li>QR kibica wydrukowany / wysłany</li><li>Link asystenta na telefonach przy boiskach</li><li>Otwórz Na żywo (nie Start)</li><li>Wiesz gdzie Zamroź (nie Reset)</li>' +
+            '</ol>' +
+            '<h4>Tryb przygotowań vs tryb dnia</h4>' +
+            '<p><b>Przygotowania:</b> Start · Składy · Tor (1–2–3) · Grupy · (opcjonalnie kapitanowie)<br>' +
+            '<b>Dzień turnieju:</b> Na żywo · Boiska · Play-Off · Podium · Share/QR/Hala · Asystent<br>' +
+            '<b>Trigger „dzień turnieju”:</b> od momentu ≥1 meczu w terminarzu (bez auto-zakładki).</p>' +
+            '<h4>Zamroź / Przywróć ostatni stan / RESET</h4>' +
+            '<p><b>ZAMROŹ</b><br>Zapisuje kopię turnieju w Wstrzymanych sesjach i czyści aktywny turniej. Przywrócisz go z listy Wstrzymanych (nie przyciskiem „Przywróć ostatni stan”).</p>' +
+            '<p><b>PRZYWRÓĆ OSTATNI STAN</b><br>Cofa ostatnią zmianę w tej sesji przeglądarki (lokalny punkt przywracania). To nie jest przywrócenie z Wstrzymanych ani z Archiwum.</p>' +
+            '<p><b>RESET — kiedy wolno</b><br>Wolno tylko, gdy żaden mecz nie został jeszcze rozegrany (brak wyników zakończonych).</p>' +
+            '<p><b>RESET — ostrzeżenie</b><br>RESET kasuje aktywny turniej (drużyny, grupy, mecze, ustawienia). Archiwum i Wstrzymane zostają. Tego nie cofniesz przyciskiem Cofnij.</p>' +
+            '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
+            '<li>Chcesz przerwać i wrócić później → <b>Zamroź</b> → potem Wstrzymane.</li>' +
+            '<li>Chcesz cofnąć ostatnią operację w tej sesji → <b>Przywróć ostatni stan</b>.</li>' +
+            '<li>Chcesz zacząć od zera i nie ma żadnego rozegranego meczu → <b>RESET</b> (2 potwierdzenia + nazwa).</li>' +
+            '<li>Jest choć jeden wynik → <b>RESET zabroniony</b>; popraw wynik albo Zamroź.</li>' +
+            '</ol>' +
+            '<h4>Procedura kapitana</h4>' +
+            '<ol style="margin:0 0 10px; padding-left:18px; line-height:1.5;">' +
+            '<li>W Start: włącz „Podaj dane zawodników” (+ kapitan/gk jeśli potrzeba).</li>' +
+            '<li>Składy: drużyny istnieją.</li>' +
+            '<li>„Link kapitana” → wyślij WhatsApp/mail.</li>' +
+            '<li>Kapitan: skład + (opcjonalnie) zdjęcie; czeka na „Zdjęcie zapisane”.</li>' +
+            '<li>Sędzia: Przejrzyj → Akceptuj / Odrzuć.</li>' +
+            '</ol>' +
+            '<p><b>Template WhatsApp:</b></p>' +
+            '<pre>Cześć! Tu link do zgłoszenia składu na turniej [NAZWA]:\n[LINK]\nUzupełnij zawodników, bramkarza i kapitana. Zdjęcie opcjonalne (JPG/PNG).\nPo wysłaniu czekamy na akceptację sędziego. Dzięki!</pre>' +
+            '<h4>Katalog empty states (referencja)</h4>' +
+            '<table class="archive-help-table"><thead><tr><th>Miejsce</th><th>Nagłówek</th><th>Zdanie</th><th>CTA</th></tr></thead><tbody>' + emptyRows + '</tbody></table>';
+    };
 
     function parseNonNegativeScore(raw, emptyAsZero) {
         if (raw === null || raw === undefined) return emptyAsZero ? 0 : NaN;
@@ -10877,9 +11031,9 @@
         const cards1 = window.formatCardsSideBadgeHTML(m.cards1, 1);
         const cards2 = window.formatCardsSideBadgeHTML(m.cards2, 2);
         const teamsHTML = (cards1 || '') +
-            '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
+            window.formatLiveTeamNameHTML(m, m.t1, 1) +
             '<span class="live-teams-vs">vs</span>' +
-            '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
+            window.formatLiveTeamNameHTML(m, m.t2, 2) +
             (cards2 || '');
         const rowCls = 'live-match-row ' + (m.played ? 'live-match-row--played' : 'live-match-row--pending');
         let scoreHTML;
@@ -10955,9 +11109,9 @@
         const cards1 = window.formatCardsSideBadgeHTML(m.cards1, 1);
         const cards2 = window.formatCardsSideBadgeHTML(m.cards2, 2);
         const teamsHTML = (cards1 || '') +
-            '<span class="live-team-name">' + esc(m.t1.name) + '</span>' +
+            window.formatLiveTeamNameHTML(m, m.t1, 1) +
             '<span class="live-teams-sep"> - </span>' +
-            '<span class="live-team-name">' + esc(m.t2.name) + '</span>' +
+            window.formatLiveTeamNameHTML(m, m.t2, 2) +
             (cards2 || '');
         const scorersHTML = opts.showScorers
             ? renderScorersBtn(m.id, isPo, !m.played, true)
@@ -11321,6 +11475,15 @@
 
         window.renderGroupsList = () => {
             const cont = document.getElementById('groups-list-display'); if(!cont || !state.groups) return;
+            if (Object.keys(state.groups).length === 0) {
+                cont.innerHTML = window.renderEmptyStateHTML({
+                    heading: 'Brak grup',
+                    sentence: 'Rozlosuj drużyny, żeby zobaczyć grupy.',
+                    ctaLabel: '→ Tor → 1 · Grupy',
+                    ctaAction: 'openLosowaniaStep(1)'
+                });
+                return;
+            }
             const info = window.getGroupSizeInfo();
             const banner = info.uneven
                 ? `<div class="uneven-groups-banner" style="background:#fff7e6; border:1px solid #ffd591; color:#ad6800; padding:10px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; line-height:1.4;">⚠ ${esc(window.formatUnevenGroupsMessage(info))}</div>`
@@ -11415,9 +11578,17 @@
 
         window.renderInputs = () => {
             window.ensureTeamAndMatchParams();
-            if (!state.teams || state.teams.length === 0) return;
             const cont = document.getElementById('inputs-container');
             if (!cont) return;
+            if (!state.teams || state.teams.length === 0) {
+                cont.innerHTML = window.renderEmptyStateHTML({
+                    heading: 'Brak drużyn',
+                    sentence: 'Najpierw utwórz skład turnieju w konfiguracji.',
+                    ctaLabel: '→ Start → Utwórz drużyny',
+                    ctaAction: "switchTab('start')"
+                });
+                return;
+            }
             const tp = window.getTeamParams();
             const writeLocked = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
             const seedingOn = !isFanMode && !isHallMode && !isAssistantMode && window.isSeedingEnabled();
@@ -12548,9 +12719,10 @@
             if (assistantBanner && isAssistantMode) {
                 assistantBanner.innerHTML = filterIsPo
                     ? '🧑‍⚖️ <b>Asystent — faza pucharowa</b> — wpisuj wyniki meczów play-off (ćwierćfinał, półfinał, finał, 3. miejsce).'
-                    : '🧑‍⚖️ Tryb asystenta — wpisuj wynik przez <b>Strzelcy/Kartki</b> (+ GOL / kartki) albo bezpośrednio w polu wyniku. Brak dostępu do ustawień turnieju.';
+                    : window.ASSISTANT_BANNER_DEFAULT;
             }
 
+            const scheduleEmpty = !(state.matches || []).length && !(state.playoffs || []).length;
             let filtered;
             let tableIsPo = false;
             if (filterIsPo) {
@@ -12618,10 +12790,20 @@
             const matchesTableHTML = renderMatchesTableHTML(filtered, tableOpts);
 
             const bodyHTML = (filtered.length === 0 && !playoffShortcutHTML)
-                ? '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>'
+                ? (scheduleEmpty && !filterIsPo
+                    ? (isFanMode
+                        ? window.renderEmptyStateHTML({ heading: 'Brak wyników', sentence: 'Turniej jeszcze nie ma meczów do pokazania.', ctaText: 'Wyniki pojawią się po pierwszym meczu' })
+                        : window.renderEmptyStateHTML({ heading: 'Brak meczów', sentence: 'Harmonogram jeszcze nie istnieje.', ctaLabel: '→ Tor → 2 · Terminarz', ctaAction: 'openLosowaniaStep(2)' }))
+                    : '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>')
                 : (groupSectionHTML + matchesTableHTML + playoffShortcutHTML);
 
-            const emptyMatchesHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>';
+            const emptyMatchesHTML = scheduleEmpty && !filterIsPo
+                ? (isFanMode
+                    ? window.renderEmptyStateHTML({ heading: 'Brak wyników', sentence: 'Turniej jeszcze nie ma meczów do pokazania.', ctaText: 'Wyniki pojawią się po pierwszym meczu' })
+                    : window.renderEmptyStateHTML({ heading: 'Brak meczów', sentence: 'Harmonogram jeszcze nie istnieje.', ctaLabel: '→ Tor → 2 · Terminarz', ctaAction: 'openLosowaniaStep(2)' }))
+                : '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>';
+
+            if (typeof window.syncLiveStatusLegend === 'function') window.syncLiveStatusLegend();
 
             containers.forEach(cont => {
                 const isLivePanel = cont.id === 'live-matches-container';
@@ -13632,6 +13814,7 @@
 
             if(t==='tabele') window.calcTables();
             if(t==='nazywo') {
+                if (typeof window.syncLiveStatusLegend === 'function') window.syncLiveStatusLegend();
                 window.renderFilterBar();
                 window.filterAndRenderMatches();
                 window.calcTables();
@@ -13652,7 +13835,7 @@
             if(t==='mecze') { window.renderFilterBar(); window.filterAndRenderMatches(); }
             if(t==='boiska') { window.renderPitchesView(); }
             if(t==='playoff') { window.renderFilterBar(); window.renderPlayoffTree(); }
-            if(t==='archiwum') { window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
+            if(t==='archiwum') { window.renderArchiveHelpPanel(); window.renderArchiveClosePanel(); window.renderArchiveAndFrozen(); window.renderLogs(); }
             if (typeof window.syncFanSubnav === 'function') window.syncFanSubnav();
             if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
             if (typeof window.syncAppLandscapeGate === 'function') window.syncAppLandscapeGate();
@@ -13952,7 +14135,7 @@
                 alert('Brak zapisanej migawki.');
                 return;
             }
-            if (!confirm("Przywrócić ostatni zapisany stan?")) return;
+            if (!confirm("Cofa ostatnią zmianę w tej sesji przeglądarki (lokalny punkt przywracania). To nie jest przywrócenie z Wstrzymanych ani z Archiwum.\n\nKontynuować?")) return;
             state = JSON.parse(JSON.stringify(lastSnapshot));
             // TODO: scentralizować pełne odświeżanie UI po restore
             window.renderInputs();
@@ -13963,7 +14146,25 @@
             window.renderDashboard();
         };
         window.resetData = () => {
-            if (!confirm("RESET? Aktywny turniej zostanie wyczyszczony. Archiwum i wstrzymane sesje zostaną zachowane.")) return;
+            const playedCount = [...(state.matches || []), ...(state.playoffs || [])].filter(function (m) { return m && m.played; }).length;
+            if (playedCount > 0) {
+                alert('RESET zabroniony — jest już co najmniej jeden rozegrany mecz.\n\nWolno tylko, gdy żaden mecz nie został jeszcze rozegrany (brak wyników zakończonych).\n\nPopraw wynik albo użyj Zamroź.');
+                return;
+            }
+            if (!confirm("RESET kasuje aktywny turniej (drużyny, grupy, mecze, ustawienia). Archiwum i Wstrzymane zostają. Tego nie cofniesz przyciskiem Cofnij.\n\nKontynuować (krok 1/2)?")) return;
+            const tourName = ((document.getElementById('tournament-name') && document.getElementById('tournament-name').value) || '').trim()
+                || (state.meta && state.meta.tournamentName ? String(state.meta.tournamentName).trim() : '')
+                || (state._meta_name ? String(state._meta_name).trim() : '');
+            if (!tourName) {
+                alert('Ustaw nazwę turnieju na karcie Start przed RESET.');
+                return;
+            }
+            const typed = prompt('Wpisz nazwę turnieju, aby potwierdzić RESET (krok 2/2):', '');
+            if (typed === null) return;
+            if (typed.trim() !== tourName) {
+                alert('RESET anulowany — nazwa turnieju nie pasuje.');
+                return;
+            }
             saveLastSnapshot();
             const base = 'turnieje_uzytkownikow/' + activeKey;
             db.ref(base).update({
@@ -14067,7 +14268,7 @@
 
         window.freezeTournament = () => {
             if(isFanMode || !state.teams || state.teams.length === 0) return;
-            if (!confirm("Czy na pewno zamrozić turniej?\nUtworzona zostanie kopia w Wstrzymanych sesjach.")) return;
+            if (!confirm("Zapisuje kopię turnieju w Wstrzymanych sesjach i czyści aktywny turniej. Przywrócisz go z listy Wstrzymanych (nie przyciskiem „Przywróć ostatni stan”).\n\nKontynuować?")) return;
             let freezeName = state._meta_name || prompt("Podaj nazwę dla wstrzymanej sesji:"); if (!freezeName) return;
             let freezePayload = { ...state, _meta_name: freezeName, _meta_date: new Date().toLocaleString('pl-PL') };
             db.ref('turnieje_uzytkownikow/' + activeKey + '/wstrzymane').push(freezePayload).then(() => { db.ref('turnieje_uzytkownikow/' + activeKey).child('teams').remove(); location.reload(); });
@@ -14134,7 +14335,7 @@
                 html += Object.keys(frozenDatabase).reverse().map(key => { let t = frozenDatabase[key]; return `<div class="archive-item" style="border-left-color:#ff8b00;" onclick="unfreezeTournament('${key}')"><button class="del-archive-btn" onclick="deleteFromArchive('${key}', 'frozen')">✖ USUŃ</button><b style="font-size:14px;">${esc(t._meta_name)}</b><br><small style="color:#666;">❄️ Zamrożono: ${esc(t._meta_date)}</small></div>`; }).join('');
             }
             html += '<h4 style="color:#00875a; border-bottom:2px solid #00875a; padding-bottom:5px; margin-top:25px;">💾 MOJE ZAKOŃCZONE TURNIEJE</h4>';
-            if(Object.keys(archiveDatabase).length === 0) { html += '<p style="font-size:12px; color:#666;">Brak zarchiwizowanych turniejów.</p>'; } else {
+            if(Object.keys(archiveDatabase).length === 0) { html += window.renderEmptyStateHTML({ heading: 'Brak archiwum', sentence: 'Tu trafią zakończone turnieje po zamknięciu.', ctaText: 'Zakończ i zarchiwizuj po turnieju' }); } else {
                 html += Object.keys(archiveDatabase).reverse().map(key => {
                     let t = archiveDatabase[key];
                     return `<div class="archive-item" onclick="openArchive('${key}')">` +
@@ -14419,7 +14620,12 @@
             if (currentStatusFilter === 'pending') po = po.filter(m => !m.played);
             if (currentStatusFilter === 'played') po = po.filter(m => m.played);
             if (po.length === 0) {
-                displayCont.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Brak meczów spełniających wybrane kryteria filtrów.</div>';
+                displayCont.innerHTML = window.renderEmptyStateHTML({
+                    heading: 'Brak drabinki',
+                    sentence: 'Play-off generujesz po domknięciu fazy grupowej.',
+                    ctaLabel: '→ Tor → 3 · Play-off',
+                    ctaAction: 'openLosowaniaStep(3)'
+                });
                 return;
             }
             const fanRo = isFanMode || window._demoStoryFanEmbed === true;
@@ -14616,14 +14822,12 @@
         window.renderPodium = () => {
             const s = window.calcStats(); const f = window.findGrandFinalMatch(); const m3 = (state.playoffs||[]).find(m=>m.n.includes("3. MIEJSCE"));
             if(!f?.played || !window.isMatchDecided(f)) {
-                const blockedMsg = !f?.played
-                    ? (isFanMode
-                        ? `🏆 <b>Podium wkrótce dostępne</b><br>Turniej jeszcze trwa — klasyfikacja końcowa i nagrody pojawią się po rozegraniu wszystkich meczów. Śledź wyniki na bieżąco w zakładce „Mecze”!`
-                        : `🏆 <b>Klasyfikacja końcowa zablokowana</b><br>Uzupełnij brakujący Półfinał 2 w zakładce "Mecze", aby serwer SaaS wyliczył podium oraz przyznał statuetki!`)
-                    : (isFanMode
-                        ? `🏆 <b>Podium wkrótce dostępne</b><br>Finał zakończył się remisem — klasyfikacja końcowa pojawi się po rozstrzygnięciu meczu (np. rzutami karnymi).`
-                        : `🏆 <b>Klasyfikacja końcowa zablokowana</b><br>Finał nie może zakończyć się remisem bez zwycięzcy. Wpisz wynik z przewagą jednej drużyny lub uzupełnij rzuty karne w protokole meczu.`);
-                document.getElementById('podium-view').innerHTML = `<div class="card" style="text-align:center; padding:30px; color:#666;">${blockedMsg}</div>`;
+                const blockedMsg = window.renderEmptyStateHTML({
+                    heading: 'Brak podium',
+                    sentence: 'Podium pojawi się po zakończeniu finału.',
+                    ctaText: 'Dokończ finał w Na żywo / Play-Off'
+                });
+                document.getElementById('podium-view').innerHTML = blockedMsg;
                 return;
             }
             const getW = (m) => m.g1 > m.g2 ? m.t1 : (m.g1 < m.g2 ? m.t2 : (m.pen1 > m.pen2 ? m.t1 : m.t2));
@@ -14679,6 +14883,16 @@
             if (!activeKey || !assistantTokenParam) {
                 document.body.classList.add('assistant-view');
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color:#de350b; background:#fff0f0; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px;">Asystent — brak tokenu</span>`;
+                const asCont = document.getElementById('assistant-matches-container');
+                const asBanner = document.getElementById('assistant-banner');
+                if (asBanner) asBanner.style.display = 'none';
+                if (asCont) {
+                    asCont.innerHTML = window.renderEmptyStateHTML({
+                        heading: 'Brak dostępu',
+                        sentence: 'Link asystenta jest niekompletny lub wygasł.',
+                        ctaText: 'Poproś sędziego o nowy link / QR'
+                    });
+                }
             } else {
                 document.body.classList.add('assistant-view');
                 document.getElementById('app-header-title').innerHTML = `${BRAND.name} <span style="color:#1e3a8a; background:#eef2ff; padding:3px 10px; border-radius:12px; font-size:11px; margin-left:8px;">🧑‍⚖️ TRYB ASYSTENTA</span>`;
@@ -14748,11 +14962,10 @@
                 window.syncTournamentMetaToForm();
                 if (typeof window.syncTeamMatchParamsToForm === 'function') window.syncTeamMatchParamsToForm();
                 if (typeof window.syncPitchCountToForm === 'function') window.syncPitchCountToForm();
-                if (state.groups && Object.keys(state.groups).length > 0) {
-                    window.renderGroupsList();
-                    if (!isAssistantMode) window.filterAndRenderMatches();
-                    window.renderPlayoffTree();
-                }
+                if (typeof window.renderGroupsList === 'function') window.renderGroupsList();
+                if (!isAssistantMode && typeof window.filterAndRenderMatches === 'function') window.filterAndRenderMatches();
+                if (typeof window.renderPlayoffTree === 'function') window.renderPlayoffTree();
+                if (typeof window.renderArchiveHelpPanel === 'function') window.renderArchiveHelpPanel();
                 if (typeof window.syncPitchNavVisibility === 'function') window.syncPitchNavVisibility();
                 const activePitchTab = document.querySelector('.tab-content.active');
                 if (activePitchTab && activePitchTab.id === 'boiska' && typeof window.renderPitchesView === 'function') {
@@ -14969,7 +15182,12 @@
             window._pitchViewFilter = 'all';
             window._pitchViewFilterCount = 0;
             targets.forEach(el => {
-                el.innerHTML = '<div class="card" style="text-align:center; color:#666; font-size:13px; padding:20px;">Boiska wyłączone — ustaw liczbę boisk (2–99) na karcie Start.</div>';
+                el.innerHTML = window.renderEmptyStateHTML({
+                    heading: 'Boiska wyłączone',
+                    sentence: 'Numeracja boisk działa od 2 boisk w górę.',
+                    ctaLabel: 'Ustaw liczbę boisk ≥2 w Start',
+                    ctaAction: "switchTab('start')"
+                });
             });
             return;
         }
