@@ -6110,10 +6110,12 @@
         const blockReason = resolveLicenseBlockReason(lic);
         if (blockReason) {
             if (!isFanMode) showLicenseBlockedScreen(blockReason);
+            if (typeof window.syncOrganizerHeaderActions === 'function') window.syncOrganizerHeaderActions();
             return;
         }
         window.licenseWriteAllowed = true;
         hideLicenseBlockedScreen();
+        if (typeof window.syncOrganizerHeaderActions === 'function') window.syncOrganizerHeaderActions();
         if (isFanMode) return;
         clearInterval(window.licenseInterval);
         window.licenseInterval = setInterval(() => {
@@ -8931,6 +8933,32 @@
         }
         if (typeof window.syncPlayoffPlacementModeToForm === 'function') {
             window.syncPlayoffPlacementModeToForm();
+        }
+        if (typeof window.syncOrganizerHeaderActions === 'function') {
+            window.syncOrganizerHeaderActions();
+        }
+    };
+
+    /** Zamroź / RESET w nagłówku — disable + tooltip gdy brak drużyn lub zapis zablokowany. */
+    window.syncOrganizerHeaderActions = function () {
+        if (isFanMode || isHallMode || isAssistantMode || isCaptainMode || viewMode === 'admin' || isDemoMode) return;
+        const freezeBtn = document.getElementById('btn-freeze');
+        if (!freezeBtn) return;
+        const hasTeams = !!(state.teams && state.teams.length);
+        const writeLocked = !!(window.isTournamentWriteLocked && window.isTournamentWriteLocked());
+        const licenseBlocked = window.licenseWriteAllowed === false;
+        const canFreeze = hasTeams && !writeLocked && !licenseBlocked;
+        freezeBtn.disabled = !canFreeze;
+        freezeBtn.style.opacity = canFreeze ? '' : '0.45';
+        freezeBtn.style.cursor = canFreeze ? 'pointer' : 'not-allowed';
+        if (!hasTeams) {
+            freezeBtn.title = 'Najpierw utwórz drużyny (Start). Pusty turniej wyczyścisz przyciskiem RESET.';
+        } else if (writeLocked) {
+            freezeBtn.title = 'Turniej zarchiwizowany — zamrożenie niedostępne.';
+        } else if (licenseBlocked) {
+            freezeBtn.title = 'Licencja nieważna — zamrożenie niedostępne.';
+        } else {
+            freezeBtn.title = 'Zapisuje kopię turnieju w Wstrzymanych sesjach i czyści aktywny turniej.';
         }
     };
 
@@ -11780,6 +11808,7 @@
             if (sig === window._dashSig && el.querySelector('[data-dash="fb"]')) {
                 if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
                 if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
+                if (typeof window.syncOrganizerHeaderActions === 'function') window.syncOrganizerHeaderActions();
                 return;
             }
 
@@ -11799,6 +11828,7 @@
             if (typeof window.syncTournamentRail === 'function') window.syncTournamentRail();
             if (typeof window.syncTournamentWord === 'function') window.syncTournamentWord();
             if (typeof window.syncGrupyTimeSummary === 'function') window.syncGrupyTimeSummary();
+            if (typeof window.syncOrganizerHeaderActions === 'function') window.syncOrganizerHeaderActions();
         };
 
         window.getGroupSizeInfo = () => {
@@ -14807,7 +14837,19 @@
         };
 
         window.freezeTournament = () => {
-            if(isFanMode || !state.teams || state.teams.length === 0) return;
+            if (isFanMode) return;
+            if (!state.teams || state.teams.length === 0) {
+                alert('❄️ Zamroź wymaga co najmniej skonfigurowanych drużyn.\n\nPusty turniej wyczyścisz przyciskiem RESET (gdy nie ma jeszcze rozegranych meczów).');
+                return;
+            }
+            if (window.licenseWriteAllowed === false) {
+                alert('❌ Licencja nieważna lub zawieszona — zamrożenie niedostępne.');
+                return;
+            }
+            if (window.isTournamentWriteLocked && window.isTournamentWriteLocked()) {
+                alert('Turniej jest zarchiwizowany — zamrożenie niedostępne.');
+                return;
+            }
             if (!confirm("Zapisuje kopię turnieju w Wstrzymanych sesjach i czyści aktywny turniej. Przywrócisz go z listy Wstrzymanych (nie przyciskiem „Przywróć ostatni stan”).\n\nKontynuować?")) return;
             let freezeName = state._meta_name || prompt("Podaj nazwę dla wstrzymanej sesji:"); if (!freezeName) return;
             let freezePayload = { ...state, _meta_name: freezeName, _meta_date: new Date().toLocaleString('pl-PL') };
@@ -15551,6 +15593,7 @@
             }
             window.renderLogs();
             window.renderDashboard();
+            if (typeof window.syncOrganizerHeaderActions === 'function') window.syncOrganizerHeaderActions();
         }
         window.applyTournamentState = applyTournamentState;
 
