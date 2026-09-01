@@ -14,6 +14,7 @@ function buildActivationUpdate(typ, now) {
     status: 'aktywny',
     aktywowany: now,
     wygasa: now + durationMs(typ),
+    everActivated: true,
   };
 }
 

@@ -84,8 +84,9 @@ exports.activateLicense = functions.region(region).https.onCall(async (data, con
   }
 
   const key = String(data?.key || '').trim();
+  const forceNewPeriod = data?.grantNewPeriod === true;
   try {
-    return await activateLicenseByKey(db, key);
+    return await activateLicenseByKey(db, key, { forceNewPeriod });
   } catch (err) {
     throw toHttpsError(err);
   }

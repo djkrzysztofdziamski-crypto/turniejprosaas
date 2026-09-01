@@ -6087,8 +6087,10 @@
     function resolveLicenseBlockReason(lic) {
         if (!lic) return 'deleted';
         if (lic.status === 'zablokowany') return 'blocked';
-        if (lic.status === 'nowy' || !lic.aktywowany) return 'pending';
-        if (lic.wygasa && Date.now() > lic.wygasa) return 'expired';
+        const everActivated = lic.everActivated === true || !!lic.aktywowany;
+        if (everActivated && lic.wygasa && Date.now() > lic.wygasa) return 'expired';
+        if (everActivated && !lic.wygasa) return 'expired';
+        if (lic.status === 'nowy' || !everActivated) return 'pending';
         if (lic.status !== 'aktywny') return 'blocked';
         return null;
     }
@@ -6569,9 +6571,11 @@
         return msg;
     }
 
-    async function callActivateLicenseCloud(key) {
+    async function callActivateLicenseCloud(key, opts = {}) {
         if (!isAdminSession()) throw new Error('Brak sesji administratora.');
-        const result = await activateLicenseCallable({ key });
+        const payload = { key };
+        if (opts.grantNewPeriod) payload.grantNewPeriod = true;
+        const result = await activateLicenseCallable(payload);
         return result.data;
     }
 
@@ -6767,13 +6771,27 @@
 
     function adminActivateLicense(key) {
         if (!isAdminSession()) return;
-        if (!confirm(`Aktywować licencję ${key}?\nRozpocznie się odliczanie czasu pakietu (Cloud Function).`)) return;
+        if (!confirm(`Pierwsza aktywacja klucza ${key}?\n\nRozpocznie się odliczanie czasu pakietu (Cloud Function).\n\nNie używaj tego na wygasłych licencjach — tam: +24H lub „Nowy okres”.`)) return;
         callActivateLicenseCloud(key)
             .then((data) => {
                 if (data?.alreadyActive) alert('ℹ️ Licencja była już aktywna.');
                 else alert('✅ Licencja aktywowana przez serwer.');
             })
             .catch(err => alert('❌ Błąd aktywacji: ' + formatCallableError(err)));
+    }
+
+    function adminGrantNewPeriod(key) {
+        if (!isAdminSession()) return;
+        const lic = adminKpiCache.licencje?.[key];
+        const name = lic?.notatka || key;
+        if (!confirm(`⚠️ REKOMPENSATA ADMINISTRATORA\n\nPrzyznać NOWY pełny okres pakietu dla:\n[${name}]\nKlucz: ${key}\n\nTo resetuje licznik od teraz (nie jest to zwykłe +24H).`)) return;
+        if (!confirm('Potwierdź ponownie: na pewno nowy pełny okres pakietu?')) return;
+        callActivateLicenseCloud(key, { grantNewPeriod: true })
+            .then((data) => {
+                if (data?.grantedNewPeriod) alert('✅ Przyznano nowy pełny okres pakietu.');
+                else alert('✅ Okres zaktualizowany.');
+            })
+            .catch(err => alert('❌ Błąd: ' + formatCallableError(err)));
     }
 
     async function adminResendOrderEmail(paymentId, btnEl) {
@@ -6846,20 +6864,38 @@
 
             Object.keys(data).reverse().forEach(key => {
                 const lic = data[key];
+                const everActivated = lic.everActivated === true || !!lic.aktywowany;
                 let currentStatus = lic.status;
                 if (lic.status === 'aktywny' && lic.wygasa && now > lic.wygasa) { currentStatus = 'wygasl'; }
+                const isExpired = everActivated && lic.wygasa && now > lic.wygasa;
+                const isActiveInPeriod = lic.status === 'aktywny' && lic.wygasa && now <= lic.wygasa;
+                const isNeverActivated = lic.status === 'nowy' && !everActivated;
+                const blockedExpiry = lic._preBlock?.wygasa ?? lic.wygasa;
+                const blockedWasExpired = lic.status === 'zablokowany' && everActivated && blockedExpiry && now > blockedExpiry;
 
                 let actDate = lic.aktywowany ? formatAdminDateTime(lic.aktywowany) : '—';
                 let expDate = lic.wygasa ? formatAdminDateTime(lic.wygasa) : '—';
                 let statusBadge = `<span class="badge ${currentStatus}">${currentStatus.toUpperCase()}</span>`;
-                
-                let blockBtn = lic.status === 'zablokowany' 
-                    ? `<button class="action-btn act-unblock" onclick="unlockLicense('${key}')">🔓 ODBLOKUJ</button>`
-                    : `<button class="action-btn act-block" onclick="confirmBlock('${key}', this)">🚫 BLOKUJ</button>`;
-                
-                let timeBtn = lic.aktywowany ? `<button class="action-btn act-time" onclick="add24h('${key}', ${lic.wygasa})">➕ 24H</button>` : '';
-                let activateBtn = (lic.status === 'nowy' || !lic.aktywowany)
+
+                let blockBtn = '';
+                if (lic.status === 'zablokowany') {
+                    blockBtn = `<button class="action-btn act-unblock" onclick="unlockLicense('${key}')">🔓 ODBLOKUJ</button>`;
+                } else if (isActiveInPeriod) {
+                    blockBtn = `<button class="action-btn act-block" onclick="confirmBlock('${key}', this)">🚫 BLOKUJ</button>`;
+                }
+
+                let timeBtn = '';
+                if (everActivated) {
+                    const expForBtn = lic.wygasa || now;
+                    timeBtn = `<button class="action-btn act-time" onclick="add24h('${key}', ${expForBtn})">➕ 24H</button>`;
+                }
+
+                let activateBtn = isNeverActivated
                     ? `<button class="action-btn act-unblock" onclick="adminActivateLicense('${key}')">✅ AKTYWUJ</button>`
+                    : '';
+
+                let grantBtn = (isExpired || blockedWasExpired)
+                    ? `<button class="action-btn act-time" onclick="adminGrantNewPeriod('${key}')">🔄 NOWY OKRES</button>`
                     : '';
 
                 const notatkaRaw = lic.notatka || '';
@@ -6877,6 +6913,7 @@
                             <div class="lic-actions">
                                 <button class="action-btn act-view" onclick="superSędzia('${key}')">👁 PODGLĄD</button>
                                 ${activateBtn}
+                                ${grantBtn}
                                 ${blockBtn}
                                 ${timeBtn}
                                 <button class="action-btn act-del" onclick="deleteLicense('${key}')">✖ USUŃ</button>
@@ -6998,19 +7035,45 @@
     function confirmBlock(key, btnEl) {
         if (!isAdminSession()) return;
         const name = (btnEl && btnEl.closest('tr')?.querySelector('.lic-col-notatka')?.getAttribute('title')) || key;
+        const lic = adminKpiCache.licencje?.[key];
+        if (!lic) { alert('❌ Brak danych licencji w cache.'); return; }
         if (confirm(`🚨 OSTRZEŻENIE SYSTEMOWE!\n\nCzy na pewno chcesz NATYCHMIAST ZABLOKOWAĆ licencję dla:\n[${name}]?\n\nSędzia / organizator straci uprawnienia do zapisu wyników w tej samej sekundzie!`)) {
-            db.ref('licencje/' + key).update({ status: 'zablokowany' });
+            const preBlock = {
+                status: lic.status,
+                aktywowany: lic.aktywowany || null,
+                wygasa: lic.wygasa || null,
+            };
+            db.ref('licencje/' + key).update({ status: 'zablokowany', _preBlock: preBlock });
         }
     }
     function unlockLicense(key) {
         if (!isAdminSession()) return;
-        if (!confirm("Odblokowanie zresetuje daty aktywacji licencji.\nKontynuować?")) return;
-        db.ref('licencje/' + key).update({ status: 'nowy', aktywowany: null, wygasa: null });
+        const lic = adminKpiCache.licencje?.[key];
+        if (!lic || lic.status !== 'zablokowany') return;
+        const snap = lic._preBlock;
+        const aktywowany = snap?.aktywowany ?? lic.aktywowany;
+        const wygasa = snap?.wygasa ?? lic.wygasa;
+        if (!aktywowany) {
+            if (!confirm('Odblokować licencję?\nKlucz wróci do stanu „nowy” (nigdy nie aktywowany).')) return;
+            db.ref('licencje/' + key).update({ status: 'nowy', aktywowany: null, wygasa: null, _preBlock: null });
+            return;
+        }
+        const expiredNote = wygasa && wygasa <= Date.now()
+            ? '\n\nOkres był już wygasły przed blokadą — odblokowanie przywraca stare daty (bez nowego pakietu).'
+            : '\n\nPrzywrócone zostaną daty aktywacji sprzed blokady.';
+        if (!confirm('Odblokować licencję?' + expiredNote)) return;
+        db.ref('licencje/' + key).update({
+            status: 'aktywny',
+            aktywowany,
+            wygasa: wygasa || null,
+            _preBlock: null,
+        });
     }
     function add24h(key, currentExpiry) {
         if (!isAdminSession()) return;
         if (confirm(`Czy na pewno chcesz przedłużyć tę licencję o dodatkowe 24 godziny?`)) {
-            db.ref('licencje/' + key).update({ wygasa: currentExpiry + (24 * 60 * 60 * 1000), status: 'aktywny' });
+            const base = Math.max(Date.now(), Number(currentExpiry) || 0);
+            db.ref('licencje/' + key).update({ wygasa: base + (24 * 60 * 60 * 1000), status: 'aktywny' });
         }
     }
     function deleteLicense(key) {
@@ -12575,7 +12638,7 @@
             const items = [
                 [hasGroups, 'Grupę wylosowano'],
                 [hasMatches, 'Terminarz wygenerowany'],
-                [groupDone || hasMatches, groupDone ? 'Faza grupowa domknięta (wszystkie mecze)' : 'Faza grupowa — możesz startować PO gdy tabele gotowe']
+                [groupDone, groupDone ? 'Faza grupowa domknięta (wszystkie mecze)' : (hasMatches ? 'Faza grupowa — rozegraj wszystkie mecze grupowe' : 'Faza grupowa — najpierw terminarz')]
             ];
             ul.innerHTML = items.map(function (it) {
                 return '<li style="color:' + (it[0] ? '#006644' : '#94a3b8') + ';">' + (it[0] ? '✓ ' : '○ ') + it[1] + '</li>';
@@ -13470,12 +13533,27 @@
                 if(!poBtn) return;
                 if (isDemoMode || window._demoStoryFanEmbed || window._demoStoryOrganizerEmbed) { poBtn.style.display = 'none'; return; }
                 poBtn.style.display = '';
-                if(anyUnconfirmedAbsoluteRemis) { poBtn.disabled = true; poBtn.style.background = '#a5b3bb'; poBtn.style.cursor = 'not-allowed'; poBtn.innerText = "🔒 START PLAY-OFF - ROZSTRZYGNIJ REMIS ABSOLUTNY"; }
-                else {
+                const hasPo = !!(state.playoffs && state.playoffs.length);
+                const poBlock = !hasPo && typeof window.getPlayoffStartBlockReason === 'function'
+                    ? window.getPlayoffStartBlockReason()
+                    : null;
+                if(anyUnconfirmedAbsoluteRemis) {
+                    poBtn.disabled = true;
+                    poBtn.style.background = '#a5b3bb';
+                    poBtn.style.cursor = 'not-allowed';
+                    poBtn.title = 'Rozstrzygnij remis absolutny na granicy awansu.';
+                    poBtn.innerText = "🔒 START PLAY-OFF - ROZSTRZYGNIJ REMIS ABSOLUTNY";
+                } else if (poBlock) {
+                    poBtn.disabled = true;
+                    poBtn.style.background = '#a5b3bb';
+                    poBtn.style.cursor = 'not-allowed';
+                    poBtn.title = poBlock.replace(/\n/g, ' ');
+                    poBtn.innerText = "🔒 START PLAY-OFF — DOMKNIJ FAZĘ GRUPOWĄ";
+                } else {
                     poBtn.disabled = false;
                     poBtn.style.background = '#00875a';
                     poBtn.style.cursor = 'pointer';
-                    const hasPo = !!(state.playoffs && state.playoffs.length);
+                    poBtn.title = hasPo ? 'Ścieżka awaryjna — wymaga potwierdzenia nazwą turnieju.' : '';
                     poBtn.innerText = hasPo ? 'START PLAY-OFF (awaryjnie)' : 'START PLAY-OFF';
                 }
             });
@@ -13592,6 +13670,50 @@
             });
         };
 
+        window.hasUnconfirmedAbsoluteRemis = function () {
+            const advCount = (state.settings && state.settings.advCount) || 4;
+            const numGroups = Object.keys(state.groups || {}).length;
+            if (!numGroups) return false;
+            let cutoffIndex = Math.floor(advCount / numGroups) - 1;
+            if (cutoffIndex < 0) cutoffIndex = 0;
+            let found = false;
+            Object.keys(state.groups || {}).forEach(function (gn) {
+                const st = window.getSortedGroupStats(gn);
+                const isConfirmed = state.settings && state.settings.confirmedTableOrder && state.settings.confirmedTableOrder[gn];
+                if (!isConfirmed && st[cutoffIndex] && st[cutoffIndex + 1] && window.isAbsoluteRemis(st[cutoffIndex], st[cutoffIndex + 1])) {
+                    found = true;
+                }
+            });
+            return found;
+        };
+
+        /** Pierwsze START PLAY-OFF — null = OK; string = powód blokady (alert + disabled przycisk). */
+        window.getPlayoffStartBlockReason = function () {
+            if (!(state.teams && state.teams.length)) {
+                return 'Play-off zablokowany — brak drużyn.\n\nNajpierw: Start → Utwórz drużyny → Składy.';
+            }
+            if (!(state.groups && Object.keys(state.groups).length)) {
+                return 'Play-off zablokowany — brak wylosowanych grup.\n\nNajpierw: Tor → 1 · Grupy.';
+            }
+            const matches = state.matches || [];
+            if (!matches.length) {
+                return 'Play-off zablokowany — brak terminarza fazy grupowej.\n\nNajpierw: Tor → 2 · Terminarz.';
+            }
+            const unplayed = matches.filter(function (m) { return m && !m.played; });
+            if (unplayed.length) {
+                return 'Play-off zablokowany — faza grupowa nie jest domknięta.\n\nPozostało meczów grupowych bez wyniku: ' + unplayed.length + ' / ' + matches.length + '.\n\nWpisz wyniki w Na żywo, potem wróć do START PLAY-OFF.';
+            }
+            if (window.hasUnconfirmedAbsoluteRemis()) {
+                return 'Play-off zablokowany — rozstrzygnij remis absolutny na granicy awansu (tabele / Na żywo).';
+            }
+            const pool = window.getAdvancingTeamsFull();
+            const real = pool.filter(function (t) { return t && t.id != null && t.id !== -99; });
+            if (real.length < 2) {
+                return 'Play-off zablokowany — za mało drużyn awansujących z fazy grupowej (min. 2).\n\nSprawdź tabele i ustawienia awansu.';
+            }
+            return null;
+        };
+
         window.moveTableTeam = (gn, index, dir) => {
             if(isFanMode) return; let st = window.getSortedGroupStats(gn); if(index + dir < 0 || index + dir >= st.length) return;
             let currentOrder = st.map(s => s.t.id); let temp = currentOrder[index]; currentOrder[index] = currentOrder[index + dir]; currentOrder[index + dir] = temp;
@@ -13626,7 +13748,12 @@
         };
 
         window.generujPlayoff = function() {
-            if (state.playoffs && state.playoffs.length > 0) {
+            const hasExistingPo = !!(state.playoffs && state.playoffs.length);
+            if (!hasExistingPo) {
+                const block = typeof window.getPlayoffStartBlockReason === 'function' ? window.getPlayoffStartBlockReason() : null;
+                if (block) { alert(block); return; }
+            }
+            if (hasExistingPo) {
                 const poPlayed = typeof window.hasPlayoffResultsPlayed === 'function' && window.hasPlayoffResultsPlayed();
                 const warn = poPlayed
                     ? 'UWAGA: są już zapisane wyniki play-off. Ponowne START PLAY-OFF wyzeruje wyniki, strzelców i całą drabinkę. To nie poprawia pojedynczego meczu — ścieżka awaryjna.\nJeśli chcesz cofnąć ostatnią zmianę, użyj Przywróć ostatni stan (gdy snapshot jeszcze ważny).\n\nKontynuować (krok 1/2)?'
