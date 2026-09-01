@@ -728,7 +728,11 @@
 
                 poDur: 15,
 
-                finDur: 20
+                finDur: 20,
+
+                showTournamentRanking: true,
+
+                showScorersRanking: true
 
             },
 
